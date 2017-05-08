@@ -1,0 +1,28 @@
+version: '2'
+services:
+  web:
+    build: .
+    container_name: campaign-web
+    volumes:
+      - ./src:/app
+    ports:
+      - "90:80"
+    links:
+      - redis
+      - serverdb
+  serverdb:
+    image: mysql:5.7
+    container_name: campaign-serverdb
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+    ports:
+      - 3406:3306
+  redis:
+    image: redis
+    container_name: campaign-redis
+    volumes:
+      - ./data/redis:/data
+    ports:
+        - "6379:6379"
