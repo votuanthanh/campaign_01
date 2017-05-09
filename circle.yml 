@@ -1,0 +1,31 @@
+##&nbsp; Config virtual test
+machine:
+#&nbsp; Config version PHP
+php:
+version: 7.0.15
+
+#&nbsp; Config variable enviroment
+environment:
+CIRCLE_ENV: testing
+APP_ENV: testing
+APP_KEY: lpivZFWb3A4xtCc6S4f3eSdE3jdP5hWm
+DB_HOST: 127.0.0.1
+DB_PORT: 3306
+DB_DATABASE: circle_test
+DB_USERNAME: ubuntu
+DB_PASSWORD:
+DB_SOCKET: /var/run/mysqld/mysqld.sock
+APP_DEBUG: false
+
+## Install library
+
+post:
+- composer install --prefer-source --no-interaction
+- php artisan migrate
+
+## Config test
+test:
+override:
+- ./vendor/bin/phpcs --standard=phpcs.xml app/ -n
+- ./vendor/bin/phpmd app/ text phpmd.xml
+- ./vendor/bin/phpunit
