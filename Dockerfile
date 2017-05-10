@@ -21,6 +21,7 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_PID_FILE /var/run/apache2.pid
 
 # install nodejs, npm, bower
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 RUN apt-get -y install nodejs npm git
 RUN npm install -g bower
 RUN npm install --global gulp-cli
