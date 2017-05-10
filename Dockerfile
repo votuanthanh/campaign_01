@@ -21,13 +21,16 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_PID_FILE /var/run/apache2.pid
 
 # install nodejs, npm, bower
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
-RUN apt-get -y install nodejs npm git
+# Install Nodejs
+RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g gulp-cli bower eslint babel-eslint eslint-plugin-react yarn
+
+RUN apt-get -y install git
 RUN npm install -g bower
 RUN npm install --global gulp-cli
 RUN apt-get install -y ruby-full rubygems
 RUN gem install sass
-RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 RUN pecl install mongodb
 #ADD conf.d/mongodb.ini /etc/php/7.0/apache2/conf.d/30-mongodb.ini
