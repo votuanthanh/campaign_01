@@ -4,7 +4,7 @@ services:
     build: .
     container_name: campaign-web
     volumes:
-      - ./src:/app
+      - ./:/app
     ports:
       - "90:80"
     links:
@@ -26,3 +26,4 @@ services:
       - ./data/redis:/data
     ports:
         - "6379:6379"
+        
