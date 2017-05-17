@@ -19,6 +19,8 @@ class Role extends BaseModel
         'type_id',
     ];
 
+    public $timestamps = false;
+
     protected $dates = ['deleted_at'];
 
     public function type()

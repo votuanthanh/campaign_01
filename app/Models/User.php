@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class)->withTimestamps();
     }
 
     public function followings()
@@ -77,5 +77,10 @@ class User extends Authenticatable
     public function followers()
     {
         return $this->belongsToMany(User::class, 'relationships', 'following_id', 'user_id');
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
     }
 }

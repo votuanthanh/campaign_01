@@ -36,7 +36,7 @@ class Campaign extends BaseModel
         return $this->hasMany(Event::class);
     }
 
-    public function medias()
+    public function media()
     {
         return $this->morphMany(Media::class, 'mediable');
     }
@@ -53,6 +53,6 @@ class Campaign extends BaseModel
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 }

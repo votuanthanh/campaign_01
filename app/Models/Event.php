@@ -41,7 +41,7 @@ class Event extends BaseModel
         return $this->belongsTo(User::class);
     }
 
-    public function medias()
+    public function media()
     {
         return $this->morphMany(Media::class, 'mediable');
     }

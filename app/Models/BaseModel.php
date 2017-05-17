@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-abstract class BaseModel extends Model {
+abstract class BaseModel extends Model
+{
 
-    public function __construct(array $attributes = [])
+    public function __construct($attributes = [])
     {
         parent::__construct($attributes);
     }
@@ -15,5 +16,4 @@ abstract class BaseModel extends Model {
     {
         return with(new static)->getTable();
     }
-
 }
