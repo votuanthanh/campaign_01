@@ -13,7 +13,7 @@ class UpdateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('settings', function (Blueprint $table) {
+        Schema::table('comments', function (Blueprint $table) {
             $table->renameColumn('target_id', 'commentable_id');
             $table->renameColumn('target_type', 'commentable_type');
         });
@@ -26,7 +26,7 @@ class UpdateCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('settings', function (Blueprint $table) {
+        Schema::table('comments', function (Blueprint $table) {
             $table->renameColumn('commentable_id', 'target_id');
             $table->renameColumn('commentable_type', 'target_type');
         });
