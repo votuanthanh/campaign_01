@@ -8,16 +8,16 @@ class Like extends BaseModel
 {
     use SoftDeletes;
 
-    public function __construct()
+    public function __construct($attributes = [])
     {
-        parent::__construct();
+        parent::__construct($attributes);
     }
 
     protected $fillable = [
         'id',
         'user_id',
-        'target_id',
-        'target_type',
+        'likeable_id',
+        'likeable_type',
     ];
 
     protected $dates = ['deleted_at'];
