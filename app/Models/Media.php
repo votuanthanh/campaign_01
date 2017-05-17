@@ -15,7 +15,7 @@ class Media extends BaseModel
 
     protected $fillable = [
         'id',
-        'url',
+        'url_file',
         'type',
         'mediable_id',
         'mediable_type',

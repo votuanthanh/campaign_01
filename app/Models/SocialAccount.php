@@ -20,7 +20,7 @@ class SocialAccount extends BaseModel
         'email',
         'name',
         'provide',
-        'avatar',
+        'url_file',
     ];
 
     protected $dates = ['deleted_at'];
