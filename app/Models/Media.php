@@ -8,15 +8,17 @@ class Media extends BaseModel
 {
     use SoftDeletes;
 
-    public function __construct()
+    public function __construct($attributes = [])
     {
-        parent::__construct();
+        parent::__construct($attributes);
     }
 
     protected $fillable = [
         'id',
         'url',
         'type',
+        'mediable_id',
+        'mediable_type',
     ];
 
     protected $dates = ['deleted_at'];
