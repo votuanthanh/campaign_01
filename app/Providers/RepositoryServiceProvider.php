@@ -6,6 +6,13 @@ use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
+    protected static $repositories = [
+        'user' => [
+            \App\Repositories\Contracts\UserRepositoryInterface::class,
+            \App\Repositories\Eloquent\UserRepository::class,
+        ],
+    ];
+
     /**
      * Bootstrap the application services.
      *
@@ -23,6 +30,11 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        foreach (static::$repositories as $repository) {
+            $this->app->singleton(
+                $repository[0],
+                $repository[1]
+            );
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
+use App\Repositories\Contracts\RepositoryInterface;
 
 abstract class BaseRepository implements RepositoryInterface
 {
@@ -208,5 +209,10 @@ abstract class BaseRepository implements RepositoryInterface
     public function with($relationship)
     {
         return $this->model->with($relationship);
+    }
+
+    public function getModel()
+    {
+        return $this->model;
     }
 }

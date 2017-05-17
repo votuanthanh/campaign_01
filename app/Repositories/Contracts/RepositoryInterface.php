@@ -24,7 +24,7 @@ interface RepositoryInterface
 
     public function orWhere($column, $operator = null, $value = null);
 
-    public function orWhereIn($column, $operator = null, $value = null);
+    public function orWhereIn($column, $values);
 
     public function whereBetween($colunm, $values);
 
@@ -57,4 +57,6 @@ interface RepositoryInterface
     public function with($relationship);
 
     public function orderBy($column, $option = 'asc');
+
+    public function getModel();
 }
