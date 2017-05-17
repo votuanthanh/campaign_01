@@ -1,6 +1,11 @@
 
 const { mix } = require('laravel-mix');
 
+const THEME_PATH = 'resources/assets/frontend/';
+const FRONTEND_PATH = 'public/frontend/';
+const BACKEND_PATH = 'public/backend/';
+const NODE_PATH = 'node_modules/';
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -12,5 +17,11 @@ const { mix } = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+mix.js('resources/assets/js/app.js', FRONTEND_PATH + 'js')
+    .copyDirectory(THEME_PATH + 'js', FRONTEND_PATH + 'js')
+    .copyDirectory(THEME_PATH + 'img', 'public/images')
+    .copyDirectory(THEME_PATH + 'css', FRONTEND_PATH + 'css')
+    .copyDirectory(THEME_PATH + 'icons', FRONTEND_PATH + 'icons')
+    .sass(THEME_PATH + 'sass/theme-styles.scss', FRONTEND_PATH + 'css/theme.css')
+    .sass(THEME_PATH + 'sass/blocks.scss', FRONTEND_PATH + 'css')
+    .sass(NODE_PATH + 'font-awesome/scss/font-awesome.scss', FRONTEND_PATH + 'css/font.css');
