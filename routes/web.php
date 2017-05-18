@@ -14,3 +14,8 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Server response to url image files
+Route::get('/img/{path}', function (Illuminate\Http\Request $request, $path) {
+    return app('glide')->getImageResponse($path, $request->all());
+})->where('path', '.*');
