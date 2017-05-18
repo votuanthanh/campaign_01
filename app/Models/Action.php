@@ -33,7 +33,7 @@ class Action extends BaseModel
         return $this->belongsTo(Event::class);
     }
 
-    public function medias()
+    public function media()
     {
         return $this->morphMany(Media::class, 'mediable');
     }
