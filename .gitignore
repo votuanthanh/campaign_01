@@ -10,6 +10,8 @@ public/css
 public/images/
 public/mix-manifest.json
 storage/*.key
+storage/debugbar/
+storage/files/
 vendor
 .idea
 .env
