@@ -30,19 +30,6 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Models\Relationship::class, function (Faker\Generator $faker) {
-    static $userId;
-
-    return [
-        'user_id' => $id = $faker->randomElement($userId ?: $userId = App\Models\User::all()
-            ->pluck('id')->toArray()),
-        'following_id' => $faker->randomElement(App\Models\User::where('id', '<>', $id)->get()
-            ->pluck('id')->toArray()),
-        'created_at' => $faker->dateTime(),
-        'updated_at' => $faker->dateTime(),
-    ];
-});
-
 $factory->define(App\Models\Type::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->word,
