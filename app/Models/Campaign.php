@@ -28,7 +28,7 @@ class Campaign extends BaseModel
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withPivot('role_id');
     }
 
     public function events()
@@ -54,5 +54,42 @@ class Campaign extends BaseModel
     public function tags()
     {
         return $this->belongsToMany(Tag::class)->withTimestamps();
+    }
+
+    public function actions()
+    {
+        return $this->hasManyThrough(Action::class, Event::class);
+    }
+
+    public function getUserByRole($roles)
+    {
+        $roles = is_array($roles) ? $roles : [$roles];
+        $roleIds = [];
+
+        foreach ($roles as $role) {
+            $roleIds[] = Role::whereName($role)->first()->id;
+        }
+
+        return $this->users()->wherePivotIn('role_id', $roleIds);
+    }
+
+    public function owner()
+    {
+        return $this->getUserByRole('owner')->first();
+    }
+
+    public function moderators()
+    {
+        return $this->getUserByRole('moderator')->get();
+    }
+
+    public function members()
+    {
+        return $this->getUserByRole('member')->get();
+    }
+
+    public function blockeds()
+    {
+        return $this->getUserByRole('blocked')->get();
     }
 }
