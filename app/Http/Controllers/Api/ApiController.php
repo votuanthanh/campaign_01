@@ -30,6 +30,7 @@ class ApiController extends AbstractController
             if (is_callable($callback)) {
                 call_user_func($callback);
             }
+
             DB::commit();
         } catch (ModelNotFoundException $e) {
             activity()->log($e->getMessage());
@@ -45,7 +46,7 @@ class ApiController extends AbstractController
             activity()->log($e->getMessage());
             DB::rollBack();
 
-            throw new UnknowException($e->getMessage(), $e->getCode());
+            throw new UnknowException($e->getMessage());
         }
 
         return $this->trueJson();
@@ -59,9 +60,9 @@ class ApiController extends AbstractController
             }
         } catch (Exception $e) {
             activity()->log($e->getMessage());
-            throw new UnknowException($e->getMessage(), $e->getCode());
+            throw new UnknowException($e->getMessage());
         }
 
-        return $this->jsonRender();
+        return $this->trueJson();
     }
 }

@@ -31,30 +31,23 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Models\Type::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->word,
-        'created_at' => $faker->dateTime(),
-        'updated_at' => $faker->dateTime(),
-    ];
-});
-
 $factory->define(App\Models\Role::class, function (Faker\Generator $faker) {
     static $typeId;
 
     return [
         'name' => $faker->word,
-        'type_id' => $faker->randomElement(App\Models\Type::pluck('id')->toArray()),
+        'type' => $faker->randomElement([1, 2]),
     ];
 });
 
 $factory->define(App\Models\Campaign::class, function (Faker\Generator $faker) {
     return [
-        'hashtag' => $faker->word,
+        'hashtag' => $faker->unique()->word,
         'description' => $faker->paragraph(),
         'longitude' => $faker->longitude,
         'latitude' => $faker->latitude,
-        'status' => rand(0, 1),
+        'status' => $faker->randomElement([0, 1]),
+        'title' => $faker->paragraph(),
         'created_at' => $faker->dateTime(),
         'updated_at' => $faker->dateTime(),
     ];

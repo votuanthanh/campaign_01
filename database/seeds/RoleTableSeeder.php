@@ -25,7 +25,7 @@ class RoleTableSeeder extends Seeder
         foreach ($roles as $value) {
             factory(Role::class)->create([
                 'name' => $value,
-                'type_id' => ($value == 'admin') ? 1 : 2,
+                'type' => (in_array($value, ['admin', 'user'])) ? 1 : 2,
             ]);
         } 
     }

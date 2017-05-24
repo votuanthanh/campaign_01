@@ -20,9 +20,9 @@ class RoleRepository extends BaseRepository implements RoleInterface
 
         $roleId = $this->where([
             'name' => $name,
-            'type_id' => is_array($typeRole) ? $typeRole : [$typeRole],
+            'type' => $typeRole,
         ])->get();
         
-        return $roleId ?: false;
+        return !$roleId->isEmpty() ? $roleId : false;
     }
 }

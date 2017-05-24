@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
-use Activity;
 
 abstract class AbstractController extends Controller
 {
@@ -47,7 +46,7 @@ abstract class AbstractController extends Controller
 
     public function activityLog($actions, $message = null)
     {
-        Activity::log( $message ?: $this->repositoryName . ':' . $actions );
+        activity()->log($message ?: $this->repositoryName . ':' . $actions);
     }
 
     public function viewRender($data = [], $view = null)
@@ -66,7 +65,7 @@ abstract class AbstractController extends Controller
         return trans($this->lang['prefix'] . $str, $replacements);
     }
 
-    protected function reponseSuccess($fields = [])
+    protected function responseSuccess($fields = [])
     {
         if (empty($this->compacts)) {
             $this->compacts['status'] = true;
@@ -77,7 +76,7 @@ abstract class AbstractController extends Controller
         return response()->json($data);
     }
 
-    protected function reponseFail()
+    protected function responseFail()
     {
         return response()->json([
             'status' => false,

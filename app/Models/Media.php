@@ -8,6 +8,9 @@ class Media extends BaseModel
 {
     use SoftDeletes;
 
+    const IMAGE = 0;
+    const VIDEO = 1;
+    
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);

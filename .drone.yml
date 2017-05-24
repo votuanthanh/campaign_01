@@ -6,6 +6,7 @@ build:
     - php artisan key:generate
     - chmod -R 755 storage/*
     - php artisan migrate
+    - php artisan db:seed
     - php artisan passport:install
     - php artisan passport:client --personal
     - framgia-ci test-connect 127.0.0.1 3306 60

@@ -8,6 +8,9 @@ class Campaign extends BaseModel
 {
     use SoftDeletes;
 
+    const BLOCK = 0;
+    const ACTIVE = 1;
+
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
@@ -18,7 +21,6 @@ class Campaign extends BaseModel
         'hashtag',
         'title',
         'description',
-        'slug',
         'longitude',
         'latitude',
         'status',
@@ -96,5 +98,10 @@ class Campaign extends BaseModel
     public function blockeds()
     {
         return $this->getUserByRole('blocked')->get();
+    }
+    
+    public function isActive()
+    {
+        return $this->attributes['status'] == static::ACTIVE;
     }
 }
