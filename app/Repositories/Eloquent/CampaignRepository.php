@@ -20,18 +20,20 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         return Campaign::class;
     }
 
-    private function isArraySettings($settings)
+    private function isArrayFormat($settings)
     {
         if (!$settings) {
             return false;
-        } elseif (!is_array($settings)) {
-            throw new UnknowException('Settings is not array');
+        } 
+        
+        if (!is_array($settings)) {
+            throw new UnknowException('Param is not an array');
         }
 
         //check each element is array
         foreach ($settings as $setting) {
             if (!is_array($setting)) {
-                throw new UnknowException('Invalit format settings array');
+                throw new UnknowException('Invalid format array');
             }
         }
 
@@ -59,7 +61,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             throw new NotFoundException('Error create campaign');
         }
 
-        if (array_key_exists('settings', $inputs) && $this->isArraySettings($inputs['settings'])) {
+        if (array_key_exists('settings', $inputs) && $this->isArrayFormat($inputs['settings'])) {
             $campaign->settings()->createMany($inputs['settings']);
         }
 
@@ -83,7 +85,98 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         return true;
     }
 
-    public function delete($campaign) {
+    public function update($campaign, $inputs)
+    {
+        $this->deleteOrCreateTags($campaign, $inputs['tags']);
+        $this->updateSettings($campaign, $inputs['settings']);
+        $this->updateMedia($inputs['media'], $campaign);
+        $campaign = parent::update($campaign->id, array_except($inputs, ['tags', 'settings', 'media']));
+
+        return $campaign;
+    }
+
+    private function deleteOrCreateTags($campaign, $tags)
+    {
+        if (!$this->isArrayFormat($tags)) {
+            return false;
+        }
+
+        if (!$campaign->tags->isEmpty() && !$tags) {
+            $campaign->tags()->detach($campaign->tags->pluck('id'));
+        }
+        
+        if ($campaign->tags->isEmpty() && !$tags) {
+            return false;
+        }
+
+        $oldIds = [];
+        $newTags = [];
+
+        foreach ($tags as $tag) {
+            if ($tag['id']) {
+                $oldIds[] = $tag['id'];
+            } else {
+                $newTags[] = ['name' => $tag['name']];
+            }
+        }
+
+        $deleteIds = array_diff($campaign->tags->pluck('id')->toArray(), $oldIds);
+
+        if ($deleteIds) {
+            $campaign->tags()->detach($deleteIds);
+        }
+
+        if ($newTags) {
+            $campaign->tags()->createMany($newTags);
+        }
+        
+        return true;
+    }
+
+    private function updateSettings($campaign, $settings)
+    {
+        if (!$campaign || !$this->isArrayFormat($settings)) {
+            return false;
+        }
+
+        $settingsCampaign = $campaign->settings;
+
+        if ($settingsCampaign->isEmpty()) {
+            return false;
+        }
+
+        foreach ($settings as $name => $setting) {
+            $model = $settingsCampaign->where('key', $setting['key'])->first();
+
+            if ($model) {
+                $model->update(['value' => $setting['value']]);
+            }
+        }
+
+        return true;
+    }
+
+    private function updateMedia($campaign, $media)
+    {
+        if (!$campaign || !is_file($media)) {
+            return false;
+        }
+
+        $model = $campaign->media->first();
+        
+        if (!$model) {
+            return false;
+        }
+
+        $this->destroyFile($model->url_file);
+        $urlFile = $this->uploadFile($media, 'campaigns');
+        $model->update(['url_file' => $urlFile]);
+
+        return true;
+    }
+    
+    public function delete($campaign)
+    {
         $campaign->donations()->delete();
         $campaign->tags()->detach();
         $campaign->users()->detach();

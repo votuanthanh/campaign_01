@@ -26,7 +26,7 @@ class UpdateColumnStatusUserTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->tinyInteger('status')->change();
+            $table->smallInteger('status')->tinyInteger('status')->change();
         });
     }
 }

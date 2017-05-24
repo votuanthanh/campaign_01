@@ -23,23 +23,6 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::post('register', 'RegisterController@create')->name('register');
     });
 
-    Route::post('check-exist', 'CommonController@checkExist');
-
-    Route::group(['middleware' => 'auth:api'], function () {
-
-    Route::post('logout', 'Auth\AuthController@logout')->name('logout');
-        Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {
-            Route::post('post-create', 'CampaignController@create')->name('create');
-            Route::delete('post-delete', 'CampaignController@delete')->name('delete');
-        });
-
-        Route::group(['prefix' => '/event', 'as' => 'event.'], function () {
-            Route::post('create', 'EventController@create')->name('create');
-            Route::patch('/update/{id}', 'EventController@update')->name('update-event');
-            Route::patch('/update-setting/{id}', 'EventController@updateSetting')->name('update-setting');
-        });
-    });
-
     Route::group(['as' => 'user.', 'prefix' => 'settings'], function () {
         Route::patch('password', 'UserController@updatePassword')->name('password');
         Route::patch('profile', 'UserController@updateProfile')->name('profile');
@@ -48,11 +31,29 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::patch('follow/{id}', 'UserController@follow')->name('follow');
         Route::patch('unfollow/{id}', 'UserController@unfollow')->name('unfollow');
     });
-});
 
-Route::group(['namespace' => 'Api', 'prefix' => 'user/{id}', 'as' => 'user.'], function () {
-    Route::get('followers', 'UserController@listFollower')->name('follower');
-    Route::get('followings', 'UserController@listFollowing')->name('following');
-    Route::get('owned-campaign', 'UserController@listOwnedCampaign')->name('owned-campaign');
-    Route::get('joined-campaign', 'UserController@listJoinedCampaign')->name('joined-campaign');
+    Route::group(['prefix' => 'user/{id}', 'as' => 'user.'], function () {
+        Route::get('followers', 'UserController@listFollower')->name('follower');
+        Route::get('followings', 'UserController@listFollowing')->name('following');
+        Route::get('owned-campaign', 'UserController@listOwnedCampaign')->name('owned-campaign');
+        Route::get('joined-campaign', 'UserController@listJoinedCampaign')->name('joined-campaign');
+    });
+    
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('logout', 'Auth\AuthController@logout')->name('logout');
+
+        Route::resource('campaign', 'CampaignController', ['only' => ['store','update']]);
+
+        Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {
+            Route::delete('post-delete', 'CampaignController@delete')->name('delete');
+        });
+
+        Route::post('check-exist', 'CommonController@checkExist');
+
+        Route::group(['prefix' => '/event', 'as' => 'event.'], function () {
+            Route::post('create', 'EventController@create')->name('create');
+            Route::patch('/update/{id}', 'EventController@update')->name('update-event');
+            Route::patch('/update-setting/{id}', 'EventController@updateSetting')->name('update-setting');
+        });
+    });
 });
