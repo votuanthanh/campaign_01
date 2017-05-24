@@ -11,6 +11,14 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\UserRepositoryInterface::class,
             \App\Repositories\Eloquent\UserRepository::class,
         ],
+        'role' => [
+            \App\Repositories\Contracts\RoleInterface::class,
+            \App\Repositories\Eloquent\RoleRepository::class,
+        ],
+        'type' => [
+            \App\Repositories\Contracts\TypeInterface::class,
+            \App\Repositories\Eloquent\TypeRepository::class,
+        ]
     ];
 
     /**

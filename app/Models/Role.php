@@ -8,6 +8,10 @@ class Role extends BaseModel
 {
     use SoftDeletes;
 
+    const TYPE_CAMPAIGN = 'campaign';
+    const TYPE_SYSTEM = 'system';
+    const ROLE_USER = 'user';
+
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
@@ -31,5 +35,13 @@ class Role extends BaseModel
     public function users()
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function scopeUserRole($query)
+    {
+        return $query->join('types', 'types.id', 'roles.type_id')->where([
+            'roles.name' => static::ROLE_USER,
+            'types.name' => static::TYPE_SYSTEM,
+        ]);
     }
 }

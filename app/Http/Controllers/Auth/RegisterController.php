@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\RoleInterface;
+use App\Http\Controllers\AbstractController;
+use Auth;
+use Illuminate\Http\Request;
 
-class RegisterController extends Controller
+class RegisterController extends AbstractController
 {
     /*
     |--------------------------------------------------------------------------
@@ -29,14 +32,19 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/home';
 
+    private $roleRepository;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('guest');
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        RoleInterface $roleRepository
+    ) {
+        parent::__construct($userRepository);
+        $this->roleRepository = $roleRepository;
     }
 
     /**
@@ -51,6 +59,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'gender' => 'required|numeric',
         ]);
     }
 
@@ -60,12 +69,29 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return User
      */
-    protected function create(array $data)
+    protected function register(Request $request)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            return $this->reponseFail();
+        }
+
+        $data = $request->only('name', 'email', 'password', 'gender');
+        $role = $this->roleRepository->getModel()->userRole()->get();
+
+        if (!$role) {
+            return $this->reponseFail();
+        }
+        
+        $user = $this->repository->register($data, $role->first()->id);
+        
+        if (!$user) {
+            return $this->reponseFail();
+        }
+
+        Auth::login($user);
+
+        return $this->reponseSuccess();
     }
 }
