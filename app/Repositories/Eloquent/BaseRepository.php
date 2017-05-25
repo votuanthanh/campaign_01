@@ -67,14 +67,20 @@ abstract class BaseRepository implements RepositoryInterface
     */
     public function lists($column, $key = null)
     {
-        return $this->model->pluck($column, $key);
+        $model = $this->model->pluck($column, $key);
+        $this->makeModel();
+        
+        return $model;
+        
     }
 
     public function paginate($limit = null, $columns = ['*'])
     {
         $limit = $limit ?: config('setting.paginate');
+        $model = $this->model->paginate($limit, $columns);
+        $this->makeModel();
 
-        return $this->model->paginate($limit, $columns);
+        return $model;
     }
 
     public function find($id, $columns = ['*'])
@@ -85,14 +91,14 @@ abstract class BaseRepository implements RepositoryInterface
     public function whereIn($column, $values)
     {
         $values = is_array($values) ? $values : [$values];
-        $this->model->whereIn($column, $values);
+        $this->model = $this->model->whereIn($column, $values);
 
         return $this;
     }
 
     public function orWhere($column, $operator = null, $value = null)
     {
-        $this->model->orWhere($column, $operator, $value);
+        $this->model = $this->model->orWhere($column, $operator, $value);
 
         return $this;
     }
@@ -100,41 +106,54 @@ abstract class BaseRepository implements RepositoryInterface
     public function orWhereIn($column, $values)
     {
         $values = is_array($values) ? $values : [$values];
-        $this->model->orWhereIn($column, $values);
+        $this->model = $this->model->orWhereIn($column, $values);
 
         return $this;
     }
 
     public function where($conditions, $operator = null, $value = null)
     {
-        $this->model->where($conditions, $operator, $value);
+        $this->model = $this->model->where($conditions, $operator, $value);
 
         return $this;
     }
 
     public function whereBetween($colunm, $values)
     {
-        return $this->model->whereBetween($colunm, $values);
+        $this->model = $this->model->whereBetween($colunm, $values);
+
+        return $this;
     }
 
     public function whereNotIn($colunm, $values)
     {
-        return $this->model->whereNotIn($colunm, $values);
+        $this->model = $this->model->whereNotIn($colunm, $values);
+
+        return $this;
     }
 
     public function whereNull($colunm)
     {
-        return $this->model->whereNull($colunm);
+        $this->model = $this->model->whereNull($colunm);
+
+        return $this;
     }
 
     public function whereNotNull($colunm)
     {
-        return $this->model->whereNotNull($colunm);
+        $this->model = $this->model->whereNotNull($colunm);
+
+        return $this;
+    }
+
+    public function insertGetId($input)
+    {
+        return $this->model->insertGetId($input);
     }
 
     public function create($input)
     {
-        return $this->model->insertGetId($input);
+        return $this->model->create($input);
     }
 
     public function firstOrCreate($input)
@@ -153,7 +172,7 @@ abstract class BaseRepository implements RepositoryInterface
         $model->fill($input);
         $model->save();
 
-        return $this;
+        return $model;
     }
 
     public function multiUpdate($column, $value, $input)
@@ -172,21 +191,28 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function orderBy($column, $option = 'asc')
     {
-        return $this->model->orderBy($column, $option);
+        $model = $this->model->orderBy($column, $option);
+        $this->makeModel();
+        
+        return $model;
     }
 
     public function join($tableName, $tableColumn, $modelColumn, $option = '')
     {
         switch ($option) {
             case 'leftJoin':
-                return $this->model->leftJoin($tableName, $tableColumn, $modelColumn);
+                $this->model = $this->model->leftJoin($tableName, $tableColumn, $modelColumn);
+                break;
 
             case 'rightJoin':
-                return $this->model->rightJoin($tableName, $tableColumn, $modelColumn);
+                $this->model = $this->model->rightJoin($tableName, $tableColumn, $modelColumn);
+                break;
 
             default:
-                return $this->model->join($tableName, $tableColumn, $modelColumn);
+                $this->model = $this->model->join($tableName, $tableColumn, $modelColumn);
         }
+
+        return $this;
     }
 
     public function groupBy($colunms)
@@ -198,21 +224,37 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function count()
     {
-        return $this->model->count();
+        $model = $this->model->count();
+        $this->makeModel();
+
+        return $model; 
     }
 
     public function first()
     {
-        return $this->model->first();
+        $model = $this->model->first();
+        $this->makeModel();
+
+        return $model;
     }
 
     public function with($relationship)
     {
-        return $this->model->with($relationship);
+        $this->model = $this->model->with($relationship);
+
+        return $this;
     }
 
     public function getModel()
     {
         return $this->model;
+    }
+
+    public function get()
+    {
+        $model = $this->model->get();
+        $this->makeModel();
+
+        return $model;
     }
 }

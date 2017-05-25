@@ -59,4 +59,8 @@ interface RepositoryInterface
     public function orderBy($column, $option = 'asc');
 
     public function getModel();
+
+    public function get();
+
+    public function insertGetId($input);
 }
