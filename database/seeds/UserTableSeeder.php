@@ -17,18 +17,30 @@ class UserTableSeeder extends Seeder
         User::truncate();
         \DB::table('role_user')->truncate();
         \DB::table('relationships')->truncate();
-        factory(User::class, 20)->create()->each(function ($user) {
-            $roleIds = Role::all()->pluck('id')->toArray();
-            $userIds = User::where('id', '<>', $user->id)
-                ->pluck('id')->toArray();
-            $user->roles()->attach(array_rand($roleIds, rand(1, 3)));
-            $user->followings()->attach(array_rand($userIds, rand(1, 3)));
-        });
 
         factory(User::class)->create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'status' => 1,
-        ]);
+        ])->roles()->attach([1]);
+
+        factory(User::class, 20)->create()->each(function ($user) {
+            $roleIds = Role::all()->pluck('id')->toArray();
+            $userIds = User::where('id', '<>', $user->id)->pluck('id')->toArray();
+            $user->roles()->attach($this->getRandomElement($roleIds));
+            $user->followings()->attach($this->getRandomElement($userIds));
+        });
+    }
+
+    public function getRandomElement($array)
+    {
+        $arrayRoles = [];
+        $tmp = array_rand($array, rand(2, 4));
+
+        foreach ($tmp as $item) {
+            $arrayRoles[] = $array[$item];
+        }
+
+        return $arrayRoles;
     }
 }
