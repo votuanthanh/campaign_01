@@ -13,6 +13,20 @@ class RoleTableSeeder extends Seeder
     public function run()
     {
         Role::truncate();
-        factory(Role::class, 8)->create();
+        $roles = [
+            'admin',
+            'user',
+            'owner',
+            'moderator',
+            'member',
+            'blocked',
+        ];
+
+        foreach ($roles as $value) {
+            factory(Role::class)->create([
+                'name' => $value,
+                'type_id' => ($value == 'admin') ? 1 : 2,
+            ]);
+        } 
     }
 }

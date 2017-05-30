@@ -13,6 +13,15 @@ class TypeTableSeeder extends Seeder
     public function run()
     {
         Type::truncate();
-        factory(Type::class, 2)->create();
+        $types = [
+            'Site',
+            'Campaign',
+        ];
+
+        foreach ($types as $value) {
+            factory(Type::class)->create([
+                'name' => $value,
+            ]);
+        }
     }
 }
