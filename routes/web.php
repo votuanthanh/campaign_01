@@ -19,3 +19,18 @@ Route::get('/', function () {
 Route::get('/img/{path}', function (Illuminate\Http\Request $request, $path) {
     return app('glide')->getImageResponse($path, $request->all());
 })->where('path', '.*');
+
+Auth::routes();
+
+Route::group(['namespace' => 'Auth', 'prefix' => '/auth', 'middleware' => 'guest'], function () {
+    Route::get('/login', 'LoginController@getLogin');
+
+    Route::post('/register', 'RegisterController@register');
+});
+
+Route::group(['namespace' => 'Frontend'], function () {
+
+    Route::get('/active/{token}', 'UserController@active');
+
+    Route::get('/user', 'UserController@index');
+});

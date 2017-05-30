@@ -11,7 +11,7 @@ abstract class AbstractController extends Controller
 
     protected $user;
 
-    protected $compacts;
+    protected $compacts = [];
 
     protected $view;
 
@@ -64,5 +64,23 @@ abstract class AbstractController extends Controller
         $replacements = array_merge($data, $this->lang['replacements']);
 
         return trans($this->lang['prefix'] . $str, $replacements);
+    }
+
+    protected function reponseSuccess($fields = [])
+    {
+        if (empty($this->compacts)) {
+            $this->compacts['status'] = true;
+        }
+
+        $data = array_merge($fields, $this->compacts);
+
+        return response()->json($data);
+    }
+
+    protected function reponseFail()
+    {
+        return response()->json([
+            'status' => false,
+        ]);
     }
 }

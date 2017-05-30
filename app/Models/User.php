@@ -16,6 +16,11 @@ class User extends Authenticatable
      *
      * @var array
      */
+    
+    const IN_ACTIVE = 0;
+    const ACTIVE = 1;
+    const BAN = 2;
+
     protected $fillable = [
         'name',
         'email',
@@ -26,6 +31,9 @@ class User extends Authenticatable
         'phone',
         'status',
         'token_confirm',
+        'head_photo',
+        'gender',
+        'about',
     ];
 
     /**
@@ -90,5 +98,19 @@ class User extends Authenticatable
         $roleId = Role::whereName($role)->first()->id;
 
         return $this->roles()->wherePivot('role_id', $roleId)->exists();
+    }
+
+    public function getHeadPhotoAttribute($value)
+    {
+        return app('glide.url')->getUrl($value);
+    }
+
+    public function getAbout($value = null)
+    {
+        if (!$value || !is_numeric($value)) {
+            return $this->attributes['about'];
+        }
+
+        return str_limit($this->attributes['about'], $value);
     }
 }
