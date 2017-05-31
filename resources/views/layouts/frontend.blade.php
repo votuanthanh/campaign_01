@@ -24,6 +24,7 @@
     {!! Html::style(mix('frontend/css/theme.css')) !!}
     {!! Html::style(mix('frontend/css/blocks.css')) !!}
     {!! Html::style(mix('frontend/css/font.css')) !!}
+    {!! Html::style(mix('frontend/css/app.css')) !!}
     @stack('styles')
 </head>
 
@@ -51,8 +52,6 @@
     {{-- Responsive Header --}}
     @include('frontend._partials.header-mobile')
     {{-- end Responsive Header --}}
-
-    <div class="header-spacer"></div>
 
     {{-- Main content --}}
     @yield('main')

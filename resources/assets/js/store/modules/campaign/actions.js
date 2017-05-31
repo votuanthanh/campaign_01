@@ -9,7 +9,7 @@
 import * as types from './mutation-types';
 
 export const getAllCampaign = ({ commit }) => {
-    commit(types.ALL_CAMPAIGN);
+
 };
 
 export default {

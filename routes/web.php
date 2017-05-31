@@ -10,7 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -33,4 +32,7 @@ Route::group(['namespace' => 'Frontend'], function () {
     Route::get('/active/{token}', 'UserController@active');
 
     Route::get('/user', 'UserController@index');
+
+    // Homepage
+    Route::get('homepage', 'HomeController@index');
 });

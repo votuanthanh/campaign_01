@@ -4,6 +4,7 @@ import store from './store'
 import VueI18n from 'vue-i18n'
 import messages from './locale'
 import components from './components'
+import { router } from './router'
 
 Vue.use(VueI18n)
 
@@ -17,5 +18,6 @@ const app = new Vue({
     el: '#app',
     store,
     i18n,
+    router,
     components
 })

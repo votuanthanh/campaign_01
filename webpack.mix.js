@@ -5,6 +5,7 @@ const THEME_PATH = 'resources/assets/frontend/';
 const FRONTEND_PATH = 'public/frontend/';
 const BACKEND_PATH = 'public/backend/';
 const NODE_PATH = 'node_modules/';
+const SASS_PATH = 'resources/assets/sass/';
 
 /*
  |--------------------------------------------------------------------------
@@ -24,4 +25,5 @@ mix.js('resources/assets/js/app.js', FRONTEND_PATH + 'js')
     .copyDirectory(THEME_PATH + 'icons', FRONTEND_PATH + 'icons')
     .sass(THEME_PATH + 'sass/theme-styles.scss', FRONTEND_PATH + 'css/theme.css')
     .sass(THEME_PATH + 'sass/blocks.scss', FRONTEND_PATH + 'css')
-    .sass(NODE_PATH + 'font-awesome/scss/font-awesome.scss', FRONTEND_PATH + 'css/font.css');
+    .sass(NODE_PATH + 'font-awesome/scss/font-awesome.scss', FRONTEND_PATH + 'css/font.css')
+    .sass(SASS_PATH + 'app.scss', FRONTEND_PATH + 'css/app.css');
