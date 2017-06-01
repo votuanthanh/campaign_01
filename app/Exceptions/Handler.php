@@ -5,6 +5,8 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Exceptions\Api\NotFoundException;
+use App\Exceptions\Api\UnknowException;
 
 class Handler extends ExceptionHandler
 {
@@ -44,7 +46,22 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceOf NotFoundException || $exception instanceOf UnknowException) {
+            return $this->failJson($exception->getCode(), $exception->getErrorMessage());
+        }
+
         return parent::render($request, $exception);
+    }
+
+    private function failJson(int $code, $message = [])
+    {
+        $res['http_status'] = [
+            'status' => false,
+            'code' => $code,
+            'message' => $message ?: translate('status_code.' . $code),
+        ];
+
+        return response()->json($res, $code);
     }
 
     /**
