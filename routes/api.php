@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
     Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {
-        Route::post('post-create', 'ApiCampaignController@create')->name('create');
+        Route::post('post-create', 'CampaignController@create')->name('create');
+        Route::delete('post-delete', 'CampaignController@delete')->name('delete');
     });
 });

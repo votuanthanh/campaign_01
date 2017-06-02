@@ -2,15 +2,14 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Models\Campaign;
 use App\Models\Media;
-use App\Models\Tag;
+use App\Models\Campaign;
 use App\Traits\Common\UploadableTrait;
 use App\Repositories\Contracts\CampaignInterface;
-use Exception;
 use App\Exceptions\Api\NotFoundException;
 use App\Exceptions\Api\UnknowException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Exception;
 
 class CampaignRepository extends BaseRepository implements CampaignInterface
 {
@@ -82,5 +81,16 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         }
 
         return true;
+    }
+
+    public function delete($campaign) {
+        $campaign->donations()->delete();
+        $campaign->tags()->detach();
+        $campaign->users()->detach();
+        $campaign->media()->delete();
+        $campaign->likes()->delete();
+        $campaign->settings()->delete();
+
+        return $campaign->delete();
     }
 }

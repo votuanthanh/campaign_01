@@ -79,13 +79,13 @@ class RegisterController extends AbstractController
         }
 
         $data = $request->only('name', 'email', 'password', 'gender');
-        $role = $this->roleRepository->findRoleId(Role::ROLE_USER, Role::TYPE_SYSTEM);
+        $roleId = $this->roleRepository->getRoleId(Role::ROLE_USER, Role::TYPE_SYSTEM);
 
-        if ($role->isEmpty()) {
+        if (!$roleId) {
             return $this->responseFail();
         }
         
-        $user = $this->repository->register($data, $role->first()->id);
+        $user = $this->repository->register($data, $roleId);
         
         if (!$user) {
             return $this->responseFail();
