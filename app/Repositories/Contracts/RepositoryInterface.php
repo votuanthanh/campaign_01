@@ -63,4 +63,6 @@ interface RepositoryInterface
     public function get();
 
     public function insertGetId($input);
+
+    public function exists($column, $input);
 }

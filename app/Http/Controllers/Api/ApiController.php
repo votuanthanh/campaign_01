@@ -62,6 +62,6 @@ class ApiController extends AbstractController
             throw new UnknowException($e->getMessage(), $e->getCode());
         }
 
-        return $this->jsonRender();
+        return $this->trueJson();
     }
 }

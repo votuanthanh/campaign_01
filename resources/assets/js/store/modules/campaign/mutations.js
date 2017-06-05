@@ -3,6 +3,6 @@ import { get, post } from 'axios'
 
 export default {
     [ALL_CAMPAIGN](state) {
-        // Call api here
+        console.log('HELLO CAMPAIGN COMPONENTS')
     },
 };

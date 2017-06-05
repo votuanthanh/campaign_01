@@ -7,8 +7,4 @@
  * account module.
  */
 
-export default {
-    isUser() {
-        return true
-    }
-};
+export default {};
