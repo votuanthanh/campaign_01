@@ -26,8 +26,8 @@ class DonationType extends BaseModel
         return $this->belongsTo(Quality::class);
     }
 
-    public function donations()
+    public function goals()
     {
-        return $this->hasMany(Donation::class);
+        return $this->hasMany(Goal::class);
     }
 }

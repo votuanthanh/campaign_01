@@ -27,6 +27,7 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'token_confirm' => str_random(10),
         'created_at' => $faker->dateTime(),
         'updated_at' => $faker->dateTime(),
+        'gender' => $faker->randomElement([0, 1]),
     ];
 });
 
@@ -43,8 +44,7 @@ $factory->define(App\Models\Role::class, function (Faker\Generator $faker) {
 
     return [
         'name' => $faker->word,
-        'type_id' => $faker->randomElement(App\Models\Type::all()
-            ->pluck('id')->toArray()),
+        'type_id' => $faker->randomElement(App\Models\Type::pluck('id')->toArray()),
     ];
 });
 
@@ -54,7 +54,7 @@ $factory->define(App\Models\Campaign::class, function (Faker\Generator $faker) {
         'description' => $faker->paragraph(),
         'longitude' => $faker->longitude,
         'latitude' => $faker->latitude,
-        'status' => $faker->randomElement([0, 1]),
+        'status' => rand(0, 1),
         'created_at' => $faker->dateTime(),
         'updated_at' => $faker->dateTime(),
     ];
@@ -73,10 +73,8 @@ $factory->define(App\Models\Event::class, function (Faker\Generator $faker) {
     static $campaignId;
 
     return [
-        'user_id' => $faker->randomElement($userId ?: $userId = App\Models\User::all()
-            ->pluck('id')->toArray()),
-        'campaign_id' => $faker->randomElement($campaignId ?: $campaignId = App\Models\Campaign::all()
-            ->pluck('id')->toArray()),
+        'user_id' => $faker->randomElement($userId ?: $userId = App\Models\User::pluck('id')->toArray()),
+        'campaign_id' => $faker->randomElement($campaignId ?: $campaignId = App\Models\Campaign::pluck('id')->toArray()),
         'title' => $faker->sentence(10),
         'description' => $faker->paragraph(),
         'longitude' => $faker->longitude,
@@ -86,15 +84,26 @@ $factory->define(App\Models\Event::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Models\Goal::class, function (Faker\Generator $faker) {
+    static $eventId;
+    static $donationTypeId;
+
+    return [
+        'donation_type_id' => $faker
+            ->randomElement($donationTypeId ?: $donationTypeId = App\Models\DonationType::pluck('id')->toArray()),
+        'event_id' => $faker
+            ->randomElement($eventId ?: $eventId = App\Models\Event::pluck('id')->toArray()),
+        'goal' => rand(10, 100),
+    ];
+});
+
 $factory->define(App\Models\Action::class, function (Faker\Generator $faker) {
     static $eventId;
     static $userId;
 
     return [
-        'event_id' => $faker->randomElement($eventId ?: $eventId = App\Models\Event::all()
-            ->pluck('id')->toArray()),
-        'user_id' => $faker->randomElement($userId ?: $userId = App\Models\User::all()
-            ->pluck('id')->toArray()),
+        'event_id' => $faker->randomElement($eventId ?: $eventId = App\Models\Event::pluck('id')->toArray()),
+        'user_id' => $faker->randomElement($userId ?: $userId = App\Models\User::pluck('id')->toArray()),
         'caption' => $faker->sentence(10),
         'description' => $faker->paragraph(),
 
@@ -112,24 +121,21 @@ $factory->define(App\Models\DonationType::class, function (Faker\Generator $fake
 
     return [
         'name' => $faker->word,
-        'quality_id' => $faker->randomElement($qualityId ?: $qualityId = App\Models\Quality::all()
-            ->pluck('id')->toArray()),
+        'quality_id' => $faker->randomElement($qualityId ?: $qualityId = App\Models\Quality::pluck('id')->toArray()),
     ];
 });
 
 $factory->define(App\Models\Donation::class, function (Faker\Generator $faker) {
     static $userId;
     static $eventId;
-    static $donationTypeId;
+    static $campaignId;
+    static $goalId;
 
     return [
-        'user_id' => $faker->randomElement($userId ?: $userId = App\Models\User::all()
-            ->pluck('id')->toArray()),
-        'event_id' => $faker->randomElement($eventId ?: $eventId = App\Models\Event::all()
-            ->pluck('id')->toArray()),
-        'donation_type_id' => $faker
-            ->randomElement($donationTypeId ?: $donationTypeId = App\Models\DonationType::all()
-            ->pluck('id')->toArray()),
+        'user_id' => $faker->randomElement($userId ?: $userId = App\Models\User::pluck('id')->toArray()),
+        'event_id' => $faker->randomElement($eventId ?: $eventId = App\Models\Event::pluck('id')->toArray()),
+        'campaign_id' => $faker->randomElement($campaignId ?: $campaignId = App\Models\Campaign::pluck('id')->toArray()),
+        'goal_id' => $faker->randomElement($goalId ?: $goalId = App\Models\Goal::pluck('id')->toArray()),
         'value' => rand(10, 1000),
     ];
 });
