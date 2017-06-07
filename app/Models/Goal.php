@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Donation extends BaseModel
+class Goal extends BaseModel
 {
     use SoftDeletes;
 
@@ -14,33 +14,24 @@ class Donation extends BaseModel
     }
 
     protected $fillable = [
-        'id',
-        'user_id',
         'event_id',
-        'value',
         'donation_type_id',
-        'campaign_id',
+        'goal',
     ];
-
     protected $dates = ['deleted_at'];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function event()
     {
-        return $this->belongsTo(Event::class);
+        return $this->belongTo(Event::class);
     }
 
-    public function campaign()
+    public function donationType()
     {
-        return $this->belongsTo(Campaign::class);
+        return $this->belongTo(DonationType::class);
     }
 
-    public function goal()
+    public function donations()
     {
-        return $this->belongsTo(Goal::class);
+        return $this->hasMany(Donation::class);
     }
 }

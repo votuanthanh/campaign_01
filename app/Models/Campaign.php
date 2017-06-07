@@ -61,6 +61,11 @@ class Campaign extends BaseModel
         return $this->hasManyThrough(Action::class, Event::class);
     }
 
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
+
     public function getUserByRole($roles)
     {
         $roles = is_array($roles) ? $roles : [$roles];
