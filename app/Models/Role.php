@@ -8,9 +8,10 @@ class Role extends BaseModel
 {
     use SoftDeletes;
 
-    const TYPE_CAMPAIGN = 'campaign';
-    const TYPE_SYSTEM = 'system';
+    const TYPE_CAMPAIGN = 2;
+    const TYPE_SYSTEM = 1;
     const ROLE_USER = 'user';
+    const ROLE_OWNER = 'owner';
 
     public function __construct($attributes = [])
     {
@@ -20,7 +21,7 @@ class Role extends BaseModel
     protected $fillable = [
         'id',
         'name',
-        'type_id',
+        'type',
     ];
 
     public $timestamps = false;
@@ -35,13 +36,5 @@ class Role extends BaseModel
     public function users()
     {
         return $this->belongsToMany(User::class);
-    }
-
-    public function scopeUserRole($query)
-    {
-        return $query->join('types', 'types.id', 'roles.type_id')->where([
-            'roles.name' => static::ROLE_USER,
-            'types.name' => static::TYPE_SYSTEM,
-        ]);
     }
 }

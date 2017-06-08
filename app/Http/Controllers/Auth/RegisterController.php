@@ -9,6 +9,7 @@ use App\Repositories\Contracts\RoleInterface;
 use App\Http\Controllers\AbstractController;
 use Auth;
 use Illuminate\Http\Request;
+use App\Models\Role;
 
 class RegisterController extends AbstractController
 {
@@ -74,24 +75,24 @@ class RegisterController extends AbstractController
         $validator = $this->validator($request->all());
 
         if ($validator->fails()) {
-            return $this->reponseFail();
+            return $this->responseFail();
         }
 
         $data = $request->only('name', 'email', 'password', 'gender');
-        $role = $this->roleRepository->getModel()->userRole()->get();
+        $role = $this->roleRepository->findRoleId(Role::ROLE_USER, Role::TYPE_SYSTEM);
 
-        if (!$role) {
-            return $this->reponseFail();
+        if ($role->isEmpty()) {
+            return $this->responseFail();
         }
         
         $user = $this->repository->register($data, $role->first()->id);
         
         if (!$user) {
-            return $this->reponseFail();
+            return $this->responseFail();
         }
 
         Auth::login($user);
 
-        return $this->reponseSuccess();
+        return $this->responseSuccess();
     }
 }
