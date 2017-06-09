@@ -19,7 +19,7 @@ class DeleteCampaignTest extends TestCase
      *
      * @return void
      */
-    public function testDeleteCampaignSuccessWithAuthorized()
+    public function testDeleteCampaignWithAuthorizedThenSuccess()
     {
         $user = factory(User::class)->create();
         $userId = $user->id;
@@ -45,7 +45,7 @@ class DeleteCampaignTest extends TestCase
      *
      * @return void
      */
-    public function testDeleteCampaignFailWithAuthorized()
+    public function testDeleteCampaignWithAuthorizedThenFail()
     {
         $user = factory(User::class)->create();
         $userId = $user->id;
@@ -74,7 +74,7 @@ class DeleteCampaignTest extends TestCase
      *
      * @return void
      */
-    public function testDeleteCampaignFailWithCampaignNotFound()
+    public function testDeleteCampaignWithCampaignNotFoundThenFail()
     {
         $user = factory(User::class)->create();
         $userId = $user->id;

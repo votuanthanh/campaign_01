@@ -85,6 +85,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class)->withTimestamps();
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class)->withTimestamps();
+    }
+
     public function followings()
     {
         return $this->belongsToMany(User::class, 'relationships', 'user_id', 'following_id');

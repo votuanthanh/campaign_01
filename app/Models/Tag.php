@@ -24,4 +24,9 @@ class Tag extends BaseModel
     {
         return $this->belongsToMany(Campaign::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

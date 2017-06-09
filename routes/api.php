@@ -48,6 +48,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::patch('change-role', 'CampaignController@changeMemberRole')->name('change-role');
             Route::patch('remove-user', 'CampaignController@removeUser')->name('remove-user');
             Route::patch('change-owner', 'CampaignController@changeOwner')->name('change-owner');
+            Route::post('approve-user', 'CampaignController@approveUserJoinCampaign')->name('approve');
         });
 
         Route::resource('campaign', 'CampaignController', ['only' => ['store', 'update', 'destroy', 'show']]);
