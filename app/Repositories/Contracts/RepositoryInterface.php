@@ -18,6 +18,8 @@ interface RepositoryInterface
 
     public function find($id, $columns = ['*']);
 
+    public function findOrFail($id, $columns = ['*']);
+
     public function where($conditions, $operator = null, $value = null);
 
     public function whereIn($column, $value);

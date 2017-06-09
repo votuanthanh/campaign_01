@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\UserInterface;
 use App\Repositories\Contracts\RoleInterface;
 use App\Http\Controllers\AbstractController;
 use Auth;
@@ -41,7 +41,7 @@ class RegisterController extends AbstractController
      * @return void
      */
     public function __construct(
-        UserRepositoryInterface $userRepository,
+        UserInterface $userRepository,
         RoleInterface $roleRepository
     ) {
         parent::__construct($userRepository);
@@ -79,14 +79,14 @@ class RegisterController extends AbstractController
         }
 
         $data = $request->only('name', 'email', 'password', 'gender');
-        $roleId = $this->roleRepository->getRoleId(Role::ROLE_USER, Role::TYPE_SYSTEM);
+        $roleId = $this->roleRepository->getRoleByName(Role::ROLE_USER, Role::TYPE_SYSTEM)->first();
 
         if (!$roleId) {
             return $this->responseFail();
         }
-        
+
         $user = $this->repository->register($data, $roleId);
-        
+
         if (!$user) {
             return $this->responseFail();
         }

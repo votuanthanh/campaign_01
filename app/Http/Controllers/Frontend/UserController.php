@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Frontend;
 
 use Illuminate\Http\Request;
-use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\UserInterface;
 use Exception;
 
 class UserController extends FrontendController
 {
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserInterface $userRepository)
     {
         parent::__construct($userRepository);
     }
@@ -16,7 +16,7 @@ class UserController extends FrontendController
     public function index()
     {
         $this->view = null;
-        
+
         return $this->viewRender();
     }
 

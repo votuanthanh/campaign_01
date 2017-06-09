@@ -8,7 +8,7 @@ class RepositoryServiceProvider extends ServiceProvider
 {
     protected static $repositories = [
         'user' => [
-            \App\Repositories\Contracts\UserRepositoryInterface::class,
+            \App\Repositories\Contracts\UserInterface::class,
             \App\Repositories\Eloquent\UserRepository::class,
         ],
         'role' => [

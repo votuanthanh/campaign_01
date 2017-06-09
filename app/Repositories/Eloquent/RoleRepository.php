@@ -13,15 +13,28 @@ class RoleRepository extends BaseRepository implements RoleInterface
         return Role::class;
     }
 
-    public function getRoleId($name, $roleType)
+    /**
+     * Get role by name and type
+     * Give $roleNames = '*' for all roles
+     * Give $idOnly = true for id array, false for collection
+     * @param  string, array  $roleNames
+     * @param  int  $roleType
+     * @return mixed
+     */
+    public function getRoleByName($roleNames, $roleType)
     {
-        if (!$name || !$roleType) {
-            return false;
+        $roleNames = is_array($roleNames) ? $roleNames : [$roleNames];
+
+        if (!$roleNames || !$roleType) {
+            return null;
         }
 
-        return $this->where([
-            'name' => $name,
-            'type' => $roleType,
-        ])->lists('id')->first();
+        $roles = $this->where('type', $roleType);
+
+        if ($roleNames != ['*']) {
+            $roles = $roles->whereIn('name', $roleNames);
+        }
+
+        return $roles = $roles->lists('id');
     }
 }

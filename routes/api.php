@@ -38,4 +38,20 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::post('create', 'EventController@create')->name('create');
         });
     });
+
+    Route::group(['as' => 'user.', 'prefix' => 'settings'], function () {
+        Route::patch('password', 'UserController@updatePassword')->name('password');
+        Route::patch('profile', 'UserController@updateProfile')->name('profile');
+        Route::post('avatar', 'UserController@updateAvatar')->name('avatar');
+        Route::post('header-photo', 'UserController@updateHeaderPhoto')->name('header');
+        Route::patch('follow/{id}', 'UserController@follow')->name('follow');
+        Route::patch('unfollow/{id}', 'UserController@unfollow')->name('unfollow');
+    });
+});
+
+Route::group(['namespace' => 'Api', 'prefix' => 'user/{id}', 'as' => 'user.'], function () {
+    Route::get('followers', 'UserController@listFollower')->name('follower');
+    Route::get('followings', 'UserController@listFollowing')->name('following');
+    Route::get('owned-campaign', 'UserController@listOwnedCampaign')->name('owned-campaign');
+    Route::get('joined-campaign', 'UserController@listJoinedCampaign')->name('joined-campaign');
 });

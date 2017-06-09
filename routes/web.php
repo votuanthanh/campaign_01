@@ -28,7 +28,6 @@ Route::group(['namespace' => 'Auth', 'prefix' => '/auth', 'middleware' => 'guest
 });
 
 Route::group(['namespace' => 'Frontend'], function () {
-
     Route::get('/active/{token}', 'UserController@active');
 
     Route::get('/user', 'UserController@index');
