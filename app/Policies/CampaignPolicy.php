@@ -8,6 +8,18 @@ use App\Models\Campaign;
 class CampaignPolicy extends BasePolicy
 {
     /**
+     * Determine whether the user can create events.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Campaign  $campaign
+     * @return mixed
+     */
+    public function createEvent(User $user, Campaign $campaign)
+    {
+        return in_array($user->id, $campaign->getUserByRole(['owner', 'moderator'])->get()->pluck('id')->toArray());
+    }
+
+    /**
      * Determine whether the user can view the campaign.
      *
      * @param  \App\User  $user
@@ -24,7 +36,7 @@ class CampaignPolicy extends BasePolicy
             return true;
         }
 
-        return in_array($campaign->id, $user->campaigns->pluck('id'));
+        return in_array($user->id, $campaign->users->pluck('id')->toArray());
     }
 
     /**
@@ -40,6 +52,7 @@ class CampaignPolicy extends BasePolicy
          * but in the future, we'll change this
          * so I keep this function here
          */
+        return true;
     }
 
     /**
