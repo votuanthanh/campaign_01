@@ -4,20 +4,19 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Event;
-use App\Models\Campaign;
 
 class EventPolicy extends BasePolicy
 {
     /**
-     * Determine whether the user can create events.
+     * Determine whether the user can view the event.
      *
      * @param  \App\Models\User  $user
-     * @param \App\Models\Campaign  $campaign
+     * @param  \App\Models\Event  $event
      * @return mixed
      */
-    public function createEvent(User $user, Campaign $campaign)
+    public function view(User $user, Event $event)
     {
-        return in_array($user->id, $campaign->getUserByRole(['owner', 'moderator'])->get()->toArray());
+        return $user->can('view', $event->campaign);
     }
 
     /**
