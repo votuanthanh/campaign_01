@@ -109,7 +109,7 @@ class EventRepository extends BaseRepository implements EventInterface
         $goals = $event->goals;
 
         if (isset($inputs['goalAdd'])) {
-            $event->goals->createMany($inputs['goalAdd']);
+            $event->goals()->createMany($inputs['goalAdd']);
         }
 
         if (isset($inputs['goalUpdate']) && $goals) {

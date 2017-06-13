@@ -8,6 +8,10 @@ class Donation extends BaseModel
 {
     use SoftDeletes;
 
+     // Donation's status
+    const ACCEPT = 1;
+    const NOT_ACCEPT = 0;
+
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
@@ -18,8 +22,9 @@ class Donation extends BaseModel
         'user_id',
         'event_id',
         'value',
-        'donation_type_id',
         'campaign_id',
+        'goal_id',
+        'status',
     ];
 
     protected $dates = ['deleted_at'];

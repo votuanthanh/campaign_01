@@ -130,6 +130,7 @@ $factory->define(App\Models\Donation::class, function (Faker\Generator $faker) {
         'campaign_id' => $faker->randomElement($campaignId ?: $campaignId = App\Models\Campaign::pluck('id')->toArray()),
         'goal_id' => $faker->randomElement($goalId ?: $goalId = App\Models\Goal::pluck('id')->toArray()),
         'value' => rand(10, 1000),
+        'status' => $faker->randomElement([0, 1]),
     ];
 });
 

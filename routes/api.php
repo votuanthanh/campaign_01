@@ -71,5 +71,10 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         });
 
         Route::resource('/comment', 'CommentController', ['only' => ['update', 'destroy']]);
+
+        Route::group(['prefix' => '/donation'], function () {
+            Route::patch('/update-status/{id}', 'DonationController@updateStatus')->name('update-status');
+            Route::resource('donation', 'DonationController', ['only' => ['store', 'update', 'destroy']]);
+        });
     });
 });

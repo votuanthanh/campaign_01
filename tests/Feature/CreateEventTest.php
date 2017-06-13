@@ -169,7 +169,6 @@ class CreateEventTest extends TestCase
         $this->actingAs($user, 'api');
 
         $response = $this->json('POST', route('event.create'), [
-            'title' => null,
             'description' => $faker->paragraph(),
             'longitude' => $faker->longitude,
             'latitude' => $faker->latitude,
@@ -227,7 +226,6 @@ class CreateEventTest extends TestCase
                 1 => '15/3/2017',
                 2 => '30/3/2017',
             ],
-            'donations' => null,
             'files' => [
                 UploadedFile::fake()->image('avatar.jpg', 600, 600),
             ],

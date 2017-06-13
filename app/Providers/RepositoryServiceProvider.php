@@ -51,6 +51,10 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\CommentInterface::class,
             \App\Repositories\Eloquent\CommentRepository::class,
         ],
+        'donation' => [
+            \App\Repositories\Contracts\DonationInterface::class,
+            \App\Repositories\Eloquent\DonationRepository::class,
+        ],
     ];
 
     /**
