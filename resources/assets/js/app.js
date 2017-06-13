@@ -1,11 +1,22 @@
-require('./bootstrap');
 import Vue from 'vue'
 import store from './store'
 import VueI18n from 'vue-i18n'
 import messages from './locale'
-import components from './components'
+import router from './router'
+import VeeValidate, { Validator } from 'vee-validate'
+import rules from './validation'
+import { config, dictionary } from './validation/config'
+import { get } from './helpers/api'
 
 Vue.use(VueI18n)
+
+// Register rules vee-validation
+Vue.use(VeeValidate, config)
+for (let rule in rules) {
+    Validator.extend(rule, rules[rule])
+}
+
+Validator.updateDictionary(dictionary);
 
 const i18n = new VueI18n({
     locale: window.Laravel.locale,
@@ -16,6 +27,6 @@ const i18n = new VueI18n({
 const app = new Vue({
     el: '#app',
     store,
-    i18n,
-    components
+    router,
+    i18n
 })
