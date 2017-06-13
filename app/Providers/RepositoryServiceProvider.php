@@ -31,6 +31,10 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\EventInterface::class,
             \App\Repositories\Eloquent\EventRepository::class,
         ],
+        'quality' => [
+            \App\Repositories\Contracts\QualityInterface::class,
+            \App\Repositories\Eloquent\QualityRepository::class,
+        ],
     ];
 
     /**

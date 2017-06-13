@@ -27,6 +27,6 @@ class RoleTableSeeder extends Seeder
                 'name' => $value,
                 'type' => (in_array($value, ['admin', 'user'])) ? 1 : 2,
             ]);
-        } 
+        }
     }
 }

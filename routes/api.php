@@ -17,9 +17,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['namespace' => 'Api', 'middleware' => 'auth:api'], function () {
+Route::group(['namespace' => 'Api', 'middleware' => ['auth:api', 'xssProtection']], function () {
     Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {
         Route::post('post-create', 'CampaignController@create')->name('create');
         Route::delete('post-delete', 'CampaignController@delete')->name('delete');
+    });
+
+    Route::group(['prefix' => '/event', 'as' => 'event.'], function () {
+        Route::post('create', 'EventController@create')->name('create');
     });
 });
