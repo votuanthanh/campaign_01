@@ -122,23 +122,23 @@ var CRUMINA = {};
          * Documentation about used plugin:
          * https://v4-alpha.getbootstrap.com/getting-started/introduction/
          * ---------------------------*/
-        var date_select_field = $('input[name="datetimepicker"]');
-        if (date_select_field.length) {
-            var start = moment().subtract(29, 'days');
-
-            date_select_field.daterangepicker({
-                startDate: start,
-                autoUpdateInput: false,
-                singleDatePicker: true,
-                showDropdowns: true,
-                locale: {
-                    format: 'DD/MM/YYYY'
-                }
-            });
-            date_select_field.on('apply.daterangepicker', function (ev, picker) {
-                $(this).val(picker.startDate.format('DD/MM/YYYY'));
-            });
-        }
+        // var date_select_field = $('input[name="datetimepicker"]');
+        // if (date_select_field.length) {
+        //     var start = moment().subtract(29, 'days');
+		//
+        //     date_select_field.daterangepicker({
+        //         startDate: start,
+        //         autoUpdateInput: false,
+        //         singleDatePicker: true,
+        //         showDropdowns: true,
+        //         locale: {
+        //             format: 'DD/MM/YYYY'
+        //         }
+        //     });
+        //     date_select_field.on('apply.daterangepicker', function (ev, picker) {
+        //         $(this).val(picker.startDate.format('DD/MM/YYYY'));
+        //     });
+        // }
 
 
     };
