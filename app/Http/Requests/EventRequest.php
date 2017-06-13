@@ -21,13 +21,25 @@ class EventRequest extends AbstractRequest
      */
     public function rules()
     {
-        return [
-            'title' => 'required|string',
-            'description' => 'required|string',
-            'files.*' => 'required|image|max:500',
-            'longitude' => 'numeric|min:-180|max:180',
-            'latitude' => 'numeric|min: -90|max:90',
-            'settings' => 'required',
-        ];
+        switch ($this->method()) {
+            case 'PATCH':
+            case 'PUT':
+                return [
+                    'title' => 'required|string',
+                    'description' => 'required|string',
+                    'mediaAdds.*' => 'image|max:500',
+                    'longitude' => 'numeric|min:-180|max:180',
+                    'latitude' => 'numeric|min:-90|max:90',
+                ];
+            default:
+                return [
+                    'title' => 'required|string',
+                    'description' => 'required|string',
+                    'files.*' => 'required|image|max:500',
+                    'longitude' => 'numeric|min:-180|max:180',
+                    'latitude' => 'numeric|min:-90|max:90',
+                    'settings' => 'required',
+                ];
+        }
     }
 }

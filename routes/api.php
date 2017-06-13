@@ -27,8 +27,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
 
     Route::group(['middleware' => 'auth:api'], function () {
 
-        Route::post('logout', 'Auth\AuthController@logout')->name('logout');
-
+    Route::post('logout', 'Auth\AuthController@logout')->name('logout');
         Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {
             Route::post('post-create', 'CampaignController@create')->name('create');
             Route::delete('post-delete', 'CampaignController@delete')->name('delete');
@@ -36,6 +35,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
 
         Route::group(['prefix' => '/event', 'as' => 'event.'], function () {
             Route::post('create', 'EventController@create')->name('create');
+            Route::patch('/update/{id}', 'EventController@update')->name('update-event');
+            Route::patch('/update-setting/{id}', 'EventController@updateSetting')->name('update-setting');
         });
     });
 });
