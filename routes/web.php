@@ -10,10 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/{vue_capture?}', function () {
+    return view('app');
+})->where('vue_capture', '[\/\w\.-]*');
 
 // Server response to url image files
 Route::get('/img/{path}', function (Illuminate\Http\Request $request, $path) {
