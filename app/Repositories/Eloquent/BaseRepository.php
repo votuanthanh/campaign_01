@@ -85,7 +85,7 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function find($id, $columns = ['*'])
     {
-        return $this->model->findOrFail($id, $columns);
+        return $this->model->find($id, $columns);
     }
 
     public function whereIn($column, $values)
@@ -238,9 +238,13 @@ abstract class BaseRepository implements RepositoryInterface
         return $model;
     }
 
-    public function with($relationship)
+    public function with($relationships)
     {
-        $this->model = $this->model->with($relationship);
+        if (is_string($relationships)) {
+            $relationships = func_get_args();
+        }
+
+        $this->model = $this->model->with($relationships);
 
         return $this;
     }

@@ -154,7 +154,7 @@ class CreateCampaign extends TestCase
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
-
+    
         $response->assertStatus(VALIDATOR_ERROR)->assertJson([
             'code' => VALIDATOR_ERROR,
             'status' => false,

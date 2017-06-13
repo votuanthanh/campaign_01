@@ -12,6 +12,8 @@ class Role extends BaseModel
     const TYPE_SYSTEM = 1;
     const ROLE_USER = 'user';
     const ROLE_OWNER = 'owner';
+    const ROLE_MODERATOR = 'moderator';
+    const ROLE_MEMBER = 'member';
 
     public function __construct($attributes = [])
     {
@@ -27,11 +29,6 @@ class Role extends BaseModel
     public $timestamps = false;
 
     protected $dates = ['deleted_at'];
-
-    public function type()
-    {
-        return $this->belongsTo(Type::class);
-    }
 
     public function users()
     {

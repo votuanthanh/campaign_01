@@ -27,6 +27,10 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\TagInterface::class,
             \App\Repositories\Eloquent\TagRepository::class,
         ],
+        'event' => [
+            \App\Repositories\Contracts\EventInterface::class,
+            \App\Repositories\Eloquent\EventRepository::class,
+        ],
     ];
 
     /**
