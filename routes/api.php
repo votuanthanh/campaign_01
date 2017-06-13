@@ -17,13 +17,25 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['namespace' => 'Api', 'middleware' => ['auth:api', 'xssProtection']], function () {
-    Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {
-        Route::post('post-create', 'CampaignController@create')->name('create');
-        Route::delete('post-delete', 'CampaignController@delete')->name('delete');
+Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function () {
+    Route::group(['namespace' => 'Auth'], function () {
+        Route::post('login', 'AuthController@login')->name('login');
+        Route::post('register', 'RegisterController@create')->name('register');
     });
 
-    Route::group(['prefix' => '/event', 'as' => 'event.'], function () {
-        Route::post('create', 'EventController@create')->name('create');
+    Route::post('check-exist', 'CommonController@checkExist');
+
+    Route::group(['middleware' => 'auth:api'], function () {
+
+        Route::post('logout', 'Auth\AuthController@logout')->name('logout');
+
+        Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {
+            Route::post('post-create', 'CampaignController@create')->name('create');
+            Route::delete('post-delete', 'CampaignController@delete')->name('delete');
+        });
+
+        Route::group(['prefix' => '/event', 'as' => 'event.'], function () {
+            Route::post('create', 'EventController@create')->name('create');
+        });
     });
 });

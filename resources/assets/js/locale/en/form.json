@@ -1,0 +1,22 @@
+{
+    "label": {
+        "email": "Your Email",
+        "password": "Your Password",
+        "remember_me": "Remember Me",
+        "forgot_password": "Forgot my Password"
+    },
+    "title": {
+        "login": "Login to your Account"
+    },
+    "button": {
+        "login": "Login",
+        "login_facebook": "Login with Facebook",
+        "login_twitter": "Login with Twitter",
+        "login_google": "Login with Google",
+        "register": "Register Now!"
+    },
+    "quote": {
+        "confirm_account": "Don’t you have an account?",
+        "login_benefits": "it’s really simple and you can start enjoing all the benefits!"
+    }
+}

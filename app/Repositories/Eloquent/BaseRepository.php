@@ -69,9 +69,8 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $model = $this->model->pluck($column, $key);
         $this->makeModel();
-        
+
         return $model;
-        
     }
 
     public function paginate($limit = null, $columns = ['*'])
@@ -193,7 +192,7 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $model = $this->model->orderBy($column, $option);
         $this->makeModel();
-        
+
         return $model;
     }
 
@@ -227,7 +226,7 @@ abstract class BaseRepository implements RepositoryInterface
         $model = $this->model->count();
         $this->makeModel();
 
-        return $model; 
+        return $model;
     }
 
     public function first()
@@ -260,5 +259,19 @@ abstract class BaseRepository implements RepositoryInterface
         $this->makeModel();
 
         return $model;
+    }
+
+    public function exists($column, $input)
+    {
+        return $this->model->where($column, $input)->exists();
+    }
+
+    public function select($columns = ['*'])
+    {
+        $columns = is_array($columns) ? $columns : func_get_args();
+
+        $this->model = $this->model->select($columns);
+
+        return $this;
     }
 }
