@@ -10,13 +10,19 @@ return [
         'timeout_campaign' => 3, // set timeout for campaign
     ],
     'events' => [
-        'start_day' => 1,
-        'end_day' => 2,
+        'start_day' => 7,
+        'end_day' => 8,
         'timeout_event' => 4, // set timeout for event
         'set_image' => 5, // set image for event
         'set_video' => 6, // set video for event
     ],
     'actions' => [
         //
+    ],
+    'value_of_settings' => [
+        'status' => [ // key of setting
+            'private' => 0,
+            'public' => 1,
+        ],
     ],
 ];

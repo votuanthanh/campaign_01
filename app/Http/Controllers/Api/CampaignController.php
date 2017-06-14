@@ -11,6 +11,7 @@ use App\Exceptions\Api\UnknowException;
 use Illuminate\Http\Request;
 use App\Http\Requests\CampaignRequest;
 use App\Models\Role;
+use Exception;
 
 class CampaignController extends ApiController
 {
@@ -173,6 +174,19 @@ class CampaignController extends ApiController
             $this->compacts['event'] = $this->paginateData(
                 $this->eventRepository->getEventFromCampaign($campaign->events())
             );
+        });
+    }
+
+    public function like($id)
+    {
+        $campaign = $this->campaignRepository->findOrFail($id);
+
+        if ($this->user->cannot('view', $campaign)) {
+            throw new Exception('Policy fail');
+        }
+
+        return $this->doAction(function () use ($campaign) {
+            $this->compacts['campaign'] = $this->campaignRepository->createOrDeleteLike($campaign, $this->user->id);
         });
     }
 }

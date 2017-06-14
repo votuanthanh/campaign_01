@@ -10,6 +10,7 @@ use App\Repositories\Contracts\EventInterface;
 use App\Repositories\Contracts\QualityInterface;
 use App\Repositories\Contracts\CampaignInterface;
 use App\Http\Requests\UpdateEventRequest;
+use Exception;
 
 class EventController extends ApiController
 {
@@ -88,6 +89,19 @@ class EventController extends ApiController
 
         return $this->doAction(function () use ($event, $request) {
             $this->compacts['event'] = $this->eventRepository->updateSettings($event, $request->setting);
+        });
+    }
+
+    public function like($id)
+    {
+        $event = $this->eventRepository->findOrFail($id);
+
+        if ($this->user->cannot('view', $event)) {
+            throw new Exception('Policy fail');
+        }
+
+        return $this->doAction(function () use ($event) {
+            $this->compacts['event'] = $this->eventRepository->createOrDeleteLike($event, $this->user->id);
         });
     }
 }
