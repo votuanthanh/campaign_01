@@ -161,6 +161,6 @@ $factory->define(App\Models\Setting::class, function (Faker\Generator $faker) {
 $factory->define(App\Models\Media::class, function (Faker\Generator $faker) {
     return [
         'url_file' => $faker->imageUrl(),
-        'type' => rand(1, 10),
+        'type' => rand(0, 1),
     ];
 });

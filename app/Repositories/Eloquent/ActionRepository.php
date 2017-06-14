@@ -2,11 +2,16 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Repositories\Contracts\ActionInterface;
+use Exception;
 use App\Models\Action;
+use App\Models\Media;
+use App\Traits\Common\UploadableTrait;
+use App\Repositories\Contracts\ActionInterface;
 
 class ActionRepository extends BaseRepository implements ActionInterface
 {
+    use UploadableTrait;
+
     public function model()
     {
         return Action::class;
@@ -26,5 +31,15 @@ class ActionRepository extends BaseRepository implements ActionInterface
         }
 
         return $action->likes()->where('user_id', $userId)->first()->forceDelete();
+    }
+
+    public function update($action, $inputs)
+    {
+        if (!empty($inputs['upload'])) {
+            $result = $this->makeDataMedias($inputs['upload']);
+            $action->media()->createMany($result);
+        }
+
+        return parent::update($action->id, $inputs['data_action']);
     }
 }
