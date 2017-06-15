@@ -139,24 +139,13 @@ class UserController extends ApiController
     }
 
     /**
-     * Follow other user
+     * Toggle follow or unfollow user
      * @return \Illuminate\Http\Response
      */
     public function follow($id)
     {
         return $this->doAction(function () use ($id) {
-            $this->user->followings()->syncWithOutDetaching($id);
-        });
-    }
-
-    /**
-     * Unfollow current user
-     * @return \Illuminate\Http\Response
-     */
-    public function unfollow($id)
-    {
-        return $this->doAction(function () use ($id) {
-            $this->user->followings()->detach($id);
+            $this->user->followings()->toggle($id);
         });
     }
 

@@ -10,6 +10,7 @@ use App\Exceptions\Api\NotFoundException;
 use App\Exceptions\Api\UnknowException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
+use App\Models\Role;
 
 class CampaignRepository extends BaseRepository implements CampaignInterface
 {
@@ -223,5 +224,55 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         }
 
         return $campaign->likes()->where('user_id', $userId)->first()->forceDelete();
+    }
+
+    /**
+     * Set role for member who join in campaign
+     * @param  App\Models\Campaign $campaign
+     * @param  int $userId
+     * @param  int $roleId
+     * @return mix
+     */
+    public function changeMemberRole($campaign, $userId, $roleId)
+    {
+        if (!in_array($roleId, app(RoleRepository::class)->findRoleOrFail('*', Role::TYPE_CAMPAIGN)->pluck('id')->all())
+            || !in_array($userId, $campaign->users->pluck('id')->all())) {
+            throw new UnknowException('Invalid data input');
+        }
+
+        return $campaign->users()->syncWithoutDetaching([$userId => ['role_id' => $roleId]]);
+    }
+
+    /**
+     * Remove user from campaign's user list
+     * @param  App\Models\Campaign $campaign
+     * @param  int $userId
+     * @return mix
+     */
+    public function removeUser($campaign, $userId)
+    {
+        if (!in_array($userId, $campaign->users->pluck('id')->all())) {
+            throw new UnknowException('This user is not a member of this campaign');
+        }
+
+        if (auth()->id() == $userId) {
+            throw new UnknowException('Can not remove yourself');
+        }
+
+        return $campaign->users()->detach($userId);
+    }
+
+    /**
+     * Change owner permission for other user
+     * @param  App\Models\Campaign $campaign
+     * @param  int $userId
+     * @param  int $roleId  Role of owner after transfer
+     * @return mixed
+     */
+    public function changeOwner($campaign, $userId, $roleId)
+    {
+        $ownerRoleId = app(RoleRepository::class)->findRoleOrFail(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)->id;
+        $this->changeMemberRole($campaign, $campaign->owner()->id, $roleId);
+        $this->changeMemberRole($campaign, $userId, $ownerRoleId);
     }
 }

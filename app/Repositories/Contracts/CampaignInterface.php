@@ -15,4 +15,10 @@ interface CampaignInterface extends RepositoryInterface
     public function getListUser($campaign);
 
     public function createOrDeleteLike($campaign, $userId);
+
+    public function changeMemberRole($campaign, $userId, $roleId);
+
+    public function removeUser($campaign, $userId);
+
+    public function changeOwner($campaign, $userId, $roleId);
 }

@@ -14,17 +14,30 @@ class RoleRepository extends BaseRepository implements RoleInterface
         return Role::class;
     }
 
-    public function findRoleOrFail($name, $typeRole)
+    public function findRoleOrFail($roleNames, $roleType)
     {
-        $role = $this->where([
-            'name' => $name,
-            'type' => $typeRole,
-        ])->first();
+        $roleNames = is_array($roleNames) ? $roleNames : [$roleNames];
 
-        if (is_null($role)) {
-            throw new NotFoundException('Role' . $name . 'not exists in system');
+        $roles = $this->where('type', $roleType);
+
+        if ($roleNames != ['*']) {
+            $roles = $roles->whereIn('name', $roleNames);
         }
 
-        return $role;
+        if (count($roleNames) == 1) {
+            $roles = $roles->first();
+
+            if (is_null($roles)) {
+                throw new NotFoundException('Role' . $roleNames[0] . 'not exists in system');
+            }
+        } else {
+            $roles = $roles->get();
+
+            if ($roles->isEmpty()) {
+                throw new NotFoundException('Roles' . implode(',', $roleNames) . 'not exists in system');
+            }
+        }
+
+        return $roles;
     }
 }

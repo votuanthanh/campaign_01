@@ -29,7 +29,6 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::post('avatar', 'UserController@updateAvatar')->name('avatar');
         Route::post('header-photo', 'UserController@updateHeaderPhoto')->name('header');
         Route::patch('follow/{id}', 'UserController@follow')->name('follow');
-        Route::patch('unfollow/{id}', 'UserController@unfollow')->name('unfollow');
     });
 
     Route::group(['prefix' => 'user/{id}', 'as' => 'user.'], function () {
@@ -44,11 +43,14 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('logout', 'Auth\AuthController@logout')->name('logout');
 
-        Route::resource('campaign', 'CampaignController', ['only' => ['store', 'update', 'destroy', 'show']]);
-
         Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {
             Route::post('like/{campaignId}', 'CampaignController@like')->name('like');
+            Route::patch('change-role', 'CampaignController@changeMemberRole')->name('change-role');
+            Route::patch('remove-user', 'CampaignController@removeUser')->name('remove-user');
+            Route::patch('change-owner', 'CampaignController@changeOwner')->name('change-owner');
         });
+
+        Route::resource('campaign', 'CampaignController', ['only' => ['store', 'update', 'destroy', 'show']]);
 
         Route::group(['prefix' => '/event', 'as' => 'event.'], function () {
             Route::post('create', 'EventController@create')->name('create');
