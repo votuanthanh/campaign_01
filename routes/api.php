@@ -22,7 +22,9 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::post('login', 'AuthController@login')->name('login');
         Route::post('register', 'RegisterController@register')->name('register');
     });
+});
 
+Route::group(['namespace' => 'Api', 'middleware' => ['auth:api', 'xssProtection']], function () {
     Route::group(['as' => 'user.', 'prefix' => 'settings'], function () {
         Route::patch('password', 'UserController@updatePassword')->name('password');
         Route::patch('profile', 'UserController@updateProfile')->name('profile');
@@ -41,19 +43,15 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
 
     Route::post('check-exist', 'CommonController@checkExist');
 
-    Route::group(['middleware' => 'auth:api'], function () {
-        Route::post('logout', 'Auth\AuthController@logout')->name('logout');
+    Route::resource('campaign', 'CampaignController', ['only' => ['store', 'update', 'destroy', 'show']]);
 
-        Route::resource('campaign', 'CampaignController', ['only' => ['store','update']]);
+    Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {
+        //
+    });
 
-        Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {
-            Route::delete('post-delete', 'CampaignController@delete')->name('delete');
-        });
-
-        Route::group(['prefix' => '/event', 'as' => 'event.'], function () {
-            Route::post('create', 'EventController@create')->name('create');
-            Route::patch('/update/{id}', 'EventController@update')->name('update-event');
-            Route::patch('/update-setting/{id}', 'EventController@updateSetting')->name('update-setting');
-        });
+    Route::group(['prefix' => '/event', 'as' => 'event.'], function () {
+        Route::post('create', 'EventController@create')->name('create');
+        Route::patch('/update/{id}', 'EventController@update')->name('update-event');
+        Route::patch('/update-setting/{id}', 'EventController@updateSetting')->name('update-setting');
     });
 });

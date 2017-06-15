@@ -54,16 +54,16 @@ class CampaignController extends ApiController
         });
     }
 
-    protected function delete(Request $request)
+    public function destroy($id)
     {
-        $campaign = $this->campaignRepository->find($request->id);
+        $campaign = $this->campaignRepository->find($id);
 
         if (!$campaign) {
-            throw new UnknowException('NOT_FOUND', NOT_FOUND);
+            throw new NotFoundException('Not foud campaign with: ' . $id, NOT_FOUND);
         }
 
         if (!$this->user->can('manage', $campaign)) {
-            throw new UnknowException('UNAUTHORIZED', UNAUTHORIZED);
+            throw new UnknowException('You do not have authorize to delete this campaign', UNAUTHORIZED);
         }
 
         return $this->doAction(function () use ($campaign) {
@@ -98,6 +98,81 @@ class CampaignController extends ApiController
 
         return $this->doAction(function () use ($data, $campaign) {
             $this->compacts['campaign'] = $this->campaignRepository->update($campaign, $data);
+        });
+    }
+    /**
+     * show campaign the first.
+     *
+     * @param  array  $data
+     * @return $campaign
+    */
+    public function show($id)
+    {
+        $campaign = $this->campaignRepository->find($id);
+
+        if (!$campaign) {
+            throw new NotFoundException('Not foud campaign with: ' . $id, NOT_FOUND);
+        }
+
+        if ($this->user->cant('view', $campaign)) {
+            throw new UnknowException('You do not have authorize to delete this campaign', UNAUTHORIZED);
+        }
+
+        return $this->getData(function () use ($campaign) {
+            $this->compacts['events'] = $this->paginateData(
+                $this->eventRepository->getEvent($campaign->events())
+            );
+
+            $this->compacts['campaignTimeline'] = $this->campaignRepository->getCampaignTimeline($campaign);
+            $this->compacts['campaign'] = $campaign;
+        });
+    }
+
+    /**
+     * show list user.
+     *
+     * @param  array  $data
+     * @return $campaign
+    */
+    public function getListUser($id)
+    {
+        $campaign = $this->campaignRepository->find($id);
+
+        if (!$campaign) {
+            throw new NotFoundException('Not foud campaign with: ' . $id, NOT_FOUND);
+        }
+
+        if ($this->user->cannot('view', $campaign)) {
+            throw new UnknowException('You do not have authorize to delete this campaign', UNAUTHORIZED);
+        }
+
+        return $this->getData(function () use ($campaign) {
+            $this->compacts['user'] = $this->campaignRepository->getListUser($campaign);
+        });
+    }
+
+    /**
+     * show campaign timeline.
+     *
+     * @param  array  $data
+     * @return $campaign
+    */
+    public function getCampaignTimeline($id)
+    {
+        $campaign = $this->campaignRepository->find($id);
+
+        if (!$campaign) {
+            throw new NotFoundException('Not foud campaign with: ' . $id, NOT_FOUND);
+        }
+
+        if ($this->user->cannot('view', $campaign)) {
+            throw new UnknowException('You do not have authorize to delete this campaign', UNAUTHORIZED);
+        }
+
+        return $this->getData(function () use ($campaign) {
+            $this->compacts['event'] = $this->paginateData(
+                $this->eventRepository->getEventFromCampaign($campaign->events())
+            );
         });
     }
 }

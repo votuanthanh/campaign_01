@@ -24,8 +24,8 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
     {
         if (!$settings) {
             return false;
-        } 
-        
+        }
+
         if (!is_array($settings)) {
             throw new UnknowException('Param is not an array');
         }
@@ -104,7 +104,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         if (!$campaign->tags->isEmpty() && !$tags) {
             $campaign->tags()->detach($campaign->tags->pluck('id'));
         }
-        
+
         if ($campaign->tags->isEmpty() && !$tags) {
             return false;
         }
@@ -129,7 +129,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         if ($newTags) {
             $campaign->tags()->createMany($newTags);
         }
-        
+
         return true;
     }
 
@@ -163,7 +163,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         }
 
         $model = $campaign->media->first();
-        
+
         if (!$model) {
             return false;
         }
@@ -174,7 +174,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
 
         return true;
     }
-    
+
     public function delete($campaign)
     {
         $campaign->donations()->delete();
@@ -185,5 +185,27 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         $campaign->settings()->delete();
 
         return $campaign->delete();
+    }
+
+    /**
+     * get campaign timeline.
+     *
+     * @param  array  $data
+     * @return $campaign
+    */
+    public function getCampaignTimeline($campaign)
+    {
+        return $campaign->with('media', 'settings', 'tags')->get();
+    }
+
+    /**
+     * get getListUser.
+     *
+     * @param  array  $data
+     * @return $campaign
+    */
+    public function getListUser($campaign)
+    {
+        return $campaign->with('users')->get();
     }
 }

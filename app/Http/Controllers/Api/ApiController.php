@@ -65,4 +65,19 @@ class ApiController extends AbstractController
 
         return $this->trueJson();
     }
+
+    protected function paginateData($model)
+    {
+        return [
+            'pagination' => [
+                'total' => $model->total(),
+                'per_page' => $model->perPage(),
+                'current_page' => $model->currentPage(),
+                'last_page' => $model->lastPage(),
+                'from' => $model->firstItem(),
+                'to' => $model->lastItem(),
+            ],
+            'data' => $model,
+        ];
+    }
 }

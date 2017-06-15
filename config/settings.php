@@ -2,6 +2,7 @@
 
 return [
     'admin_system' => 'admin system',
+    'paginate' => 15,
     'locale' => ['vi', 'en', 'ja'],
     'campaigns' => [
         'status' => 1, // set campaign public or private
@@ -13,7 +14,7 @@ return [
         'end_day' => 2,
         'timeout_event' => 4, // set timeout for event
         'set_image' => 5, // set image for event
-        'set_video' => 6, // set video for event 
+        'set_video' => 6, // set video for event
     ],
     'actions' => [
         //
