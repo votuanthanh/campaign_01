@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
-use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\UserInterface;
 
 class UserController extends BackendController
 {
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserInterface $userRepository)
     {
         parent::__construct($userRepository);
     }

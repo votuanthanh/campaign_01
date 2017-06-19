@@ -10,10 +10,12 @@ class Role extends BaseModel
 
     const TYPE_CAMPAIGN = 2;
     const TYPE_SYSTEM = 1;
+    const ROLE_ADMIN = 'admin';
     const ROLE_USER = 'user';
     const ROLE_OWNER = 'owner';
     const ROLE_MODERATOR = 'moderator';
     const ROLE_MEMBER = 'member';
+    const ROLE_BLOCKED = 'blocked';
 
     public function __construct($attributes = [])
     {

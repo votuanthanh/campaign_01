@@ -87,6 +87,11 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->model->find($id, $columns);
     }
 
+    public function findOrFail($id, $columns = ['*'])
+    {
+        return $this->model->findOrFail($id, $columns);
+    }
+
     public function whereIn($column, $values)
     {
         $values = is_array($values) ? $values : [$values];

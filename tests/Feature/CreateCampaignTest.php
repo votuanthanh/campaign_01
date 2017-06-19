@@ -256,7 +256,7 @@ class CreateCampaign extends TestCase
             'messages' => [
                 trans('validation.max.numeric', ['attribute' => 'longitude', 'max' => 180]),
                 trans('validation.min.numeric', ['attribute' => 'latitude', 'min' => -90]),
-            ],    
+            ],
         ]);
     }
 }

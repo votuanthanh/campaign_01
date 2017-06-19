@@ -6,17 +6,20 @@ use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Eloquent\UrlImage;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable, SoftDeletes;
+    use HasApiTokens, Notifiable, SoftDeletes, UrlImage;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    
+
+    // User's status
     const IN_ACTIVE = 0;
     const ACTIVE = 1;
     const BAN = 2;
@@ -55,7 +58,7 @@ class User extends Authenticatable
 
     public function campaigns()
     {
-        return $this->belongsToMany(Campaign::class);
+        return $this->belongsToMany(Campaign::class)->withPivot('role_id');
     }
 
     public function events()
@@ -112,5 +115,10 @@ class User extends Authenticatable
         }
 
         return str_limit($this->attributes['about'], $value);
+    }
+
+    public function settings()
+    {
+        return $this->morphMany(Setting::class, 'settingable');
     }
 }

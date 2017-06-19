@@ -36,8 +36,8 @@ class CampaignController extends ApiController
     {
         $data = $request->only('title', 'description', 'hashtag', 'longitude', 'latitude', 'tags', 'settings', 'media');
 
-        $data['role_id'] = $this->roleRepository->getRoleId(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN);
-         
+        $data['role_id'] = $this->roleRepository->getRoleByName(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)->first();
+
         if (!$data['role_id']) {
             throw new NotFoundException('Not found role when create campaign');
         }
@@ -53,7 +53,7 @@ class CampaignController extends ApiController
     protected function delete(Request $request)
     {
         $campaign = $this->campaignRepository->find($request->id);
-        
+
         if (!$campaign) {
             throw new UnknowException('NOT_FOUND', NOT_FOUND);
         }

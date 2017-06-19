@@ -99,7 +99,7 @@ class Campaign extends BaseModel
     {
         return $this->getUserByRole('blocked')->get();
     }
-    
+
     public function isActive()
     {
         return $this->attributes['status'] == static::ACTIVE;
