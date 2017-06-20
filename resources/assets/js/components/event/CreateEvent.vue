@@ -84,7 +84,7 @@
                     <dropzone
                         ref="vueDropzone"
                         id="myVueDropzone"
-                        url="http://campaign.app/api/file/upload"
+                        url="/api/file/upload"
                         acceptedFileTypes='image/*'
                         :autoProcessQueue="true"
                         :maxNumberOfFiles="maxFile"
@@ -175,6 +175,7 @@
 
             // filter danation before request to sever
             getDonation() {
+                this.newEvent.donations = []
                 for (let donation of this.donations) {
                     let flag = true
 

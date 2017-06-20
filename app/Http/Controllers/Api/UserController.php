@@ -105,7 +105,9 @@ class UserController extends ApiController
     public function listFollower($id)
     {
         return $this->getData(function () use ($id) {
-            $this->compacts['data'] = $this->repository->listFollower($id);
+            $data = $this->repository->listFollower($id);
+            $this->compacts['currentPageUser'] = $data['currentPageUser'];
+            $this->compacts['data'] = $data['follower'];
         });
     }
 
@@ -116,7 +118,9 @@ class UserController extends ApiController
     public function listFollowing($id)
     {
         return $this->getData(function () use ($id) {
-            $this->compacts['data'] = $this->repository->listFollowing($id);
+            $data = $this->repository->listFollowing($id);
+            $this->compacts['currentPageUser'] = $data['currentPageUser'];
+            $this->compacts['data'] = $data['follower'];
         });
     }
 
@@ -196,6 +200,34 @@ class UserController extends ApiController
 
         return $this->doAction(function () use ($id) {
             $this->repository->joinCampaign($id);
+        });
+    }
+
+    public function getUser($id)
+    {
+        return $this->getData(function () use ($id) {
+            $this->compacts['data'] = $this->repository->find($id);
+        });
+    }
+
+    public function searchFollowers($id, $data)
+    {
+        return $this->getData(function () use ($id, $data) {
+            $this->compacts['data'] = $this->repository->searchFollowers($id, $data);
+        });
+    }
+
+    public function searchFollowings($id, $data)
+    {
+        return $this->getData(function () use ($id, $data) {
+            $this->compacts['data'] = $this->repository->searchFollowings($id, $data);
+        });
+    }
+
+    public function getTimeLine($id)
+    {
+        return $this->getData(function () use ($id) {
+            $this->compacts['data'] = $this->repository->getTimeLine($id);
         });
     }
 }

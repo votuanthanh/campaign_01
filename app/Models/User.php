@@ -92,12 +92,17 @@ class User extends Authenticatable
 
     public function followings()
     {
-        return $this->belongsToMany(User::class, 'relationships', 'user_id', 'following_id');
+        return $this->belongsToMany(User::class, 'relationships', 'user_id', 'following_id')->withTimestamps();
     }
 
     public function followers()
     {
-        return $this->belongsToMany(User::class, 'relationships', 'following_id', 'user_id');
+        return $this->belongsToMany(User::class, 'relationships', 'following_id', 'user_id')->withTimestamps();
+    }
+
+    public function followed()
+    {
+        return $this->belongsToMany(User::class, 'relationships', 'following_id', 'user_id')->where('user_id', \Auth::guard('api')->user()->id);
     }
 
     public function setPasswordAttribute($value)

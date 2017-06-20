@@ -75,7 +75,7 @@ class AppServiceProvider extends ServiceProvider
     protected function registerUrlBuilder()
     {
         $this->app->singleton('glide.url', function ($app) {
-            return UrlBuilderFactory::create('/img/');
+            return UrlBuilderFactory::create('/images/');
         });
     }
 }

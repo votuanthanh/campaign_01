@@ -22,7 +22,7 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'birthday' => $faker->date(),
         'address' => $faker->streetAddress(),
         'phone' => $faker->tollFreePhoneNumber(),
-        'url_file' => 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Default-avatar.jpg',
+        'url_file' => $faker->imageUrl(124, 124, 'fashion', true, 'Faker', false),
         'status' => $faker->randomElement([0, 1]),
         'token_confirm' => str_random(10),
         'created_at' => $faker->dateTime(),

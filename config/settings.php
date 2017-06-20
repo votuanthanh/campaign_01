@@ -27,4 +27,8 @@ return [
             'public' => 1,
         ],
     ],
+    'pagination' => [
+        'follow' => 12,
+        'timeline' => 5,
+    ]
 ];

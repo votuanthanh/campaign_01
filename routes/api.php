@@ -22,6 +22,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::post('register', 'RegisterController@register')->name('register');
     });
 
+    Route::post('check-exist', 'CommonController@checkExist');
+
     Route::group(['as' => 'user.'], function () {
         Route::group(['prefix' => 'settings'], function () {
             Route::patch('password', 'UserController@updatePassword')->name('password');
@@ -35,17 +37,19 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
     });
 
     Route::group(['prefix' => 'user/{id}', 'as' => 'user.'], function () {
+        Route::get('/', 'UserController@getTimeLine')->name('getTimeLine');
         Route::get('followers', 'UserController@listFollower')->name('follower');
         Route::get('followings', 'UserController@listFollowing')->name('following');
         Route::get('owned-campaign', 'UserController@listOwnedCampaign')->name('owned-campaign');
         Route::get('joined-campaign', 'UserController@listJoinedCampaign')->name('joined-campaign');
         Route::get('following-campaign', 'UserController@listFollowingCampaign')->name('following-campaign');
         Route::get('following-tag', 'UserController@listFollowingTag')->name('following-tag');
+        Route::get('get-user', 'UserController@getUser')->name('user');
+        Route::get('search-followers/{data}', 'UserController@searchFollowers')->name('search-followers');
+        Route::get('search-followings/{data}', 'UserController@searchFollowings')->name('search-followings');
     });
 
     Route::resource('tag', 'TagController', ['only' => ['index', 'show']]);
-
-    Route::post('check-exist', 'CommonController@checkExist');
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('logout', 'Auth\AuthController@logout')->name('logout');

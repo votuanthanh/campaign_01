@@ -2,6 +2,12 @@ import { authGuard, guestGuard } from './middleware'
 // Register Components to router
 import Campaign from '../components/campaign/Campaign.vue'
 import App from '../components/layout/App.vue'
+import Followers from '../components/user/Followers.vue'
+import MasterUser from '../components/user/MasterUser.vue'
+import Timeline from '../components/user/Timeline.vue'
+import Photo from '../components/user/Photo.vue'
+import Video from '../components/user/Video.vue'
+import About from '../components/user/About.vue'
 import Auth from '../components/auth/Auth.vue'
 import AddCampaign from '../components/campaign/AddCampaign.vue'
 import CreateEvent from '../components/event/CreateEvent.vue'
@@ -11,26 +17,55 @@ import Profile from '../components/user/Profile.vue'
 import Setting from '../components/user/Setting.vue'
 
 const router = [
-    ...authGuard([
-        { path: '/', component: App,
-            children: [
-                { path: '/campaign', component: Campaign },
-                { path: '/campaign/create', component: AddCampaign },
-                { path: '/event/create/:campaign_id', component: CreateEvent },
-                { path: '/settings', component: User,
-                    children: [
-                        { path: '', redirect: '/settings/settings' },
-                        { path: 'password', component: Password },
-                        { path: 'profile', component: Profile },
-                        { path: 'settings', component: Setting },
-                    ]
-                }
-            ]
-        }
-    ]),
+    ...authGuard([{
+        path: '/',
+        component: App,
+        children: [
+            { path: '/campaign', component: Campaign },
+            { path: '/campaign/create', component: AddCampaign },
+            { path: '/event/create/:campaign_id', component: CreateEvent },
+            {
+                path: '/settings',
+                component: User,
+                children: [
+                    { path: '', redirect: '/settings/settings' },
+                    { path: 'password', component: Password },
+                    { path: 'profile', component: Profile },
+                    { path: 'settings', component: Setting },
+                ]
+            }, {
+                path: 'user/:id',
+                name: 'user',
+                component: MasterUser,
+                children: [{
+                        path: 'followers',
+                        component: Followers,
+                    }, {
+                        path: 'followings',
+                        component: Followers,
+                    }, {
+                        path: '',
+                        component: Timeline,
+                    },
+                    {
+                        path: 'photo',
+                        component: Photo,
+                    },
+                    {
+                        path: 'about',
+                        component: About,
+                    },
+                    {
+                        path: 'video',
+                        component: Video,
+                    },
+                ]
+            }
+        ]
+    }]),
     ...guestGuard([
         { path: '/register', component: Auth },
-        { path: '/login', component: Auth},
+        { path: '/login', component: Auth },
     ])
 ]
 
