@@ -7,4 +7,6 @@ interface EventInterface extends RepositoryInterface
     public function delete($eventIds);
 
     public function update($event, $inputs);
+
+    public function getEvent($campaign);
 }

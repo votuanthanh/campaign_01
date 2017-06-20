@@ -17,14 +17,14 @@ class DeleteCampaignTest extends TestCase
     /**
      * test delete campaign success.
      *
-     * @return void 
+     * @return void
      */
     public function testDeleteCampaignSuccessWithAuthorized()
     {
         $user = factory(User::class)->create();
         $userId = $user->id;
         $campaign = factory(Campaign::class)->create(['hashtag' => 'Default']);
-        $roleOwnerId = Role::where('type', Role::TYPE_CAMPAIGN)->where('name', Role::ROLE_OWNER)->pluck('id')->first(); 
+        $roleOwnerId = Role::where('type', Role::TYPE_CAMPAIGN)->where('name', Role::ROLE_OWNER)->pluck('id')->first();
         $campaign->users()->attach([
             $userId => [
                 'role_id' => $roleOwnerId,
@@ -32,26 +32,25 @@ class DeleteCampaignTest extends TestCase
         ]);
 
         $this->actingAs($user, 'api');
-        $response = $this->json('DELETE', route('campaign.delete'), [
-            'id' => $campaign->id,
-        ],[
+        $response = $this->json('DELETE', route('campaign.destroy', ['campaign' => $campaign->id]),
+        [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
-        
+
         $response->assertStatus(CODE_OK);
     }
 
      /**
      * test delete campaign fail.
      *
-     * @return void 
+     * @return void
      */
     public function testDeleteCampaignFailWithAuthorized()
     {
         $user = factory(User::class)->create();
         $userId = $user->id;
         $campaign = factory(Campaign::class)->create(['hashtag' => 'Default']);
-        $roleCampaignIds = Role::where('type', Role::TYPE_CAMPAIGN)->pluck('id', 'name')->toArray(); 
+        $roleCampaignIds = Role::where('type', Role::TYPE_CAMPAIGN)->pluck('id', 'name')->toArray();
         $campaign->users()->attach([
             $userId => [
                 'role_id' => $roleCampaignIds[Role::ROLE_MEMBER],
@@ -62,9 +61,8 @@ class DeleteCampaignTest extends TestCase
         ]);
 
         $this->actingAs($user, 'api');
-        $response = $this->json('DELETE', route('campaign.delete'), [
-            'id' => $campaign->id,
-        ],[
+        $response = $this->json('DELETE', route('campaign.destroy', ['campaign' =>  $campaign->id ]),
+        [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
@@ -74,14 +72,14 @@ class DeleteCampaignTest extends TestCase
      /**
      * test delete campaign fail.
      *
-     * @return void 
+     * @return void
      */
     public function testDeleteCampaignFailWithCampaignNotFound()
     {
         $user = factory(User::class)->create();
         $userId = $user->id;
         $campaign = factory(Campaign::class)->create(['hashtag' => 'Default']);
-        $roleCampaignIds = Role::where('type', Role::TYPE_CAMPAIGN)->pluck('id', 'name')->toArray(); 
+        $roleCampaignIds = Role::where('type', Role::TYPE_CAMPAIGN)->pluck('id', 'name')->toArray();
         $campaign->users()->attach([
             $userId => [
                 'role_id' => $roleCampaignIds[Role::ROLE_MEMBER],
@@ -92,12 +90,11 @@ class DeleteCampaignTest extends TestCase
         ]);
 
         $this->actingAs($user, 'api');
-        $response = $this->json('DELETE', route('campaign.delete'), [
-            'id' => 1000,
-        ],[
+        $response = $this->json('DELETE', route('campaign.destroy', ['campaign' => -1]),
+        [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
-        
+
         $response->assertStatus(NOT_FOUND);
     }
-}   
+}

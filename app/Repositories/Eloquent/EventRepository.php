@@ -108,7 +108,7 @@ class EventRepository extends BaseRepository implements EventInterface
     {
         $goals = $event->goals;
 
-        if (isset($inputs['goalAdd'])) { 
+        if (isset($inputs['goalAdd'])) {
             $event->goals->createMany($inputs['goalAdd']);
         }
 
@@ -124,7 +124,7 @@ class EventRepository extends BaseRepository implements EventInterface
             }
         }
 
-        if (!empty($inputs['mediaDels'])) { 
+        if (!empty($inputs['mediaDels'])) {
             foreach ($inputs['mediaDels'] as $mediaId) {
                 $media = $event->media->find($mediaId);
 
@@ -137,7 +137,7 @@ class EventRepository extends BaseRepository implements EventInterface
             }
         }
 
-        if (!empty($inputs['mediaAdds'])) { 
+        if (!empty($inputs['mediaAdds'])) {
             foreach ($inputs['mediaAdds'] as $mediaId) {
                 $urlFile = $this->uploadFile($mediaId, 'event');
                 $event->media()->create([
@@ -147,7 +147,7 @@ class EventRepository extends BaseRepository implements EventInterface
             }
         }
 
-        if (!empty($inputs['goalDels'])) { 
+        if (!empty($inputs['goalDels'])) {
             $event->goals()->delete($inputs['goalDels']);
         }
 
@@ -157,7 +157,7 @@ class EventRepository extends BaseRepository implements EventInterface
         return true;
     }
 
-    public function updateSettings($event, $listSetting) 
+    public function updateSettings($event, $listSetting)
     {
         $settings = $event->settings->pluck('id')->toArray();
 
@@ -183,5 +183,10 @@ class EventRepository extends BaseRepository implements EventInterface
         }
 
         return $event;
+    }
+
+    public function getEvent($event)
+    {
+        return $event->with('actions', 'likes', 'media', 'donations')->paginate(config('settings.paginate'));
     }
 }
