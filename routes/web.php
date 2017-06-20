@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/redirect/{provider}', 'SocialController@redirectToProvider');
+Route::get('/callback/{provider}', 'SocialController@callback');
+
 Route::get('/{vue_capture?}', function () {
     return view('app');
 })->where('vue_capture', '[\/\w\.-]*');

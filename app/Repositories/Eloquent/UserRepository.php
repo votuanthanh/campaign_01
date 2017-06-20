@@ -6,11 +6,13 @@ use App\Models\User;
 use App\Models\Role;
 use App\Repositories\Contracts\UserInterface;
 use App\Jobs\SendEmail;
-use Exception;
-use DB;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use App\Exceptions\Api\UnknowException;
 
 class UserRepository extends BaseRepository implements UserInterface
 {
+    use DispatchesJobs;
+
     public function model()
     {
         return User::class;
@@ -34,38 +36,28 @@ class UserRepository extends BaseRepository implements UserInterface
 
     public function register($inputs, $roleId)
     {
-        $data = $inputs ?: false;
+        $user = $this->create($inputs);
 
-        if (!$data || !$roleId) {
-            return false;
+        if (!$user) {
+            throw new UnknowException('Had errors while processing');
         }
 
-        $data['token_confirm'] = md5(uniqid($data['email'], true));
-        $data['status'] = User::IN_ACTIVE;
+        $user->roles()->attach($roleId);
+
+        // Send email active to user
         $info = [
-            'email' => $data['email'],
+            'email' => $inputs['email'],
             'subject' => trans('emails.active_subject'),
         ];
 
         $fields = [
-            'linkActive' => action('Frontend\UserController@active', $data['token_confirm']),
-            'content' => trans('emails.active_account', ['object' => $data['name']]),
+            'linkActive' => action('Frontend\UserController@active', $user->token_confirm),
+            'content' => trans('emails.active_account', ['object' => $user->name]),
         ];
 
-        DB::beginTransaction();
-        try {
-            $user = $this->create($data);
-            $role = $user->roles()->attach(['role_id' => $roleId]);
-            $job = (new SendEmail($info, 'emails.active', $fields))->onConnection('redis')->onQueue('emails');
-            dispatch($job);
-            DB::commit();
+        $this->dispatch(new SendEmail($info, User::ACTIVE_LINK_SEND, $fields));
 
-            return $user;
-        } catch (Exception $e) {
-            DB::rollback();
-
-            return false;
-        }
+        return $fields;
     }
 
     /**

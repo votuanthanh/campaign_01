@@ -35,22 +35,17 @@ class CampaignController extends ApiController
     public function store(CampaignRequest $request)
     {
         $data = $request->only(
-            'title', 
-            'description', 
-            'hashtag', 
-            'longitude', 
-            'latitude', 
-            'tags', 
+            'title',
+            'description',
+            'hashtag',
+            'longitude',
+            'latitude',
+            'tags',
             'settings',
             'media'
         );
 
-        $data['role_id'] = $this->roleRepository->getRoleByName(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)->first();
-
-        if (!$data['role_id']) {
-            throw new NotFoundException('Not found role when create campaign');
-        }
-
+        $data['role_id'] = $this->roleRepository->findRoleOrFail(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)->id;
         $data['user_id'] = $this->user->id;
         $data['tags'] = $this->tagRepository->getOrCreate($data['tags']);
 
@@ -81,12 +76,12 @@ class CampaignController extends ApiController
     public function update(CampaignRequest $request, $id)
     {
         $data = $request->only(
-            'title', 
-            'description', 
-            'hashtag', 
-            'longitude', 
-            'latitude', 
-            'settings', 
+            'title',
+            'description',
+            'hashtag',
+            'longitude',
+            'latitude',
+            'settings',
             'tags',
             'media'
         );
@@ -100,7 +95,7 @@ class CampaignController extends ApiController
         if ($this->user->cannot('manage', $campaign)) {
             throw new Exception('Policy fail');
         }
-        
+
         return $this->doAction(function () use ($data, $campaign) {
             $this->compacts['campaign'] = $this->campaignRepository->update($campaign, $data);
         });

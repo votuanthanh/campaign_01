@@ -35,6 +35,10 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\QualityInterface::class,
             \App\Repositories\Eloquent\QualityRepository::class,
         ],
+        'social_account' => [
+            \App\Repositories\Contracts\SocialAccountInterface::class,
+            \App\Repositories\Eloquent\SocialAccountRepository::class,
+        ],
     ];
 
     /**
