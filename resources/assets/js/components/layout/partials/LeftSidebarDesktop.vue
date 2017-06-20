@@ -1,5 +1,5 @@
 <template lang="html">
-    <div class="fixed-sidebar">
+    <div class="fixed-sidebar" :class="{open: isOpen}">
         <div class="fixed-sidebar-left sidebar--small" id="sidebar-left">
             <a href="02-ProfilePage.html" class="logo">
                 <img src="/images/logo.png" alt="Olympus">
@@ -7,7 +7,7 @@
             <div class="mCustomScrollbar" data-mcs-theme="dark">
                 <ul class="left-menu">
                     <li>
-                        <a href="#" class="js-sidebar-open">
+                        <a href="javascript:void(0)" class="js-sidebar-open" @click.stop="isOpen = true">
                             <svg class="olymp-menu-icon left-menu-icon">
                                 <use xlink:href="/frontend/icons/icons.svg#olymp-menu-icon"></use>
                             </svg>
@@ -94,7 +94,7 @@
             <div class="mCustomScrollbar" data-mcs-theme="dark">
                 <ul class="left-menu">
                     <li>
-                        <a href="#" class="js-sidebar-open">
+                        <a href="javascript:void(0)" class="js-sidebar-open" @click.stop="isOpen = false">
                             <svg class="olymp-close-icon left-menu-icon">
                                 <use xlink:href="/frontend/icons/icons.svg#olymp-close-icon"></use>
                             </svg>
@@ -206,7 +206,9 @@
 
 <script>
 export default {
-
+    data: () => ({
+        isOpen: false
+    })
 }
 </script>
 

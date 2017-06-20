@@ -3,4 +3,11 @@
 export const getUser = 'user'
 export const handleLogin = 'login'
 export const logout = 'logout'
-export const handleRegister = 'register'
+export const register = 'register'
+
+export default {
+    getUser,
+    handleLogin,
+    logout,
+    register
+}

@@ -3,6 +3,9 @@
         <div class="v-modal-mask" @click="onClose" v-show="show">
             <div class="v-modal-container" @click.stop>
                 <div class="v-modal-header">
+                    <button type="button" class="close" aria-label="Close" @click.stop="onClose">
+                        <span aria-hidden="true">×</span>
+                    </button>
                     <slot name="header"></slot>
                 </div>
 
@@ -47,8 +50,18 @@ export default {
         background-color: rgba(0, 0, 0, .5);
         transition: opacity .3s ease;
         .v-modal-container {
-            width: 300px;
-            margin: 40px auto 0;
+            @media screen and (min-width: 992px) {
+                width: 900px;
+            }
+            @media screen and (min-width: 768px) {
+               width: 600px;
+            }
+            width: auto;
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%);
             padding: 20px 30px;
             background-color: #fff;
             border-radius: 2px;

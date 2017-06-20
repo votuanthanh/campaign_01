@@ -411,7 +411,7 @@
                 </div>
                 <div class="author-page author vcard inline-items more">
                     <div class="author-thumb">
-                        <img alt="author" src="/images/author-page.jpg" class="avatar">
+                        <img alt="author" :src="user.url_file" class="avatar">
                         <span class="icon-status online"></span>
                         <div class="more-dropdown more-with-triangle">
                             <div class="ui-block-title ui-block-title-small">
@@ -559,4 +559,10 @@ export default {
 </script>
 
 <style lang="scss">
+.author-thumb {
+    .avatar {
+        width: 36px;
+        height: 36px;
+    }
+}
 </style>
