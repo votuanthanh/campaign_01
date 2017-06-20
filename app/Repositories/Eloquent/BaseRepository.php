@@ -234,9 +234,9 @@ abstract class BaseRepository implements RepositoryInterface
         return $model;
     }
 
-    public function first()
+    public function first($columns = ['*'])
     {
-        $model = $this->model->first();
+        $model = $this->model->first($columns);
         $this->makeModel();
 
         return $model;

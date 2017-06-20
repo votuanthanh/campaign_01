@@ -24,7 +24,7 @@ class CreateCampaign extends TestCase
         $faker = \Faker\Factory::create();
         $user = factory(User::class)->create();
         $this->actingAs($user, 'api');
-        $response = $this->json('POST', route('campaign.create'), [
+        $response = $this->json('POST', route('campaign.store'), [
             'title' => $faker->name,
             'description' => $faker->paragraph(),
             'hashtag' => $faker->unique()->name,
@@ -69,7 +69,7 @@ class CreateCampaign extends TestCase
         $faker = \Faker\Factory::create();
         $user = factory(User::class)->create();
         $this->actingAs($user, 'api');
-        $response = $this->json('POST', route('campaign.create'), [
+        $response = $this->json('POST', route('campaign.store'), [
             'title' => $faker->name,
             'description' => $faker->paragraph(),
             'hashtag' => $faker->unique()->name,
@@ -105,7 +105,7 @@ class CreateCampaign extends TestCase
         $faker = \Faker\Factory::create();
         $user = factory(User::class)->create();
         $this->actingAs($user, 'api');
-        $response = $this->json('POST', route('campaign.create'), [
+        $response = $this->json('POST', route('campaign.store'), [
             'title' => $faker->name,
             'description' => $faker->paragraph(),
             'hashtag' => $faker->unique()->name,
@@ -136,7 +136,7 @@ class CreateCampaign extends TestCase
         $user = factory(User::class)->create();
         $this->actingAs($user, 'api');
         factory(Campaign::class)->create(['hashtag' => 'duplicate']);
-        $response = $this->json('POST', route('campaign.create'), [
+        $response = $this->json('POST', route('campaign.store'), [
             'title' => $faker->name,
             'description' => $faker->paragraph(),
             'hashtag' => 'duplicate',
@@ -168,7 +168,7 @@ class CreateCampaign extends TestCase
     {
         $user = factory(User::class)->create();
         $this->actingAs($user, 'api');
-        $response = $this->json('POST', route('campaign.create'), [
+        $response = $this->json('POST', route('campaign.store'), [
             'title' => null,
             'description' => null,
             'hashtag' => null,
@@ -192,12 +192,12 @@ class CreateCampaign extends TestCase
         ]);
     }
 
-    public function testCreateCampaignWithInvalitSettingThenFail()
+    public function testCreateCampaignWithInvalidSettingThenFail()
     {
         $faker = \Faker\Factory::create();
         $user = factory(User::class)->create();
         $this->actingAs($user, 'api');
-        $response = $this->json('POST', route('campaign.create'), [
+        $response = $this->json('POST', route('campaign.store'), [
             'title' => $faker->name,
             'description' => $faker->paragraph(),
             'hashtag' => $faker->unique()->name,
@@ -221,16 +221,16 @@ class CreateCampaign extends TestCase
             'http_status' => [
                 'status' => false,
                 'code' => INTERNAL_SERVER_ERROR,
-                'message' => 'Invalit format settings array',
+                'message' => 'Invalid format array',
         ]]);
     }
 
-    public function testCreateCampaignWithInvalitLongtitudeLatitudeThenFail()
+    public function testCreateCampaignWithInvalidLongitudeLatitudeThenFail()
     {
         $faker = \Faker\Factory::create();
         $user = factory(User::class)->create();
         $this->actingAs($user, 'api');
-        $response = $this->json('POST', route('campaign.create'), [
+        $response = $this->json('POST', route('campaign.store'), [
             'title' => $faker->name,
             'description' => $faker->paragraph(),
             'hashtag' => $faker->unique()->name,

@@ -54,7 +54,7 @@ interface RepositoryInterface
 
     public function count();
 
-    public function first();
+    public function first($columns = ['*']);
 
     public function with($relationship);
 

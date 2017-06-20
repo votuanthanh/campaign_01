@@ -7,9 +7,9 @@ use App\Repositories\Contracts\RoleInterface;
 use App\Repositories\Contracts\TagInterface;
 use App\Repositories\Contracts\EventInterface;
 use App\Exceptions\Api\NotFoundException;
-use App\Http\Requests\CreateCampaignRequest;
 use App\Exceptions\Api\UnknowException;
 use Illuminate\Http\Request;
+use App\Http\Requests\CampaignRequest;
 use App\Models\Role;
 
 class CampaignController extends ApiController
@@ -32,9 +32,18 @@ class CampaignController extends ApiController
         $this->campaignRepository = $campaignRepository;
     }
 
-    protected function create(CreateCampaignRequest $request)
+    public function store(CampaignRequest $request)
     {
-        $data = $request->only('title', 'description', 'hashtag', 'longitude', 'latitude', 'tags', 'settings', 'media');
+        $data = $request->only(
+            'title', 
+            'description', 
+            'hashtag', 
+            'longitude', 
+            'latitude', 
+            'tags', 
+            'settings',
+            'media'
+        );
 
         $data['role_id'] = $this->roleRepository->getRoleByName(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)->first();
 
@@ -66,6 +75,34 @@ class CampaignController extends ApiController
             $eventIds = $campaign->events()->pluck('id');
             $this->campacts['event'] = $this->eventRepository->delete($eventIds);
             $this->campacts['campaign'] = $this->campaignRepository->delete($campaign);
+        });
+    }
+
+    public function update(CampaignRequest $request, $id)
+    {
+        $data = $request->only(
+            'title', 
+            'description', 
+            'hashtag', 
+            'longitude', 
+            'latitude', 
+            'settings', 
+            'tags',
+            'media'
+        );
+
+        $campaign = $this->campaignRepository->find($id);
+
+        if (!$campaign) {
+            throw new NotFoundException('Not found campaign with id :' . $id);
+        }
+
+        if ($this->user->cannot('manage', $campaign)) {
+            throw new Exception('Policy fail');
+        }
+        
+        return $this->doAction(function () use ($data, $campaign) {
+            $this->compacts['campaign'] = $this->campaignRepository->update($campaign, $data);
         });
     }
 }
