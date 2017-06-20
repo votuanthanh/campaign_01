@@ -4,3 +4,15 @@
     padding: 20px 0;
     margin-bottom: 0;
 }
+
+.btn {
+    &:disabled {
+        &:hover {
+            background-color: #9a9fbf;
+            border-color: #9a9fbf;
+        }
+    }
+    &.btn-google {
+        background-color: #db4437;
+    }
+}

@@ -1,3 +1,8 @@
 {
-    "login_fail": "The email and password that you've entered is incorrect"
+    "login_fail": "The email and password that you've entered is incorrect",
+    "regiser_fail": "Information that you've entered is incorrect",
+    "warning_verify_register": "Your email address hasn't been verified. Please click the verification link in the email that was sent to the address you signed up with. (Don't forget to check your spam folder.)",
+    "you_may": "You may",
+    "want_to_resend": "request the email be resent",
+    "not_receive_mail": "if you are unable to locate your activation email."
 }

@@ -1,18 +1,23 @@
 {
     "label": {
         "email": "Your Email",
+        "name": "Your Name",
+        "gender": "Your Gender",
+        "birthday": "Your Birthday",
         "password": "Your Password",
         "remember_me": "Remember Me",
         "forgot_password": "Forgot my Password"
     },
     "title": {
-        "login": "Login to your Account"
+        "login": "Login to your Account",
+        "register_campaign": "Register to Campaign"
     },
     "button": {
         "login": "Login",
         "login_facebook": "Login with Facebook",
         "login_twitter": "Login with Twitter",
         "login_google": "Login with Google",
+        "complete_register": "Complete Registration!",
         "register": "Register Now!"
     },
     "quote": {

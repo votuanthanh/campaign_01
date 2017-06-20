@@ -13,7 +13,16 @@ export default new Vuex.Store({
         campaign,
         auth,
     },
-
+    // #root state
+    state: {
+      loading: false,
+    },
+    // #root mutations
+    mutations: {
+        SET_LOADING(state, loading) {
+            state.loading = loading
+        },
+    },
     // If strict mode should be enabled
     strict: debug,
 });
