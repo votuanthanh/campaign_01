@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\Role;
 use App\Models\User;
 use App\Repositories\Contracts\RoleInterface;
+use App\Exceptions\Api\NotFoundException;
 
 class RoleRepository extends BaseRepository implements RoleInterface
 {
@@ -13,28 +14,17 @@ class RoleRepository extends BaseRepository implements RoleInterface
         return Role::class;
     }
 
-    /**
-     * Get role by name and type
-     * Give $roleNames = '*' for all roles
-     * Give $idOnly = true for id array, false for collection
-     * @param  string, array  $roleNames
-     * @param  int  $roleType
-     * @return mixed
-     */
-    public function getRoleByName($roleNames, $roleType)
+    public function findRoleOrFail($name, $typeRole)
     {
-        $roleNames = is_array($roleNames) ? $roleNames : [$roleNames];
+        $role = $this->where([
+            'name' => $name,
+            'type' => $typeRole,
+        ])->first();
 
-        if (!$roleNames || !$roleType) {
-            return null;
+        if (is_null($role)) {
+            throw new NotFoundException('Role' . $name . 'not exists in system');
         }
 
-        $roles = $this->where('type', $roleType);
-
-        if ($roleNames != ['*']) {
-            $roles = $roles->whereIn('name', $roleNames);
-        }
-
-        return $roles = $roles->lists('id');
+        return $role;
     }
 }

@@ -16,4 +16,9 @@ abstract class BaseModel extends Model
     {
         return with(new static)->getTable();
     }
+
+    public function scopeFilters($query, $queryFilter)
+    {
+        return $queryFilter->apply($query);
+    }
 }

@@ -8,10 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Eloquent\UrlImage;
 use App\Models\Role;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+use App\Traits\Eloquent\ConvertEmptyStringToNull;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable, SoftDeletes, UrlImage;
+    use HasApiTokens, Notifiable, SoftDeletes, UrlImage, ConvertEmptyStringToNull;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +26,7 @@ class User extends Authenticatable
     const IN_ACTIVE = 0;
     const ACTIVE = 1;
     const BAN = 2;
+    const ACTIVE_LINK_SEND = 'emails.active';
 
     protected $fillable = [
         'name',
@@ -120,5 +124,14 @@ class User extends Authenticatable
     public function settings()
     {
         return $this->morphMany(Setting::class, 'settingable');
+    }
+
+    protected static function boot()
+    {
+        static::creating(function ($user) {
+            // Set filtering params before creating that it executes saving
+            $user->token_confirm = Str::random(60);
+            $user->birthday = is_null($user->birthday) ? null : Carbon::parse($user->birthday);
+        });
     }
 }

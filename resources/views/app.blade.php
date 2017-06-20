@@ -20,6 +20,9 @@
             'url' => url('/'),
             'languages' => config('settings.locale'),
         ]) !!};
+        @if (session('access_token'))
+            localStorage.setItem('access_token', '{{ session('access_token') }}')
+        @endif
     </script>
     {!! Html::style(asset('frontend/css/bootstrap.css')) !!}
     {!! Html::style(mix('frontend/css/theme.css')) !!}
@@ -28,7 +31,6 @@
     {!! Html::style(asset('frontend/css/daterangepicker.css')) !!}
     {!! Html::style(asset('frontend/css/bootstrap-select.css')) !!}
     {!! Html::style(mix('frontend/css/app.css')) !!}
-
 </head>
 
 <body>
