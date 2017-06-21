@@ -9,13 +9,23 @@
         "forgot_password": "Forgot my Password",
         "event_name": "Event Name",
         "event_location": "Event Location",
-        "event_description": "Event Description"
-
+        "event_description": "Event Description",
+        "full_name": "Full name",
+        "first_name": "First name",
+        "last_name": "Last name",
+        "phone": "Your phone number",
+        "about": "Write a little description about you",
+        "address": "Your address",
+        "current_password": "Confirm Current Password",
+        "new_password": "Your New Password",
+        "confirm_password": "Confirm New Password"
     },
     "title": {
         "login": "Login to your Account",
         "register_campaign": "Register to Campaign",
-        "add_donation": "Add Donation"
+        "add_donation": "Add Donation",
+        "profile": "Personal Information",
+        "change_password": "Change your password"
     },
     "button": {
         "login": "Login",
@@ -24,7 +34,10 @@
         "login_google": "Login with Google",
         "complete_register": "Complete Registration!",
         "register": "Register Now!",
-        "create_event": "Create Event"
+        "create_event": "Create Event",
+        "restore": "Restore all Attributes",
+        "save": "Save all Changes",
+        "change_password": "Change Password Now!"
     },
     "quote": {
         "confirm_account": "Don’t you have an account?",

@@ -11,9 +11,7 @@
 
         <div class="header-spacer header-spacer-small"></div>
 
-        <div class="container">
-            <router-view></router-view>
-        </div>
+        <router-view></router-view>
 
         <popup-chat></popup-chat>
     </div>

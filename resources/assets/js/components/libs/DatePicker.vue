@@ -7,16 +7,20 @@ export default {
     props: {
         date: {
             type: String
+        },
+        data: {
+            type: Object
         }
     },
     mounted() {
         $(this.$el).daterangepicker({
-            autoUpdateInput: false,
+            autoUpdateInput: true,
             singleDatePicker: true,
             showDropdowns: true,
             locale: {
                 format: 'L'
-            }
+            },
+            ...this.data,
         });
 
         $(this.$el).on('apply.daterangepicker', (ev, picker) => {

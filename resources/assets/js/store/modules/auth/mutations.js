@@ -21,7 +21,6 @@ export default {
     },
 
     [LOGOUT](state) {
-        console.log('asdsa')
         state.authenticated = false
         state.user = ''
         localStorage.removeItem('access_token')

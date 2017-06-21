@@ -12,13 +12,21 @@ export const vi = {
     name: 'tên',
     age: 'tuổi',
     birthday: 'ngày sinh',
-    description: 'mô tả'
+    description: 'mô tả',
+    first_name: 'tên',
+    phone: 'số điện thoại',
+    about: 'giới thiệu',
+    address: 'địa chỉ'
 }
 
 export const ja = {
     name: 'name',
     age: 'age',
-    birthday: 'birthday'
+    birthday: 'birthday',
+    first_name: 'first name',
+    phone: 'phone',
+    about: 'about',
+    address: 'address'
 }
 
 

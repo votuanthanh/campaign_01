@@ -157,7 +157,7 @@ export default {
         color: rgb(0, 0, 0);
     }
 
-    .body-modal{
+    .body-modal {
         ul {
             list-style-type: disc;
             list-style-position: outside;

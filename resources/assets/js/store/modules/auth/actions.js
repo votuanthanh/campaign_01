@@ -43,5 +43,5 @@ export default {
     check,
     login,
     logout,
-    setUser,
+    setUser
 };
