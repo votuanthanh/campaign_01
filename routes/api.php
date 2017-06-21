@@ -46,12 +46,18 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:api', 'xssProtection'
     Route::resource('campaign', 'CampaignController', ['only' => ['store', 'update', 'destroy', 'show']]);
 
     Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {
-        //
+        Route::delete('post-delete', 'CampaignController@delete')->name('delete');
+        Route::post('like/{campaignId}', 'CampaignController@like')->name('like');
     });
 
     Route::group(['prefix' => '/event', 'as' => 'event.'], function () {
         Route::post('create', 'EventController@create')->name('create');
         Route::patch('/update/{id}', 'EventController@update')->name('update-event');
         Route::patch('/update-setting/{id}', 'EventController@updateSetting')->name('update-setting');
+        Route::post('like/{eventId}', 'EventController@like')->name('like');
+    });
+
+    Route::group(['prefix' => '/action', 'as' => 'action.'], function () {
+        Route::post('like/{actionId}', 'ActionController@like')->name('like');
     });
 });

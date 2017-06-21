@@ -69,4 +69,6 @@ interface RepositoryInterface
     public function exists($column, $input);
 
     public function select($columns = ['*']);
+
+    public function createByRelationship($method, $inputs, $option = false);
 }

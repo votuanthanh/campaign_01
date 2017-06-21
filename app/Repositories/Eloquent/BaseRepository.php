@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
 use App\Repositories\Contracts\RepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 abstract class BaseRepository implements RepositoryInterface
 {
@@ -15,6 +16,48 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $this->app = new App();
         $this->makeModel();
+    }
+
+    /**
+     * to call relationship in model
+     *
+     * @return relationship
+    */
+    public function __call($method, $args)
+    {
+        $model = $this->model;
+
+        if (!$model instanceof Model) {
+            $model = $model->first();
+
+            if (!$model) {
+                throw new ModelNotFoundException();
+            }
+        }
+
+        $this->makeModel();
+
+        return call_user_func_array([$model, $method], $args);
+    }
+
+    /**
+     * to call eager loading
+     *
+     * @return collection
+    */
+    public function __get($name)
+    {
+        $model = $this->model;
+
+        if (!$model instanceof Model) {
+            $model = $model->first();
+
+            if (!$model) {
+                throw new ModelNotFoundException();
+            }
+        }
+
+        return $model->$name;
     }
 
     abstract public function model();
@@ -89,7 +132,11 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function findOrFail($id, $columns = ['*'])
     {
-        return $this->model->findOrFail($id, $columns);
+        try {
+            return $this->model->findOrFail($id, $columns);
+        } catch (ModelNotFoundException $e) {
+            throw new \App\Exceptions\Api\NotFoundException('Model not found with id:' . $id, NOT_FOUND);
+        }
     }
 
     public function whereIn($column, $values)
@@ -278,5 +325,23 @@ abstract class BaseRepository implements RepositoryInterface
         $this->model = $this->model->select($columns);
 
         return $this;
+    }
+
+    public function createByRelationship($method, $inputs, $option = false)
+    {
+        $inputs = is_array($inputs) ? $inputs : [$inputs];
+
+        if (!empty($inputs['model'])) {
+            $this->model = $inputs['model'];
+            $inputs = array_except($inputs, ['model']);
+        }
+
+        if (empty($inputs['attribute'])) {
+            throw new Exception('No input field to create model');
+        }
+
+        return !$option
+            ? $this->__call($method, [])->create($inputs['attribute'])
+            : $this->__call($method, [])->createMany($inputs['attribute']);
     }
 }

@@ -208,4 +208,20 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
     {
         return $campaign->with('users')->get();
     }
+
+    public function createOrDeleteLike($campaign, $userId)
+    {
+        if (!is_numeric($userId) || !$campaign) {
+            return false;
+        }
+
+        if ($campaign->likes->where('user_id', $userId)->isEmpty()) {
+            return $this->createByRelationship('likes', [
+                'model' => $campaign,
+                'attribute' => ['user_id' => $userId],
+            ]);
+        }
+
+        return $campaign->likes()->where('user_id', $userId)->first()->forceDelete();
+    }
 }

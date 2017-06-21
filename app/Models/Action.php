@@ -13,7 +13,7 @@ class Action extends BaseModel
         parent::__construct($attributes);
     }
 
-    protected $filable = [
+    protected $fillable = [
         'id',
         'caption',
         'description',

@@ -28,15 +28,16 @@ class CampaignPolicy extends BasePolicy
      */
     public function view(User $user, Campaign $campaign)
     {
-        if (in_array($user->id, $campaign->blockeds()->pluck('id')->toArray())) {
+        if (in_array($user->id, $campaign->blockeds()->pluck('id')->toArray())
+            || $campaign->status == Campaign::BLOCK
+        ) {
             return false;
         }
 
-        if ($campaign->status == config('campaign.status.public')) {
-            return true;
-        }
-
-        return in_array($user->id, $campaign->users->pluck('id')->toArray());
+        return in_array($user->id, $campaign->users->pluck('id')->toArray())
+            || $campaign->settings
+                ->where('key', config('settings.campaigns.status'))
+                ->where('value', config('settings.value_of_settings.status.public'))->isNotEmpty();
     }
 
     /**

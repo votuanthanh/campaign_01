@@ -189,4 +189,20 @@ class EventRepository extends BaseRepository implements EventInterface
     {
         return $event->with('actions', 'likes', 'media', 'donations')->paginate(config('settings.paginate'));
     }
+
+    public function createOrDeleteLike($event, $userId)
+    {
+        if (!is_numeric($userId) || !$event) {
+            return false;
+        }
+
+        if ($event->likes->where('user_id', $userId)->isEmpty()) {
+            return $this->createByRelationship('likes', [
+                'model' => $event,
+                'attribute' => ['user_id' => $userId],
+            ]);
+        }
+
+        return $event->likes()->where('user_id', $userId)->first()->forceDelete();
+    }
 }

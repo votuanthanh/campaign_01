@@ -13,4 +13,6 @@ interface CampaignInterface extends RepositoryInterface
     public function getCampaignTimeline($campaign);
 
     public function getListUser($campaign);
+
+    public function createOrDeleteLike($campaign, $userId);
 }
