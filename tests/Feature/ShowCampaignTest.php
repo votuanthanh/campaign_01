@@ -22,11 +22,10 @@ class ShowCampaignTest extends TestCase
     public function testShowCampaignWithAuthorizeThenSuccess()
     {
         $user = factory(User::class)->create();
-        $userId = $user->id;
-        $campaign = factory(Campaign::class)->create(['hashtag' => 'Default']);
+        $campaign = factory(Campaign::class)->create(['hashtag' => 'Default', 'status' => Campaign::ACTIVE]);
         $roleOwnerId = Role::where('type', Role::TYPE_CAMPAIGN)->where('name', Role::ROLE_OWNER)->pluck('id')->first();
         $campaign->users()->attach([
-            $userId => [
+            $user->id => [
                 'role_id' => $roleOwnerId,
             ],
         ]);
@@ -47,7 +46,6 @@ class ShowCampaignTest extends TestCase
     public function testShowCampaignWithAuthorizeThenFail()
     {
         $user = factory(User::class)->create();
-        $userId = $user->id;
         $campaign = factory(Campaign::class)->create(['hashtag' => 'Default', 'status' => Campaign::BLOCK]);
         $roleOwnerId = Role::where('type', Role::TYPE_CAMPAIGN)->where('name', Role::ROLE_OWNER)->pluck('id')->first();
         $campaign->users()->attach([

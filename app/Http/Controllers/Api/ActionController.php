@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Repositories\Contracts\ActionInterface;
-use App\Exceptions\Api\NotFoundException;
 use Exception;
+use App\Http\Requests\ActionRequest;
+use App\Exceptions\Api\UnknowException;
+use App\Exceptions\Api\NotFoundException;
+use App\Repositories\Contracts\ActionInterface;
+use App\Repositories\Contracts\MediaInterface;
 
 class ActionController extends ApiController
 {
-    private $actionRepository;
+    protected $actionRepository;
+    protected $mediaRepository;
 
-    public function __construct(ActionInterface $actionRepository)
-    {
+    public function __construct(
+        ActionInterface $action,
+        MediaInterface $media
+    ) {
         parent::__construct();
-        $this->actionRepository = $actionRepository;
+        $this->actionRepository = $action;
+        $this->mediaRepository = $media;
     }
 
     /**
@@ -31,6 +38,27 @@ class ActionController extends ApiController
 
         return $this->doAction(function () use ($action) {
             $this->compacts['action'] = $this->actionRepository->createOrDeleteLike($action, $this->user->id);
+        });
+    }
+
+    public function update(ActionRequest $request, $id)
+    {
+        $inputs['data_action'] = $request->only('caption', 'description');
+        $inputs['data_action']['user_id'] = $this->user->id;
+        $inputs['upload'] = $request->upload;
+        $mediaIds = $request->delete;
+
+        $action = $this->actionRepository->findOrFail($id);
+
+        if ($this->user->cant('manage', $action)) {
+            throw new UnknowException('Permission error: User can not edit this action.');
+        }
+
+        $media = $action->media->whereIn('id', $mediaIds);
+
+        return $this->doAction(function () use ($action, $inputs, $media) {
+            $this->compacts['action'] = $this->actionRepository->update($action, $inputs);
+            $this->mediaRepository->deleteMedia($media);
         });
     }
 }

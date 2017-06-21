@@ -2,6 +2,7 @@
 namespace App\Traits\Common;
 
 use Illuminate\Support\Facades\Auth;
+use App\Models\Media;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Storage;
@@ -60,5 +61,32 @@ trait UploadableTrait
         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
 
         return $name . '.' . $ext;
+    }
+
+    public function makeDataMedias($data, $path = 'other')
+    {
+        if (!is_array($data)) {
+            throw new UnknowException('Data type is incorrect');
+        }
+
+        if (!empty($data['image'])) {
+            foreach ($data['image'] as $value) {
+                $result[] = [
+                    'type' => Media::IMAGE,
+                    'url_file' => $this->uploadFile($value, $path),
+                ];
+            }
+        }
+
+        if (!empty($data['video'])) {
+            foreach ($data['video'] as $value) {
+                $result[] = [
+                    'type' => Media::VIDEO,
+                    'url_file' => $value,
+                ];
+            }
+        }
+
+        return $result;
     }
 }

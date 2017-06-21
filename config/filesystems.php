@@ -44,7 +44,7 @@ return [
     'disks' => [
         'image' => [
             'driver' => 'local',
-            'root'   => storage_path(env('DISK_IMAGE', 'files/images')),
+            'root' => storage_path(env('DISK_IMAGE', 'files/images')),
         ],
 
         'local' => [

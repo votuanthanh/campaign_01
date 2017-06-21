@@ -116,13 +116,17 @@ class CampaignController extends ApiController
         }
 
         if ($this->user->cant('view', $campaign)) {
-            throw new UnknowException('You do not have authorize to delete this campaign', UNAUTHORIZED);
+            throw new UnknowException('You do not have authorize to see this campaign', UNAUTHORIZED);
         }
 
         return $this->getData(function () use ($campaign) {
-            $this->compacts['events'] = $this->paginateData(
-                $this->eventRepository->getEvent($campaign->events())
-            );
+            $this->compacts['events'] = [];
+
+            if ($campaign->events()->get()->isEmpty()) {
+                $this->compacts['events'] = $this->paginateData(
+                    $this->eventRepository->getEvent($campaign->events())
+                );
+            }
 
             $this->compacts['campaignTimeline'] = $this->campaignRepository->getCampaignTimeline($campaign);
             $this->compacts['campaign'] = $campaign;
@@ -144,7 +148,7 @@ class CampaignController extends ApiController
         }
 
         if ($this->user->cannot('view', $campaign)) {
-            throw new UnknowException('You do not have authorize to delete this campaign', UNAUTHORIZED);
+            throw new NotFoundException('You do not have authorize to see this campaign', UNAUTHORIZED);
         }
 
         return $this->getData(function () use ($campaign) {
@@ -167,7 +171,7 @@ class CampaignController extends ApiController
         }
 
         if ($this->user->cannot('view', $campaign)) {
-            throw new UnknowException('You do not have authorize to delete this campaign', UNAUTHORIZED);
+            throw new NotFoundException('You do not have authorize to delete this campaign', UNAUTHORIZED);
         }
 
         return $this->getData(function () use ($campaign) {
