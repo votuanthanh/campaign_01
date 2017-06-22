@@ -193,4 +193,52 @@ class CampaignController extends ApiController
             $this->compacts['campaign'] = $this->campaignRepository->createOrDeleteLike($campaign, $this->user->id);
         });
     }
+
+    /**
+     * Set role for member who join in campaign
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function changeMemberRole(Request $request)
+    {
+        $data = $request->only('campaign_id', 'user_id', 'role_id');
+        $campaign = $this->campaignRepository->findOrFail($data['campaign_id']);
+
+        return $this->doAction(function () use ($data, $campaign) {
+            $this->authorize('manage', $campaign);
+            $this->campaignRepository->changeMemberRole($campaign, $data['user_id'], $data['role_id']);
+        });
+    }
+
+    /**
+     * Remove user from campaign's user list
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function removeUser(Request $request)
+    {
+        $data = $request->only('campaign_id', 'user_id');
+        $campaign = $this->campaignRepository->findOrFail($data['campaign_id']);
+
+        return $this->doAction(function () use ($data, $campaign) {
+            $this->authorize('manage', $campaign);
+            $this->campaignRepository->removeUser($campaign, $data['user_id']);
+        });
+    }
+
+    /**
+     * Change owner permission for other user
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function changeOwner(Request $request)
+    {
+        $data = $request->only('campaign_id', 'user_id', 'role_id');
+        $campaign = $this->campaignRepository->findOrFail($data['campaign_id']);
+
+        return $this->doAction(function () use ($data, $campaign) {
+            $this->authorize('manage', $campaign);
+            $this->campaignRepository->changeOwner($campaign, $data['user_id'], $data['role_id']);
+        });
+    }
 }

@@ -67,7 +67,7 @@ class UserRepository extends BaseRepository implements UserInterface
     public function ownedCampaign($id, $orderBy = 'created_at', $direction = 'desc')
     {
         return $this->findOrFail($id)->campaigns()
-            ->wherePivot('role_id', app(RoleRepository::class)->getRoleByName(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)->first())
+            ->wherePivot('role_id', app(RoleRepository::class)->findRoleOrFail(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)->id)
             ->orderBy($orderBy, $direction)
             ->simplePaginate();
     }
@@ -79,11 +79,11 @@ class UserRepository extends BaseRepository implements UserInterface
     public function joinedCampaign($id, $orderBy = 'created_at', $direction = 'desc')
     {
         return $this->findOrFail($id)->campaigns()
-            ->wherePivotIn('role_id', app(RoleRepository::class)->getRoleByName([
+            ->wherePivotIn('role_id', app(RoleRepository::class)->findRoleOrFail([
                 Role::ROLE_OWNER,
                 Role::ROLE_MODERATOR,
                 Role::ROLE_MEMBER,
-            ], Role::TYPE_CAMPAIGN)->all())
+            ], Role::TYPE_CAMPAIGN)->pluck('id')->all())
             ->orderBy($orderBy, $direction)
             ->simplePaginate();
     }

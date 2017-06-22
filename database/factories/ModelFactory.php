@@ -42,7 +42,7 @@ $factory->define(App\Models\Role::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Models\Campaign::class, function (Faker\Generator $faker) {
     return [
-        'hashtag' => $faker->unique()->word,
+        'hashtag' => str_replace(' ', '', $faker->unique()->name),
         'description' => $faker->paragraph(),
         'longitude' => $faker->longitude,
         'latitude' => $faker->latitude,
