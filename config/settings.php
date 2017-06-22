@@ -8,6 +8,8 @@ return [
         'status' => 1, // set campaign public or private
         'limit' => 2, // limit user join campaign
         'timeout_campaign' => 3, // set timeout for campaign
+        'start_day' => 9,
+        'end_day' => 10,
     ],
     'events' => [
         'start_day' => 7,

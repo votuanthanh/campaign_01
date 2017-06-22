@@ -49,9 +49,9 @@ class CampaignController extends ApiController
 
         $data['role_id'] = $this->roleRepository->findRoleOrFail(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)->id;
         $data['user_id'] = $this->user->id;
-        $data['tags'] = $this->tagRepository->getOrCreate($data['tags']);
 
         return $this->doAction(function () use ($data) {
+            $data['tags'] = $this->tagRepository->getOrCreate($data['tags']);
             $this->compacts['campaign'] = $this->campaignRepository->create($data);
         });
     }
@@ -234,6 +234,13 @@ class CampaignController extends ApiController
         return $this->doAction(function () use ($data, $campaign) {
             $this->authorize('manage', $campaign);
             $this->campaignRepository->changeOwner($campaign, $data['user_id'], $data['role_id']);
+        });
+    }
+
+    public function getTags()
+    {
+        return $this->getData(function () {
+            $this->compacts['tags'] = $this->tagRepository->get(['name', 'id']);
         });
     }
 }

@@ -14,31 +14,24 @@ class TagRepository extends BaseRepository implements TagInterface
 
     public function getOrCreate($tags)
     {
-        if (!$tags) {
+        if (!is_array($tags)) {
             return false;
         }
 
-        $tags = is_array($tags) ? $tags : [$tags];
-        $tags = array_map('strtolower', $tags);
-        // get all tag in array with key => id and value => name
-        $oldTags = $this->whereIn('name', $tags)->lists('name', 'id')->toArray();
-        $newTags = $oldTags ? array_diff($tags, $oldTags) : $tags;
+        $newTags = [];
+        $oldTags = [];
 
-        if (!$newTags) {
-            return false;
-        }
-
-        $tagsName = [];
-
-        foreach ($newTags as $name) {
-            $tagsName[] = [
-                'name' => $name,
-            ];
+        foreach ($tags as $tag) {
+            if (empty($tag['id'])) {
+                $newTags[] = ['name' => strtolower($tag['name'])];
+            } else {
+                $oldTags[] = $tag['id'];
+            }
         }
 
         return [
-            'old' => array_keys($oldTags),
-            'new' => $tagsName, 
+            'old' => $oldTags,
+            'new' => $newTags,
         ];
     }
 }

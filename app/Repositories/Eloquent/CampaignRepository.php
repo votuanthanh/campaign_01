@@ -66,8 +66,10 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             $campaign->settings()->createMany($inputs['settings']);
         }
 
-        if (!empty($inputs['media']) && is_file($inputs['media'])) {
-            $urlFile = $this->uploadFile($inputs['media'], 'campaigns');
+        if (!empty($inputs['media'])) {
+            $urlFile = is_string($inputs['media'])
+                ? $this->parseBase64($inputs['media'], 'campaigns')
+                : $this->uploadFile($inputs['media'], 'campaigns');
             $campaign->media()->create([
                 'url_file' => $urlFile,
                 'type' => Media::IMAGE,
@@ -83,7 +85,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             $campaign->tags()->createMany($inputs['tags']['new']);
         }
 
-        return true;
+        return $campaign;
     }
 
     public function update($campaign, $inputs)

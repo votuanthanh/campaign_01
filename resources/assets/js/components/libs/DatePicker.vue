@@ -1,11 +1,11 @@
 <template lang="html">
-    <input :value="birthday"/>
+    <input :value="date"/>
 </template>
 
 <script>
 export default {
     props: {
-        birthday: {
+        date: {
             type: String
         }
     },
@@ -19,12 +19,16 @@ export default {
             }
         });
 
-        $(this.$el).on('hide.daterangepicker', (ev, picker) => {
+        $(this.$el).on('apply.daterangepicker', (ev, picker) => {
             const { format } = picker.locale
             const { date } = picker.startDate._d
 
-            this.$emit('update:birthday', picker.startDate.format(format))
+            this.$emit('update:date', picker.startDate.format(format))
         });
+
+        $(this.$el).on('hide.daterangepicker', (ev, picker) => {
+            this.$emit('update:date', '')
+        })
     },
     beforeDestroy() {
         $(this.$el).data('daterangepicker').remove()

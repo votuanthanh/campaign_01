@@ -3,19 +3,21 @@ import { authGuard, guestGuard } from './middleware'
 import Campaign from '../components/campaign/Campaign.vue'
 import App from '../components/layout/App.vue'
 import Auth from '../components/auth/Auth.vue'
+import AddCampaign from '../components/campaign/AddCampaign.vue'
 
 const router = [
     ...authGuard([
-        // auth routes here
+        { path: '/', component: App,
+            children: [
+                { path: '/campaign', component: Campaign },
+                { path: '/campaign/create', component: AddCampaign }
+            ]
+        }
     ]),
     ...guestGuard([
         { path: '/register', component: Auth },
         { path: '/login', component: Auth},
-    ]),
-    { path: '/', component: App,
-        children: []
-    }
-
+    ])
 ]
 
 export default router

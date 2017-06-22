@@ -89,4 +89,16 @@ trait UploadableTrait
 
         return $result;
     }
+
+    public function parseBase64($base64, $path = 'other', $uploadDisk = 'image')
+    {
+        $base64 = explode(';', $base64);
+        $type = explode('/', $base64[0]);
+        $image = explode(',', $base64[1]);
+        $file = base64_decode($image[1]);
+        $name = $this->getTarget($path) . '/img-' . md5(uniqid(rand(), true)) . '.' . $type[1];
+        \Storage::disk($uploadDisk)->put($name, $file);
+
+        return $name;
+    }
 }

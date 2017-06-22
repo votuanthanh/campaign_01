@@ -31,10 +31,26 @@ class CreateCampaign extends TestCase
             'longitude' => $faker->longitude($min = -180, $max = 180),
             'latitude' => $faker->latitude($min = -90, $max = 90),
             'tags' => [
-                'php',
-                'laravel',
-                'vue.js',
-                'mysql',
+                [
+                    'id' => null,
+                    'name' => 'php',
+                ],
+                [
+                    'id' => null,
+                    'name' => 'laravel',
+                ],
+                [
+                    'id' => null,
+                    'name' => 'laravel',
+                ],
+                [
+                    'id' => null,
+                    'name' => 'vue.js',
+                ],
+                [
+                    'id' => null,
+                    'name' => 'mysql',
+                ],
             ],
             'settings' => [
                 [
@@ -55,8 +71,7 @@ class CreateCampaign extends TestCase
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
-        $response->assertStatus(CODE_OK)->assertExactJson([
-            'campaign' => true,
+        $response->assertStatus(CODE_OK)->assertJson([
             'http_status' => [
                 'code' => CODE_OK,
                 'status' => true,
@@ -91,8 +106,7 @@ class CreateCampaign extends TestCase
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
-        $response->assertStatus(CODE_OK)->assertExactJson([
-            'campaign' => true,
+        $response->assertStatus(CODE_OK)->assertJson([
             'http_status' => [
                 'code' => CODE_OK,
                 'status' => true,
@@ -112,8 +126,13 @@ class CreateCampaign extends TestCase
             'longitude' => $faker->longitude($min = -180, $max = 180),
             'latitude' => $faker->latitude($min = -90, $max = 90),
             'tags' => [
-                'mysql',
-                'demo',
+                [
+                    'id' => 1,
+                ],
+                [
+                    'id' => null,
+                    'name' => 'demo',
+                ],
             ],
             'settings' => [],
             'media' => UploadedFile::fake()->image('avatar2.jpg', 600, 600),
@@ -121,8 +140,7 @@ class CreateCampaign extends TestCase
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
-        $response->assertStatus(CODE_OK)->assertExactJson([
-            'campaign' => true,
+        $response->assertStatus(CODE_OK)->assertJson([
             'http_status' => [
                 'code' => CODE_OK,
                 'status' => true,
@@ -143,8 +161,13 @@ class CreateCampaign extends TestCase
             'longitude' => $faker->longitude($min = -180, $max = 180),
             'latitude' => $faker->latitude($min = -90, $max = 90),
             'tags' => [
-                'mysql',
-                'demo',
+                [
+                    'id' => 1,
+                ],
+                [
+                    'id' => null,
+                    'name' => 'demo',
+                ],
             ],
             'settings' => [
                 'key' => 1,

@@ -13,14 +13,14 @@
 Route::get('/redirect/{provider}', 'SocialController@redirectToProvider');
 Route::get('/callback/{provider}', 'SocialController@callback');
 
-Route::get('/{vue_capture?}', function () {
-    return view('app');
-})->where('vue_capture', '[\/\w\.-]*');
-
 // Server response to url image files
 Route::get('/img/{path}', function (Illuminate\Http\Request $request, $path) {
     return app('glide')->getImageResponse($path, $request->all());
 })->where('path', '.*');
+
+Route::get('/{vue_capture?}', function () {
+    return view('app');
+})->where('vue_capture', '[\/\w\.-]*');
 
 Auth::routes();
 
