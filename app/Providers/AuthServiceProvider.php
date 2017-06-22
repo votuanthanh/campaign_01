@@ -8,9 +8,11 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use App\Models\Campaign;
 use App\Models\Event;
 use App\Models\Action;
+use App\Models\Comment;
 use App\Policies\CampaignPolicy;
 use App\Policies\EventPolicy;
 use App\Policies\ActionPolicy;
+use App\Policies\CommentPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
         Campaign::class => CampaignPolicy::class,
         Event::class => EventPolicy::class,
         Action::class => ActionPolicy::class,
+        Comment::class => CommentPolicy::class,
     ];
 
     /**

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
+use App\Http\Requests\CommentRequest;
 use App\Exceptions\Api\UnknowException;
+use App\Http\Requests\UpdateEventRequest;
 use App\Http\Controllers\AbstractController;
 use App\Repositories\Contracts\EventInterface;
 use App\Repositories\Contracts\QualityInterface;
 use App\Repositories\Contracts\CampaignInterface;
-use App\Http\Requests\UpdateEventRequest;
-use Exception;
 
 class EventController extends ApiController
 {
@@ -38,7 +39,7 @@ class EventController extends ApiController
         $campaign = $this->campaignRepository->find($input['data_event']['campaign_id']);
 
         return $this->doAction(function () use ($input, $campaign) {
-            if (!$this->user->can('createEvent', $campaign)) {
+            if ($this->user->cant('createEvent', $campaign)) {
                 throw new UnknowException('Have error when create event');
             }
 

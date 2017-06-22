@@ -47,6 +47,10 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\MediaInterface::class,
             \App\Repositories\Eloquent\MediaRepository::class,
         ],
+        'comment' => [
+            \App\Repositories\Contracts\CommentInterface::class,
+            \App\Repositories\Eloquent\CommentRepository::class,
+        ],
     ];
 
     /**

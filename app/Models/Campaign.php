@@ -10,6 +10,8 @@ class Campaign extends BaseModel
 
     const BLOCK = 0;
     const ACTIVE = 1;
+    const APPROVING = 0;
+    const APPROVED = 1;
 
     public function __construct($attributes = [])
     {

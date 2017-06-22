@@ -57,11 +57,19 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::patch('/update/{id}', 'EventController@update')->name('update-event');
             Route::patch('/update-setting/{id}', 'EventController@updateSetting')->name('update-setting');
             Route::post('like/{eventId}', 'EventController@like')->name('like');
+            Route::group(['prefix' => '/comment', 'as' => 'comment.'], function () {
+                Route::post('create', 'CommentController@createCommentEvent')->name('create');
+            });
         });
 
         Route::group(['prefix' => '/action', 'as' => 'action.'], function () {
             Route::patch('/update/{id}', 'ActionController@update')->name('update');
             Route::post('like/{actionId}', 'ActionController@like')->name('like');
+            Route::group(['prefix' => '/comment', 'as' => 'comment.'], function () {
+                Route::post('create', 'CommentController@createCommentAction')->name('create');
+            });
         });
+
+        Route::resource('/comment', 'CommentController', ['only' => ['update', 'destroy']]);
     });
 });

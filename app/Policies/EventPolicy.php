@@ -4,6 +4,8 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Event;
+use App\Models\Role;
+use App\Models\Campaign;
 
 class EventPolicy extends BasePolicy
 {
@@ -30,5 +32,18 @@ class EventPolicy extends BasePolicy
     {
         return $user->id === $event->user_id
             || $user->can('manage', $event->campaign);
+    }
+
+    public function comment(User $user, Event $event)
+    {
+        $roleBlockId = Role::where('name', Role::ROLE_BLOCKED)->first(['id']);
+
+        $userInCampaign = $event->campaign->users()
+            ->wherePivot('status', Campaign::APPROVED)
+            ->wherePivot('role_id', '<>', $roleBlockId)
+            ->pluck('user_id')
+            ->all();
+
+        return in_array($user->id, $userInCampaign);
     }
 }
