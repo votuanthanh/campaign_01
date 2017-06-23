@@ -64,4 +64,9 @@ class Event extends BaseModel
     {
         return $this->hasMany(Donation::class);
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

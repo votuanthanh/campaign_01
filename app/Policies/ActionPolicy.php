@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Action;
+use App\Models\Role;
 
 class ActionPolicy extends BasePolicy
 {
@@ -30,5 +31,18 @@ class ActionPolicy extends BasePolicy
     {
         return $user->id === $action->user_id
             || $user->can('manage', $action->event);
+    }
+
+    public function comment(User $user, Action $action)
+    {
+        $roleBlockId = Role::where('name', Role::ROLE_BLOCKED)->first(['id']);
+
+        $userInCampaign = $action->event->campaign->users()
+            ->wherePivot('status', Campaign::APPROVED)
+            ->wherePivot('role_id', '<>', $roleBlockId)
+            ->pluck('user_id')
+            ->all();
+
+        return in_array($user->id, $userInCampaign);
     }
 }
