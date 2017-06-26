@@ -11,8 +11,8 @@ use App\Exceptions\Api\UnknowException;
 use Illuminate\Http\Request;
 use App\Http\Requests\CampaignRequest;
 use App\Models\Role;
-use Exception;
 use App\Models\Campaign;
+use Exception;
 
 class CampaignController extends ApiController
 {
@@ -148,7 +148,7 @@ class CampaignController extends ApiController
         $campaign = $this->campaignRepository->findOrFail($id);
 
         if ($this->user->cannot('view', $campaign)) {
-            throw new NotFoundException('You do not have authorize to see this campaign', UNAUTHORIZED);
+            throw new UnknowException('You do not have authorize to see this campaign', UNAUTHORIZED);
         }
 
         return $this->getData(function () use ($campaign) {
@@ -167,7 +167,7 @@ class CampaignController extends ApiController
         $campaign = $this->campaignRepository->findOrFail($id);
 
         if ($this->user->cannot('view', $campaign)) {
-            throw new NotFoundException('You do not have authorize to delete this campaign', UNAUTHORIZED);
+            throw new UnknowException('You do not have authorize to see this campaign', UNAUTHORIZED);
         }
 
         return $this->getData(function () use ($campaign) {

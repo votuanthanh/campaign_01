@@ -91,6 +91,13 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::resource('donation', 'DonationController', ['only' => ['store', 'update', 'destroy']]);
         });
     });
+
+    Route::group(['as' => 'action.'], function () {
+        Route::resource('action', 'ActionController', [
+            'names' => ['store' => 'create'],
+            'only' => ['store', 'update'],
+        ]);
+    });
 });
 Route::group(['prefix' => 'file', 'as' => 'file'], function () {
     Route::post('upload', 'Api\UploadController@upload')->name('upload');
