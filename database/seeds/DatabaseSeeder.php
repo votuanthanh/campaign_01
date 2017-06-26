@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(SocialAccountTableSeeder::class);
         $this->call(RoleTableSeeder::class);
-        $this->call(UserTableSeeder::class);
         $this->call(TagTableSeeder::class);
+        $this->call(UserTableSeeder::class);
         $this->call(CampaignTableSeeder::class);
         $this->call(EventTableSeeder::class);
         $this->call(ActionTableSeeder::class);

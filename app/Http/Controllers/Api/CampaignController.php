@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CampaignRequest;
 use App\Models\Role;
 use Exception;
+use App\Models\Campaign;
 
 class CampaignController extends ApiController
 {
@@ -57,11 +58,7 @@ class CampaignController extends ApiController
 
     public function destroy($id)
     {
-        $campaign = $this->campaignRepository->find($id);
-
-        if (!$campaign) {
-            throw new NotFoundException('Not foud campaign with: ' . $id, NOT_FOUND);
-        }
+        $campaign = $this->campaignRepository->findOrFail($id);
 
         if (!$this->user->can('manage', $campaign)) {
             throw new UnknowException('You do not have authorize to delete this campaign', UNAUTHORIZED);
@@ -69,8 +66,22 @@ class CampaignController extends ApiController
 
         return $this->doAction(function () use ($campaign) {
             $eventIds = $campaign->events()->pluck('id');
-            $this->campacts['event'] = $this->eventRepository->delete($eventIds);
-            $this->campacts['campaign'] = $this->campaignRepository->delete($campaign);
+            $this->compacts['event'] = $this->eventRepository->delete($eventIds);
+            $this->compacts['campaign'] = $this->campaignRepository->delete($campaign);
+        });
+    }
+
+    public function approveUserJoinCampaign(Request $request)
+    {
+        $data = $request->only('user_id', 'campaign_id');
+        $data['campaign'] = $this->campaignRepository->findOrFail($data['campaign_id']);
+
+        if ($this->user->cannot('changeStatusUser', $data['campaign'])) {
+            throw new UnknowException('You do not have authorize to change status user in this campaign', UNAUTHORIZED);
+        }
+
+        return $this->doAction(function () use ($data) {
+            $this->compacts['campaign'] = $this->campaignRepository->changeStatusUser($data, Campaign::APPROVED);
         });
     }
 
@@ -87,11 +98,7 @@ class CampaignController extends ApiController
             'media'
         );
 
-        $campaign = $this->campaignRepository->find($id);
-
-        if (!$campaign) {
-            throw new NotFoundException('Not found campaign with id :' . $id);
-        }
+        $campaign = $this->campaignRepository->findOrFail($id);
 
         if ($this->user->cannot('manage', $campaign)) {
             throw new Exception('Policy fail');
@@ -109,11 +116,7 @@ class CampaignController extends ApiController
     */
     public function show($id)
     {
-        $campaign = $this->campaignRepository->find($id);
-
-        if (!$campaign) {
-            throw new NotFoundException('Not foud campaign with: ' . $id, NOT_FOUND);
-        }
+        $campaign = $this->campaignRepository->findOrFail($id);
 
         if ($this->user->cant('view', $campaign)) {
             throw new UnknowException('You do not have authorize to see this campaign', UNAUTHORIZED);
@@ -141,11 +144,7 @@ class CampaignController extends ApiController
     */
     public function getListUser($id)
     {
-        $campaign = $this->campaignRepository->find($id);
-
-        if (!$campaign) {
-            throw new NotFoundException('Not foud campaign with: ' . $id, NOT_FOUND);
-        }
+        $campaign = $this->campaignRepository->findOrFail($id);
 
         if ($this->user->cannot('view', $campaign)) {
             throw new NotFoundException('You do not have authorize to see this campaign', UNAUTHORIZED);
@@ -164,11 +163,7 @@ class CampaignController extends ApiController
     */
     public function getCampaignTimeline($id)
     {
-        $campaign = $this->campaignRepository->find($id);
-
-        if (!$campaign) {
-            throw new NotFoundException('Not foud campaign with: ' . $id, NOT_FOUND);
-        }
+        $campaign = $this->campaignRepository->findOrFail($id);
 
         if ($this->user->cannot('view', $campaign)) {
             throw new NotFoundException('You do not have authorize to delete this campaign', UNAUTHORIZED);

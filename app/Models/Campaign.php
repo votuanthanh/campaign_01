@@ -32,7 +32,7 @@ class Campaign extends BaseModel
 
     public function users()
     {
-        return $this->belongsToMany(User::class)->withPivot('role_id');
+        return $this->belongsToMany(User::class)->withPivot('role_id', 'status');
     }
 
     public function events()

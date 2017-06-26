@@ -25,6 +25,7 @@ class CampaignTableSeeder extends Seeder
             foreach (range(1, 4) as $key) {
                 $array[array_rand($userIds)] = [
                     'role_id' => array_rand($roleIds),
+                    'status' => rand(1, 3),
                 ];
             }
 

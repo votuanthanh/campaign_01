@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Campaign;
+use App\Models\Role;
 
 class CampaignPolicy extends BasePolicy
 {
@@ -16,7 +17,7 @@ class CampaignPolicy extends BasePolicy
      */
     public function createEvent(User $user, Campaign $campaign)
     {
-        return in_array($user->id, $campaign->getUserByRole(['owner', 'moderator'])->get()->pluck('id')->toArray());
+        return in_array($user->id, $campaign->getUserByRole([Role::ROLE_OWNER, Role::ROLE_MODERATOR])->pluck('user_id')->toArray());
     }
 
     /**
@@ -66,5 +67,17 @@ class CampaignPolicy extends BasePolicy
     public function manage(User $user, Campaign $campaign)
     {
         return $user->id === $campaign->owner()->id;
+    }
+
+    /**
+     * Determine whether the user can change status user in campaign.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Campaign  $campaign
+     * @return mixed
+     */
+    public function changeStatusUser(User $user, Campaign $campaign)
+    {
+        return in_array($user->id, $campaign->getUserByRole([Role::ROLE_OWNER, Role::ROLE_MODERATOR])->pluck('user_id')->all());
     }
 }

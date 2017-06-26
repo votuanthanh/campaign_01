@@ -275,4 +275,11 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         $this->changeMemberRole($campaign, $campaign->owner()->id, $roleId);
         $this->changeMemberRole($campaign, $userId, $ownerRoleId);
     }
+
+    public function changeStatusUser($data, $status)
+    {
+        $data['campaign']->users()->updateExistingPivot($data['user_id'], ['status' => $status]);
+
+        return true;
+    }
 }

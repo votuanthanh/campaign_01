@@ -21,4 +21,6 @@ interface CampaignInterface extends RepositoryInterface
     public function removeUser($campaign, $userId);
 
     public function changeOwner($campaign, $userId, $roleId);
+
+    public function changeStatusUser($data, $status);
 }
