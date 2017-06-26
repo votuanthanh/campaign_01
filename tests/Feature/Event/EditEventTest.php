@@ -21,10 +21,6 @@ class EditEventTest extends TestCase
      *
      * @return void
      */
-    public function testExample()
-    {
-        $this->assertTrue(true);
-    }
 
     public function testWhenAddNewImageThenSuccess()
     {
@@ -75,7 +71,7 @@ class EditEventTest extends TestCase
         ]);
     }
 
-    public function testWhenThenFails()
+    public function testWhenAddSettingsThenSuccess()
     {
         $faker = \Faker\Factory::create();
         $user = factory(User::class)->create();
@@ -105,7 +101,7 @@ class EditEventTest extends TestCase
             $listSettingUpdate[$setting->id] = $value++;
         }
 
-        $response = $this->json('PATCH', route('event.update-setting', ['id' =>  $event->id]), [
+        $response = $this->json('PATCH', route('event.update-setting', ['id' => $event->id]), [
             'setting' => $listSettingUpdate
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -170,7 +166,6 @@ class EditEventTest extends TestCase
         $this->actingAs($user, 'api');
 
         $response = $this->json('PATCH', route('event.update-event', ['id' => 1]), [
-            'title' => null,
             'description' => $faker->paragraph(),
             'longitude' => $faker->longitude($min = -180, $max = 180),
             'latitude' => $faker->latitude($min = -90, $max = 90),
@@ -182,7 +177,7 @@ class EditEventTest extends TestCase
             'code' => VALIDATOR_ERROR,
             'status' => false,
             'messages' => [
-                'The title field is required.',
+                trans('validation.required', ['attribute' => 'title']),
             ],
         ]);
     }
@@ -195,7 +190,6 @@ class EditEventTest extends TestCase
 
         $response = $this->json('PATCH', route('event.update-event', ['id' => 1]), [
             'title' => 'This is title',
-            'description' => null,
             'longitude' => $faker->longitude($min = -180, $max = 180),
             'latitude' => $faker->latitude($min = -90, $max = 90),
         ], [
@@ -206,7 +200,7 @@ class EditEventTest extends TestCase
             'code' => VALIDATOR_ERROR,
             'status' => false,
             'messages' => [
-                'The description field is required.',
+                trans('validation.required', ['attribute' => 'description']),
             ],
         ]);
     }
