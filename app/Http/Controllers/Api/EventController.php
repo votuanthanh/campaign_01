@@ -9,6 +9,7 @@ use App\Http\Requests\CommentRequest;
 use App\Exceptions\Api\UnknowException;
 use App\Http\Requests\UpdateEventRequest;
 use App\Http\Controllers\AbstractController;
+use App\Repositories\Contracts\DonationTypeInterface;
 use App\Repositories\Contracts\EventInterface;
 use App\Repositories\Contracts\QualityInterface;
 use App\Repositories\Contracts\CampaignInterface;
@@ -18,21 +19,24 @@ class EventController extends ApiController
     protected $eventRepository;
     protected $qualityRepository;
     protected $campaignRepository;
+    protected $donationTypeRepository;
 
     public function __construct(
         EventInterface $eventRepository,
         QualityInterface $qualityRepository,
-        CampaignInterface $campaignRepository
+        CampaignInterface $campaignRepository,
+        DonationTypeInterface $donationTypeRepository
     ) {
         parent::__construct();
         $this->qualityRepository = $qualityRepository;
         $this->campaignRepository = $campaignRepository;
         $this->eventRepository = $eventRepository;
+        $this->donationTypeRepository = $donationTypeRepository;
     }
 
     public function create(EventRequest $request)
     {
-        $input['data_event'] = $request->only('campaign_id', 'title', 'description', 'longitude', 'latitude');
+        $input['data_event'] = $request->only('campaign_id', 'title', 'description', 'longitude', 'latitude', 'address');
         $input['data_event']['user_id'] = $this->user->id;
         $input['other'] = $request->only('settings', 'files');
         $input['donations'] = $this->qualityRepository->getOrCreate($request->get('donations'));
@@ -103,6 +107,14 @@ class EventController extends ApiController
 
         return $this->doAction(function () use ($event) {
             $this->compacts['event'] = $this->eventRepository->createOrDeleteLike($event, $this->user->id);
+        });
+    }
+
+    public function getTypeQuality()
+    {
+        return $this->doAction(function () {
+            $this->compacts['qualitys'] = $this->qualityRepository->distinct()->select('name')->get();
+            $this->compacts['types'] = $this->donationTypeRepository->distinct()->select('name')->get();
         });
     }
 }

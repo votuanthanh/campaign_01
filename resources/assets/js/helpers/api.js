@@ -20,3 +20,10 @@ export function post(url, payload = '') {
     	data: payload
     })
 }
+
+export function del(url) {
+    return axios({
+        method: 'DELETE',
+        url: concatUrl(url)
+    })
+}

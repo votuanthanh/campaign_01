@@ -35,7 +35,6 @@ class EventRequest extends AbstractRequest
                 return [
                     'title' => 'required|string',
                     'description' => 'required|string',
-                    'files.*' => 'required|image|max:500',
                     'longitude' => 'numeric|min:-180|max:180',
                     'latitude' => 'numeric|min:-90|max:90',
                     'settings' => 'required',

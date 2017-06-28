@@ -6,11 +6,16 @@
         "birthday": "Your Birthday",
         "password": "Your Password",
         "remember_me": "Remember Me",
-        "forgot_password": "Forgot my Password"
+        "forgot_password": "Forgot my Password",
+        "event_name": "Event Name",
+        "event_location": "Event Location",
+        "event_description": "Event Description"
+
     },
     "title": {
         "login": "Login to your Account",
-        "register_campaign": "Register to Campaign"
+        "register_campaign": "Register to Campaign",
+        "add_donation": "Add Donation"
     },
     "button": {
         "login": "Login",
@@ -18,7 +23,8 @@
         "login_twitter": "Login with Twitter",
         "login_google": "Login with Google",
         "complete_register": "Complete Registration!",
-        "register": "Register Now!"
+        "register": "Register Now!",
+        "create_event": "Create Event"
     },
     "quote": {
         "confirm_account": "Don’t you have an account?",

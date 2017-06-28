@@ -37,8 +37,14 @@ class CreateEventTest extends TestCase
             'latitude' => $faker->latitude,
             'campaign_id' => '4',
             'settings' => [
-                1 => '15/3/2017',
-                2 => '30/3/2017',
+                [
+                    'type' => 7,
+                    'value' => '07/03/2017',
+                ],
+                [
+                    'type' => 8,
+                    'value' => '27/03/2017',
+                ],
             ],
             'donations' => [
                 1 => [
@@ -53,7 +59,8 @@ class CreateEventTest extends TestCase
                 ],
             ],
             'files' => [
-                UploadedFile::fake()->image('avatar.jpg', 600, 600),
+                '2017/07/other/img-14990616485959dd9020f27.png',
+                '2017/07/other/img-14990616485959dd9020f28.png',
             ],
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -81,8 +88,14 @@ class CreateEventTest extends TestCase
             'latitude' => $faker->latitude,
             'campaign_id' => '4',
             'settings' => [
-                1 => '15/3/2017',
-                2 => '30/3/2017',
+                [
+                    'type' => 7,
+                    'value' => '07/03/2017',
+                ],
+                [
+                    'type' => 8,
+                    'value' => '27/03/2017',
+                ],
             ],
             'donations' => [
                 1 => [
@@ -97,7 +110,8 @@ class CreateEventTest extends TestCase
                 ],
             ],
             'files' => [
-                UploadedFile::fake()->image('avatar.jpg', 600, 600),
+                '2017/07/other/img-14990616485959dd9020f27.png',
+                '2017/07/other/img-14990616485959dd9020f28.png',
             ],
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -125,8 +139,14 @@ class CreateEventTest extends TestCase
             'latitude' => $faker->latitude,
             'campaign_id' => '4',
             'settings' => [
-                1 => '15/3/2017',
-                2 => '30/3/2017',
+                [
+                    'type' => 7,
+                    'value' => '07/03/2017',
+                ],
+                [
+                    'type' => 8,
+                    'value' => '27/03/2017',
+                ],
             ],
             'donations' => [
                 1 => [
@@ -141,7 +161,8 @@ class CreateEventTest extends TestCase
                 ],
             ],
             'files' => [
-                UploadedFile::fake()->image('avatar.jpg', 600, 600),
+                '2017/07/other/img-14990616485959dd9020f27.png',
+                '2017/07/other/img-14990616485959dd9020f28.png',
             ],
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -174,8 +195,14 @@ class CreateEventTest extends TestCase
             'latitude' => $faker->latitude,
             'campaign_id' => '4',
             'settings' => [
-                1 => '15/3/2017',
-                2 => '30/3/2017',
+                [
+                    'type' => 7,
+                    'value' => '07/03/2017',
+                ],
+                [
+                    'type' => 8,
+                    'value' => '27/03/2017',
+                ],
             ],
             'donations' => [
                 1 => [
@@ -190,7 +217,8 @@ class CreateEventTest extends TestCase
                 ],
             ],
             'files' => [
-                UploadedFile::fake()->image('avatar.jpg', 600, 600),
+                '2017/07/other/img-14990616485959dd9020f27.png',
+                '2017/07/other/img-14990616485959dd9020f28.png',
             ],
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -223,11 +251,18 @@ class CreateEventTest extends TestCase
             'latitude' => $faker->latitude,
             'campaign_id' => '4',
             'settings' => [
-                1 => '15/3/2017',
-                2 => '30/3/2017',
+                [
+                    'type' => 7,
+                    'value' => '07/03/2017',
+                ],
+                [
+                    'type' => 8,
+                    'value' => '27/03/2017',
+                ],
             ],
             'files' => [
-                UploadedFile::fake()->image('avatar.jpg', 600, 600),
+                '2017/07/other/img-14990616485959dd9020f27.png',
+                '2017/07/other/img-14990616485959dd9020f28.png',
             ],
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,

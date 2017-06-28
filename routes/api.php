@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -70,6 +69,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::group(['prefix' => '/comment', 'as' => 'comment.'], function () {
                 Route::post('create', 'CommentController@createCommentEvent')->name('create');
             });
+            Route::get('donation', 'EventController@getTypeQuality')->name('getTypeQuality');
         });
 
         Route::group(['prefix' => '/action', 'as' => 'action.'], function () {
@@ -87,4 +87,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::resource('donation', 'DonationController', ['only' => ['store', 'update', 'destroy']]);
         });
     });
+});
+Route::group(['prefix' => 'file', 'as' => 'file'], function () {
+    Route::post('upload', 'Api\UploadController@upload')->name('upload');
+    Route::delete('delete/{path?}', 'Api\UploadController@delete')->name('delete')->where('path', '.+');
 });
