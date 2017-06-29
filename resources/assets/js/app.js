@@ -2,11 +2,14 @@ import Vue from 'vue'
 import store from './store'
 import VueI18n from 'vue-i18n'
 import messages from './locale'
-import router from './router'
+import routes from './router'
+import makeRouter from './router/middleware'
 import VeeValidate, { Validator } from 'vee-validate'
 import rules from './validation'
 import { config, dictionary } from './validation/config'
 import { get } from './helpers/api'
+
+const router = makeRouter(routes)
 
 Vue.use(VueI18n)
 

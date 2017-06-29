@@ -120,10 +120,6 @@ export default {
     },
     beforeRouteEnter (to, from, next) {
         next((vm) => {
-            if (vm.authenticated) {
-                vm.$router.push('/')
-            }
-
             const tab = to.path == '/register' ? 'home' : 'profile'
             if (tab == 'profile') {
                 vm.loginTab = true
