@@ -1,5 +1,5 @@
 <template lang="html">
-    <h1>{{ $t('campaigns.campaigns') }}</h1>
+    <router-link to="/campaign/create"><h1>{{ $t('campaigns.campaigns') }}</h1></router-link>
 </template>
 
 <script>

@@ -22,7 +22,7 @@ class CampaignRequest extends AbstractRequest
     public function rules()
     {
         $rule = [];
-        
+
         switch ($this->method()) {
             case 'PUT': case 'PATH':
                 $rule = [
@@ -51,7 +51,7 @@ class CampaignRequest extends AbstractRequest
                     'settings' => 'nullable|array',
                     'settings.*.key' => 'nullable|numeric',
                     'settings.*.value' => 'nullable|string|max:255',
-                    'media' => 'required|image|mimes:jpg,jpeg,png,gif,svg|max:1000',
+                    'media' => 'required|base64image',
                 ];
                 break;
         }

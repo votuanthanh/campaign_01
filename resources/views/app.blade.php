@@ -19,6 +19,12 @@
             'fallbackLocale' => config('app.fallback_locale'),
             'url' => url('/'),
             'languages' => config('settings.locale'),
+            'settings' => [
+                'campaigns' => config('settings.campaigns'),
+                'events' => config('settings.events'),
+                'actions' => config('settings.actions'),
+                'value' => config('settings.value_of_settings'),
+            ]
         ]) !!};
         @if (session('access_token'))
             localStorage.setItem('access_token', '{{ session('access_token') }}')

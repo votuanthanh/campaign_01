@@ -1,3 +1,21 @@
 {
-  "campaigns": "Campaigns"
+  "campaigns": "Campaigns",
+  "create_campaign": "Create new campagin",
+  "title": "Title",
+  "hashtag": "Hashtag",
+  "longitude": "Longitude",
+  "latitude": "Latitude",
+  "description": "Description",
+  "image": "Image",
+  "settings": "Settings",
+  "location": "Location",
+  "startday": "Start day",
+  "endday": "End day",
+  "status": "Public or private",
+  "limit": "Limit user join campaign",
+  "public": "Public",
+  "private": "Private",
+  "format_date": "MM/DD/YYYY",
+  "tags": "Search or add a tag",
+  "add_tags": "Add this as new tag"
 }

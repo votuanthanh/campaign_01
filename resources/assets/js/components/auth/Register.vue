@@ -58,7 +58,7 @@
 
                     <div class="form-group date-time-picker label-floating">
                         <label class="control-label">{{ $t('form.label.birthday') }}</label>
-                        <date-picker :birthday.sync="user.birthday"></date-picker>
+                        <date-picker :date.sync="user.birthday"></date-picker>
                         <span class="input-group-addon">
                             <svg class="olymp-calendar-icon">
                                 <use xlink:href="/frontend/icons/icons.svg#olymp-calendar-icon"></use>

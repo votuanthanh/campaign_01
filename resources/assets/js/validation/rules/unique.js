@@ -6,7 +6,7 @@ export default {
     validate(value, args) {
         let [database, column, idIgnore = ''] = args
 
-        return axios.post('api/check-exist', { database, column, value, idIgnore })
+        return post('check-exist', { database, column, value, idIgnore })
             .then(res => {
                 return {
                     valid: !res.data.valid
