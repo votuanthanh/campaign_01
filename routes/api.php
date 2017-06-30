@@ -23,12 +23,16 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::post('register', 'RegisterController@register')->name('register');
     });
 
-    Route::group(['as' => 'user.', 'prefix' => 'settings'], function () {
-        Route::patch('password', 'UserController@updatePassword')->name('password');
-        Route::patch('profile', 'UserController@updateProfile')->name('profile');
-        Route::post('avatar', 'UserController@updateAvatar')->name('avatar');
-        Route::post('header-photo', 'UserController@updateHeaderPhoto')->name('header');
+    Route::group(['as' => 'user.'], function () {
+        Route::group(['prefix' => 'settings'], function () {
+            Route::patch('password', 'UserController@updatePassword')->name('password');
+            Route::patch('profile', 'UserController@updateProfile')->name('profile');
+            Route::post('avatar', 'UserController@updateAvatar')->name('avatar');
+            Route::post('header-photo', 'UserController@updateHeaderPhoto')->name('header');
+        });
         Route::patch('follow/{id}', 'UserController@follow')->name('follow');
+        Route::patch('follow-tag/{id}', 'UserController@followTag')->name('follow-tag');
+        Route::patch('join-campaign/{id}', 'UserController@joinCampaign')->name('join-campaign');
     });
 
     Route::group(['prefix' => 'user/{id}', 'as' => 'user.'], function () {
@@ -36,7 +40,11 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::get('followings', 'UserController@listFollowing')->name('following');
         Route::get('owned-campaign', 'UserController@listOwnedCampaign')->name('owned-campaign');
         Route::get('joined-campaign', 'UserController@listJoinedCampaign')->name('joined-campaign');
+        Route::get('following-campaign', 'UserController@listFollowingCampaign')->name('following-campaign');
+        Route::get('following-tag', 'UserController@listFollowingTag')->name('following-tag');
     });
+
+    Route::resource('tag', 'TagController', ['only' => ['index', 'show']]);
 
     Route::post('check-exist', 'CommonController@checkExist');
 

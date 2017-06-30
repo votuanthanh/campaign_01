@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Campaign;
 use App\Repositories\Contracts\UserInterface;
 use App\Jobs\SendEmail;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -110,5 +111,54 @@ class UserRepository extends BaseRepository implements UserInterface
             ->followings()
             ->orderBy($orderBy, $direction)
             ->simplePaginate();
+    }
+
+    /**
+     * List all campaigns that the user are following through tag
+     * @param  int $id
+     * @param  string $orderBy
+     * @param  string $direction
+     * @return Illuminate\Pagination\Paginator
+     */
+    public function listFollowingCampaign($id, $orderBy = 'created_at', $direction = 'desc')
+    {
+        $this->findOrFail($id);
+
+        return \DB::table('users')->join('tag_user', 'users.id', '=', 'tag_user.user_id')
+            ->join('campaign_tag', 'tag_user.tag_id', '=', 'campaign_tag.tag_id')
+            ->join('campaigns', 'campaigns.id', '=', 'campaign_tag.campaign_id')
+            ->where('users.id', $id)
+            ->select('users.id', 'campaigns.*')
+            ->orderBy($orderBy, $direction)
+            ->simplePaginate();
+    }
+
+    /**
+     * List all tags that the user are following
+     * @param  int $id
+     * @param  string $orderBy
+     * @param  string $direction
+     * @return Illuminate\Pagination\Paginator
+     */
+    public function listFollowingTag($id, $orderBy = 'created_at', $direction = 'desc')
+    {
+        $user = $this->findOrFail($id);
+
+        return $user
+            ->tags()
+            ->orderBy($orderBy, $direction)
+            ->simplePaginate();
+    }
+
+    /**
+     * User join or quit campaign
+     * @param  int $campaignId
+     */
+    public function joinCampaign($campaignId)
+    {
+        \Auth::guard('api')
+            ->user()
+            ->campaigns()
+            ->toggle([$campaignId => ['status' => Campaign::APPROVING]]);
     }
 }

@@ -62,7 +62,7 @@ class User extends Authenticatable
 
     public function campaigns()
     {
-        return $this->belongsToMany(Campaign::class)->withPivot('role_id');
+        return $this->belongsToMany(Campaign::class)->withPivot('role_id', 'status');
     }
 
     public function events()

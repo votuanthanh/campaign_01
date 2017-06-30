@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ApiController;
 use App\Repositories\Contracts\UserInterface;
+use App\Repositories\Contracts\TagInterface;
 use App\Http\Requests\User\ProfileRequest;
 use App\Http\Requests\User\SecurityRequest;
 use App\Http\Requests\User\ImageUploadRequest;
@@ -17,9 +18,12 @@ class UserController extends ApiController
 {
     use UploadableTrait;
 
-    public function __construct(UserInterface $userRepository)
+    protected $tagRepository;
+
+    public function __construct(UserInterface $userRepository, TagInterface $tagRepository)
     {
         parent::__construct($userRepository);
+        $this->tagRepository = $tagRepository;
     }
 
     /**
@@ -150,45 +154,48 @@ class UserController extends ApiController
     }
 
     /**
-     * Follow a tag
+     * Toogle follow or unfollow a tag
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function followTag($id)
     {
-        //
-    }
+        $this->tagRepository->findOrFail($id);
 
-    /**
-     * Unfollow a tag
-     * @return \Illuminate\Http\Response
-     */
-    public function unfollowTag($id)
-    {
-        //
+        return $this->doAction(function () use ($id) {
+            $this->user->tags()->toggle($id);
+        });
     }
 
     /**
      * List all campaigns that user are following (with tag)
+     * @return \Illuminate\Http\Response
      */
-    public function listFollowCampaign($id)
+    public function listFollowingCampaign($id)
     {
-        //
+        return $this->doAction(function () use ($id) {
+            $this->compacts['campaigns'] = $this->repository->listFollowingCampaign($id);
+        });
     }
+
+    public function listFollowingTag($id)
+    {
+        return $this->doAction(function () use ($id) {
+            $this->compacts['tags'] = $this->repository->listFollowingTag($id);
+        });
+    }
+
     /**
-     * Join a campaign
+     * Join/quit a campaign
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function joinCampaign($id)
     {
-        //
-    }
+        $this->repository->findOrFail($id);
 
-    /**
-     * Quit a campaign which user are in
-     * @return \Illuminate\Http\Response
-     */
-    public function quitCampaign($id)
-    {
-        //
+        return $this->doAction(function () use ($id) {
+            $this->repository->joinCampaign($id);
+        });
     }
 }
