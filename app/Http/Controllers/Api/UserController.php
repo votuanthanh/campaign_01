@@ -178,14 +178,14 @@ class UserController extends ApiController
     public function listFollowingCampaign($id)
     {
         return $this->doAction(function () use ($id) {
-            $this->compacts['campaigns'] = $this->repository->listFollowingCampaign($id);
+            $this->compacts['data'] = $this->repository->listFollowingCampaign($id);
         });
     }
 
     public function listFollowingTag($id)
     {
         return $this->doAction(function () use ($id) {
-            $this->compacts['tags'] = $this->repository->listFollowingTag($id);
+            $this->compacts['data'] = $this->repository->listFollowingTag($id);
         });
     }
 

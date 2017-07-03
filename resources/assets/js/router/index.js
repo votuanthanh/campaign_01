@@ -15,6 +15,7 @@ import User from '../components/user/User.vue'
 import Password from '../components/user/Password.vue'
 import Profile from '../components/user/Profile.vue'
 import Setting from '../components/user/Setting.vue'
+import CampaignUser from '../components/user/CampaignUser.vue'
 
 const router = [
     ...authGuard([{
@@ -33,34 +34,21 @@ const router = [
                     { path: 'profile', component: Profile },
                     { path: 'settings', component: Setting },
                 ]
-            }, {
+            },
+            {
                 path: 'user/:id',
                 name: 'user',
                 component: MasterUser,
-                children: [{
-                        path: 'followers',
-                        component: Followers,
-                    }, {
-                        path: 'followings',
-                        component: Followers,
-                    }, {
-                        path: '',
-                        component: Timeline,
-                    },
-                    {
-                        path: 'photo',
-                        component: Photo,
-                    },
-                    {
-                        path: 'about',
-                        component: About,
-                    },
-                    {
-                        path: 'video',
-                        component: Video,
-                    },
+                children: [
+                    { path: '', component: Timeline },
+                    { path: 'followers', component: Followers },
+                    { path: 'followings', component: Followers },
+                    { path: 'photo', component: Photo },
+                    { path: 'about', component: About },
+                    { path: 'video', component: Video },
+                    { path: ':path', component: CampaignUser },
                 ]
-            }
+            },
         ]
     }]),
     ...guestGuard([

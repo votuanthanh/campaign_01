@@ -66,7 +66,7 @@ class CampaignPolicy extends BasePolicy
      */
     public function manage(User $user, Campaign $campaign)
     {
-        return $user->id === $campaign->owner()->id;
+        return $user->id === $campaign->owner()->first()->id;
     }
 
     /**

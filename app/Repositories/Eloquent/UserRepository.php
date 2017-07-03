@@ -68,6 +68,7 @@ class UserRepository extends BaseRepository implements UserInterface
     public function ownedCampaign($id, $orderBy = 'created_at', $direction = 'desc')
     {
         return $this->findOrFail($id)->campaigns()
+            ->with('users', 'owner', 'media')
             ->wherePivot('role_id', app(RoleRepository::class)->findRoleOrFail(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)->id)
             ->orderBy($orderBy, $direction)
             ->simplePaginate();
@@ -80,6 +81,7 @@ class UserRepository extends BaseRepository implements UserInterface
     public function joinedCampaign($id, $orderBy = 'created_at', $direction = 'desc')
     {
         return $this->findOrFail($id)->campaigns()
+            ->with('users', 'owner', 'media')
             ->wherePivotIn('role_id', app(RoleRepository::class)->findRoleOrFail([
                 Role::ROLE_OWNER,
                 Role::ROLE_MODERATOR,
@@ -164,15 +166,12 @@ class UserRepository extends BaseRepository implements UserInterface
      */
     public function listFollowingCampaign($id, $orderBy = 'created_at', $direction = 'desc')
     {
-        $this->findOrFail($id);
-
-        return \DB::table('users')->join('tag_user', 'users.id', '=', 'tag_user.user_id')
-            ->join('campaign_tag', 'tag_user.tag_id', '=', 'campaign_tag.tag_id')
-            ->join('campaigns', 'campaigns.id', '=', 'campaign_tag.campaign_id')
-            ->where('users.id', $id)
-            ->select('users.id', 'campaigns.*')
+        return \App\Models\Campaign::with('users', 'owner', 'media')->whereHas('tags', function ($query) use ($id) {
+            $query->whereIn('campaign_tag.tag_id', \App\Models\User::findOrFail($id)->tags->pluck('id'));
+        })
+            ->distinct()
             ->orderBy($orderBy, $direction)
-            ->simplePaginate();
+            ->simplePaginate(3);
     }
 
     /**

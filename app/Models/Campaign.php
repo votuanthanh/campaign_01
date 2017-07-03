@@ -89,7 +89,7 @@ class Campaign extends BaseModel
 
     public function owner()
     {
-        return $this->getUserByRole('owner')->first();
+        return $this->getUserByRole('owner');
     }
 
     public function moderators()
@@ -110,5 +110,13 @@ class Campaign extends BaseModel
     public function isActive()
     {
         return $this->attributes['status'] == static::ACTIVE;
+    }
+
+    public function getCreatedAtAttribute($date)
+    {
+        $locale = \App::getLocale();
+        \Carbon\Carbon::setLocale($locale);
+
+        return \Carbon\Carbon::parse($date)->diffForHumans();
     }
 }

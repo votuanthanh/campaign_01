@@ -43,6 +43,15 @@
                                                         <li>
                                                             <a href="#">Block Profile</a>
                                                         </li>
+                                                        <li>
+                                                            <router-link :to="`/user/${$route.params.id}/following-campaign`">{{ $t('user.label.following_campaign') }}</router-link>
+                                                        </li>
+                                                        <li>
+                                                            <router-link :to="`/user/${$route.params.id}/joined-campaign`">{{ $t('user.label.joined_campaign') }}</router-link>
+                                                        </li>
+                                                        <li>
+                                                            <router-link :to="`/user/${$route.params.id}/owned-campaign`">{{ $t('user.label.owned_campaign') }}</router-link>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </li>
@@ -66,7 +75,7 @@
                                                 <a href="#" data-toggle="modal" data-target="#update-header-photo">Update Header Photo</a>
                                             </li>
                                             <li>
-                                                <a href="29-YourAccount-AccountSettings.html">Account Settings</a>
+                                                <router-link :to="'/settings/profile'">Account Settings</router-link>
                                             </li>
                                         </ul>
                                     </div>
