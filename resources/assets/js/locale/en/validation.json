@@ -1,4 +1,5 @@
 {
     "unique": "The :attribute has already been taken",
-    "required": "The :attribute field is required"
+    "required": "The :attribute field is required",
+    "required_with": "The :value is required, when the :attribute is present"
 }
