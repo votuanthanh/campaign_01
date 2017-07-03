@@ -4,7 +4,7 @@ import vietnam from 'vee-validate/dist/locale/vi'
 import { message } from './rules/function'
 import attribute from './attributes'
 
-
+// Field-specific Custom Messages
 const customMessages = {}
 const rules = ['required'];
 
@@ -18,20 +18,21 @@ for (let lang of window.Laravel.languages) {
 
 export const dictionary = customMessages
 
+// Set attributes and messages
 export const config = {
     locale: window.Laravel.locale,
     dictionary: {
         en: {
             messages: english.messages,
-            attributes: {}
+            attributes: attribute.en
         },
         vi: {
             messages: vietnam.messages,
-            attributes: {}
+            attributes: attribute.vi
         },
         ja: {
             messages: japan.messages,
-            attributes: {}
+            attributes: attribute.ja
         }
     }
 }

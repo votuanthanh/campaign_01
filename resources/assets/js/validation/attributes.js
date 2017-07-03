@@ -1,5 +1,10 @@
 export const en = {
-
+    name: 'name',
+    password: 'password',
+    email: 'email',
+    goal: 'goal',
+    type: 'type',
+    quality: 'quality'
 }
 
 export const vi = {
