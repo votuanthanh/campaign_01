@@ -4,13 +4,15 @@ export const en = {
     email: 'email',
     goal: 'goal',
     type: 'type',
-    quality: 'quality'
+    quality: 'quality',
+    description: 'description'
 }
 
 export const vi = {
     name: 'tên',
     age: 'tuổi',
-    birthday: 'ngày sinh'
+    birthday: 'ngày sinh',
+    description: 'mô tả'
 }
 
 export const ja = {

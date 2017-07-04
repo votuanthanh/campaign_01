@@ -35,7 +35,6 @@ class EventRepository extends BaseRepository implements EventInterface
     public function create($data)
     {
         $donation = $data['donations'];
-        $dataSettings = $this->createDataSettings($data['other']['settings']);
         $dataMedias = $this->createDataMedias($data['other']['files']);
         $event = $this->model->create($data['data_event']);
 
@@ -43,16 +42,14 @@ class EventRepository extends BaseRepository implements EventInterface
             throw new NotFoundException('Have error when create model');
         }
 
-        $createSettings = $event->settings()->createMany($dataSettings);
+        $createSettings = $event->settings()->createMany($data['other']['settings']);
 
         if (!$createSettings) {
             throw new NotFoundException('Have error when create model');
         }
 
-        $createMedias = $event->media()->createMany($dataMedias);
-
-        if (!$createMedias) {
-            throw new NotFoundException('Have error when create model');
+        if ($dataMedias) {
+            $createMedias = $event->media()->createMany($dataMedias);
         }
 
         if ($donation) {
@@ -66,38 +63,14 @@ class EventRepository extends BaseRepository implements EventInterface
         return true;
     }
 
-    private function createDataSettings($data)
-    {
-        if (!is_array($data)) {
-            throw new UnknowException('Data type is incorrect');
-        }
-
-        foreach ($data as $key => $value) {
-            $result[] = [
-                'key' => $key,
-                'value' => $value,
-            ];
-        }
-
-        return $result;
-    }
-
     private function createDataMedias($data)
     {
-        if (!is_array($data)) {
-            throw new UnknowException('Data type is incorrect');
-        }
+        $result = [];
 
         foreach ($data as $value) {
-            $urlFile = $this->uploadFile($value, 'event');
-
-            if (!$urlFile) {
-                throw new UnknowException('Upload file fail');
-            }
-
             $result[] = [
                 'type' => Media::IMAGE,
-                'url_file' => $urlFile,
+                'url_file' => $value,
             ];
         }
 
@@ -129,7 +102,7 @@ class EventRepository extends BaseRepository implements EventInterface
                 $media = $event->media->find($mediaId);
 
                 if (!$media) {
-                   throw new UnknowException('Error: Image is not found');
+                    throw new UnknowException('Error: Image is not found');
                 }
 
                 $this->destroyFile($media->url_file, 'image');

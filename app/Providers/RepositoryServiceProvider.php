@@ -15,10 +15,6 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\RoleInterface::class,
             \App\Repositories\Eloquent\RoleRepository::class,
         ],
-        'type' => [
-            \App\Repositories\Contracts\TypeInterface::class,
-            \App\Repositories\Eloquent\TypeRepository::class,
-        ],
         'campaign' => [
             \App\Repositories\Contracts\CampaignInterface::class,
             \App\Repositories\Eloquent\CampaignRepository::class,
@@ -54,6 +50,10 @@ class RepositoryServiceProvider extends ServiceProvider
         'donation' => [
             \App\Repositories\Contracts\DonationInterface::class,
             \App\Repositories\Eloquent\DonationRepository::class,
+        ],
+        'donation_type' => [
+            \App\Repositories\Contracts\DonationTypeInterface::class,
+            \App\Repositories\Eloquent\DonationTypeRepository::class,
         ],
     ];
 
