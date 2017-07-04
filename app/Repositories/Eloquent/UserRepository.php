@@ -145,12 +145,14 @@ class UserRepository extends BaseRepository implements UserInterface
             ->get();
     }
 
-    public function getTimeLine($id)
+    public function getTimeline($user)
     {
-        return $this->findOrFail($id)
-            ->campaigns()
-            ->with('events', 'actions')
-            ->paginate(config('settings.pagination.timeline'));
+        $activities = $user->activities()->with('activitiable')->get();
+
+        return [
+            'currentPageUser' => $user,
+            'listActivity' => $activities,
+        ];
     }
 
     /**

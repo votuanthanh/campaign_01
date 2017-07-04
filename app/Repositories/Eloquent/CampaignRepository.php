@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Media;
 use App\Models\Campaign;
+use App\Models\Activity;
 use App\Traits\Common\UploadableTrait;
 use App\Repositories\Contracts\CampaignInterface;
 use App\Exceptions\Api\NotFoundException;
@@ -76,6 +77,10 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             ]);
         }
 
+        $campaign->activities()->create([
+            'user_id' => $inputs['user_id'],
+            'name' => Activity::CREATE,
+        ]);
         $campaign->users()->attach($inputs['user_id'], [
             'role_id' => $inputs['role_id'],
         ]);
@@ -281,6 +286,10 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
     public function changeStatusUser($data, $status)
     {
         $data['campaign']->users()->updateExistingPivot($data['user_id'], ['status' => $status]);
+        $data['campaign']->activities()->create([
+            'user_id' => $data['user_id'],
+            'name' => Activity::JOIN,
+        ]);
 
         return true;
     }

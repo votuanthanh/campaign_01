@@ -38,4 +38,9 @@ class Comment extends BaseModel
     {
         return $this->morphMany(Like::class, 'likeable');
     }
+
+    public function activities()
+    {
+        return $this->morphMany(Activity::class, 'activitiable');
+    }
 }

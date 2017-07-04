@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use Exception;
 use App\Models\Action;
 use App\Models\Media;
+use App\Models\Activity;
 use App\Traits\Common\UploadableTrait;
 use App\Repositories\Contracts\ActionInterface;
 use App\Exceptions\Api\UnknowException;
@@ -48,6 +49,10 @@ class ActionRepository extends BaseRepository implements ActionInterface
     public function create($inputs)
     {
         $action = parent::create($inputs['data_action']);
+        $action->activities()->create([
+            'user_id' => $inputs['data_action']['user_id'],
+            'name' => Activity::CREATE,
+        ]);
 
         if (!is_null($inputs['upload'])) {
             $media = $this->makeDataMedias($inputs['upload']);

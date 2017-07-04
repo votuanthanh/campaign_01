@@ -31,4 +31,9 @@ class Like extends BaseModel
     {
         return $this->morphTo();
     }
+
+    public function activities()
+    {
+        return $this->morphMany(Activity::class, 'activitiable');
+    }
 }
