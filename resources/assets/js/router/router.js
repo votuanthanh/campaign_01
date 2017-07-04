@@ -6,6 +6,8 @@ export const logout = 'logout'
 export const register = 'register'
 export const storeCampaign = 'campaign'
 export const tags = 'campaign/get/tags'
+export const changePassword = 'settings/password'
+export const updateProfile = 'settings/profile'
 
 export default {
     getUser,
@@ -13,5 +15,7 @@ export default {
     logout,
     register,
     storeCampaign,
-    tags
+    tags,
+    changePassword,
+    updateProfile
 }

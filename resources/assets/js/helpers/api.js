@@ -27,3 +27,11 @@ export function del(url) {
         url: concatUrl(url)
     })
 }
+
+export function patch(url, payload = '') {
+    return axios({
+        method: 'PATCH',
+        url: concatUrl(url),
+        data: payload
+    })
+}

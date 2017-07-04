@@ -419,12 +419,12 @@
                             </div>
                             <ul class="account-settings">
                                 <li>
-                                    <a href="29-YourAccount-AccountSettings.html">
+                                    <router-link to="/settings/profile">
                                         <svg class="olymp-menu-icon">
                                             <use xlink:href="frontend/icons/icons.svg#olymp-menu-icon"></use>
                                         </svg>
                                         <span>Profile Settings</span>
-                                    </a>
+                                    </router-link>
                                 </li>
                                 <li>
                                     <a href="36-FavPage-SettingsAndCreatePopup.html">
