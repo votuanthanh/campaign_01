@@ -18,7 +18,8 @@
         "address": "Your address",
         "current_password": "Confirm Current Password",
         "new_password": "Your New Password",
-        "confirm_password": "Confirm New Password"
+        "confirm_password": "Confirm New Password",
+        "search_action" : "Search action"
     },
     "title": {
         "login": "Login to your Account",

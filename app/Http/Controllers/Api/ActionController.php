@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use Exception;
+use Illuminate\Http\Request;
 use App\Http\Requests\ActionRequest;
 use App\Http\Requests\CommentRequest;
 use App\Exceptions\Api\UnknowException;
 use App\Exceptions\Api\NotFoundException;
 use App\Repositories\Contracts\ActionInterface;
-use App\Repositories\Contracts\MediaInterface;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\EventInterface;
+use App\Repositories\Contracts\MediaInterface;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateCampaignRequest;
 
 class ActionController extends ApiController
@@ -88,6 +88,24 @@ class ActionController extends ApiController
 
         return $this->doAction(function () use ($data) {
             $this->compacts['action'] = $this->actionRepository->create($data);
+        });
+    }
+
+    public function listAction($eventId)
+    {
+        $event = $this->eventRepository->findOrFail($eventId);
+
+        return $this->doAction(function () use ($event) {
+            $this->compacts['actions'] = $this->actionRepository->getActionPaginate($event->actions());
+        });
+    }
+
+    public function searchAction(Request $request, $eventId)
+    {
+        $key = $request->key;
+
+        return $this->doAction(function () use ($eventId, $key) {
+            $this->compacts['actions'] = $this->actionRepository->searchAction($eventId, $key);
         });
     }
 }

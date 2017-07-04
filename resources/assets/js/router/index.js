@@ -16,12 +16,13 @@ import Video from '../components/user/Video.vue'
 import About from '../components/user/About.vue'
 import Auth from '../components/auth/Auth.vue'
 import AddCampaign from '../components/campaign/AddCampaign.vue'
-import CreateEvent from '../components/event/CreateEvent.vue'
+import CreateEvent from '../components/event/create/CreateEvent.vue'
 import User from '../components/user/User.vue'
 import Password from '../components/user/Password.vue'
 import Profile from '../components/user/Profile.vue'
 import Setting from '../components/user/Setting.vue'
 import CampaignUser from '../components/user/CampaignUser.vue'
+import HomeEvent from '../components/event/HomeEvent.vue'
 
 const router = [
     ...authGuard([{
@@ -66,9 +67,11 @@ const router = [
                         component: TimelineCampaign
                     }]
                 }]
-            }
+            },
+            { path: '/event/:event_id/index.html', component: HomeEvent }
         ]
     }]),
+
     ...guestGuard([
         { path: '/register', component: Auth },
         { path: '/login', component: Auth },

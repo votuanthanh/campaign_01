@@ -1,0 +1,17 @@
+export const SET_EVENT = 'SET_EVENT'
+export const LOAD_ACTION = 'LOAD_ACTION'
+export const SET_ACTION = 'SET_ACTION'
+export const SET_KEY_SEARCH = 'SET_KEY_SEARCH'
+export const SET_FLAG_SEARCH = 'SET_FLAG_SEARCH'
+export const SET_LOAD_SEARCH = 'SET_LOAD_SEARCH'
+export const SET_LOAD_PAGINATE = 'SET_LOAD_PAGINATE'
+
+export default {
+    SET_EVENT,
+    LOAD_ACTION,
+    SET_ACTION,
+    SET_KEY_SEARCH,
+    SET_FLAG_SEARCH,
+    SET_LOAD_SEARCH,
+    SET_LOAD_PAGINATE
+}

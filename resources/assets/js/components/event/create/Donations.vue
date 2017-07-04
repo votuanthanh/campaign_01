@@ -60,9 +60,8 @@
 </template>
 
 <script type="text/javascript">
-    import { get } from '../../helpers/api'
     import Multiselect from 'vue-multiselect'
-
+    import { get } from '../../../helpers/api'
     export default {
         data: () => ({
             types: [],

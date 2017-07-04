@@ -102,11 +102,11 @@
     import Dropzone from 'vue2-dropzone'
     import Vue from 'vue'
     import Donations from './Donations.vue'
-    import SettingDate from '../libs/SettingDate.vue'
+    import SettingDate from '../../libs/SettingDate.vue'
     import axios from 'axios'
-    import { config, editorOption } from '../../config'
-    import { post, del } from '../../helpers/api'
-    import noty from '../../helpers/noty'
+    import { config, editorOption } from '../../../config'
+    import { post, del } from '../../../helpers/api'
+    import noty from '../../../helpers/noty'
 
     Vue.use(Dropzone)
     Vue.use(VueGoogleMaps, {
@@ -178,6 +178,7 @@
             // filter danation before request to sever
             getDonation() {
                 this.newEvent.donations = []
+
                 for (let donation of this.donations) {
                     let flag = true
 
@@ -256,7 +257,6 @@
 
             createEvent() {
                 this.$validator.validateAll().then((result) => {
-
                     if (!this.flag || this.hasErrorDonation()) {
                         return
                     }
@@ -272,7 +272,6 @@
                                 container: false,
                                 type: 'success'
                             })
-                            this.$route.router.go(`/campaign/${this.$route.params.campaign_id}`)
                         })
                         .catch(err => {
                             noty({
@@ -283,7 +282,6 @@
                             })
                         })
                 })
-                .catch(() => {})
             },
 
             hasErrorDonation() {
@@ -309,7 +307,7 @@
 
 <style type="text/css">
     .create-event {
-        width: 80%!important;
+        width: 80% !important;
     }
     #delete-donation:hover {
         color: #ff5e3a;
@@ -324,13 +322,13 @@
         margin-bottom: 25px;
     }
     .icon-donation {
-        font-size: 1.5em!important;
+        font-size: 1.5em !important;
         padding-left: 5px;
     }
     #delete-donation {
         margin-top: 1em;
     }
     .visible:hover {
-        cursor: not-allowed!important;
+        cursor: not-allowed !important;
     }
 </style>

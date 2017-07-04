@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import campaign from './modules/campaign'
 import auth from './modules/auth'
 import comment from './modules/comment'
+import event from './modules/event'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
         campaign,
         auth,
         comment,
+        event,
     },
     // #root state
     state: {
