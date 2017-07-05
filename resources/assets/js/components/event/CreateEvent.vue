@@ -53,12 +53,13 @@
 
                 <div class="form-group label-floating" :class="{ 'has-danger': errors.has('description')}">
                     <label class="control-label">{{ $t('form.label.event_description') }}</label>
-                    <textarea
-                        name="description"
+                    <quill-editor name="description"
+                        data-vv-name="description"
+                        id="description"
                         class="form-control"
                         v-model="newEvent.description"
-                        v-validate="'required|max:500'">
-                    </textarea>
+                        v-validate="'required'">
+                    </quill-editor>
                     <span v-show="errors.has('description')" class="material-input text-danger">
                         {{ errors.first('description') }}
                     </span>
@@ -110,6 +111,7 @@
     import { config } from '../../config'
     import { post, del } from '../../helpers/api'
     import noty from '../../helpers/noty'
+    import { quillEditor } from 'vue-quill-editor'
 
     Vue.use(Dropzone)
     Vue.use(VueGoogleMaps, {
@@ -125,7 +127,7 @@
             zoom: config.zoom,
             maxFile: config.maxFileUpload,
             maxSizeFile: config.maxSizeFile,
-            latLng: {lat: 0, lng: 0},
+            latLng: { lat: 0, lng: 0 },
             center: { lat: 0, lng: 0 },
             visible: true,
             startDate: '',
@@ -281,7 +283,8 @@
         components: {
             Donations,
             Dropzone,
-            SettingDate
+            SettingDate,
+            quillEditor
         }
     }
 </script>
