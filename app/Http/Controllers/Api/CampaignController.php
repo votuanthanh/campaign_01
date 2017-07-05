@@ -44,7 +44,8 @@ class CampaignController extends ApiController
             'latitude',
             'tags',
             'settings',
-            'media'
+            'media',
+            'address'
         );
 
         $data['role_id'] = $this->roleRepository->findRoleOrFail(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)->id;
