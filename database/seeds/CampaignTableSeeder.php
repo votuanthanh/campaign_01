@@ -18,13 +18,13 @@ class CampaignTableSeeder extends Seeder
         \DB::table('campaign_tag')->truncate();
         \DB::table('campaign_user')->truncate();
         factory(Campaign::class, 10)->create()->each(function ($campaign) {
-            $tagIds = App\Models\Tag::all()->pluck('id')->toArray();
-            $userIds = User::all()->pluck('id')->toArray();
-            $roleIds = Role::all()->pluck('id')->toArray();
+            $tagIds = App\Models\Tag::all()->pluck('id');
+            $userIds = User::all()->pluck('id');
+            $roleIds = Role::all()->pluck('id');
 
             foreach (range(1, 4) as $key) {
-                $array[array_rand($userIds)] = [
-                    'role_id' => array_rand($roleIds),
+                $array[$userIds->random()] = [
+                    'role_id' => $roleIds->random(),
                     'status' => rand(1, 3),
                 ];
             }
@@ -35,7 +35,7 @@ class CampaignTableSeeder extends Seeder
                 $media[] = factory(App\Models\Media::class)->make()->toArray();
             }
 
-            $campaign->tags()->attach(array_rand($tagIds, rand(1, 3)));
+            $campaign->tags()->attach($tagIds->random(rand(1, 3)));
             $campaign->likes()->createMany($like);
             $campaign->settings()->createMany($setting);
             $campaign->media()->createMany($media);

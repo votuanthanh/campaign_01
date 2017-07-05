@@ -23,4 +23,6 @@ interface CampaignInterface extends RepositoryInterface
     public function changeOwner($campaign, $userId, $roleId);
 
     public function changeStatusUser($data, $status);
+
+    public function getMembers($id);
 }
