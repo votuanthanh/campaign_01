@@ -35,9 +35,9 @@ abstract class BaseRepository implements RepositoryInterface
             }
         }
 
-        $this->makeModel();
+        $this->model = call_user_func_array([$model, $method], $args);
 
-        return call_user_func_array([$model, $method], $args);
+        return $this;
     }
 
     /**
@@ -340,8 +340,10 @@ abstract class BaseRepository implements RepositoryInterface
             throw new Exception('No input field to create model');
         }
 
+        $this->__call($method, []);
+
         return !$option
-            ? $this->__call($method, [])->create($inputs['attribute'])
-            : $this->__call($method, [])->createMany($inputs['attribute']);
+            ? $this->model->create($inputs['attribute'])
+            : $this->model->createMany($inputs['attribute']);
     }
 }

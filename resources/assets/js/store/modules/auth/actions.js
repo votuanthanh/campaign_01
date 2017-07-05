@@ -7,8 +7,8 @@
  */
 
 import * as types from './mutation-types';
-import { post } from '../../../helpers/api'
-import { handleLogin } from '../../../router/router'
+import { post, get } from '../../../helpers/api'
+import { handleLogin, follow } from '../../../router/router'
 
 export const check = ({ commit }) => {
     commit(types.CHECK);
@@ -39,9 +39,22 @@ export const setUser = ({ commit }, user) => {
     commit(types.SET_USER, user);
 };
 
+export const getListFollow = ({ commit }, list) => {
+    get(follow)
+        .then(res => {
+            commit(types.GET_LIST_FOLLOW, res.data.followings);
+            commit(types.GET_GROUPS, res.data.groups)
+        })
+        .catch(err => {
+            commit(types.GET_LIST_FOLLOW, []);
+            reject(err)
+        })
+};
+
 export default {
     check,
     login,
     logout,
-    setUser
+    setUser,
+    getListFollow
 };

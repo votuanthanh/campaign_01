@@ -1,0 +1,11 @@
+{
+    "groups": "GROUP CHAT",
+    "settings": "SETTINGS",
+    "close_friends": "CLOSE FRIENDS",
+    "online": "ONLINE",
+    "offline": "OFFLINE",
+    "search_friends": "Search friends...",
+    "campaign_chat": "CAMPAIGN CHAT",
+    "send_message_error": "Can't send your message!!!",
+    "get_message_error": "Can't load your message!!!"
+}

@@ -3,6 +3,8 @@ import {
     LOGIN,
     LOGOUT,
     SET_USER,
+    GET_LIST_FOLLOW,
+    GET_GROUPS
 } from './mutation-types';
 import axios from 'axios'
 
@@ -30,4 +32,12 @@ export default {
     [SET_USER](state, user) {
         state.user = user
     },
+
+    [GET_LIST_FOLLOW](state, list) {
+        state.listContact = list
+    },
+
+    [GET_GROUPS](state, list) {
+        state.groups = list
+    }
 };

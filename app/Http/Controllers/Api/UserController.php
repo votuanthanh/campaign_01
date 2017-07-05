@@ -13,6 +13,8 @@ use App\Exceptions\Api\UnknowException;
 use App\Traits\Common\UploadableTrait;
 use Carbon\Carbon;
 use Hash;
+use App\Models\User;
+use App\Models\Campaign;
 
 class UserController extends ApiController
 {
@@ -235,6 +237,30 @@ class UserController extends ApiController
 
         return $this->doAction(function () use ($user) {
             $this->compacts['data'] = $this->repository->getTimeline($user);
+        });
+    }
+
+    public function getListFollow()
+    {
+        return $this->getData(function () {
+            $this->compacts['followings'] = $this->user->followings()
+                ->where('status', User::ACTIVE)
+                ->get([
+                    'users.id',
+                    'name',
+                    'email',
+                    'url_file'
+                ]);
+            $this->compacts['groups'] = $this->user->campaigns()
+                ->where('campaigns.status', Campaign::ACTIVE)
+                ->with(['media', 'users' => function ($query) {
+                    return $query->select(['users.id', 'users.email', 'users.name'])
+                        ->where('users.status', User::ACTIVE);
+                }])
+                ->get([
+                    'campaigns.id',
+                    'hashtag'
+                ]);
         });
     }
 }

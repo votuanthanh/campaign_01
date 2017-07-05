@@ -33,4 +33,6 @@ return [
         'follow' => 12,
         'timeline' => 5,
     ],
+    'group_chat' => 'groupChat',
+    'single_chat' => 'singleChat',
 ];
