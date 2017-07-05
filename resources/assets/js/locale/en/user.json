@@ -1,0 +1,38 @@
+{
+    "follow": {
+        "block": "Block Profile",
+        "report": "Report Profile",
+        "turn_off_notifications": "Turn Off Notifications",
+        "birthday": "Birthday",
+        "phone": "Phone",
+        "gender": "Gender",
+        "address": "Address",
+        "email": "Email",
+        "male": "Male",
+        "female": "Female",
+        "loading": "Loading...",
+        "followers": "Followers",
+        "is_following": " is following ",
+        "people": " people.",
+        "people_following": " people following ",
+        "info": {
+            "followers": "followers",
+            "is_following": " is following ",
+            "people": " people.",
+            "people_following": " people following ",
+            "there_are_no": "No results for keyword ",
+            "there_is": "There is a result for the keyword ",
+            "there_are": "There are ",
+            "result_for": " results for the keyword "
+        },
+        "follow_since": "Follow Since",
+        "follow": "Follow",
+        "unfollow": "Unfollow",
+        "photo": "Photos",
+        "video": "Videos"
+    },
+    "title": {
+        "login": "Login to your Account",
+        "register_campaign": "Register to Campaign"
+    }
+}

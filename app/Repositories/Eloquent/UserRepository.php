@@ -95,10 +95,18 @@ class UserRepository extends BaseRepository implements UserInterface
      */
     public function listFollower($id, $orderBy = 'created_at', $direction = 'desc')
     {
-        return $this->findOrFail($id)
-            ->followers()
+        $user = $this->findOrFail($id);
+        $listFollower = $user->followers()
+            ->with('followers', 'followed')
+            //"followers" -> this statement will get all follower who is following user
+            //"followed" -> this will check followers of current page user is following auth or not
             ->orderBy($orderBy, $direction)
-            ->simplePaginate();
+            ->paginate(config('settings.pagination.follow'));
+
+        return [
+            'currentPageUser' => $user,
+            'follower' => $listFollower,
+        ];
     }
 
     /**
@@ -107,10 +115,42 @@ class UserRepository extends BaseRepository implements UserInterface
      */
     public function listFollowing($id, $orderBy = 'created_at', $direction = 'desc')
     {
+        $user = $this->findOrFail($id);
+        $listFollower = $user->followings()
+            ->with('followers', 'followed')
+            ->orderBy($orderBy, $direction)
+            ->paginate(config('settings.pagination.follow'));
+
+        return [
+            'currentPageUser' => $user,
+            'follower' => $listFollower,
+        ];
+    }
+
+    public function searchFollowers($id, $data)
+    {
+        return $this->findOrFail($id)
+            ->followers()
+            ->with('followers', 'followed')
+            ->where('name', 'like', '%' . $data . '%')
+            ->get();
+    }
+
+    public function searchFollowings($id, $data)
+    {
         return $this->findOrFail($id)
             ->followings()
-            ->orderBy($orderBy, $direction)
-            ->simplePaginate();
+            ->with('followers', 'followed')
+            ->where('name', 'like', '%' . $data . '%')
+            ->get();
+    }
+
+    public function getTimeLine($id)
+    {
+        return $this->findOrFail($id)
+            ->campaigns()
+            ->with('events', 'actions')
+            ->paginate(config('settings.pagination.timeline'));
     }
 
     /**

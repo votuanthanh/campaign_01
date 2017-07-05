@@ -14,7 +14,7 @@ Route::get('/redirect/{provider}', 'SocialController@redirectToProvider');
 Route::get('/callback/{provider}', 'SocialController@callback');
 
 // Server response to url image files
-Route::get('/img/{path}', function (Illuminate\Http\Request $request, $path) {
+Route::get('/images/{path}', function (Illuminate\Http\Request $request, $path) {
     return app('glide')->getImageResponse($path, $request->all());
 })->where('path', '.*');
 

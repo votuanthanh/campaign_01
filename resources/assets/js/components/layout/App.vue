@@ -11,7 +11,9 @@
 
         <div class="header-spacer header-spacer-small"></div>
 
-        <router-view></router-view>
+        <div class="middle-container">
+            <router-view></router-view>
+        </div>
 
         <popup-chat></popup-chat>
     </div>
@@ -46,4 +48,7 @@ export default {
 </script>
 
 <style lang="scss">
+    .middle-container {
+        min-height: 1150px;
+    }
 </style>

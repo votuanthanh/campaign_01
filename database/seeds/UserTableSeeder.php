@@ -30,16 +30,16 @@ class UserTableSeeder extends Seeder
             $roleIds = Role::pluck('id')->toArray();
             $tagIds = Tag::pluck('id')->toArray();
             $userIds = User::where('id', '<>', $user->id)->pluck('id')->toArray();
-            $user->roles()->attach($this->getRandomElement($roleIds));
-            $user->followings()->attach($this->getRandomElement($userIds));
-            $user->tags()->attach($this->getRandomElement($tagIds));
+            $user->roles()->attach($this->getRandomElement($roleIds, 2, 4));
+            $user->followings()->attach($this->getRandomElement($userIds, 4, 19));
+            $user->tags()->attach($this->getRandomElement($tagIds, 2, 4));
         });
     }
 
-    public function getRandomElement($array)
+    public function getRandomElement($array, $start, $end)
     {
         $arrayRoles = [];
-        $tmp = array_rand($array, rand(2, 4));
+        $tmp = array_rand($array, rand($start, $end));
 
         foreach ($tmp as $item) {
             $arrayRoles[] = $array[$item];

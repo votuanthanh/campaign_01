@@ -12,5 +12,6 @@
     "end_day": "End date must be greater than start date or current date",
     "profile": {
         "change_success": "Change your profile successfully!"
-    }
+    },
+    "load_fail": "Load data fail"
 }

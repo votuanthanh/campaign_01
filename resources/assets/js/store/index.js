@@ -15,7 +15,7 @@ export default new Vuex.Store({
     },
     // #root state
     state: {
-      loading: false,
+        loading: false,
     },
     // #root mutations
     mutations: {

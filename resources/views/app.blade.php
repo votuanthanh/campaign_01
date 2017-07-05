@@ -24,7 +24,10 @@
                 'events' => config('settings.events'),
                 'actions' => config('settings.actions'),
                 'value' => config('settings.value_of_settings'),
-            ]
+            ],
+            'pagination' => [
+                'follow' => config('settings.pagination.follow'),
+            ],
         ]) !!};
         @if (session('access_token'))
             localStorage.setItem('access_token', '{{ session('access_token') }}')
@@ -37,6 +40,8 @@
     {!! Html::style(asset('frontend/css/daterangepicker.css')) !!}
     {!! Html::style(asset('frontend/css/bootstrap-select.css')) !!}
     {!! Html::style(mix('frontend/css/app.css')) !!}
+    {!! Html::style(asset('frontend/css/swiper.min.css')) !!}
+</head>
 </head>
 
 <body>
@@ -46,9 +51,9 @@
     {!! Html::script(asset('frontend/js/bootstrap.js')) !!}
     {!! Html::script(asset('frontend/js/material.min.js')) !!}
     {!! Html::script(asset('frontend/js/theme-plugins.js')) !!}
-    {!! Html::script(asset('frontend/js/main.js')) !!}
     {!! Html::script(asset('frontend/js/selectize.min.js')) !!}
     {!! Html::script(asset('frontend/js/daterangepicker.min.js')) !!}
+    {!! Html::script(asset('frontend/js/swiper.jquery.min.js')) !!}
     {!! Html::script(mix('frontend/js/app.js')) !!}
 </body>
 
