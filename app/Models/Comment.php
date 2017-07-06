@@ -43,4 +43,9 @@ class Comment extends BaseModel
     {
         return $this->morphMany(Activity::class, 'activitiable');
     }
+
+    public function subComment()
+    {
+        return $this->hasMany(Comment::class, 'parent_id', 'id');
+    }
 }

@@ -15,6 +15,18 @@ import { ImageResize } from './helpers/quill-editor/ImageResize'
 Quill.register('modules/imageImport', ImageImport)
 Quill.register('modules/imageResize', ImageResize)
 
+import * as VueGoogleMaps from 'vue2-google-maps'
+import VueTimeago from 'vue-timeago'
+
+Vue.use(VueTimeago, {
+    name: 'timeago', // component name, `timeago` by default
+    locale: 'en-US',
+    locales: {
+        // you will need json-loader in webpack 1
+        'en-US': require('vue-timeago/locales/en-US.json')
+    }
+});
+
 const router = makeRouter(routes)
 
 Vue.use(VueQuillEditor)

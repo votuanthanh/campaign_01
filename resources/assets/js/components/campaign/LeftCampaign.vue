@@ -93,6 +93,14 @@
 
 <script>
     import { mapState } from 'vuex'
+    import { config, editorOption } from '../../config'
+
+    Vue.use(VueGoogleMaps, {
+        load: {
+            key: config.keyMap,
+            libraries: 'places',
+        }
+    })
 
     export default {
         computed: {
