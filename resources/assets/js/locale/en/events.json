@@ -1,3 +1,6 @@
 {
-    "create_event" : "Create New Event"
+    "create_event": "Create New Event",
+    "edit-event": "Edit event",
+    "delete-event": "Delete event",
+    "turn-off-notification": "Turn off notification"
 }

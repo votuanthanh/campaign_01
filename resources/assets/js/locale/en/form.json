@@ -42,5 +42,10 @@
     "quote": {
         "confirm_account": "Don’t you have an account?",
         "login_benefits": "it’s really simple and you can start enjoing all the benefits!"
-    }
+    },
+    "delete": "Delete",
+    "edit": "Edit",
+    "answers": "answers",
+    "cancel": "Cancel",
+    "hidden": "hidden"
 }
