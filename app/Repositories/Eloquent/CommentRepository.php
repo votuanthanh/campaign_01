@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Comment;
+use App\Models\Activity;
 use App\Exceptions\Api\UnknowException;
 use App\Repositories\Contracts\CommentInterface;
 
@@ -19,6 +20,12 @@ class CommentRepository extends BaseRepository implements CommentInterface
             throw new UnknowException('Data is null');
         }
 
-        return $model->comments()->create($data);
+        $comment = $model->comments()->create($data);
+        $comment->activities()->create([
+            'user_id' => $data['user_id'],
+            'name' => Activity::CREATE,
+        ]);
+
+        return $comment;
     }
 }

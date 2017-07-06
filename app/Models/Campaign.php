@@ -55,6 +55,11 @@ class Campaign extends BaseModel
         return $this->morphMany(Setting::class, 'settingable');
     }
 
+    public function activities()
+    {
+        return $this->morphMany(Activity::class, 'activitiable');
+    }
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class)->withTimestamps();

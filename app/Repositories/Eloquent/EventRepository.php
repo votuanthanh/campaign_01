@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use Exception;
 use App\Models\Event;
 use App\Models\Media;
+use App\Models\Activity;
 use App\Traits\Common\UploadableTrait;
 use App\Exceptions\Api\UnknowException;
 use App\Exceptions\Api\NotFoundException;
@@ -39,13 +40,18 @@ class EventRepository extends BaseRepository implements EventInterface
         $event = $this->model->create($data['data_event']);
 
         if (!$event) {
-            throw new NotFoundException('Have error when create model');
+            throw new NotFoundException('Have error when create event');
         }
+
+        $event->activities()->create([
+            'user_id' => $data['data_event']['user_id'],
+            'name' => Activity::CREATE,
+        ]);
 
         $createSettings = $event->settings()->createMany($data['other']['settings']);
 
         if (!$createSettings) {
-            throw new NotFoundException('Have error when create model');
+            throw new NotFoundException('Have error when create settings');
         }
 
         if ($dataMedias) {

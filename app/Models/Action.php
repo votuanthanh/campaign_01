@@ -47,4 +47,9 @@ class Action extends BaseModel
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
+
+    public function activities()
+    {
+        return $this->morphMany(Activity::class, 'activitiable');
+    }
 }

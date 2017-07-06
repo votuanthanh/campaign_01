@@ -159,7 +159,7 @@ class UserController extends ApiController
 
     /**
      * Toogle follow or unfollow a tag
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function followTag($id)
@@ -224,10 +224,17 @@ class UserController extends ApiController
         });
     }
 
-    public function getTimeLine($id)
+    /**
+     * Timeline of user
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTimeline($id)
     {
-        return $this->getData(function () use ($id) {
-            $this->compacts['data'] = $this->repository->getTimeLine($id);
+        $user = $this->repository->findOrFail($id);
+
+        return $this->doAction(function () use ($user) {
+            $this->compacts['data'] = $this->repository->getTimeline($user);
         });
     }
 }
