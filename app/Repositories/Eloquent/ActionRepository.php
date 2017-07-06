@@ -7,6 +7,8 @@ use App\Models\Action;
 use App\Models\Media;
 use App\Traits\Common\UploadableTrait;
 use App\Repositories\Contracts\ActionInterface;
+use App\Exceptions\Api\UnknowException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ActionRepository extends BaseRepository implements ActionInterface
 {
@@ -41,5 +43,17 @@ class ActionRepository extends BaseRepository implements ActionInterface
         }
 
         return parent::update($action->id, $inputs['data_action']);
+    }
+
+    public function create($inputs)
+    {
+        $action = parent::create($inputs['data_action']);
+
+        if (!is_null($inputs['upload'])) {
+            $media = $this->makeDataMedias($inputs['upload']);
+            $action->media()->createMany($media);
+        }
+
+        return true;
     }
 }

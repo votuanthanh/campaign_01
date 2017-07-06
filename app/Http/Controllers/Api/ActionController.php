@@ -9,19 +9,26 @@ use App\Exceptions\Api\UnknowException;
 use App\Exceptions\Api\NotFoundException;
 use App\Repositories\Contracts\ActionInterface;
 use App\Repositories\Contracts\MediaInterface;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Repositories\Contracts\EventInterface;
+use App\Http\Requests\CreateCampaignRequest;
 
 class ActionController extends ApiController
 {
     protected $actionRepository;
     protected $mediaRepository;
+    protected $eventRepository;
 
     public function __construct(
         ActionInterface $action,
-        MediaInterface $media
+        MediaInterface $media,
+        EventInterface $eventRepository
     ) {
         parent::__construct();
         $this->actionRepository = $action;
         $this->mediaRepository = $media;
+        $this->eventRepository = $eventRepository;
     }
 
     /**
@@ -60,6 +67,27 @@ class ActionController extends ApiController
         return $this->doAction(function () use ($action, $inputs, $media) {
             $this->compacts['action'] = $this->actionRepository->update($action, $inputs);
             $this->mediaRepository->deleteMedia($media);
+        });
+    }
+
+    public function store(ActionRequest $request)
+    {
+        $data['data_action'] = $request->only(
+            'caption',
+            'description',
+            'event_id',
+            'user_id'
+        );
+
+        $data['upload'] = $request->upload;
+        $event = $this->eventRepository->findOrFail($data['data_action']['event_id']);
+
+        if ($this->user->cant('view', $event)) {
+             throw new UnknowException('Permission error: User can not create this action.', UNAUTHORIZED);
+        }
+
+        return $this->doAction(function () use ($data) {
+            $this->compacts['action'] = $this->actionRepository->create($data);
         });
     }
 }

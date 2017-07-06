@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Media;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Exceptions\Api\UnknowException;
 use Storage;
 
 trait UploadableTrait
@@ -68,6 +69,8 @@ trait UploadableTrait
         if (!is_array($data)) {
             throw new UnknowException('Data type is incorrect');
         }
+
+        $result = [];
 
         if (!empty($data['image'])) {
             foreach ($data['image'] as $value) {
