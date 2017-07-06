@@ -169,8 +169,10 @@ class EventRepository extends BaseRepository implements EventInterface
         return $event->with(['actions', 'likes.user', 'donations', 'media', 'user', 'comments' => function ($query) {
             $query->with(['user', 'likes', 'subComment' => function ($subQuery) {
                 $subQuery->with('user', 'likes');
-            }])->where('parent_id', config('settings.comment_parent'))->paginate(config('settings.paginate_comment'));
-        }])->orderBy('created_at', 'desc')->paginate(config('settings.paginate_default'));
+            }])->where('parent_id', config('settings.comment_parent'))
+               ->paginate(config('settings.paginate_comment'));
+        }])->orderBy('created_at', 'desc')
+           ->paginate(config('settings.paginate_default'));
     }
 
     public function createOrDeleteLike($event, $userId)

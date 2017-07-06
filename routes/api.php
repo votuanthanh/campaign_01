@@ -74,9 +74,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::patch('/update/{id}', 'EventController@update')->name('update-event');
             Route::patch('/update-setting/{id}', 'EventController@updateSetting')->name('update-setting');
             Route::post('like/{eventId}', 'EventController@like')->name('like');
-            Route::group(['prefix' => '/comment', 'as' => 'comment.'], function () {
-                Route::post('create', 'CommentController@createCommentEvent')->name('create');
-            });
+
             Route::get('donation', 'EventController@getTypeQuality')->name('getTypeQuality');
         });
 
@@ -91,7 +89,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::resource('/comment', 'CommentController', ['only' => ['update', 'destroy', 'show']]);
 
         Route::group(['prefix' => '/comment', 'as' => 'comment.'], function () {
-            Route::post('/create-comment/{modelId}/{parentId}/{flag}', 'CommentController@createComment');
+            Route::post('/create-comment/{modelId}/{parentId}/{flag}', 'CommentController@createComment')->name('create');
         });
 
         Route::group(['prefix' => '/donation'], function () {

@@ -8,6 +8,7 @@ use App\Exceptions\Api\NotFoundException;
 use App\Repositories\Contracts\EventInterface;
 use App\Repositories\Contracts\ActionInterface;
 use App\Repositories\Contracts\CommentInterface;
+use Illuminate\Http\Request;
 
 class CommentController extends ApiController
 {
@@ -26,41 +27,42 @@ class CommentController extends ApiController
         $this->commentRepository = $commentRepository;
     }
 
-    public function createCommentEvent(CommentRequest $request)
+    public function createComment($modelId, $parentId, $flag, CommentRequest $request)
     {
-        if (!$request->event_id) {
+        if (!$modelId) {
             throw new UnknowException('Event_id is null');
         }
 
-        $data = $request->intersect('parent_id', 'content');
-        $data['user_id'] = $this->user->id;
-        $event = $this->eventRepository->findOrFail($request->event_id);
-
-        if ($this->user->cant('comment', $event)) {
-            throw new UnknowException('Permission error: User can not create comment in this event.');
+        if ($parentId != config('settings.comment_parent')) {
+             $data['parent_id'] = $parentId;
         }
 
-        return $this->doAction(function () use ($data, $event) {
-            $this->compacts['createComment'] = $this->commentRepository->createComment($data, $event);
+        $data['content'] = $request->content;
+        $data['user_id'] = $this->user->id;
+
+        if ($flag) {
+            switch ($flag) {
+                case 'event':
+                    $model = $this->eventRepository->findOrFail($modelId);
+                    break;
+                case 'action':
+                    $model = $this->actionRepository->findOrFail($modelId);
+                    break;
+                default:
+                    $model = '';
+            }
+        }
+
+        if ($this->user->cant('comment', $model)) {
+            throw new UnknowException('Permission error: User can not create comment in this post.');
+        }
+
+        $this->doAction(function () use ($data, $model) {
+            $this->compacts['createComment'] = $this->commentRepository->createComment($data, $model);
         });
-    }
 
-    public function createCommentAction(CommentRequest $request)
-    {
-        if (!$request->action_id) {
-            throw new UnknowException('Action_id is null');
-        }
-
-        $data = $request->intersect('parent_id', 'content');
-        $data['user_id'] = $this->user->id;
-        $action = $this->actionRepository->findOrFail($request->action_id);
-
-        if ($this->user->cant('comment', $action)) {
-            throw new UnknowException('Permission error: User can not comment for this action.');
-        }
-
-        return $this->doAction(function () use ($data, $action) {
-            $this->compacts['createComment'] = $this->commentRepository->createComment($data, $action);
+        return $this->getData(function () use ($modelId) {
+            $this->compacts['comment'] = $this->commentRepository->getComment($modelId);
         });
     }
 
@@ -68,26 +70,43 @@ class CommentController extends ApiController
     {
         $data = $request->only('content');
         $comment = $this->commentRepository->findOrFail($id);
+        $modelId = $comment->commentable_id;
 
         if ($this->user->cant('update', $comment)) {
             throw new UnknowException('Permission error: User can not edit this comment.');
         }
 
-        return $this->doAction(function () use ($id, $data) {
+        $this->doAction(function () use ($id, $data) {
             $this->compacts['updateComment'] = $this->commentRepository->update($id, $data);
+        });
+
+        return $this->getData(function () use ($modelId) {
+            $this->compacts['comment'] = $this->commentRepository->getComment($modelId);
         });
     }
 
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
         $comment = $this->commentRepository->findOrFail($id);
+        $modelId = $request->modelId;
 
         if ($this->user->cant('delete', $comment)) {
             throw new UnknowException('Permission error: User can not edit this comment.');
         }
 
-        return $this->doAction(function () use ($id) {
+        $this->doAction(function () use ($id) {
             $this->compacts['deleteComment'] = $this->commentRepository->delete($id);
+        });
+
+        return $this->getData(function () use ($modelId) {
+            $this->compacts['comment'] = $this->commentRepository->getComment($modelId);
+        });
+    }
+
+    public function show($modelId)
+    {
+        return $this->getData(function () use ($modelId) {
+            $this->compacts['comment'] = $this->commentRepository->getComment($modelId);
         });
     }
 }
