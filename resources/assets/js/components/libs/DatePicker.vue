@@ -14,7 +14,7 @@ export default {
     },
     mounted() {
         $(this.$el).daterangepicker({
-            autoUpdateInput: true,
+            autoUpdateInput: false,
             singleDatePicker: true,
             showDropdowns: true,
             locale: {

@@ -36,7 +36,7 @@ class EventController extends ApiController
 
     public function create(EventRequest $request)
     {
-        $input['data_event'] = $request->only('campaign_id', 'title', 'description', 'longitude', 'latitude', 'address');
+        $input['data_event'] = $request->intersect('campaign_id', 'title', 'description', 'longitude', 'latitude', 'address');
         $input['data_event']['user_id'] = $this->user->id;
         $input['other'] = $request->only('settings', 'files');
         $input['donations'] = $this->qualityRepository->getOrCreate($request->get('donations'));
