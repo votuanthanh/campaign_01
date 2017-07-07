@@ -1,6 +1,12 @@
 import { authGuard, guestGuard } from './middleware'
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import store from '../store'
+import {get } from '../helpers/api'
+import { getUser } from './router'
 // Register Components to router
 import Campaign from '../components/campaign/Campaign.vue'
+import TimelineCampaign from '../components/campaign/TimelineCampaign.vue'
 import App from '../components/layout/App.vue'
 import Followers from '../components/user/Followers.vue'
 import MasterUser from '../components/user/MasterUser.vue'
@@ -49,6 +55,18 @@ const router = [
                     { path: ':path', component: CampaignUser },
                 ]
             },
+            {
+                path: '/',
+                component: App,
+                children: [{
+                    path: 'campaign/:id',
+                    component: Campaign,
+                    children: [{
+                        path: 'timeline',
+                        component: TimelineCampaign
+                    }]
+                }]
+            }
         ]
     }]),
     ...guestGuard([
@@ -56,5 +74,7 @@ const router = [
         { path: '/login', component: Auth },
     ])
 ]
+
+Vue.use(VueRouter)
 
 export default router

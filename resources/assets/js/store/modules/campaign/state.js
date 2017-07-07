@@ -1,3 +1,7 @@
 export default {
-    campaigns: []
+    campaign: [],
+    events: [],
+    pageNumberEvent: [],
+    tags: [],
+    loading: true
 }
