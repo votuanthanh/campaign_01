@@ -12,6 +12,7 @@ use App\Exceptions\Api\UnknowException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 use App\Models\Role;
+use App\Models\User;
 
 class CampaignRepository extends BaseRepository implements CampaignInterface
 {
@@ -292,5 +293,10 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         ]);
 
         return true;
+    }
+
+    public function getMembers($id)
+    {
+        return $this->findOrFail($id)->members()->where('status', User::ACTIVE);
     }
 }

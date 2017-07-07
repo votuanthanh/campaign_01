@@ -244,4 +244,11 @@ class CampaignController extends ApiController
             $this->compacts['tags'] = $this->tagRepository->get(['name', 'id']);
         });
     }
+
+    public function members($id)
+    {
+        return $this->getData(function () use ($id) {
+            $this->compacts['members'] = $this->campaignRepository->getMembers($id);
+        });
+    }
 }

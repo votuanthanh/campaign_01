@@ -12,6 +12,7 @@ public/mix-manifest.json
 storage/*.key
 storage/debugbar/
 storage/files/
+storage/2017/
 vendor
 .idea
 .env

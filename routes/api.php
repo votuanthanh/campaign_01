@@ -64,6 +64,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::post('approve-user', 'CampaignController@approveUserJoinCampaign')->name('approve');
             Route::get('get/tags', 'CampaignController@getTags')->name('tags');
             Route::get('/{id}/timeline/event', 'CampaignController@getListEvent');
+            Route::get('member/{campaignId}', 'CampaignController@members')->name('members');
         });
 
         Route::resource('campaign', 'CampaignController', ['only' => ['store', 'update', 'destroy', 'show']]);

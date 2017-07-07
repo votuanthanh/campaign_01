@@ -78,11 +78,8 @@ class Campaign extends BaseModel
     public function getUserByRole($roles)
     {
         $roles = is_array($roles) ? $roles : [$roles];
-        $roleIds = [];
 
-        foreach ($roles as $role) {
-            $roleIds[] = Role::whereName($role)->first()->id;
-        }
+        $roleIds = Role::whereIn('name', $roles)->pluck('id');
 
         return $this->users()->wherePivotIn('role_id', $roleIds);
     }
