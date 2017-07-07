@@ -22,7 +22,7 @@ class EditCamapaignTest extends TestCase
     public function testEditCampaignSuccess()
     {
         $campaign = Campaign::find(1);
-        $user = $campaign->owner();
+        $user = $campaign->owner()->first();
 
         if (!$user) {
             $user = factory(User::class)->create(['email' => 'exampale.unit.test@gmail.com']);
@@ -127,7 +127,7 @@ class EditCamapaignTest extends TestCase
     public function testEditCampaignWhenInvalidArrayThenFail()
     {
         $campaign = Campaign::find(1);
-        $user = $campaign->owner();
+        $user = $campaign->owner()->first();
 
         if (!$user) {
             $user = factory(User::class)->create(['email' => 'exampale.unit.test@gmail.com']);
@@ -188,7 +188,7 @@ class EditCamapaignTest extends TestCase
     {
         $campaign = Campaign::find(1);
         $otherCampaign = Campaign::find(3);
-        $user = $campaign->owner();
+        $user = $campaign->owner()->first();
 
         if (!$user) {
             $user = factory(User::class)->create(['email' => 'exampale.unit.test@gmail.com']);

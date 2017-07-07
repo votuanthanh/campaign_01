@@ -34,5 +34,18 @@
     "title": {
         "login": "Login to your Account",
         "register_campaign": "Register to Campaign"
+    },
+    "label": {
+        "following_campaign": "Following Campaigns",
+        "joined_campaign": "Joined Campaigns",
+        "owned_campaign": "Owned Campaigns"
+    },
+    "button": {
+        "read_more": "Read more"
+    },
+    "quote": {
+        "create_campaign": "create a new campaign",
+        "more_user": "and <br> {0} more joined in this",
+        "no_data": "no more data..."
     }
 }

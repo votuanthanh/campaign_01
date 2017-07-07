@@ -279,7 +279,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
     public function changeOwner($campaign, $userId, $roleId)
     {
         $ownerRoleId = app(RoleRepository::class)->findRoleOrFail(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)->id;
-        $this->changeMemberRole($campaign, $campaign->owner()->id, $roleId);
+        $this->changeMemberRole($campaign, $campaign->owner()->first()->id, $roleId);
         $this->changeMemberRole($campaign, $userId, $ownerRoleId);
     }
 

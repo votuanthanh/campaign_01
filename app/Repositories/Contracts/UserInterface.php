@@ -15,4 +15,10 @@ interface UserInterface extends RepositoryInterface
     public function listFollower($id, $orderBy = 'created_at', $direction = 'desc');
 
     public function listFollowing($id, $orderBy = 'created_at', $direction = 'desc');
+
+    public function listFollowingCampaign($id, $orderBy = 'created_at', $direction = 'desc');
+
+    public function listFollowingTag($id, $orderBy = 'created_at', $direction = 'desc');
+
+    public function joinCampaign($campaignId);
 }
