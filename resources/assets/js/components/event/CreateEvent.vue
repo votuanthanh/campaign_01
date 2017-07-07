@@ -8,7 +8,6 @@
             <div class="ui-block-title">
                 <h6 class="title">{{ $t('events.create_event') }}</h6>
             </div>
-
             <div class="ui-block-content">
                 <div class="form-group label-floating" :class="{ 'has-danger': errors.has('name')}">
                     <label class="control-label">{{ $t('form.label.event_name') }}</label>
@@ -43,29 +42,22 @@
                     </gmap-map>
                 </div>
 
-                <div class="form-group date-time-picker label-floating">
-                    <setting-date
-                        :startDay.sync="startDate"
-                        :endDay.sync="endDate"
-                        :flag.sync="flag">
-                    </setting-date>
-                </div>
+                <setting-date
+                    :startDay.sync="startDate"
+                    :endDay.sync="endDate"
+                    :flag.sync="flag">
+                </setting-date>
 
-                <div class="form-group label-floating" :class="{ 'has-danger': errors.has('description')}">
-                    <label class="control-label">{{ $t('form.label.event_description') }}</label>
-                    <quill-editor name="description"
-                        data-vv-name="description"
-                        id="description"
-                        class="form-control"
-                        v-model="newEvent.description"
-                        v-validate="'required'">
-                    </quill-editor>
-                    <span v-show="errors.has('description')" class="material-input text-danger">
-                        {{ errors.first('description') }}
-                    </span>
-                </div>
-
-                <hr>
+                <quill-editor
+                    data-vv-name="description"
+                    id="description"
+                    :options="editorOption"
+                    v-model="newEvent.description"
+                    v-validate="'required'">
+                </quill-editor>
+                <span v-show="errors.has('description')" class="material-input text-danger">
+                    {{ errors.first('description') }}
+                </span>
 
                 <div class="wrap-donation">
                     <p>{{ $t('form.title.add_donation') }}
@@ -73,10 +65,14 @@
                         </i>
                     </p>
                     <donations
-                        :donations="donations"
+                        v-for="(donation, index) in donations"
+                        :donation="donation"
+                        :index="index"
+                        :key="index"
                         :visible="visible"
-                        @update-donations="updateGoal"
-                        @delete-donation="deleteDonation">
+                        @add-instance-validate="addErrors"
+                        @update-row-donation="updateGoal"
+                        @delete-donation="deleteDonation(index)">
                     </donations>
                 </div>
 
@@ -108,10 +104,9 @@
     import Donations from './Donations.vue'
     import SettingDate from '../libs/SettingDate.vue'
     import axios from 'axios'
-    import { config } from '../../config'
+    import { config, editorOption } from '../../config'
     import { post, del } from '../../helpers/api'
     import noty from '../../helpers/noty'
-    import { quillEditor } from 'vue-quill-editor'
 
     Vue.use(Dropzone)
     Vue.use(VueGoogleMaps, {
@@ -136,7 +131,7 @@
             donations: [
                 { type : '', goal: '', quality: ''}
             ],
-
+            errorBags: {},
             newEvent : {
                 title: '',
                 campaign_id: '',
@@ -147,10 +142,15 @@
                 files: [],
                 address: ' ',
                 donations: []
-            }
+            },
+            editorOption
         }),
 
         methods: {
+            addErrors(index, value) {
+                this.errorBags[index] = value
+            },
+
             setPlace(place) {
                 this.latLng = {
                     lat: place.geometry.location.lat(),
@@ -195,19 +195,23 @@
             },
 
             deleteDonation(index) {
-                this.visible = true
+                this.donations.length > 1 && this.donations.splice(index, 1)
 
-                if (this.donations.length > 1) {
-                    this.donations.splice(index, 1)
-                }
+                this.errorBags.length > 1 && this.errorBags.splice(index, 1)
 
-                if (this.donations.length > 1) {
-                    this.visible = false
+                if (this.donations.length === 1) {
+                    this.visible = true
                 }
             },
 
-            updateGoal(value, index, type) {
-                this.donations[index][type] = value
+            updateGoal(newValue) {
+                // mix <=> key: type, goal, quality
+                // key <=> key of newValue that children emitted
+                const [key, mix, instanse] = Object.keys(newValue)
+                const index = newValue[key]
+
+                this.errorBags[index] = newValue[instanse]
+                this.donations[index][mix] = newValue[mix]
             },
 
             updatePosition(event) {
@@ -252,7 +256,8 @@
 
             createEvent() {
                 this.$validator.validateAll().then((result) => {
-                    if (!this.flag) {
+
+                    if (!this.flag || this.hasErrorDonation()) {
                         return
                     }
 
@@ -277,14 +282,26 @@
                             })
                         })
                 })
+                .catch(() => {})
+            },
+
+            hasErrorDonation() {
+                let errorDonations = []
+
+                for(let index in this.errorBags) {
+                    // Triger validation children donation
+                    this.errorBags[index].validateAll().catch(() => {})
+                    errorDonations.push(this.errorBags[index].getErrors())
+                }
+
+                return !errorDonations.every(item => !item.count())
             }
         },
 
         components: {
             Donations,
             Dropzone,
-            SettingDate,
-            quillEditor
+            SettingDate
         }
     }
 </script>

@@ -47,5 +47,9 @@
     "edit": "Edit",
     "answers": "answers",
     "cancel": "Cancel",
-    "hidden": "hidden"
+    "hidden": "hidden",
+    "placeholder": {
+        "choose_quality": "Choose quality",
+        "choose_type": "Choose type"
+    }
 }

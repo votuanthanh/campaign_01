@@ -7,10 +7,17 @@ import makeRouter from './router/middleware'
 import VeeValidate, { Validator } from 'vee-validate'
 import rules from './validation'
 import { config, dictionary } from './validation/config'
-import { get } from './helpers/api'
+// import editor quill
+import VueQuillEditor from 'vue-quill-editor'
+import { ImageImport } from './helpers/quill-editor/ImageImport'
+import { ImageResize } from './helpers/quill-editor/ImageResize'
+
+Quill.register('modules/imageImport', ImageImport)
+Quill.register('modules/imageResize', ImageResize)
 
 const router = makeRouter(routes)
 
+Vue.use(VueQuillEditor)
 Vue.use(VueI18n)
 
 // Register rules vee-validation
