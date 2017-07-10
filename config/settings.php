@@ -2,7 +2,9 @@
 
 return [
     'admin_system' => 'admin system',
-    'paginate' => 15,
+    'comment_parent' => 0,
+    'paginate_comment' => 4,
+    'paginate_default' => 15,
     'locale' => ['vi', 'en', 'ja'],
     'campaigns' => [
         'status' => 1, // set campaign public or private

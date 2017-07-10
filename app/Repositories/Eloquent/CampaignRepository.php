@@ -197,14 +197,31 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
     }
 
     /**
-     * get campaign timeline.
+     * get campaign.
      *
      * @param  array  $data
      * @return $campaign
     */
-    public function getCampaignTimeline($campaign)
+    public function getCampaign($campaign, $roleIdOwner)
     {
-        return $campaign->with('media', 'settings', 'tags')->get();
+        // settings
+        $settings = $campaign->settings();
+        $campaign['status'] = $settings->where('key', config('settings.campaigns.status'))->first(['value']);
+        $campaign['limit'] = $settings->where('key', config('settings.campaigns.limit'))->first(['value']);
+        $campaign['start_day'] = $settings->where('key', config('settings.campaigns.start_day'))->first(['value']);
+        $campaign['end_day'] = $settings->where('key', config('settings.campaigns.end_day'))->first(['value']);
+        $campaign['timeout_campaign'] = $settings->where('key', config('settings.campaigns.timeout_campaign'))->first(['value']);
+        // members in campaign
+        $campaign['members'] = $campaign->users()->get();
+        $campaign['owner'] =$campaign->owner()->first(['user_id', 'email', 'phone', 'url_file']);
+        $campaign['memberIds'] = $campaign['members']->pluck('id')->all();
+        // images campaign
+        $campaign['campaign_images'] = $campaign->media()->first(['url_file', 'type']);
+
+        return [
+            'campaign' => $campaign,
+            'tags' => $campaign->tags()->get(['name'])->flatten(),
+        ];
     }
 
     /**

@@ -58,6 +58,7 @@ class CreateEventTest extends TestCase
                   'quality' => 'gam',
                 ],
             ],
+            'address' => $faker->address,
             'files' => [
                 '2017/07/other/img-14990616485959dd9020f27.png',
                 '2017/07/other/img-14990616485959dd9020f28.png',
@@ -87,6 +88,7 @@ class CreateEventTest extends TestCase
             'longitude' => $faker->longitude,
             'latitude' => $faker->latitude,
             'campaign_id' => '4',
+            'address' => $faker->address,
             'settings' => [
                 [
                     'type' => 7,
@@ -138,6 +140,7 @@ class CreateEventTest extends TestCase
             'longitude' => $faker->longitude,
             'latitude' => $faker->latitude,
             'campaign_id' => '4',
+            'address' => $faker->address,
             'settings' => [
                 [
                     'type' => 7,
@@ -194,6 +197,7 @@ class CreateEventTest extends TestCase
             'longitude' => $faker->longitude,
             'latitude' => $faker->latitude,
             'campaign_id' => '4',
+            'address' => $faker->address,
             'settings' => [
                 [
                     'type' => 7,
@@ -250,6 +254,7 @@ class CreateEventTest extends TestCase
             'longitude' => $faker->longitude,
             'latitude' => $faker->latitude,
             'campaign_id' => '4',
+            'address' => $faker->address,
             'settings' => [
                 [
                     'type' => 7,
