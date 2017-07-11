@@ -25,8 +25,7 @@ class CommentTest extends TestCase
         $roleAdminId = Role::where('type', Role::TYPE_SYSTEM)->pluck('id')->first();
         $user->roles()->attach($roleAdminId);
         $this->actingAs($user, 'api');
-        $response = $this->json('POST', route('event.comment.create'), [
-            'event_id' => $event->id,
+        $response = $this->json('POST', route('comment.create', ['modelId' => $event->id, 'parentId' => 0, 'flag' => 'event']), [
             'content' => $faker->sentence(10),
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -65,8 +64,7 @@ class CommentTest extends TestCase
 
         $this->actingAs($user, 'api');
 
-        $response = $this->json('POST', route('event.comment.create'), [
-            'event_id' => $event->id,
+        $response = $this->json('POST', route('comment.create', ['modelId' => $event->id, 'parentId' => 0, 'flag' => 'event']), [
             'content' => $faker->sentence(10),
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -103,8 +101,8 @@ class CommentTest extends TestCase
 
         $this->actingAs($user, 'api');
 
-        $response = $this->json('POST', route('event.comment.create'), [
-            'event_id' => $event->id,
+        $response = $this->json('POST', route('comment.create', ['modelId' => $event->id, 'parentId' => 0, 'flag' => 'event']), [
+            'content' => '',
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
@@ -128,8 +126,7 @@ class CommentTest extends TestCase
 
         $this->actingAs($user, 'api');
 
-        $response = $this->json('POST', route('event.comment.create'), [
-            'event_id' => $event->id,
+        $response = $this->json('POST', route('comment.create', ['modelId' => $event->id, 'parentId' => 0, 'flag' => 'event']), [
             'content' => $faker->sentence(10),
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
