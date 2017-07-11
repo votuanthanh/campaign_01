@@ -41,5 +41,6 @@
     "write-comment": "Write something ....",
     "view-more": "View more comments",
     "create-event": "Create event",
-    "leave": "Leave"
+    "leave": "Leave",
+    "aproving": "Aproving"
 }

@@ -30,29 +30,19 @@ export const fetchData = ({ commit }, data) => {
     }
 };
 
-export const joinCampaign = ({ commit }, campaignId) => {
+export const attendCampaign = ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-        post('campaign/join-campaign/' + campaignId)
+        post('campaign/attend-campaign/' + data.campaignId + data.flag)
             .then(res => {
                 if (res.data.http_status.status) {
-                    console.log(res.data.join_campaign)
-                    commit(types.JOIN_CAMPAIGN, res.data.join_campaign)
-                    resolve(res.data.http_status.status)
-                }
-            })
-            .catch(err => {
-                reject(err)
-            })
-    })
-};
+                    if (data.flag == 'join') {
+                        commit(types.JOIN_CAMPAIGN, res.data.attend_campaign)
+                        resolve(res.data.http_status.status)
+                    } else {
+                        commit(types.LEAVE_CAMPAIGN, res.data.attend_campaign)
+                        resolve(res.data.http_status.status)
+                    }
 
-export const leaveCampaign = ({ commit }, campaignId) => {
-    return new Promise((resolve, reject) => {
-        post('campaign/leave-campaign/' + campaignId)
-            .then(res => {
-                if (res.data.http_status.status) {
-                    commit(types.LEAVE_CAMPAIGN, res.data.leave_campaign)
-                    resolve(res.data.http_status.status)
                 }
             })
             .catch(err => {
@@ -64,6 +54,5 @@ export const leaveCampaign = ({ commit }, campaignId) => {
 export default {
     campaignDetail,
     fetchData,
-    joinCampaign,
-    leaveCampaign
+    attendCampaign,
 };

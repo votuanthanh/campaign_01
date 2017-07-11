@@ -56,7 +56,7 @@
                                 <div class="counter-friends">{{ totalMemberCurrent }} {{ $t('campaigns.lbl-members') }}</div>
 
                                 <ul class="friends-harmonic">
-                                    <li v-for="member in campaign.members">
+                                    <li v-for="member in listMembers.members">
                                         <a href="#">
                                             <img :src="member.url_file" :alt="member.name">
                                         </a>
@@ -69,10 +69,38 @@
                             </div>
                         </li>
                     </ul>
-                    <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width" v-if="campaign.memberIds.indexOf(user.id) < 0" @click="joinCampaign()">{{ $t('campaigns.join-now') }}</a>
-                    <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width" v-if="campaign.memberIds.indexOf(user.id) >= 0" @click="leaveCampaign()">{{ $t('campaigns.leave') }}</a>
+                    <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                        v-if="listMembers.memberIds.indexOf(user.id) < 0"
+                        @click="comfirmJoinCampaign()">{{ $t('campaigns.join-now') }}</a>
+
+                    <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                        v-if="listMembers.memberIds.indexOf(user.id) >= 0"
+                        @click="comfirmLeaveCampaign()" >
+                            {{ $t('campaigns.leave') }}
+                        </a>
                 </div>
             </div>
+            <!-- form comfirm join campaign -->
+            <modal :show.sync="flag_confirm_join">
+                <h5 class="exclamation-header" slot="header">
+                    {{ $t('messages.comfirm-join-campaign') }}
+                </h5>
+                <div class="body-modal" slot="main">
+                    <a href="javascript:void(0)" class="col-md-5 btn btn-breez" @click="joinCampaigns">{{ $t('form.button.agree') }}</a>
+                    <a href="javascript:void(0)" class="col-md-5 btn btn-secondary" @click="cancelJoinCampaign">{{ $t('form.button.cancel') }}</a>
+                </div>
+            </modal>
+
+            <!-- form comfirm leave campaign -->
+            <modal :show.sync="flag_confirm_leave">
+                <h5 class="exclamation-header" slot="header">
+                    {{ $t('messages.comfirm-join-campaign') }}
+                </h5>
+                <div class="body-modal" slot="main">
+                    <a href="javascript:void(0)" class="col-md-5 btn btn-breez" @click="leaveCampaigns">{{ $t('form.button.agree') }}</a>
+                    <a href="javascript:void(0)" class="col-md-5 btn btn-secondary" @click="cancelLeaveCampaign">{{ $t('form.button.cancel') }}</a>
+                </div>
+            </modal>
         </div>
 </template>
 
@@ -92,33 +120,39 @@
 </style>
 
 <script>
-    import { mapState } from 'vuex'
+    import { mapState, mapActions } from 'vuex'
+    import Modal from '../libs/Modal.vue'
+    import noty from '../../helpers/noty'
 
     export default {
+        data: () =>({
+                flag_confirm_join: false,
+                flag_confirm_leave: false
+            }),
         computed: {
-            ...mapState('campaign', ['campaign', 'tags']),
+            ...mapState('campaign', ['campaign', 'tags', 'listMembers']),
             ...mapState('auth', {
                 authenticated: state => state.authenticated,
                 user: state => state.user
             }),
             totalMemberCurrent() {
-                if (this.campaign.members != null) {
-                    return this.campaign.members.length
+                if (this.listMembers.members != null) {
+                    return this.listMembers.members.length
                 }
 
                 return 0
 
             },
             remainingMembers() {
-                if (this.campaign.members != null) {
-                    return parseInt(this.campaign.members.length) - 10
+                if (this.listMembers.members != null) {
+                    return parseInt(this.listMembers.members.length) - 10
                 }
 
                 return 0
             }
         },
         methods: {
-            ...mapActions('campaign', ['joinCampaign', 'leaveCampaign']),
+            ...mapActions('campaign', ['attendCampaign']),
             comfirmJoinCampaign() {
                 this.flag_confirm_join = true
             },
@@ -128,8 +162,11 @@
             cancelJoinCampaign() {
                 this.flag_confirm_join = false
             },
+            cancelLeaveCampaign() {
+                this.flag_confirm_leave = false
+            },
             joinCampaigns() {
-                this.joinCampaign(this.campaign.id)
+                this.attendCampaign({ campaignId: this.campaign.id, flag: 'join' })
                     .then(status => {
                         this.flag_confirm_join = false
                         const message = this.$i18n.t('messages.join_campaign_success')
@@ -142,7 +179,7 @@
                     })
             },
             leaveCampaigns() {
-                this.leaveCampaign(this.campaign.id)
+                this.attendCampaign({ campaignId: this.campaign.id, flag: 'leave' })
                     .then(status => {
                         this.flag_confirm_leave = false
                         const message = this.$i18n.t('messages.leave_campaign_success')

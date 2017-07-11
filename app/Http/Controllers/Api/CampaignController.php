@@ -248,4 +248,31 @@ class CampaignController extends ApiController
             $this->compacts['members'] = $this->campaignRepository->getMembers($id);
         });
     }
+
+    /**
+     * user request join to campaign
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function attendCampaign($id, $flag)
+    {
+        $campaign = $this->campaignRepository->findOrFail($id);
+
+        if ($flag == config('settings.flag_join')) {
+            if ($this->user->cannot('joinCampaign', $campaign)) {
+                throw new NotFoundException('You do not have authorize to join this campaign', UNAUTHORIZED);
+            }
+        } else {
+            if ($this->user->cannot('leaveCampaign', $campaign)) {
+                throw new NotFoundException('You do not have authorize to leave this campaign', UNAUTHORIZED);
+            }
+        }
+
+        $user = $this->user;
+
+        return $this->doAction(function () use ($user, $campaign) {
+            $this->campaignRepository->attendCampaign($campaign, $user->id);
+            $this->compacts['attend_campaign'] = $user;
+        });
+    }
 }

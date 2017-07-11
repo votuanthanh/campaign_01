@@ -105,8 +105,6 @@ class CommentController extends ApiController
 
     public function show($modelId)
     {
-        return $this->getData(function () use ($modelId) {
-            $this->compacts['comment'] = $this->commentRepository->getComment($modelId);
-        });
+        //
     }
 }
