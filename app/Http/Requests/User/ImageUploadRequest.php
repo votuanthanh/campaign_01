@@ -24,8 +24,8 @@ class ImageUploadRequest extends AbstractRequest
     public function rules()
     {
         return [
-            'avatar' => 'image|mimes:jpg,jpeg,JPEG,png,gif|max:1024',
-            'header_photo' => 'image|mimes:jpg,jpeg,JPEG,png,gif|max:1024',
+            'url_file' => 'string',
+            'uploads.*' => 'image|mimes:jpg,jpeg,JPEG,png,gif|max:1024',
         ];
     }
 }

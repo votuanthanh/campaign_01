@@ -122,11 +122,6 @@ class User extends Authenticatable
         return $this->roles()->wherePivot('role_id', $roleId)->exists();
     }
 
-    public function getHeadPhotoAttribute($value)
-    {
-        return app('glide.url')->getUrl($value);
-    }
-
     public function getAbout($value = null)
     {
         if (!$value || !is_numeric($value)) {
@@ -134,6 +129,11 @@ class User extends Authenticatable
         }
 
         return str_limit($this->attributes['about'], $value);
+    }
+
+    public function media()
+    {
+        return $this->morphMany(Media::class, 'mediable');
     }
 
     public function settings()

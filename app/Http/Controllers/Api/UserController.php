@@ -28,6 +28,13 @@ class UserController extends ApiController
         $this->tagRepository = $tagRepository;
     }
 
+    public function authUser()
+    {
+        return $this->user->load(['media' => function ($query) {
+            $query->latest();
+        }]);
+    }
+
     /**
      * Update current user's password
      *
@@ -72,14 +79,8 @@ class UserController extends ApiController
      */
     public function updateAvatar(ImageUploadRequest $request)
     {
-        if (!$request->hasFile('avatar')) {
-            throw new UnknowException('File is incorrect', BAD_REQUEST);
-        }
-
         return $this->doAction(function () use ($request) {
-            $uploaded = $this->uploadFile($request->file('avatar'), 'avatar');
-            $this->destroyFile($this->user->url_file);
-            $this->repository->update($this->user->id, ['url_file' => $uploaded]);
+            $this->repository->update($this->user->id, ['url_file' => $request->get('url_file')]);
         });
     }
 
@@ -89,14 +90,21 @@ class UserController extends ApiController
      */
     public function updateHeaderPhoto(ImageUploadRequest $request)
     {
-        if (!$request->hasFile('head_photo')) {
-            throw new UnknowException('File is incorrect', BAD_REQUEST);
-        }
-
         return $this->doAction(function () use ($request) {
-            $uploaded = $this->uploadFile($request->file('head_photo'), 'header');
-            $this->destroyFile($this->user->head_photo);
-            $this->repository->update($this->user->id, ['head_photo' => $uploaded]);
+            $this->repository->update($this->user->id, ['head_photo' => $request->get('url_file')]);
+        });
+    }
+
+    /**
+     * Multi upload images
+     * @param  Request $request
+     * @param  string  $path
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadImages(ImageUploadRequest $request, $path)
+    {
+        return $this->doAction(function () use ($request, $path) {
+            $this->compacts['images'] = $this->repository->uploadImages($request->uploads, $path);
         });
     }
 
@@ -249,7 +257,7 @@ class UserController extends ApiController
                     'users.id',
                     'name',
                     'email',
-                    'url_file'
+                    'url_file',
                 ]);
             $this->compacts['groups'] = $this->user->campaigns()
                 ->where('campaigns.status', Campaign::ACTIVE)
@@ -259,7 +267,7 @@ class UserController extends ApiController
                 }])
                 ->get([
                     'campaigns.id',
-                    'hashtag'
+                    'hashtag',
                 ]);
         });
     }

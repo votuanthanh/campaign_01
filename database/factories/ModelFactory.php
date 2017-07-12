@@ -28,6 +28,7 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'created_at' => $faker->dateTime(),
         'updated_at' => $faker->dateTime(),
         'gender' => $faker->randomElement([0, 1]),
+        'head_photo' => '/images/head_photo.jpg',
     ];
 });
 

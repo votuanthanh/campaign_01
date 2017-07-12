@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Eloquent\UrlImage;
 
 class Media extends BaseModel
 {
-    use SoftDeletes;
+    use SoftDeletes, UrlImage;
 
     const IMAGE = 0;
     const VIDEO = 1;
@@ -25,6 +26,7 @@ class Media extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
+    protected $appends = ['image_default'];
 
     public function mediable()
     {

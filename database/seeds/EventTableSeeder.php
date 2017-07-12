@@ -17,13 +17,13 @@ class EventTableSeeder extends Seeder
             foreach (range(1, 2) as $key) {
                 $like[] = factory(App\Models\Like::class)->make()->toArray();
                 $setting[] = factory(App\Models\Setting::class)->make()->toArray();
-                $media[] = factory(App\Models\Media::class)->make()->toArray();
+                $media[] = factory(App\Models\Media::class)->make();
                 $comments[] = factory(App\Models\Comment::class)->make()->toArray();
             }
             $event->comments()->createMany($comments);
             $event->likes()->createMany($like);
             $event->settings()->createMany($setting);
-            $event->media()->createMany($media);
+            $event->media()->saveMany($media);
         });
     }
 }

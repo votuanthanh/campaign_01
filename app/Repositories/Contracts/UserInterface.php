@@ -21,4 +21,6 @@ interface UserInterface extends RepositoryInterface
     public function listFollowingTag($id, $orderBy = 'created_at', $direction = 'desc');
 
     public function joinCampaign($campaignId);
+
+    public function uploadImages(array $files, $path);
 }

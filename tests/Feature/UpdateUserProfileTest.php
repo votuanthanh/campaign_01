@@ -93,16 +93,4 @@ class UpdateUserProfileTest extends TestCase
 
         $response->assertStatus(CODE_OK);
     }
-
-    public function testUpdateAvatarWithEmptyFieldThenFail()
-    {
-        $user = factory(User::class)->create();
-        $this->actingAs($user, 'api');
-
-        $response = $this->json('POST', route('user.avatar'), [
-            'avatar' => '',
-        ]);
-
-        $response->assertStatus(BAD_REQUEST);
-    }
 }
