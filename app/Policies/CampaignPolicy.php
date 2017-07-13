@@ -42,6 +42,42 @@ class CampaignPolicy extends BasePolicy
     }
 
     /**
+     * Determine whether the user can join to the campaign.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Campaign  $campaign
+     * @return mixed
+     */
+    public function joinCampaign(User $user, Campaign $campaign)
+    {
+        if ($campaign->blockeds()->pluck('id')->search($user->id)
+            || $campaign->status == Campaign::BLOCK || $campaign->users()->pluck('user_id')->search($user->id)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine whether the user can leave to the campaign.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Campaign  $campaign
+     * @return mixed
+     */
+    public function leaveCampaign(User $user, Campaign $campaign)
+    {
+        if ($campaign->blockeds()->pluck('id')->search($user->id)
+            || $campaign->status == Campaign::BLOCK || !$campaign->users()->pluck('user_id')->search($user->id)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Determine whether the user can create campaigns.
      *
      * @param  \App\User  $user

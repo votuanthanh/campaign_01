@@ -204,16 +204,17 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
     */
     public function getCampaign($campaign, $roleIdOwner)
     {
-        // settings
-        $settings = $campaign->settings();
-        $campaign['status'] = $settings->where('key', config('settings.campaigns.status'))->first(['value']);
-        $campaign['limit'] = $settings->where('key', config('settings.campaigns.limit'))->first(['value']);
-        $campaign['start_day'] = $settings->where('key', config('settings.campaigns.start_day'))->first(['value']);
-        $campaign['end_day'] = $settings->where('key', config('settings.campaigns.end_day'))->first(['value']);
-        $campaign['timeout_campaign'] = $settings->where('key', config('settings.campaigns.timeout_campaign'))->first(['value']);
+
+        $settings = $campaign->settings()->whereIn('key', config('settings.campaigns'))->get();
+
+        $campaign['status'] = $settings->where('key', config('settings.campaigns.status'))->first();
+        $campaign['limit'] = $settings->where('key', config('settings.campaigns.limit'))->first('value');
+        $campaign['start_day'] = $settings->where('key', config('settings.campaigns.start_day'))->first('value');
+        $campaign['end_day'] = $settings->where('key', config('settings.campaigns.end_day'))->first('value');
+        $campaign['timeout_campaign'] = $settings->where('key', config('settings.campaigns.timeout_campaign'))->first('value');
         // members in campaign
-        $campaign['members'] = $campaign->users()->get();
-        $campaign['owner'] =$campaign->owner()->first(['user_id', 'email', 'phone', 'url_file']);
+        $campaign['members'] = $campaign->users;
+        $campaign['owner'] = $campaign['members']->where('pivot.role_id', $roleIdOwner)->first();
         $campaign['memberIds'] = $campaign['members']->pluck('id')->all();
         // images campaign
         $campaign['campaign_images'] = $campaign->media()->first(['url_file', 'type']);
@@ -232,7 +233,11 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
     */
     public function getListUser($campaign)
     {
-        return $campaign->with('users')->get();
+        $data = [];
+        $data['members'] = $campaign->with('users')->get();
+        $data['memberIds'] = $data['members']->pluck('user_id')->all();
+
+        return $data;
     }
 
     public function createOrDeleteLike($campaign, $userId)
@@ -315,5 +320,15 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
     public function getMembers($id)
     {
         return $this->findOrFail($id)->members()->where('status', User::ACTIVE);
+    }
+
+    public function attendCampaign($campaign, $userId)
+    {
+        return $campaign->users()->toggle([
+            $userId => [
+                'role_id' => app(RoleRepository::class)->findRoleOrFail(Role::ROLE_MEMBER, Role::TYPE_CAMPAIGN)->id,
+                'status' => Campaign::APPROVING,
+            ]
+        ]);
     }
 }

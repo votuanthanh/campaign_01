@@ -11,19 +11,19 @@
                         <span class="text">{{ campaign.description }}</span>
                     </li>
 
-                    <li v-if="campaign.start_day !== null">
+                    <li v-if="campaign.start_day != null">
                         <span class="title">{{ $t('campaigns.start-day') }}:</span>
-                        <span class="text">{{ campaign.start_day }}</span>
+                        <span class="text">{{ campaign.start_day['value'] }}</span>
                     </li>
 
-                    <li v-if="campaign.end_day !== null">
+                    <li v-if="campaign.end_day != null">
                         <span class="title">{{ $t('campaigns.end-day') }}:</span>
-                        <span class="text">{{ campaign.end_day }}</span>
+                        <span class="text">{{ campaign.end_day['value'] }}</span>
                     </li>
 
-                    <li v-if="campaign.timeout_campaign !== null">
+                    <li v-if="campaign.timeout_campaign != null">
                         <span class="title">{{ $t('campaigns.operation-time') }}:</span>
-                        <span class="text">{{ campaign.timeout_campaign }}</span>
+                        <span class="text">{{ campaign.timeout_campaign['value'] }}</span>
                     </li>
 
                     <li>
