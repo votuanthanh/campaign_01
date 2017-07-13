@@ -81,6 +81,8 @@
             </div>
         </div>
         <!-- ... end Login-Registration Form  -->
+
+        <vue-progress-bar></vue-progress-bar>
     </div>
 </template>
 

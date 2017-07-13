@@ -16,6 +16,8 @@
         </div>
 
         <popup-chat></popup-chat>
+
+        <vue-progress-bar></vue-progress-bar>
     </div>
 </template>
 
