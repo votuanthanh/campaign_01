@@ -13,6 +13,7 @@ use App\Repositories\Contracts\DonationTypeInterface;
 use App\Repositories\Contracts\EventInterface;
 use App\Repositories\Contracts\QualityInterface;
 use App\Repositories\Contracts\CampaignInterface;
+use App\Repositories\Contracts\ActionInterface;
 
 class EventController extends ApiController
 {
@@ -20,18 +21,21 @@ class EventController extends ApiController
     protected $qualityRepository;
     protected $campaignRepository;
     protected $donationTypeRepository;
+    protected $actionRepository;
 
     public function __construct(
         EventInterface $eventRepository,
         QualityInterface $qualityRepository,
         CampaignInterface $campaignRepository,
-        DonationTypeInterface $donationTypeRepository
+        DonationTypeInterface $donationTypeRepository,
+        ActionInterface $actionRepository
     ) {
         parent::__construct();
         $this->qualityRepository = $qualityRepository;
         $this->campaignRepository = $campaignRepository;
         $this->eventRepository = $eventRepository;
         $this->donationTypeRepository = $donationTypeRepository;
+        $this->actionRepository = $actionRepository;
     }
 
     public function create(EventRequest $request)
@@ -115,6 +119,24 @@ class EventController extends ApiController
         return $this->doAction(function () {
             $this->compacts['qualitys'] = $this->qualityRepository->distinct()->select('name')->get();
             $this->compacts['types'] = $this->donationTypeRepository->distinct()->select('name')->get();
+        });
+    }
+
+    public function show($id)
+    {
+        return $this->doAction(function () use ($id) {
+            $event = $this->eventRepository->findOrFail($id);
+            $this->compacts['actions'] = $this->actionRepository->getActionPaginate($event->actions());
+            $this->compacts['event'] = $this->eventRepository
+                ->where('id', $id)
+                ->with([
+                    'user',
+                    'media',
+                    'likes',
+                    'comments.likes',
+                    'comments.user',
+                ])
+                ->get();
         });
     }
 }

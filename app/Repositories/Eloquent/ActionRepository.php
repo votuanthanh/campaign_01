@@ -61,4 +61,22 @@ class ActionRepository extends BaseRepository implements ActionInterface
 
         return true;
     }
+
+    public function getActionPaginate($action)
+    {
+        return $action
+            ->with('user', 'likes', 'comments', 'media')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(config('settings.actions.paginate_in_event'));
+    }
+
+    public function searchAction($eventId, $key)
+    {
+        return $this->model
+            ->with('user', 'likes', 'comments', 'media')
+            ->where('event_id', $eventId)
+            ->where('caption', 'like', '%' . $key . '%')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(config('settings.actions.paginate_in_event'));
+    }
 }

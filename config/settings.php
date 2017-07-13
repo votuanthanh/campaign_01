@@ -21,7 +21,7 @@ return [
         'set_video' => 6, // set video for event
     ],
     'actions' => [
-        //
+        'paginate_in_event' => 15,
     ],
     'value_of_settings' => [
         'status' => [ // key of setting
@@ -32,5 +32,5 @@ return [
     'pagination' => [
         'follow' => 12,
         'timeline' => 5,
-    ]
+    ],
 ];

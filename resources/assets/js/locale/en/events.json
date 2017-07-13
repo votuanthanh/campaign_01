@@ -2,5 +2,12 @@
     "create_event": "Create New Event",
     "edit-event": "Edit event",
     "delete-event": "Delete event",
-    "turn-off-notification": "Turn off notification"
+    "turn-off-notification": "Turn off notification",
+    "place_holder_comment" : "Enter your comment...",
+    "reply" : "Reply",
+    "create_action" : "Create action",
+    "show_more" : "Show more",
+    "show_less" : "Show less",
+    "search_action" : "Search action",
+    "search" : "Search"
 }
