@@ -7,6 +7,11 @@ import makeRouter from './router/middleware'
 import VeeValidate, { Validator } from 'vee-validate'
 import rules from './validation'
 import { config, dictionary } from './validation/config'
+import VueProgressBar from 'vue-progressbar'
+import * as configPlugin from './config'
+import * as VueGoogleMaps from 'vue2-google-maps'
+import VueTimeago from 'vue-timeago'
+
 // import editor quill
 import VueQuillEditor from 'vue-quill-editor'
 import { ImageImport } from './helpers/quill-editor/ImageImport'
@@ -15,22 +20,10 @@ import { ImageResize } from './helpers/quill-editor/ImageResize'
 Quill.register('modules/imageImport', ImageImport)
 Quill.register('modules/imageResize', ImageResize)
 
-import * as VueGoogleMaps from 'vue2-google-maps'
-import VueTimeago from 'vue-timeago'
-
-Vue.use(VueTimeago, {
-    name: 'timeago', // component name, `timeago` by default
-    locale: 'en-US',
-    locales: {
-        // you will need json-loader in webpack 1
-        'en-US': require('vue-timeago/locales/en-US.json')
-    }
-});
-
-const router = makeRouter(routes)
-
 Vue.use(VueQuillEditor)
 Vue.use(VueI18n)
+Vue.use(VueTimeago, configPlugin.timeago);
+Vue.use(VueProgressBar, configPlugin.topProgressBar);
 
 // Register rules vee-validation
 Vue.use(VeeValidate, config)
@@ -45,6 +38,8 @@ const i18n = new VueI18n({
     fallbackLocale: window.Laravel.fallbackLocale,
     messages
 })
+
+const router = makeRouter(routes)
 
 const app = new Vue({
     el: '#app',

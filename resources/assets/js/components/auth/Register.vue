@@ -119,6 +119,8 @@ export default {
         handleRegister() {
             this.$validator.validateAll().then((result) => {
                 this.spinner = true
+                this.$Progress.start()
+
                 post(register, this.user)
                     .then(res => {
                         this.spinner = false
@@ -130,11 +132,14 @@ export default {
                         this.$nextTick(function () {
                             this.errors.clear()
                         })
+
+                        this.$Progress.finish()
                     })
                     .catch(err => {
                         this.spinner = false
                         const message = this.$i18n.t('messages.regiser_fail')
                         noty({ text: message, force: true})
+                        this.$Progress.fail()
                     })
             })
         }

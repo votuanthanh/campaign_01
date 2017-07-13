@@ -94,13 +94,16 @@ export default {
         ]),
         handlelogin() {
             this.$validator.validateAll().then(() => {
+                this.$Progress.start()
                 this.login(this.user)
                     .then(registered => {
                         if (registered) {
+                            this.$Progress.finish()
                             this.$router.push('/')
                         }
                     })
                     .catch(err => {
+                        this.$Progress.fail()
                         const message = this.$i18n.t('messages.login_fail')
                         noty({ text: message, force: true})
                     })
