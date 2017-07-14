@@ -20,10 +20,14 @@ import { ImageResize } from './helpers/quill-editor/ImageResize'
 Quill.register('modules/imageImport', ImageImport)
 Quill.register('modules/imageResize', ImageResize)
 
+import VueSocketio from 'vue-socket.io'
+import socketio from 'socket.io-client'
+
+Vue.use(VueSocketio, socketio(':8890'))
 Vue.use(VueQuillEditor)
 Vue.use(VueI18n)
-Vue.use(VueTimeago, configPlugin.timeago);
-Vue.use(VueProgressBar, configPlugin.topProgressBar);
+Vue.use(VueTimeago, configPlugin.timeago)
+Vue.use(VueProgressBar, configPlugin.topProgressBar)
 
 // Register rules vee-validation
 Vue.use(VeeValidate, config)

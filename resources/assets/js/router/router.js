@@ -8,6 +8,10 @@ export const storeCampaign = 'campaign'
 export const tags = 'campaign/get/tags'
 export const changePassword = 'settings/password'
 export const updateProfile = 'settings/profile'
+export const sendMessage = 'send-message'
+export const receiveMessage = 'receive-message'
+export const showMessage = 'show-message'
+export const follow = 'list-user-following'
 
 export default {
     getUser,
@@ -17,5 +21,9 @@ export default {
     storeCampaign,
     tags,
     changePassword,
-    updateProfile
+    updateProfile,
+    showMessage,
+    receiveMessage,
+    sendMessage,
+    follow
 }

@@ -26,18 +26,6 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
 
     Route::post('check-exist', 'CommonController@checkExist');
 
-    Route::group(['as' => 'user.'], function () {
-        Route::group(['prefix' => 'settings'], function () {
-            Route::patch('password', 'UserController@updatePassword')->name('password');
-            Route::patch('profile', 'UserController@updateProfile')->name('profile');
-            Route::post('avatar', 'UserController@updateAvatar')->name('avatar');
-            Route::post('header-photo', 'UserController@updateHeaderPhoto')->name('header');
-        });
-        Route::patch('follow/{id}', 'UserController@follow')->name('follow');
-        Route::patch('follow-tag/{id}', 'UserController@followTag')->name('follow-tag');
-        Route::patch('join-campaign/{id}', 'UserController@joinCampaign')->name('join-campaign');
-    });
-
     Route::group(['prefix' => 'user/{id}', 'as' => 'user.'], function () {
         Route::get('/', 'UserController@getTimeLine')->name('getTimeLine');
         Route::get('followers', 'UserController@listFollower')->name('follower');
@@ -55,6 +43,24 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('logout', 'Auth\AuthController@logout')->name('logout');
+
+        Route::post('send-message', 'ChatController@sendMessage');
+        Route::post('send-message-to-group', 'ChatController@sendMessageToGroup');
+        Route::get('receive-message', 'ChatController@receiveMessage');
+        Route::get('show-message/{id}', 'ChatController@showMessages');
+
+        Route::group(['as' => 'user.'], function () {
+            Route::group(['prefix' => 'settings'], function () {
+                Route::patch('password', 'UserController@updatePassword')->name('password');
+                Route::patch('profile', 'UserController@updateProfile')->name('profile');
+                Route::post('avatar', 'UserController@updateAvatar')->name('avatar');
+                Route::post('header-photo', 'UserController@updateHeaderPhoto')->name('header');
+            });
+            Route::patch('follow/{id}', 'UserController@follow')->name('follow');
+            Route::patch('follow-tag/{id}', 'UserController@followTag')->name('follow-tag');
+            Route::patch('join-campaign/{id}', 'UserController@joinCampaign')->name('join-campaign');
+            Route::get('list-user-following', 'UserController@getListFollow')->name('list-user-following');
+        });
 
         Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {
             Route::post('like/{campaignId}', 'CampaignController@like')->name('like');

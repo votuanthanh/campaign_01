@@ -1,6 +1,6 @@
 <template lang="html">
     <div>
-         <header-campaign></header-campaign>
+        <header-campaign></header-campaign>
         <div class="container">
             <div class="row">
                 <router-view></router-view>

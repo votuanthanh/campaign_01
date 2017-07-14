@@ -38,7 +38,8 @@ class CampaignPolicy extends BasePolicy
         return in_array($user->id, $campaign->users->pluck('id')->toArray())
             || $campaign->settings
                 ->where('key', config('settings.campaigns.status'))
-                ->where('value', config('settings.value_of_settings.status.public'))->isNotEmpty();
+                ->where('value', config('settings.value_of_settings.status.public'))
+                ->isNotEmpty();
     }
 
     /**
@@ -115,5 +116,23 @@ class CampaignPolicy extends BasePolicy
     public function changeStatusUser(User $user, Campaign $campaign)
     {
         return in_array($user->id, $campaign->getUserByRole([Role::ROLE_OWNER, Role::ROLE_MODERATOR])->pluck('user_id')->all());
+    }
+
+    /**
+     * Determine whether the user can join the chat group of campaign.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Campaign  $campaign
+     * @return mixed
+     */
+    public function joinChat(User $user, Campaign $campaign)
+    {
+        if ($campaign->blockeds()->pluck('id')->contains($user->id)
+            || $campaign->status == Campaign::BLOCK
+        ) {
+            return false;
+        }
+
+        return $campaign->users->pluck('id')->contains($user->id);
     }
 }
