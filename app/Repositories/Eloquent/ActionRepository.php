@@ -75,8 +75,7 @@ class ActionRepository extends BaseRepository implements ActionInterface
         return $this->model
             ->with('user', 'likes', 'comments', 'media')
             ->where('event_id', $eventId)
-            ->where('caption', 'like', '%' . $key . '%')
-            ->orderBy('created_at', 'DESC')
+            ->search($key, null, true)
             ->paginate(config('settings.actions.paginate_in_event'));
     }
 }

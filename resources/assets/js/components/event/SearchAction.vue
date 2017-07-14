@@ -22,6 +22,23 @@
                                 data-target="#update-header-photo">
                                 {{ $t('events.create_action') }}
                             </button>
+                            <div class="more">
+                                <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
+                                <ul class="more-dropdown">
+                                    <li>
+                                        <a href="#">Edit Post</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Delete Post</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Turn Off Notifications</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Select as Featured</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -46,7 +63,7 @@
 
             search: _.debounce(function () {
                 if (this.key_search) {
-                    this.search_action({ event_id: this.$route.params.event_id, key_search: this.key_search.trim()})
+                    this.search_action({ event_id: this.$route.params.event_id, key_search: this.key_search.replace(/ +/g, ' ') })
                 } else {
                     this.search_action({ event_id: this.$route.params.event_id, key_search: this.key_search })
                 }
@@ -55,23 +72,19 @@
     }
 </script>
 
-<style type="scss">
+<style lang="scss">
     .search_action {
         padding: 7px !important;
-        .search_action {
-            div {
-                input {
-                    padding: .8rem 2.1rem !important;
-                    margin-top: 2px !important;
-                }
-            }
-            .input-search-action {
-                height: 42px !important;
-                width: 60%;
-                display: inline-block !important;
-                float: left;
-            }
+        .input-search-action {
+            height: 42px !important;
+            width: 50%;
+            display: inline-block !important;
+            float: left;
+            padding: .8rem 2.1rem !important;
+            margin-top: 2px !important;
+        }
+        .more {
+            display: inline;
         }
     }
-
 </style>

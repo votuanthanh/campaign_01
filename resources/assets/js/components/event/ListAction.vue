@@ -1,6 +1,11 @@
 <template>
     <div class="container">
-        <div class="load-search loader" v-if="load_search"></div>
+        <div class="load-search" v-if="load_search"></div>
+        <div class="empty center-block" v-if="isEmpty">
+            <h2>
+                {{ $t('events.not_found_action') }}
+            </h2>
+        </div>
         <div class="row">
             <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12" v-for="action in actions.data">
                 <div class="ui-block video-item">
@@ -23,7 +28,7 @@
                     </div>
 
                     <div class="ui-block-content video-content info-action">
-                        <a href="javascript.void(0)" class="h6 title">{{ action.user.name }}</a>
+                        <a href="javascript:void(0)" class="h6 title">{{ action.user.name }}</a>
                         &nbsp
                         <time class="published">
                             {{ timeAgo(action.created_at) }}
@@ -62,7 +67,11 @@
                 'key_search',
                 'load_search',
                 'load_paginate'
-            ])
+            ]),
+
+            isEmpty() {
+                return !this.actions.data.length
+            }
         },
 
         mounted() {
@@ -94,7 +103,7 @@
     }
 </script>
 
-<style type="scss">
+<style lang="scss">
     .info-action {
         padding: 5px;
         text-align: center;
@@ -119,5 +128,18 @@
         background-size: 40px 40px;
         width: 100%;
         height: 60px;
+    }
+    .empty {
+        z-index: 999;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        h2 {
+            color: #c2c5d9;
+            text-align: center;
+            margin-top: 50px ;
+        }
     }
 </style>

@@ -4,12 +4,12 @@
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="ui-block features-video wrap-event">
                     <div class="slider-event video-player">
-                        <slider animation="fade" height="100%" :interval="30000">
+                        <slider animation="fade" height="100%" :interval="300000">
                             <slider-item v-for="(i, index) in event.media" :key="index">
                                 <div :style="style">
-                                    <img :src="i.url_file">
+                                    <img :src="i.url_file" class="image-event">
                                 </div>
-                          </slider-item>
+                            </slider-item>
                         </slider>
                     </div>
 
@@ -122,7 +122,7 @@
             }),
 
             checkLike() {
-                    this.isLiked = this.event.likes.some(item => this.user.id == item.user_id)
+                this.isLiked = this.event.likes.some(item => this.user.id == item.user_id)
             }
         },
 
@@ -156,13 +156,24 @@
     }
 </script>
 
-<style type="scss">
+<style lang="scss">
     .wrap-event {
+        z-index: 20 !important;
         margin-top: 10px;
         margin-bottom: 0px;
         align-items: initial !important;
         .slider-event {
             height: 420px !important;
+            button {
+                z-index: 20 !important;
+            }
+            .image-event {
+                width: 100% !important;
+                height: 100% !important;
+            }
+            .slider-item {
+                z-index: 19 !important;
+            }
         }
         .info-event {
             padding: 5px 14px !important;
@@ -184,9 +195,9 @@
             }
             .liked {
                 background-color: #ff5e3a !important;
-            }
-            .liked:hover {
-                background-color: #9a9fbf !important;
+                &:hover {
+                    background-color: #9a9fbf !important;
+                }
             }
         }
     }
