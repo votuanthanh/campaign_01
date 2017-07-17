@@ -15,8 +15,7 @@
 import HeaderCampaign from './HeaderCampaign.vue'
 import LeftCampaign from './LeftCampaign.vue'
 import RightCampaign from './RightCampaign.vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
-import { get } from '../../helpers/api'
+import { mapActions } from 'vuex'
 
 export default {
     created: function () {

@@ -1,5 +1,5 @@
 <template lang="html">
-    <div v-if="comments[modelId] != null ">
+    <div v-if="comments[modelId] != null " :class="classListComment">
         <a ref="loadmore" href="javascript:void(0)" class="btn btn-control btn-more" data-container="newsfeed-items-grid" v-show="loading == modelId">
             <i class="fa fa-spinner fa-spin"></i>
             <div class="ripple-container"></div>
@@ -48,6 +48,7 @@
                     </div>
 
                 </div>
+
                 <show-text
                     :text="comment.content"
                     :show_char=100
@@ -59,6 +60,7 @@
                     :parentComment="comment"
                     v-if="flagEdit == comment.id"
                     :flagEdit="flagEdit"
+                    :classFormComment="''"
                     @changeFlagEdit="changeFlagEdit">
                 </form-comment-edit>
 
@@ -150,6 +152,7 @@
                             :parentComment="subComment"
                             v-if="flagEdit == subComment.id"
                             :flagEdit="flagEdit"
+                            :classFormComment="''"
                             @changeFlagEdit="changeFlagEdit">
                         </form-comment-edit>
 
@@ -164,6 +167,7 @@
                     :model-id="modelId"
                     :comment-parent-id="comment.id"
                     :flag="flag"
+                    :classFormComment="''"
                     v-if="flagReply == comment.id">
                 </form-comment>
             </li>
@@ -184,7 +188,11 @@ export default {
         flagReply: '',
         loading: ''
     }),
-    props: ['modelId', 'flag'],
+    props: [
+        'modelId',
+        'flag',
+        'classListComment'
+    ],
     computed: {
         ...mapState('comment', ['comments', 'paginates']),
         ...mapState('auth', {
