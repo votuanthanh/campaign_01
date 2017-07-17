@@ -10,7 +10,7 @@ import * as types from './mutation-types';
 import { get, post } from '../../../helpers/api'
 
 export const campaignDetail = ({ commit }, campaignId) => {
-    get('campaign/' + campaignId)
+    get(`campaign/${campaignId}`)
         .then(res => {
             commit(types.CAMPAIGN_DETAIL, res.data)
         })
@@ -20,7 +20,7 @@ export const fetchData = ({ commit }, data) => {
     commit(types.LOADING, true)
 
     if (data.pageNumberEvent > (parseInt(data.events.length) / 15) + 1) {
-        get('campaign/' + data.campaignId + '/timeline/event?page=' + ((parseInt(data.events.length) / 15) + 1))
+        get(`campaign/${data.campaignId}/timeline/event?page=${((parseInt(data.events.length) / 15) + 1)}`)
             .then(res => {
                 commit(types.FETCH_DATA, res.data.events.data)
                 commit(types.LOADING, false)
@@ -32,7 +32,7 @@ export const fetchData = ({ commit }, data) => {
 
 export const attendCampaign = ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-        post('campaign/attend-campaign/' + data.campaignId + data.flag)
+        post(`campaign/attend-campaign/${data.campaignId}/${data.flag}`)
             .then(res => {
                 if (res.data.http_status.status) {
                     if (data.flag == 'join') {

@@ -19,5 +19,6 @@
     "join_campaign_success": "You joined to campaign is successfully!",
     "join_campaign_fail": "You join to campaign is fail!",
     "leave_campaign_success": "You left campaign is successfully!",
-    "leave_campaign_fail": "You leave campaign is fail!"
+    "leave_campaign_fail": "You leave campaign is fail!",
+    "comment_not_empty": "Comment not empty!"
 }
