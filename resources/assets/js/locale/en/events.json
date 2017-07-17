@@ -9,5 +9,6 @@
     "show_more" : "Show more",
     "show_less" : "Show less",
     "search_action" : "Search action",
-    "search" : "Search"
+    "search" : "Search",
+    "not_found_action": "Not Found Action"
 }

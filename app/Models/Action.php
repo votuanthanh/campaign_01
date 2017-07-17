@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Action extends BaseModel
 {
-    use SoftDeletes;
+    use SoftDeletes, SearchableTrait;
 
     public function __construct($attributes = [])
     {
@@ -52,4 +53,15 @@ class Action extends BaseModel
     {
         return $this->morphMany(Activity::class, 'activitiable');
     }
+
+    protected $searchable = [
+        'columns' => [
+            'actions.caption' => 10,
+            'actions.description' => 10,
+            'users.name' => 9,
+        ],
+        'joins' => [
+            'users' => ['actions.user_id', 'users.id'],
+        ],
+    ];
 }
