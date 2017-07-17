@@ -55,7 +55,7 @@
 
 <script>
 import { post, get } from '../../helpers/api'
-import { sendMessage, showMessage } from '../../router/router'
+import { sendMessage, sendMessageToGroup, showMessage } from '../../router/router'
 import { mapState } from 'vuex'
 import noty from '../../helpers/noty'
 
@@ -65,6 +65,7 @@ export default {
         name: null,
         list: null,
         marginRight: 0,
+        type: Boolean,
         index: {
             type: Number
         }
@@ -87,10 +88,15 @@ export default {
     },
     created () {
         if (this.receiveUser != '') {
-            if (this.user.id > this.receiveUser) {
-                this.groupChat = this.receiveUser + '-' + this.user.id
+            if (this.type) {
+                if (this.user.id > this.receiveUser) {
+                    this.groupChat = this.receiveUser + '-' + this.user.id
+                } else {
+                    this.groupChat = this.user.id + '-' + this.receiveUser
+                }
             } else {
-                this.groupChat = this.user.id + '-' + this.receiveUser
+                this.groupChat = this.receiveUser
+                this.$socket.emit('register', { id: this.groupChat, type: false })
             }
 
             this.getMessage()
@@ -107,19 +113,24 @@ export default {
                 return
             }
 
-            post(sendMessage, {
+            let channel = null
+            let link = null
+
+            if (this.type) {
+                channel = 'singleChat'
+                link = sendMessage
+            } else {
+                channel = 'groupChat'
+                link = sendMessageToGroup
+            }
+
+            post(link, {
                 message: this.content.trim(),
                 receiveUser: this.receiveUser,
-                channel: 'singleChat',
+                channel: channel,
                 groupKey: this.groupChat
             }).then(res => {
                     if (res.data.status == 200) {
-                        let mess = {
-                            userId: this.user.id,
-                            message: this.content
-                        }
-                        console.log(mess)
-                        this.messages.push(mess)
                         this.content = ''
                     } else {
                         this.messages.push(this.$i18n.t('chat.send_message_error'))
@@ -130,7 +141,7 @@ export default {
                 })
         }, 300),
         getMessage() {
-            get(showMessage + '/' + this.receiveUser)
+            get(`${showMessage}/${this.receiveUser}?type=${this.type}`)
                 .then(res => {
                     if (res.data.status == 200) {
                         for (var index = 0; index < res.data.messages.length; index++ ) {
@@ -163,8 +174,21 @@ export default {
             var socketData = JSON.parse(data)
 
             if (socketData.success
-                && socketData.from == this.receiveUser
-                && socketData.to == this.user.id
+                && socketData.groupChat == this.groupChat
+            ) {
+                var message = JSON.parse(socketData.message)
+                let mess = {
+                    userId: socketData.from,
+                    message: message.message
+                }
+
+                this.messages.push(mess)
+            }
+        },
+        groupChat: function (data) {
+            var socketData = JSON.parse(data)
+
+            if (socketData.success
                 && socketData.groupChat == this.groupChat
             ) {
                 var message = JSON.parse(socketData.message)
@@ -201,14 +225,51 @@ export default {
     overflow-y: scroll !important;
 }
 
-.popup-chat .chat-message-field li:nth-child(2n) .author-thumb {
-    float: initial;
-}
+.popup-chat {
+    .chat-message-field {
+        li:nth-child(2n) {
+            .author-thumb {
+                float: initial;
+            }
 
-.popup-chat .chat-message-field li:nth-child(2n) .chat-message-item {
-    float: initial;
-    background-color: #f0f4f9;
-    color: #8b8da8;
+            .chat-message-item {
+                float: initial;
+                background-color: #f0f4f9;
+                color: #8b8da8;
+            }
+
+            .notification-event {
+                float: initial;
+                padding-left: initial;
+                padding-right: initial;
+            }
+        }
+
+        li {
+            padding: 0px 20px 0px 10px;
+
+            .notification-event {
+                float: right !important;
+                padding-left: initial;
+                padding-right: initial;
+            }
+        }
+
+        .li-friend:nth-child(2n) {
+            padding: 15px 10px !important;
+        }
+    }
+
+    .mCustomScrollbar {
+        max-height: 350px !important;
+    }
+
+
+    position: fixed !important;
+    z-index: 999 !important;
+    right: 69px !important;
+    bottom: -17px !important;
+    padding: 0px;
 }
 
 .message-auth {
@@ -222,57 +283,20 @@ export default {
     float: right !important;
 }
 
-.popup-chat .chat-message-field li:nth-child(2n) .notification-event {
-    float: initial;
-    padding-left: initial;
-    padding-right: initial;
-}
+.chat-friend {
+    margin-left: -20px;
+    margin-right: 45px;
 
-.popup-chat .chat-message-field li .notification-event {
-    float: right !important;
-    padding-left: initial;
-    padding-right: initial;
-}
-
-.li-friend {
-
-}
-
-.chat-friend .chat-message-item {
-    color: #767082;
-}
-
-.popup-chat .chat-message-field li {
-    padding: 0px 20px 0px 10px;
+    .chat-message-item {
+        color: #767082;
+    }
 }
 
 .mrg-top {
     margin-top: 10px;
-    // padding: 12px 12px 0px 0px !important;
-}
-
-.chat-friend {
-    margin-left: -20px;
-    margin-right: 45px;
-}
-
-.popup-chat {
-    position: fixed !important;
-    z-index: 100 !important;
-    right: 69px !important;
-    bottom: -17px !important;
-    padding: 0px;
 }
 
 .div-input-chat {
     padding: 0px 10px;
-}
-
-.popup-chat .mCustomScrollbar {
-    max-height: 350px !important;
-}
-
-.popup-chat .chat-message-field .li-friend:nth-child(2n) {
-    padding: 15px 10px !important;
 }
 </style>

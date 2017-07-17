@@ -3,7 +3,7 @@
         <div class="fixed-sidebar-right sidebar--small" id="sidebar-right">
             <div class="mCustomScrollbar" data-mcs-theme="dark" id="listClose">
                 <ul class="chat-users" v-for="friend in friends">
-                    <li class="inline-items" @click="addChatComponent(friend.id, friend.name)">
+                    <li class="inline-items" @click="addChatComponent(friend.id, friend.name, true)">
                         <div class="author-thumb">
                             <img alt="author" :src="friend.url_file" class="avatar">
                             <span class="icon-status online"></span>
@@ -50,7 +50,7 @@
                                         data-placement="top"
                                         data-original-title="START CONVERSATION"
                                         class="olymp-comments-post-icon"
-                                        @click="addChatComponent(friend.id, friend.name)">
+                                        @click="addChatComponent(friend.id, friend.name, true)">
                                         <use xlink:href='/frontend/icons/icons.svg#olymp-comments-post-icon'></use>
                                     </svg>
                                 </li>
@@ -76,7 +76,7 @@
                     <li class="inline-items" v-for="group in groups">
                         <div class="author-thumb">
                             <img alt="author"
-                                :src="group.media[0]"
+                                :src="group.media[0].url_file"
                                 class="avatar">
                             <span class="icon-status online"></span>
                         </div>
@@ -90,7 +90,11 @@
                             </svg>
                             <ul class="more-icons">
                                 <li>
-                                    <svg data-toggle="tooltip" data-placement="top" data-original-title="START CONVERSATION" class="olymp-comments-post-icon">
+                                    <svg data-toggle="tooltip"
+                                        data-placement="top"
+                                        data-original-title="START CONVERSATION"
+                                        class="olymp-comments-post-icon"
+                                        @click="addChatComponent(group.hashtag, group.title, false)">
                                         <use xlink:href='/frontend/icons/icons.svg#olymp-comments-post-icon'></use>
                                     </svg>
                                 </li>
@@ -135,11 +139,12 @@
         <div>
             <chat v-for="(chat, index) in chats"
                 :receive="chat.id"
+                :key="chat.id"
                 :name="chat.name"
+                :type="chat.type"
                 :list.sync="chats"
                 :index="index"
                 :marginRight="chat.marginRight"
-                :key="chat.id"
                 @deleteChatIndex="handleDeleteChatIndex">
             </chat>
         </div>
@@ -172,30 +177,33 @@ export default {
     },
     watch: {
         isOpen() {
-            // set margin when open or close list choose friend
+            //set margin when open or close list choose friend
             if (!this.isOpen && this.chats.length) {
                 this.chats[0].marginRight = this.marginDefault
 
                 for (var index = 1; index < this.chats.length; index++) {
-                    this.chats[index].marginRight = this.chats[index - 1].marginRight + this.widthDefault;
+                    this.chats[index].marginRight = this.chats[index - 1].marginRight + this.widthDefault
                 }
-            } else {
+            }
+
+            if (this.isOpen && this.chats.length) {
                 this.chats[0].marginRight = this.marginWhenOpen
 
                 for (var index = 1; index < this.chats.length; index++) {
-                    this.chats[index].marginRight = this.chats[index - 1].marginRight + this.widthDefault;
+                    this.chats[index].marginRight = this.chats[index - 1].marginRight + this.widthDefault
                 }
             }
         }
     },
     created () {
+        this.$socket.emit('register', { id: this.user.id, type: true })
         this.getListFollow()
     },
     methods: {
         ...mapActions('auth', [
             'getListFollow'
         ]),
-        addChatComponent(id, name) {
+        addChatComponent(id, name, singleChat) {
             var flag = true
 
             //check if conponent chat is exists in array chats
@@ -220,6 +228,7 @@ export default {
                     id: id,
                     name: name,
                     marginRight: this.marginRight,
+                    type: singleChat,
                     visiable: true
                 }
 
@@ -243,14 +252,17 @@ export default {
         Chat
     },
     sockets: {
-        singleChat: function(data) {
+        singleChat: function (data) {
             var socketData = JSON.parse(data)
 
             if (socketData.success && socketData.to == this.user.id) {
-                for (var index = 0; index < this.friends.length; index ++) {
-                    // create popup chat if receive is following sender
-                    if (this.friends[index].id == socketData.from) {
-                        this.addChatComponent(socketData.from, this.friends[index].name)
+                this.addChatComponent(socketData.from, socketData.name, true)
+            }
+
+            if (socketData.success && socketData.from == this.user.id) {
+                for (var index = 0; index < this.friends.length; index++) {
+                    if (this.friends[index].id == socketData.to) {
+                        this.addChatComponent(socketData.to, this.friends[index].name, true)
                         break
                     }
                 }

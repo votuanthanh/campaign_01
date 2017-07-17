@@ -30,7 +30,7 @@ class ChatController extends ApiController
      */
     public function showMessages(Request $request, $id)
     {
-        $groupKey = $this->getNameGroupChat($this->user->id, $id);
+        $groupKey = $this->getNameGroupChat($this->user->id, $id, json_decode($request->type));
         $keyMessages = json_decode($this->redis->get($groupKey));
         $keyMessages = is_array($keyMessages) ? $keyMessages : [$keyMessages];
         $messages = [];
@@ -82,12 +82,12 @@ class ChatController extends ApiController
      */
     public function sendMessageToGroup(Request $request)
     {
-        if ($channel != config('settings.group_chat')) {
+        if ($request->channel != config('settings.group_chat')) {
             return $this->failAction(config('settings.group_chat'));
         }
 
         try {
-            $campaign = $this->campaignRepository->findOrFail($request->campaignId);
+            $campaign = $this->campaignRepository->where('hashtag', $request->receiveUser)->first();
 
             if ($this->user->cant('joinChat', $campaign)) {
                 throw new Exception();
@@ -95,14 +95,17 @@ class ChatController extends ApiController
 
             $keys = $this->setGroupChat($campaign->hashtag, false);
 
-            if (empty($keys['group']) || $keys['group'] != $request->groupKey) {
+            if (empty($keys['group']) || $keys['group'] != md5($request->groupKey)) {
                 throw new Exception();
             }
 
-            $data = $this->saveMessage($request->message, $keys, $campaign->hashtag);
+            $receive = config('settings.head_room_name') . $campaign->hashtag;
+            $data = $this->saveMessage($request->message, $keys, $receive);
+            $data['groupChat'] = $campaign->hashtag;
 
             return $this->successAction($request->channel, $data);
         } catch (Exception $e) {
+
             return $this->failAction($request->channel);
         }
     }
@@ -117,7 +120,9 @@ class ChatController extends ApiController
         if ($status) {
             return ($send > $receive) ? $receive . '-' . $send : $send . '-' . $receive;
         } else {
-            return is_string($send) ? $send : $receive;
+            $groupName = is_string($send) ? $send : $receive;
+
+            return md5($groupName);
         }
     }
 
@@ -130,7 +135,7 @@ class ChatController extends ApiController
     private function setGroupChat($receive, $status = true)
     {
         $groupKey = $this->getNameGroupChat($this->user->id, $receive, $status);
-        $idMessage = $this->user->id . '-' . $receive . '-' . \Carbon\Carbon::now();
+        $idMessage = $this->user->id . '-' . $receive . '-' . \Carbon\Carbon::now()->format('m/d/Y:H:i:s');
 
         if (!$this->redis->get($groupKey)) {
             $this->redis->set($groupKey, json_encode([$idMessage]));
@@ -166,7 +171,7 @@ class ChatController extends ApiController
         $this->redis->set($keys['idMessage'], $message);
 
         $data = [
-            'from' => $this->user->id,
+            'from' => (string)$this->user->id,
             'name' => $this->user->name,
             'to' => $toReceive,
             'groupChat' => $keys['group'],

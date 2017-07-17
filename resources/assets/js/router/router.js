@@ -9,7 +9,7 @@ export const tags = 'campaign/get/tags'
 export const changePassword = 'settings/password'
 export const updateProfile = 'settings/profile'
 export const sendMessage = 'send-message'
-export const receiveMessage = 'receive-message'
+export const sendMessageToGroup = 'send-message-to-group'
 export const showMessage = 'show-message'
 export const follow = 'list-user-following'
 export const updateHeaderImage = 'settings/header-photo'
@@ -26,7 +26,7 @@ export default {
     changePassword,
     updateProfile,
     showMessage,
-    receiveMessage,
+    sendMessageToGroup,
     sendMessage,
     follow,
     updateHeaderImage,
