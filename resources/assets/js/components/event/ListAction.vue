@@ -13,7 +13,7 @@
                         <slider animation="fade" :height="height" :interval="100000">
                             <slider-item v-for="(i, index) in action.media" :key="index" :auto='false'>
                                 <div :style="style">
-                                    <img :src="i.url_file">
+                                    <img :src="i.image_medium">
                                 </div>
                             </slider-item>
                         </slider>
@@ -21,14 +21,15 @@
                             <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                             <ul class="more-dropdown more-with-triangle">
                                 <a href="javascript:void(0)" class="post-add-icon inline-items">
-                                    {{ action.caption }}
                                 </a>
                             </ul>
                         </div>
                     </div>
 
                     <div class="ui-block-content video-content info-action">
-                        <a href="javascript:void(0)" class="h6 title">{{ action.user.name }}</a>
+                        <router-link :to="{ name: 'user.timeline', params: { id: action.user.id } }">
+                            <a href="javascript:void(0)" class="h6 title">{{ action.user.name }}</a>
+                        </router-link>
                         &nbsp
                         <time class="published">
                             {{ timeAgo(action.created_at) }}
@@ -76,7 +77,7 @@
 
         mounted() {
             $(window).scroll(() => {
-                if ($(document).height() - $(window).height() == $(window).scrollTop()) {
+                if ($(document).height() - $(window).height() < $(window).scrollTop() + 1) {
                     this.load_action({
                         event_id: this.$route.params.event_id,
                         actions: this.actions,
@@ -109,7 +110,7 @@
         text-align: center;
     }
     .more {
-        z-index: 999 !important;
+        z-index: 20 !important;
     }
     .load-search {
         position: absolute;

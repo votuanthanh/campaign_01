@@ -55,7 +55,7 @@ class ActionRepository extends BaseRepository implements ActionInterface
         ]);
 
         if (!is_null($inputs['upload'])) {
-            $media = $this->makeDataMedias($inputs['upload']);
+            $media = $this->createDataMedias($inputs['upload']);
             $action->media()->createMany($media);
         }
 

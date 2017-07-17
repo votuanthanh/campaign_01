@@ -75,11 +75,10 @@ class ActionController extends ApiController
         $data['data_action'] = $request->only(
             'caption',
             'description',
-            'event_id',
-            'user_id'
+            'event_id'
         );
-
-        $data['upload'] = $request->upload;
+        $data['data_action']['user_id'] = $this->user->id;
+        $data['upload'] = $request->get('files');
         $event = $this->eventRepository->findOrFail($data['data_action']['event_id']);
 
         if ($this->user->cant('view', $event)) {

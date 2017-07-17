@@ -1,4 +1,4 @@
- <template>
+<template>
     <div class="container">
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -21,7 +21,9 @@
                                 <img :src="event.user.url_file" alt="author">
 
                                 <div class="author-date">
-                                    <a class="h6 post__author-name fn" href="02-ProfilePage.html">{{ event.user.name }}</a>
+                                    <router-link :to="{ name: 'user.timeline', params: { id: user.id } }">
+                                        <a class="h6 post__author-name fn" href="javascript.void(0)">{{ event.user.name }}</a>
+                                    </router-link>
                                     <div class="post__date">
                                         <time class="published" datetime="2017-03-24T18:18">
                                             {{ timeAgo(event.created_at) }}

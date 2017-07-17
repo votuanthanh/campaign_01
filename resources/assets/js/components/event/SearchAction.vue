@@ -19,7 +19,8 @@
                                 href="#"
                                 class="btn btn-primary btn-md-2"
                                 data-toggle="modal"
-                                data-target="#update-header-photo">
+                                data-target="#update-header-photo"
+                                @click="createAction">
                                 {{ $t('events.create_action') }}
                             </button>
                             <div class="more">
@@ -44,15 +45,19 @@
                 </div>
             </div>
         </div>
+        <create-action :show.sync="show">
+        </create-action>
     </div>
 </template>
 
 <script>
     import { mapActions, mapState } from 'vuex'
+    import CreateAction from './CreateAction.vue'
     export default {
         data: () => {
             return {
-                key_search: ''
+                key_search: '',
+                show: false,
             }
         },
 
@@ -67,8 +72,16 @@
                 } else {
                     this.search_action({ event_id: this.$route.params.event_id, key_search: this.key_search })
                 }
-            }, 1000)
+            }, 1000),
+
+            createAction() {
+                this.show = true
+            }
         },
+
+        components: {
+            CreateAction
+        }
     }
 </script>
 

@@ -104,4 +104,18 @@ trait UploadableTrait
 
         return $name;
     }
+
+    public function createDataMedias($data)
+    {
+        $result = [];
+
+        foreach ($data as $value) {
+            $result[] = [
+                'type' => Media::IMAGE,
+                'url_file' => $value,
+            ];
+        }
+
+        return $result;
+    }
 }

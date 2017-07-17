@@ -5,7 +5,8 @@ export const en = {
     goal: 'goal',
     type: 'type',
     quality: 'quality',
-    description: 'description'
+    description: 'description',
+    title: 'title'
 }
 
 export const vi = {
@@ -16,7 +17,8 @@ export const vi = {
     first_name: 'tên',
     phone: 'số điện thoại',
     about: 'giới thiệu',
-    address: 'địa chỉ'
+    address: 'địa chỉ',
+    title: 'tiêu đề'
 }
 
 export const ja = {
@@ -26,7 +28,8 @@ export const ja = {
     first_name: 'first name',
     phone: 'phone',
     about: 'about',
-    address: 'address'
+    address: 'address',
+    title: 'title'
 }
 
 

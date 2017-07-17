@@ -5,6 +5,7 @@ import form from './form.json'
 import messages from './messages.json'
 import user from './user.json'
 import chat from './chat.json'
+import actions from './actions.json'
 
 export default {
     campaigns,
@@ -13,5 +14,6 @@ export default {
     form,
     messages,
     user,
-    chat
+    chat,
+    actions
 }
