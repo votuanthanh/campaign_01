@@ -15,7 +15,7 @@ export const changeComment = ({ commit }, comments) => {
 
 export const addComment = ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-        post(`comment/create-comment/${data.modelId}/${data.commentParentId}/${data.flag, data.comment}`)
+        post(`comment/create-comment/${data.modelId}/${data.commentParentId}/${data.flag}`, data.comment)
             .then(res => {
                 if (res.data.http_status.status) {
 

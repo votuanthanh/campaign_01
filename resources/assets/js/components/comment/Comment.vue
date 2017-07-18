@@ -1,7 +1,16 @@
 <template lang="html">
     <div>
-        <list-comment :model-id="modelId" :flag="flag"></list-comment>
-        <form-comment :model-id="modelId" :comment-parent-id="0" :flag="flag"></form-comment>
+        <list-comment
+            :model-id="modelId"
+            :flag="flag"
+            :classListComment="classListComment">
+        </list-comment>
+        <form-comment
+            :model-id="modelId"
+            :comment-parent-id="0"
+            :flag="flag"
+            :classFormComment="classFormComment">
+        </form-comment>
     </div>
 </template>
 
@@ -14,7 +23,13 @@ export default {
     created() {
         this.changeComment({ comments: this.comments, modelId: this.modelId })
     },
-    props: ['comments', 'modelId', 'flag'],
+    props: [
+        'comments',
+        'modelId',
+        'flag',
+        'classListComment',
+        'classFormComment'
+    ],
     computed: {
         //
     },

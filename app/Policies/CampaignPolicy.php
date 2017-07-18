@@ -51,8 +51,8 @@ class CampaignPolicy extends BasePolicy
      */
     public function joinCampaign(User $user, Campaign $campaign)
     {
-        if ($campaign->blockeds()->pluck('id')->search($user->id)
-            || $campaign->status == Campaign::BLOCK || $campaign->users()->pluck('user_id')->search($user->id)
+        if ($campaign->blockeds()->pluck('id')->contains($user->id)
+            || $campaign->status == Campaign::BLOCK || $campaign->users()->pluck('user_id')->contains($user->id)
         ) {
             return false;
         }
@@ -69,8 +69,8 @@ class CampaignPolicy extends BasePolicy
      */
     public function leaveCampaign(User $user, Campaign $campaign)
     {
-        if ($campaign->blockeds()->pluck('id')->search($user->id)
-            || $campaign->status == Campaign::BLOCK || !$campaign->users()->pluck('user_id')->search($user->id)
+        if ($campaign->blockeds()->pluck('id')->contains($user->id)
+            || $campaign->status == Campaign::BLOCK || !$campaign->users()->pluck('user_id')->contains($user->id)
         ) {
             return false;
         }

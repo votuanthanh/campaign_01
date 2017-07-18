@@ -18,9 +18,10 @@ class EventTableSeeder extends Seeder
                 $like[] = factory(App\Models\Like::class)->make()->toArray();
                 $setting[] = factory(App\Models\Setting::class)->make()->toArray();
                 $media[] = factory(App\Models\Media::class)->make();
-                $comments[] = factory(App\Models\Comment::class)->make()->toArray();
+                $comments[] = factory(App\Models\Comment::class)->make();
             }
-            $event->comments()->createMany($comments);
+
+            $event->comments()->saveMany($comments);
             $event->likes()->createMany($like);
             $event->settings()->createMany($setting);
             $event->media()->saveMany($media);

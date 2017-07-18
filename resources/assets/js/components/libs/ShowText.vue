@@ -4,11 +4,11 @@
             <div class="ui-block">
                 <div class="ui-block-title">
                     <i v-if="flag">
-                        {{ shot_text }}
+                        <span v-html="convertToHTML(shot_text)"></span>
                         <a href="javascript:void(0)" @click="show_hide" v-if="show_link">{{ show }}</a>
                     </i>
                     <i v-else="!flag">
-                        {{ text }}
+                        <span v-html="convertToHTML(text)"></span>
                         <a href="javascript:void(0)" @click="show_hide">{{ hide }}</a>
                     </i>
                 </div>
@@ -55,6 +55,9 @@
         methods: {
             show_hide() {
                 this.flag = !this.flag
+            },
+            convertToHTML(text) {
+                return text.replace(/(?:\r\n|\r|\n)/g, '<br />');
             }
         },
         components: {

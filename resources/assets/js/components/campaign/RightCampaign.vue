@@ -3,7 +3,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css" rel="stylesheet">
         <div class="ui-block">
             <div class="ui-block-title">
-                <router-link :to="{ path: '/event/create/', params: { campaignId: campaign.id }}" class="btn btn-md-2 btn-border-think custom-color c-grey full-width">{{ $t('campaigns.create-event') }}</router-link>
+                <router-link :to="{ name: 'event.create', params: { campaignId: campaign.id }}" class="btn btn-md-2 btn-border-think custom-color c-grey full-width">{{ $t('campaigns.create-event') }}</router-link>
             </div>
         </div>
 
@@ -86,8 +86,8 @@
                     {{ $t('messages.comfirm-join-campaign') }}
                 </h5>
                 <div class="body-modal" slot="main">
-                    <a href="javascript:void(0)" class="col-md-5 btn btn-breez" @click="joinCampaigns">{{ $t('form.button.agree') }}</a>
-                    <a href="javascript:void(0)" class="col-md-5 btn btn-secondary" @click="cancelJoinCampaign">{{ $t('form.button.cancel') }}</a>
+                    <a href="javascript:void(0)" class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="joinCampaigns">{{ $t('form.button.agree') }}</a>
+                    <a href="javascript:void(0)" class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="cancelJoinCampaign">{{ $t('form.button.cancel') }}</a>
                 </div>
             </modal>
 
@@ -97,8 +97,8 @@
                     {{ $t('messages.comfirm-join-campaign') }}
                 </h5>
                 <div class="body-modal" slot="main">
-                    <a href="javascript:void(0)" class="col-md-5 btn btn-breez" @click="leaveCampaigns">{{ $t('form.button.agree') }}</a>
-                    <a href="javascript:void(0)" class="col-md-5 btn btn-secondary" @click="cancelLeaveCampaign">{{ $t('form.button.cancel') }}</a>
+                    <a href="javascript:void(0)" class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="leaveCampaigns">{{ $t('form.button.agree') }}</a>
+                    <a href="javascript:void(0)" class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="cancelLeaveCampaign">{{ $t('form.button.cancel') }}</a>
                 </div>
             </modal>
         </div>

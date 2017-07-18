@@ -26,8 +26,12 @@
                         </ul>
                     </div>
                 </div>
-
-                <p v-if="event.description !== null">{{ event.description }}</p>
+                <show-text
+                    :text="event.description"
+                    :show_char=100
+                    :show="$t('events.show_more')"
+                    :hide="$t('events.show_less')">
+                </show-text>
 
                 <div class="post-additional-info inline-items">
 
@@ -55,7 +59,6 @@
                             <span v-if="event.comments != null">{{ event.comments.length }}</span>
                         </a>
                     </div>
-
                 </div>
 
                 <div class="control-block-button post-control-button">
@@ -76,8 +79,13 @@
 
             </article>
 
-            <comment :comments="event.comments" :model-id ="event.id" :flag="model"></comment>
-
+            <comment
+                :comments="event.comments"
+                :model-id ="event.id"
+                :flag="model"
+                :classListComment="''"
+                :classFormComment="''">
+            </comment>
         </div>
     </div>
 </template>
@@ -86,6 +94,7 @@
 import { mapState } from 'vuex'
 import axios from 'axios'
 import Comment from '../comment/Comment.vue'
+import ShowText from '../libs/ShowText.vue'
 
 export default {
     data: () => ({
@@ -99,10 +108,11 @@ export default {
         }),
     },
     methods: {
-       //
+        //
     },
     components: {
-        Comment
+        Comment,
+        ShowText
     }
 }
 </script>
