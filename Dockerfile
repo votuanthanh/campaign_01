@@ -5,7 +5,6 @@ RUN apt-get update && apt-get -y upgrade && apt-get -y install \
  apache2 php libapache2-mod-php php-mcrypt php-mysql curl php-gd php-cli php-mbstring git unzip php-xml \
  libcurl4-openssl-dev pkg-config libssl-dev libsslcommon2-dev php-pear php-dev vim
 
-
 RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
 RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
@@ -32,7 +31,10 @@ RUN npm install --global gulp-cli
 RUN apt-get install -y ruby-full rubygems
 RUN gem install sass
 
-RUN pecl install mongodb
+# Install PM2
+RUN npm install -g pm2
+
+# RUN pecl install mongodb
 #ADD conf.d/mongodb.ini /etc/php/7.0/apache2/conf.d/30-mongodb.ini
 #ADD conf.d/mongodb.ini /etc/php/7.0/cli/conf.d/30-mongodb.ini
 #ADD conf.d/mongodb.ini /etc/php/7.0/mods-available//mongodb.ini
