@@ -1,5 +1,4 @@
 import * as types from './mutation-types';
-
 import axios from 'axios'
 
 export default {
@@ -32,5 +31,9 @@ export default {
 
     [types.SET_LOAD_PAGINATE](state, dataLoad) {
         state.load_paginate = dataLoad
-    }
+    },
+
+    [types.SET_DETAIL_EVENT](state, event) {
+        state.detailEvent[event.id] = event
+    },
 };

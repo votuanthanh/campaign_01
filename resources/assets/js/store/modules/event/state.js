@@ -5,4 +5,5 @@ export default {
     key_search: '',
     load_search: false,
     load_paginate: false,
+    detailEvent: {},
 }

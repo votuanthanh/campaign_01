@@ -1,11 +1,11 @@
 import * as types from './mutation-types'
-import { get, post } from 'axios'
+import { post, get } from 'axios'
 
 export default {
     [types.CHANGE_COMMENT](state, data) {
         state.comments[data.modelId] = []
 
-        data.comments.data.forEach(function(item, index) {
+        data.comments.data.forEach(function (item, index) {
             state.comments[item.commentable_id][index] = item
         })
 
@@ -26,16 +26,16 @@ export default {
     [types.PARENT_COMMENT](state, data) {
         var comments = state.comments
 
-        if (comments.length > 0 ) {
-            let exits = $.grep(comments, function(item, index) {
+        if (comments.length > 0) {
+            let exits = $.grep(comments, function (item, index) {
                 return index == data.modelId;
             });
 
             if (exits.length <= 0) {
-                    comments[data.modelId] = data.comments
+                comments[data.modelId] = data.comments
             } else {
                 if (data.flagAction == 'edit') {
-                    let dataComment = $.map(comments[data.modelId], function(item, index) {
+                    let dataComment = $.map(comments[data.modelId], function (item, index) {
                         if (item.id == data.comments.id) {
                             return data.comments;
                         }
@@ -58,8 +58,8 @@ export default {
     [types.SUB_COMMENT](state, data) {
         var comments = state.comments
 
-        if (comments.length > 0 ) {
-            let index = $.map(comments[data.modelId], function(item, index) {
+        if (comments.length > 0) {
+            let index = $.map(comments[data.modelId], function (item, index) {
                 if (item.id == data.comments.parent_id) {
                     return index;
                 }
@@ -70,7 +70,7 @@ export default {
             }
 
             if (data.flagAction == 'edit') {
-                let dataComment = $.map(comments[data.modelId][index[0]].sub_comment.data, function(item, index) {
+                let dataComment = $.map(comments[data.modelId][index[0]].sub_comment.data, function (item, index) {
                     if (item.id == data.comments.id) {
                         return data.comments;
                     }
@@ -81,7 +81,7 @@ export default {
                 comments[data.modelId][index[0]].sub_comment.data = []
                 comments[data.modelId][index[0]].sub_comment.data = dataComment
             } else {
-               comments[data.modelId][index[0]].sub_comment.data = comments[data.modelId][index[0]].sub_comment.data.concat(data.comments)
+                comments[data.modelId][index[0]].sub_comment.data = comments[data.modelId][index[0]].sub_comment.data.concat(data.comments)
             }
         }
 
@@ -91,8 +91,8 @@ export default {
 
     [types.DELETE_PARENT_COMMENT](state, data) {
         var comments = state.comments
-        let dataComment = $.grep(comments[data.modelId], function(item, index) {
-            return item.id !==  data.commentId;
+        let dataComment = $.grep(comments[data.modelId], function (item, index) {
+            return item.id !== data.commentId;
         });
 
         comments[data.modelId] = []
@@ -104,14 +104,14 @@ export default {
 
     [types.DELETE_SUB_COMMENT](state, data) {
         var comments = state.comments
-        let index = $.map(comments[data.modelId], function(item, index) {
+        let index = $.map(comments[data.modelId], function (item, index) {
             if (item.id == data.commentParentId) {
                 return index;
             }
         });
 
-        let dataComment = $.grep(comments[data.modelId][index[0]].sub_comment.data, function(item, index) {
-            return item.id !==  data.commentId;
+        let dataComment = $.grep(comments[data.modelId][index[0]].sub_comment.data, function (item, index) {
+            return item.id !== data.commentId;
         });
 
         comments[data.modelId][index[0]].sub_comment.data = []
@@ -124,18 +124,18 @@ export default {
     [types.LOAD_MORE_PARENT_COMMENT](state, data) {
         var comments = state.comments
         var paginates = state.paginates
-        // comment
+            // comment
         comments[data.modelId] = data.comments.concat(comments[data.modelId])
         state.comments = []
         state.comments = comments
-        //page
+            //page
         paginates[data.modelId].page_current = paginates[data.modelId].page_current + 1;
         state.paginates = paginates
     },
 
     [types.LOAD_MORE_SUB_COMMENT](state, data) {
         var comments = state.comments
-        let index = $.map(comments[data.modelId], function(item, index) {
+        let index = $.map(comments[data.modelId], function (item, index) {
             if (item.id == data.commentParentId) {
                 return index;
             }
