@@ -45,7 +45,10 @@ export default {
         HeaderDesktop,
         HeaderMobile,
         PopupChat
-    }
+    },
+    mounted() {
+        $.material.init()
+    },
 }
 </script>
 

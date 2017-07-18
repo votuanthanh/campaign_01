@@ -419,25 +419,25 @@
                             </div>
                             <ul class="account-settings">
                                 <li>
-                                    <router-link to="/settings/profile">
+                                    <router-link :to="{ name: 'setting.profile' }">
                                         <svg class="olymp-menu-icon">
-                                            <use xlink:href="frontend/icons/icons.svg#olymp-menu-icon"></use>
+                                            <use xlink:href="/frontend/icons/icons.svg#olymp-menu-icon"></use>
                                         </svg>
                                         <span>Profile Settings</span>
                                     </router-link>
                                 </li>
                                 <li>
-                                    <a href="36-FavPage-SettingsAndCreatePopup.html">
+                                    <router-link :to="{ name: 'user.timeline', params: { id: user.id }}">
                                         <svg class="olymp-star-icon left-menu-icon">
-                                            <use xlink:href="frontend/icons/icons.svg#olymp-star-icon"></use>
+                                            <use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use>
                                         </svg>
-                                        <span>Create Fav Page</span>
-                                    </a>
+                                        <span>Your timeline</span>
+                                    </router-link>
                                 </li>
                                 <li>
                                     <a @click="handleLogout">
                                         <svg class="olymp-logout-icon">
-                                            <use xlink:href="frontend/icons/icons.svg#olymp-logout-icon"></use>
+                                            <use xlink:href="/frontend/icons/icons.svg#olymp-logout-icon"></use>
                                         </svg>
                                         <span>Log Out</span>
                                     </a>

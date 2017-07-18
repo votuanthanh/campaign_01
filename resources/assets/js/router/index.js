@@ -29,47 +29,46 @@ const router = [
         path: '/',
         component: App,
         children: [
-            { path: '/campaign', component: Campaign },
-            { path: '/campaign/create', component: AddCampaign },
-            { path: '/event/create/:campaign_id', component: CreateEvent },
+            { path: '/campaign', component: Campaign, name: 'campaign.index' },
+            { path: '/campaign/create', component: AddCampaign, name: 'campaign.create' },
+            { path: '/event/create/:campaign_id', component: CreateEvent, name: 'event.create' },
             {
                 path: '/settings',
                 component: User,
                 children: [
-                    { path: '', redirect: '/settings/settings' },
-                    { path: 'password', component: Password },
-                    { path: 'profile', component: Profile },
-                    { path: 'settings', component: Setting },
+                    { path: '', redirect: '/settings/settings', name: 'setting' },
+                    { path: 'password', component: Password, name: 'setting.password' },
+                    { path: 'profile', component: Profile, name: 'setting.profile' },
+                    { path: 'settings', component: Setting, name: 'setting.setting' },
                 ]
             },
             {
                 path: 'user/:id',
-                name: 'user',
                 component: MasterUser,
                 children: [
-                    { path: '', component: Timeline },
-                    { path: 'followers', component: Followers },
-                    { path: 'followings', component: Followers },
-                    { path: 'photo', component: Photo },
-                    { path: 'about', component: About },
-                    { path: 'video', component: Video },
-                    { path: ':path', component: CampaignUser },
+                    { path: '', component: Timeline, name: 'user.timeline' },
+                    { path: 'followers', component: Followers, name: 'user.followers' },
+                    { path: 'followings', component: Followers, name: 'user.followings' },
+                    { path: 'photo', component: Photo, name: 'user.photo' },
+                    { path: 'about', component: About, name: 'user.about' },
+                    { path: 'video', component: Video, name: 'user.video' },
+                    { path: ':path', component: CampaignUser, name: 'user.campaign' },
                 ]
             },
             {
                 path: 'campaign/:id',
                 component: Campaign,
                 children: [
-                    { path: 'timeline', component: TimelineCampaign }
+                    { path: 'timeline', component: TimelineCampaign, name: 'campaign.timeline' }
                 ]
             },
-            { path: '/event/:event_id/index.html', component: HomeEvent }
+            { path: '/event/:event_id/index.html', component: HomeEvent, name: 'event.index' }
         ]
     }]),
 
     ...guestGuard([
-        { path: '/register', component: Auth },
-        { path: '/login', component: Auth },
+        { path: '/register', component: Auth, name: 'register' },
+        { path: '/login', component: Auth, name: 'login' },
     ])
 ]
 

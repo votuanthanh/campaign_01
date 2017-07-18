@@ -7,8 +7,8 @@
  */
 
 import * as types from './mutation-types';
+import * as routes from '../../../router/router'
 import { post, get } from '../../../helpers/api'
-import { handleLogin, follow } from '../../../router/router'
 
 export const check = ({ commit }) => {
     commit(types.CHECK);
@@ -18,7 +18,7 @@ export const login = ({ commit }, data) => {
     commit('SET_LOADING', true, { root: true })
 
     return new Promise((resolve, reject) => {
-        post(handleLogin, data)
+        post(routes.handleLogin, data)
             .then(res => {
                 commit(types.LOGIN, res.data)
                 commit('SET_LOADING', false, { root: true });
@@ -40,7 +40,7 @@ export const setUser = ({ commit }, user) => {
 };
 
 export const getListFollow = ({ commit }, list) => {
-    get(follow)
+    get(routes.follow)
         .then(res => {
             commit(types.GET_LIST_FOLLOW, res.data.followings);
             commit(types.GET_GROUPS, res.data.groups)
@@ -51,10 +51,40 @@ export const getListFollow = ({ commit }, list) => {
         })
 };
 
+export const updateHeaderPhoto = ({ commit }, image) => {
+    post(routes.updateHeaderImage, image)
+        .then(res => {
+            commit(types.CHANGE_HEADER_PHOTO, image)
+        })
+};
+
+export const changeAvatar = ({ commit }, image) => {
+    post(routes.updateAvatar, image)
+        .then(res => {
+            commit(types.CHANGE_AVATAR, image)
+        })
+};
+
+export const uploadImage = ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+        post(routes.uploadImages + data.path, data.formData)
+            .then(res => {
+                commit(types.UPLOAD_IMAGES, res.data.images)
+                resolve(res.data.http_status.status)
+            })
+            .catch(err => {
+                reject(err)
+            })
+    })
+};
+
 export default {
     check,
     login,
     logout,
     setUser,
-    getListFollow
+    getListFollow,
+    updateHeaderPhoto,
+    changeAvatar,
+    uploadImage
 };

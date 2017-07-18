@@ -4,7 +4,10 @@ import {
     LOGOUT,
     SET_USER,
     GET_LIST_FOLLOW,
-    GET_GROUPS
+    GET_GROUPS,
+    CHANGE_HEADER_PHOTO,
+    CHANGE_AVATAR,
+    UPLOAD_IMAGES
 } from './mutation-types';
 import axios from 'axios'
 
@@ -39,5 +42,17 @@ export default {
 
     [GET_GROUPS](state, list) {
         state.groups = list
+    },
+
+    [CHANGE_HEADER_PHOTO](state, image) {
+        state.user.head_photo = image.url_file
+    },
+
+    [CHANGE_AVATAR](state, image) {
+        state.user.url_file = image.url_file
+    },
+
+    [UPLOAD_IMAGES](state, imageArr) {
+        state.user.media = imageArr.concat(state.user.media)
     }
 };

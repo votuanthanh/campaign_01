@@ -12,9 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->get('/user', 'Api\UserController@authUser');
 Route::get('/show-campaign', function (Request $request) {
     return $request->user();
 });
@@ -55,6 +53,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
                 Route::patch('profile', 'UserController@updateProfile')->name('profile');
                 Route::post('avatar', 'UserController@updateAvatar')->name('avatar');
                 Route::post('header-photo', 'UserController@updateHeaderPhoto')->name('header');
+                Route::post('upload-files/{path}', 'UserController@uploadImages')->name('upload');
             });
             Route::patch('follow/{id}', 'UserController@follow')->name('follow');
             Route::patch('follow-tag/{id}', 'UserController@followTag')->name('follow-tag');

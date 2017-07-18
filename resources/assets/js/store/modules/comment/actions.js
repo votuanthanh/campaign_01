@@ -111,7 +111,7 @@ export const loadMoreParentComment = ({ commit }, data) => {
 export const loadMoreSubComment = ({ commit }, data) => {
     if (data.lastPage >= (parseInt(data.pageCurrent) + 1)) {
         return new Promise((resolve, reject) => {
-            get(`comment/sub-comment/${data.commentParentId}?page=${(parseInt(data.pageCurrent) + 1)}`
+            get(`comment/sub-comment/${data.commentParentId}?page=${(parseInt(data.pageCurrent) + 1)}`)
                 .then(res => {
                     commit(types.LOAD_MORE_SUB_COMMENT, {
                         comments: res.data.subComment,

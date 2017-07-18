@@ -12,6 +12,9 @@ export const sendMessage = 'send-message'
 export const receiveMessage = 'receive-message'
 export const showMessage = 'show-message'
 export const follow = 'list-user-following'
+export const updateHeaderImage = 'settings/header-photo'
+export const updateAvatar = 'settings/avatar'
+export const uploadImages = 'settings/upload-files/'
 
 export default {
     getUser,
@@ -25,5 +28,8 @@ export default {
     showMessage,
     receiveMessage,
     sendMessage,
-    follow
+    follow,
+    updateHeaderImage,
+    updateAvatar,
+    uploadImages
 }

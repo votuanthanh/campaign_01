@@ -32,13 +32,13 @@ class CampaignTableSeeder extends Seeder
             foreach (range(1, 2) as $key) {
                 $like[] = factory(App\Models\Like::class)->make()->toArray();
                 $setting[] = factory(App\Models\Setting::class)->make()->toArray();
-                $media[] = factory(App\Models\Media::class)->make()->toArray();
+                $media[] = factory(App\Models\Media::class)->make();
             }
 
             $campaign->tags()->attach($tagIds->random(rand(1, 3)));
             $campaign->likes()->createMany($like);
             $campaign->settings()->createMany($setting);
-            $campaign->media()->createMany($media);
+            $campaign->media()->saveMany($media);
             $campaign->users()->attach($array);
         });
     }

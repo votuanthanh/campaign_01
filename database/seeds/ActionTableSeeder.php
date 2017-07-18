@@ -17,12 +17,12 @@ class ActionTableSeeder extends Seeder
             foreach (range(1, 2) as $key) {
                 $comments[] = factory(App\Models\Comment::class)->make()->toArray();
                 $like[] = factory(App\Models\Like::class)->make()->toArray();
-                $media[] = factory(App\Models\Media::class)->make()->toArray();
+                $media[] = factory(App\Models\Media::class)->make();
             }
 
             $action->comments()->createMany($comments);
             $action->likes()->createMany($like);
-            $action->media()->createMany($media);
+            $action->media()->saveMany($media);
         });
     }
 }

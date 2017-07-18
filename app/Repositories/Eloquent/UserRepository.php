@@ -9,10 +9,11 @@ use App\Repositories\Contracts\UserInterface;
 use App\Jobs\SendEmail;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use App\Exceptions\Api\UnknowException;
+use App\Traits\Common\UploadableTrait;
 
 class UserRepository extends BaseRepository implements UserInterface
 {
-    use DispatchesJobs;
+    use DispatchesJobs, UploadableTrait;
 
     public function model()
     {
@@ -201,5 +202,23 @@ class UserRepository extends BaseRepository implements UserInterface
             ->user()
             ->campaigns()
             ->toggle([$campaignId => ['status' => Campaign::APPROVING]]);
+    }
+
+    /**
+     * Multiupload images
+     * @param  array  $files
+     * @param  string $path
+     */
+    public function uploadImages(array $files, $path)
+    {
+        foreach ($files as $key => $file) {
+            $uploadedFiles[$key]['url_file'] = $this->uploadFile($file, $path);
+            $uploadedFiles[$key]['type'] = \App\Models\Media::IMAGE;
+        }
+
+        return \Auth::guard('api')
+            ->user()
+            ->media()
+            ->createMany($uploadedFiles);
     }
 }
