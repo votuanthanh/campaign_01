@@ -22,19 +22,16 @@
                                     <div class="col-xl-8 offset-xl-2 col-lg-8 offset-lg-2 col-md-12 offset-md-0">
                                         <ul class="profile-menu">
                                             <li>
-                                                <router-link to="/campaign/timeline" class="active">{{ $t('campaigns.timeline') }}</router-link>
+                                                <router-link :to="{ name: 'campaign.timeline', params: { id: campaign.id }}" :class="checkActiveUrl('campaign.timeline')">{{ $t('campaigns.timeline') }}</router-link>
                                             </li>
                                             <li>
-                                                <a href="13-FavouritePage-About.html">About</a>
+                                                <router-link :to="{ name: 'campaign.photo', params: { id: campaign.id }}" :class="checkActiveUrl('campaign.photo')">{{ $t('campaigns.photos') }}</router-link>
                                             </li>
                                             <li>
-                                                <a href="07-ProfilePage-Photos.html">Photos</a>
+                                                <a href="09-ProfilePage-Videos.html">{{ $t('campaigns.videos') }}</a>
                                             </li>
                                             <li>
-                                                <a href="09-ProfilePage-Videos.html">Videos</a>
-                                            </li>
-                                            <li>
-                                                <a href="14-FavouritePage-Statistics.html">Statistics</a>
+                                                <a href="14-FavouritePage-Statistics.html">{{ $t('campaigns.statistics') }}</a>
                                             </li>
                                             <li>
                                                 <a href="15-FavouritePage-Events.html">Events</a>
@@ -72,6 +69,15 @@ export default {
             user: state => state.user
         }),
         ...mapState('campaign', ['campaign'])
+    },
+    methods : {
+        checkActiveUrl(name) {
+            if (this.$route.name == name) {
+                return 'active'
+            }
+
+            return ''
+        }
     }
 }
 </script>

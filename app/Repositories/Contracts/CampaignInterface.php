@@ -25,4 +25,6 @@ interface CampaignInterface extends RepositoryInterface
     public function changeStatusUser($data, $status);
 
     public function getMembers($id);
+
+    public function listPhotos($campaign);
 }

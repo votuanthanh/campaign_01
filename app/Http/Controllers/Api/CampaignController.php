@@ -7,6 +7,7 @@ use App\Repositories\Contracts\RoleInterface;
 use App\Repositories\Contracts\TagInterface;
 use App\Repositories\Contracts\EventInterface;
 use App\Repositories\Contracts\CommentInterface;
+use App\Repositories\Contracts\ActionInterface;
 use App\Exceptions\Api\NotFoundException;
 use App\Exceptions\Api\UnknowException;
 use Illuminate\Http\Request;
@@ -22,13 +23,15 @@ class CampaignController extends ApiController
     private $eventRepository;
     private $campaignRepository;
     private $commentRepository;
+    private $actionRepository;
 
     public function __construct(
         CampaignInterface $campaignRepository,
         RoleInterface $roleRepository,
         TagInterface $tagRepository,
         EventInterface $eventRepository,
-        CommentInterface $commentRepository
+        CommentInterface $commentRepository,
+        ActionInterface $actionRepository
     ) {
         parent::__construct();
         $this->roleRepository = $roleRepository;
@@ -36,6 +39,7 @@ class CampaignController extends ApiController
         $this->eventRepository = $eventRepository;
         $this->campaignRepository = $campaignRepository;
         $this->commentRepository = $commentRepository;
+        $this->actionRepository = $actionRepository;
     }
 
     public function store(CampaignRequest $request)
@@ -253,7 +257,7 @@ class CampaignController extends ApiController
      * user request join to campaign
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
-     */
+    */
     public function attendCampaign($id, $flag)
     {
         $campaign = $this->campaignRepository->findOrFail($id);
@@ -273,6 +277,26 @@ class CampaignController extends ApiController
         return $this->doAction(function () use ($user, $campaign) {
             $this->campaignRepository->attendCampaign($campaign, $user->id);
             $this->compacts['attend_campaign'] = $user;
+        });
+    }
+
+    /**
+     * list photos of campaign
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+    */
+    public function listPhotos($id)
+    {
+        $campaign = $this->campaignRepository->findOrFail($id);
+
+        if ($this->user->cannot('view', $campaign)) {
+            throw new NotFoundException('You do not have authorize to see this campaign', UNAUTHORIZED);
+        }
+
+        return $this->getData(function () use ($campaign) {
+            $eventIds = $campaign->events()->pluck('id')->all();
+            $actions = $this->actionRepository->whereIn('event_id', $eventIds);
+            $this->compacts['list_photos'] = $this->actionRepository->getActionPhotos($actions);
         });
     }
 }

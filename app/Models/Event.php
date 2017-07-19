@@ -25,7 +25,7 @@ class Event extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
-    protected $appends = ['comments'];
+    protected $appends = ['comments', 'likes'];
 
     public function actions()
     {
@@ -79,9 +79,14 @@ class Event extends BaseModel
 
     public function getCommentsAttribute()
     {
-        return $this->comments()->with('user', 'likes.user')
+        return $this->comments()
             ->where('parent_id', config('settings.comment_parent'))
             ->orderBy('created_at', 'desc')
             ->paginate(config('settings.paginate_comment'));
+    }
+
+    public function getLikesAttribute()
+    {
+        return $this->likes()->with('user')->paginate(config('settings.paginate_event'));
     }
 }

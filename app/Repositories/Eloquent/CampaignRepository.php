@@ -204,7 +204,6 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
     */
     public function getCampaign($campaign, $roleIdOwner)
     {
-
         $settings = $campaign->settings()->whereIn('key', config('settings.campaigns'))->get();
 
         $campaign['status'] = $settings->where('key', config('settings.campaigns.status'))->first();
@@ -306,6 +305,12 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         $this->changeMemberRole($campaign, $userId, $ownerRoleId);
     }
 
+    /**
+     * Change status of user when join to campaign
+     * @param  App\Models\Campaign $campaign
+     * @param  int $data, $status
+     * @return boolen
+     */
     public function changeStatusUser($data, $status)
     {
         $data['campaign']->users()->updateExistingPivot($data['user_id'], ['status' => $status]);
@@ -317,11 +322,23 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         return true;
     }
 
+    /**
+     * get list members of campaign
+     * @param  App\Models\Campaign $campaign
+     * @param  int $id
+     * @return boolen
+     */
     public function getMembers($id)
     {
         return $this->findOrFail($id)->members()->where('status', User::ACTIVE);
     }
 
+    /**
+     * user join and leave of campaign
+     * @param  App\Models\Campaign $campaign
+     * @param  int $campaign, $userId
+     * @return
+     */
     public function attendCampaign($campaign, $userId)
     {
         return $campaign->users()->toggle([
@@ -330,5 +347,20 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
                 'status' => Campaign::APPROVING,
             ]
         ]);
+    }
+
+    /**
+     * list photos of campaign that mean photo of action
+     * @param  App\Models\Campaign $campaign
+     * @param  int $campaign
+     * @return
+     */
+    public function listPhotos($campaign)
+    {
+        return $campaign->events()->with(['actions' => function ($query) {
+            $query->with(['media' => function ($subQuery) {
+                $subQuery->orderBy('created_at', 'desc')->first();
+            }])->orderBy('created_at', 'desc')->first();
+        }])->orderBy('created_at', 'desc')->paginate(config('settings.paginate_default'));
     }
 }

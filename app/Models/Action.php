@@ -23,6 +23,7 @@ class Action extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
+    protected $appends = ['comments'];
 
     public function user()
     {
@@ -52,6 +53,14 @@ class Action extends BaseModel
     public function activities()
     {
         return $this->morphMany(Activity::class, 'activitiable');
+    }
+
+    public function getCommentsAttribute()
+    {
+        return $this->comments()
+            ->where('parent_id', config('settings.comment_parent'))
+            ->orderBy('created_at', 'desc')
+            ->paginate(config('settings.paginate_comment'));
     }
 
     protected $searchable = [

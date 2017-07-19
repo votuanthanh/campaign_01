@@ -2,10 +2,7 @@
     <div>
         <header-campaign></header-campaign>
         <div class="container">
-            <div class="row">
                 <router-view></router-view>
-                <left-campaign ></left-campaign>
-                <right-campaign></right-campaign>
             </div>
         </div>
     </div>
@@ -13,8 +10,6 @@
 
 <script>
 import HeaderCampaign from './HeaderCampaign.vue'
-import LeftCampaign from './LeftCampaign.vue'
-import RightCampaign from './RightCampaign.vue'
 import { mapActions } from 'vuex'
 
 export default {
@@ -25,9 +20,7 @@ export default {
         ...mapActions('campaign', ['campaignDetail'])
     },
     components: {
-       HeaderCampaign,
-       LeftCampaign,
-       RightCampaign
+       HeaderCampaign
     }
 }
 </script>
