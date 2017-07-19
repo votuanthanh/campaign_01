@@ -16,11 +16,18 @@ export const campaignDetail = ({ commit }, campaignId) => {
         })
 };
 
+export const getlistPhotos = ({ commit }, campaignId) => {
+    get(`campaign/list-photos/${campaignId}`)
+        .then(res => {
+            commit(types.LIST_PHOTOS, res.data.list_photos)
+        })
+};
+
 export const fetchData = ({ commit }, data) => {
     commit(types.LOADING, true)
 
-    if (data.pageNumberEvent > (parseInt(data.events.length) / 15) + 1) {
-        get(`campaign/${data.campaignId}/timeline/event?page=${((parseInt(data.events.length) / 15) + 1)}`)
+    if (data.pageNumberEvent > (parseInt(data.pageCurrent) + 1)) {
+        get(`campaign/${data.campaignId}/timeline/event?page=${(parseInt(data.pageCurrent) + 1)}`)
             .then(res => {
                 commit(types.FETCH_DATA, res.data.events.data)
                 commit(types.LOADING, false)
@@ -51,8 +58,24 @@ export const attendCampaign = ({ commit }, data) => {
     })
 };
 
+export const loadMorePhotos = ({ commit }, data) => {
+    if ((parseInt(data.currentPage) + 1) <= data.lastPage ) {
+        return new Promise((resolve, reject) => {
+            get(`campaign/list-photos/${data.campaignId}?page=${(parseInt(data.currentPage) + 1)}`)
+                .then(res => {
+                    commit(types.LOAD_MORE_LIST_PHOTOS, res.data.list_photos)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    }
+};
+
 export default {
     campaignDetail,
     fetchData,
     attendCampaign,
+    getlistPhotos,
+    loadMorePhotos
 };

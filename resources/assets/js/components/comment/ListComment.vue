@@ -66,14 +66,14 @@
 
                 <a href="#" class="post-add-icon inline-items">
                     <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
-                    <span v-if="comment.likes != null">{{ comment.likes.length }}</span>
+                    <span v-if="comment.likes != null">{{ comment.likes.total }}</span>
                 </a>
 
                 <a href="javascript:void(0)" @click="showSubComment(comment, index)" class="reply">{{ $t('campaigns.reply') }}</a>
 
                 <a href="javascript:void(0)"
                     @click="showSubComment(comment, index)"
-                    v-if ="comment.sub_comment.data != null"
+                    v-if ="comment.sub_comment"
                     class="reply">
                     <span>
                         {{ comment.sub_comment.total }}
@@ -87,7 +87,7 @@
                     v-if="flagReply == comment.id">
                 {{ $t('form.hidden') }}</a>
 
-                <ul class="children" v-if ="comment.sub_comment.data != null" >
+                <ul class="children" v-if ="comment.sub_comment" >
                     <li v-show="loading == comment.id">
                         <a ref="loadmore" href="javascript:void(0)" class="btn btn-control btn-more" data-container="newsfeed-items-grid" >
                             <i class="fa fa-spinner fa-spin"></i>

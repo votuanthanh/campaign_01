@@ -6,6 +6,8 @@ export default {
     },
     events: [],
     pageNumberEvent: [],
+    pageCurrentEvent: [],
     tags: [],
-    loading: true
+    loading: true,
+    listPhotos: []
 }

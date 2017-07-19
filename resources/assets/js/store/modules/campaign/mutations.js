@@ -7,6 +7,7 @@ export default {
         state.listMembers.memberIds = data.show_campaign.campaign.memberIds
         state.events = data.events.data
         state.pageNumberEvent = data.events.last_page
+        state.pageCurrentEvent = data.events.current_page
         state.tags = data.show_campaign.tags
     },
 
@@ -33,5 +34,15 @@ export default {
         });
 
         state.listMembers = list_members
+    },
+
+    [types.LIST_PHOTOS](state, listPhotos) {
+        state.listPhotos = listPhotos
+    },
+
+    [types.LOAD_MORE_LIST_PHOTOS](state, listPhotos) {
+        listPhotos.data = [...state.listPhotos.data, ...listPhotos.data]
+        state.listPhotos = []
+        state.listPhotos = listPhotos
     }
 };
