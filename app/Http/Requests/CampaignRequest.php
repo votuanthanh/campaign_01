@@ -22,7 +22,6 @@ class CampaignRequest extends AbstractRequest
     public function rules()
     {
         $rule = [];
-
         switch ($this->method()) {
             case 'PUT': case 'PATH':
                 $rule = [

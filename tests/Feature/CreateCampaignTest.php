@@ -55,11 +55,11 @@ class CreateCampaign extends TestCase
             'settings' => [
                 [
                     'key' => 1,
-                    'value' => 1,
+                    'value' => '1',
                 ],
                 [
                     'key' => 2,
-                    'value' => 5,
+                    'value' => '5',
                 ],
                 [
                     'key' => 3,
@@ -94,11 +94,11 @@ class CreateCampaign extends TestCase
             'settings' => [
                 [
                     'key' => 1,
-                    'value' => 0,
+                    'value' => '0',
                 ],
                 [
                     'key' => 2,
-                    'value' => 10,
+                    'value' => '10',
                 ],
             ],
             'media' => UploadedFile::fake()->image('avatar1.jpg', 600, 600),
@@ -171,7 +171,7 @@ class CreateCampaign extends TestCase
             ],
             'settings' => [
                 'key' => 1,
-                'value' => 0,
+                'value' => '0',
             ],
             'media' => UploadedFile::fake()->image('avatar2.jpg', 600, 600),
         ], [
@@ -233,7 +233,7 @@ class CreateCampaign extends TestCase
                     'value' => null,
                 ],
                 'key' => 1,
-                'value' => 1,
+                'value' => '1',
             ],
             'media' => UploadedFile::fake()->image('avatar2.jpg', 600, 600),
         ], [
@@ -266,7 +266,7 @@ class CreateCampaign extends TestCase
                     'value' => null,
                 ],
                 'key' => 1,
-                'value' => 1,
+                'value' => '1',
             ],
             'media' => UploadedFile::fake()->image('avatar2.jpg', 600, 600),
         ], [

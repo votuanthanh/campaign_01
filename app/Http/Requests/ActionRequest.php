@@ -23,7 +23,6 @@ class ActionRequest extends AbstractRequest
     {
         return [
             'caption' => 'required|max:255|min:4',
-            'description' => 'max:500',
             'upload.image.*' => 'image|max:500',
             'upload.video.*' => 'url',
         ];

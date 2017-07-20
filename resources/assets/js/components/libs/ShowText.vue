@@ -1,20 +1,14 @@
 <template>
-    <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="ui-block">
-                <div class="ui-block-title">
-                    <i v-if="flag">
-                        <span v-html="convertToHTML(shot_text)"></span>
-                        <a href="javascript:void(0)" @click="show_hide" v-if="show_link">{{ show }}</a>
-                    </i>
-                    <i v-else="!flag">
-                        <span v-html="convertToHTML(text)"></span>
-                        <a href="javascript:void(0)" @click="show_hide">{{ hide }}</a>
-                    </i>
-                </div>
-            </div>
-        </div>
-    </div>
+    <span class="ui-block-title">
+        <span v-if="flag">
+            <span v-html="convertToHTML(shot_text)"></span>
+            <a href="javascript:void(0)" @click="show_hide" v-if="show_link">{{ show }}</a>
+        </span>
+        <span v-else="!flag">
+            <span v-html="convertToHTML(text)"></span>
+            <a href="javascript:void(0)" @click="show_hide">{{ hide }}</a>
+        </span>
+    </span>
 </template>
 
 <script>

@@ -3,5 +3,7 @@
     "title_action": "Title of action",
     "cancel": "Cancel",
     "create_action": "Create action",
-    "description_action": "Description action"
+    "description_action": "Description action",
+    "edit_action": "Edit action",
+    "delete_action": "Delete action"
 }

@@ -133,8 +133,6 @@ class EventController extends ApiController
                     'user',
                     'media',
                     'likes',
-                    'comments.likes',
-                    'comments.user',
                 ])
                 ->get();
         });
