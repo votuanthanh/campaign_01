@@ -31,7 +31,7 @@ class CreateActionTest extends TestCase
         ]);
         $campaign = factory(Campaign::class)->create([
             'hashtag' => 'Default',
-            'status' => Campaign::ACTIVE
+            'status' => Campaign::ACTIVE,
         ]);
         $roleCampaigns = Role::where('type', Role::TYPE_CAMPAIGN)->pluck('id', 'name')->all();
         $campaign->users()->attach([
@@ -243,13 +243,7 @@ class CreateActionTest extends TestCase
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
-        $response->assertStatus(VALIDATOR_ERROR)->assertJson([
-            'code' => VALIDATOR_ERROR,
-            'status' => false,
-            'messages' => [
-                trans('validation.required', ['attribute' => 'description']),
-            ],
-        ]);
+        $response->assertStatus(CODE_OK);
     }
 
     /**

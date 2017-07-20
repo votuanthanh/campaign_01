@@ -89,6 +89,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::post('like/{actionId}', 'ActionController@like')->name('like');
             Route::get('list/{eventId}', 'ActionController@listAction');
             Route::get('search/{eventId}', 'ActionController@searchAction');
+            Route::post('create', 'ActionController@store')->name('create');
         });
 
         Route::resource('/comment', 'CommentController', ['only' => ['update', 'destroy', 'show']]);
@@ -102,13 +103,6 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::patch('/update-status/{id}', 'DonationController@updateStatus')->name('update-status');
             Route::resource('donation', 'DonationController', ['only' => ['store', 'update', 'destroy']]);
         });
-    });
-
-    Route::group(['as' => 'action.'], function () {
-        Route::resource('action', 'ActionController', [
-            'names' => ['store' => 'create'],
-            'only' => ['store', 'update'],
-        ]);
     });
 });
 
