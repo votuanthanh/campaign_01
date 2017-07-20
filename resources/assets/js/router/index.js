@@ -45,6 +45,7 @@ const router = [
             {
                 path: 'user/:id',
                 component: MasterUser,
+                name: 'user',
                 children: [
                     { path: '', component: Timeline, name: 'user.timeline' },
                     { path: 'followers', component: Followers, name: 'user.followers' },

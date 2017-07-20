@@ -36,4 +36,5 @@ return [
     ],
     'group_chat' => 'groupChat',
     'single_chat' => 'singleChat',
+    'head_room_name' => 'hashtag:',
 ];

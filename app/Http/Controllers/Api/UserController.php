@@ -268,6 +268,7 @@ class UserController extends ApiController
                 ->get([
                     'campaigns.id',
                     'hashtag',
+                    'title',
                 ]);
         });
     }
