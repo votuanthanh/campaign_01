@@ -5,6 +5,7 @@ return [
     'comment_parent' => 0,
     'paginate_default' => 15,
     'paginate_comment' => 2,
+    'paginate_event' => 4,
     'flag_join' => 'join',
     'locale' => ['vi', 'en', 'ja'],
     'campaigns' => [

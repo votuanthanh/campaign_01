@@ -63,7 +63,7 @@ class Comment extends BaseModel
 
     public function getLikesAttribute()
     {
-        return $this->likes()->with('user')->get();
+        return $this->likes()->with('user')->paginate(config('settings.paginate_comment'));
     }
 
     public function getUserAttribute()

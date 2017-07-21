@@ -166,8 +166,8 @@ class EventRepository extends BaseRepository implements EventInterface
 
     public function getEvent($event)
     {
-        return $event->with('actions', 'likes.user', 'donations', 'media', 'user')->orderBy('created_at', 'desc')
-           ->paginate(config('settings.paginate_default'));
+        return $event->with('media', 'user')->orderBy('created_at', 'desc')
+           ->paginate(config('settings.paginate_event'));
     }
 
     public function createOrDeleteLike($event, $userId)
