@@ -111,7 +111,7 @@
                                         class="selectpicker form-control"
                                         tabindex="-98"
                                         v-model="feature">
-                                        <option v-for="name in status" :value="{ value: name.value }">
+                                        <option v-for="name in status" :value="{ value: String(name.value) }">
                                             {{ name.name }}
                                         </option>
                                     </select>

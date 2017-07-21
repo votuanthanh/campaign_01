@@ -14,7 +14,8 @@
             </div>
             <div class="mCustomScrollbar ps ps--theme_default ps--active-y"
                 data-mcs-theme="dark"
-                data-ps-id="08dcf30a-ed2f-f4fc-dd34-a543d06407f1">
+                data-ps-id="08dcf30a-ed2f-f4fc-dd34-a543d06407f1"
+                :id="replaceSpace(receiveUser)">
                 <ul class="notification-list chat-message chat-message-field">
                     <li v-for="(message, index) in messages"
                         :class="((user.id == message.userId) ? '' : 'li-friend')
@@ -78,7 +79,9 @@ export default {
             receiveName: this.name,
             groupChat: '',
             listChat: this.list,
-            right: this.marginRight
+            right: this.marginRight,
+            paginate: 0,
+            isLoad: false
         }
     },
     watch: {
@@ -103,6 +106,13 @@ export default {
         } else {
             const message = this.$i18n.t('chat.get_message_error')
             noty({ text: message, container: false, force: true})
+        }
+    },
+    updated() {
+        if (!this.isLoad) {
+            $('#' + this.replaceSpace(this.receiveUser))
+                .scrollTop($('#' + this.replaceSpace(this.receiveUser))[0].scrollHeight)
+            this.isLoad = true
         }
     },
     methods: {
@@ -141,7 +151,7 @@ export default {
                 })
         }, 300),
         getMessage() {
-            get(`${showMessage}/${this.receiveUser}?type=${this.type}`)
+            get(`${showMessage}/${this.receiveUser}?type=${this.type}&paginate=${this.paginate}`)
                 .then(res => {
                     if (res.data.status == 200) {
                         for (var index = 0; index < res.data.messages.length; index++ ) {
@@ -151,9 +161,11 @@ export default {
                                     message: res.data.messages[index].message
                                 }
 
-                                this.messages.push(mess)
+                                this.messages.unshift(mess)
                             }
                         }
+
+                        this.paginate = res.data.paginate
                     }
                 })
                 .catch(err => {
@@ -162,43 +174,52 @@ export default {
         },
         closeComponent() {
             this.$emit('deleteChatIndex', this.index)
+        },
+        replaceSpace(str) {
+            let replaceStr = String(str)
+
+            if (replaceStr.indexOf(' ')) {
+                replaceStr.replace(' ', '')
+            }
+
+            return replaceStr
+        },
+        receiveMessage(data) {
+            var socketData = JSON.parse(data)
+
+            if (socketData.success && socketData.groupChat == this.groupChat) {
+                var message = JSON.parse(socketData.message)
+                let mess = {
+                    userId: socketData.from,
+                    message: message.message
+                }
+
+                this.messages.push(mess)
+                this.paginate++
+                $('#' + this.replaceSpace(this.receiveUser))
+                    .scrollTop($('#' + this.replaceSpace(this.receiveUser))[0].scrollHeight)
+            }
         }
+    },
+    mounted() {
+        $('#' + this.replaceSpace(this.receiveUser)).scroll(() => {
+            if ($('#' + this.replaceSpace(this.receiveUser)).scrollTop() == 0) {
+                this.getMessage()
+            }
+        })
     },
     computed: {
         ...mapState('auth', {
             user: state => state.user
         })
+
     },
     sockets: {
         singleChat: function (data) {
-            var socketData = JSON.parse(data)
-
-            if (socketData.success
-                && socketData.groupChat == this.groupChat
-            ) {
-                var message = JSON.parse(socketData.message)
-                let mess = {
-                    userId: socketData.from,
-                    message: message.message
-                }
-
-                this.messages.push(mess)
-            }
+            this.receiveMessage(data)
         },
         groupChat: function (data) {
-            var socketData = JSON.parse(data)
-
-            if (socketData.success
-                && socketData.groupChat == this.groupChat
-            ) {
-                var message = JSON.parse(socketData.message)
-                let mess = {
-                    userId: socketData.from,
-                    message: message.message
-                }
-
-                this.messages.push(mess)
-            }
+            this.receiveMessage(data)
         }
     }
 }
@@ -214,15 +235,19 @@ export default {
 }
 
 .ps__scrollbar-y-rail {
-    top: 0px; height: 350px; right: 0px;
+    top: 0px; height: 10px; right: 0px;
 }
 
 .ps__scrollbar-y {
-    top: 0px; height: 247px;
+    top: 0px; height: 10px;
 }
 
 .mCustomScrollbar.ps.ps--theme_default.ps--active-y {
     overflow-y: scroll !important;
+}
+
+.notification-list {
+    min-height: 360px;
 }
 
 .popup-chat {
@@ -263,7 +288,6 @@ export default {
     .mCustomScrollbar {
         max-height: 350px !important;
     }
-
 
     position: fixed !important;
     z-index: 999 !important;
