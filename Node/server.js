@@ -11,10 +11,10 @@ redisClient.subscribe('singleChat', 'groupChat')
 redisClient.on('message', function(channel, data) {
     var message = JSON.parse(data)
 
-    if (parseInt(message.to) && io.sockets.adapter.rooms[message.from].length > 1) {
+    if (parseInt(message.to)) {
         io.sockets.in(message.to).in(message.from).emit(channel, data)
     } else {
-        io.sockets.to(message.to).emit(channel, data)
+        io.to(message.to).emit(channel, data)
     }
 })
 
