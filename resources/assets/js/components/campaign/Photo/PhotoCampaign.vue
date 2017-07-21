@@ -10,14 +10,23 @@
                         <div class="photo-album-item-wrap col-4-width" v-for="photo in listPhotos.data">
                             <div class="photo-album-item" data-mh="album-item">
                                 <div class="photo-item" v-if="photo.media.length > 0">
-                                    <img :src="photo.media[0].url_file" alt="photo">
+
+                                    <a href="javascript:void(0)" @click="detailAction(photo)">
+                                        <img :src="photo.media[0].image_small" alt="photo">
+                                    </a>
+
                                     <div class="overlay overlay-dark"></div>
-                                    <a href="#" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
-                                    <a href="#" class="post-add-icon">
+                                    <a href="javascript:void(0)" @click="detailAction(photo)" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
+                                    <a href="javascript:void(0)" class="post-add-icon" @click="detailAction(photo)">
                                         <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
                                         <span >{{ photo.likes.length }}</span>
                                     </a>
-                                    <a href="#" data-toggle="modal" data-target="#open-photo-popup-v2" class="full-block"></a>
+                                    <a href="javascript:void(0)"
+                                        data-toggle="modal"
+                                        data-target="#open-photo-popup-v2"
+                                        class="full-block"
+                                        @click="detailAction(photo, user)">
+                                    </a>
                                 </div>
 
                                 <div class="content">
@@ -26,7 +35,7 @@
                                         :show_char=70
                                         :show="$t('events.show_more')"
                                         :hide="$t('events.show_less')"
-                                        class="title h5">
+                                        class="title p">
                                     </show-text>
 
                                     <span class="sub-title">{{ timeAgo(photo.created_at) }}</span>
@@ -36,9 +45,11 @@
                                             <div class="swiper-slide">
                                                 <ul class="friends-harmonic" >
                                                     <li v-for="(like, index) in photo.likes" v-if="index <= 6">
-                                                        <a href="#">
-                                                            <img :src="like.user.url_file" alt="friend">
-                                                        </a>
+                                                        <router-link
+                                                            :to="{ name: 'user.timeline', params: { id: like.user.id }}"
+                                                            class="h6 post__author-name fn">
+                                                            <img :src="like.user.image_thumbnail" :alt="like.user.name">
+                                                        </router-link>
                                                     </li>
                                                     <li v-if="memberLength(photo.likes) > 0">
                                                         <a href="#" class="all-users">+{{ memberLength(photo.likes) }}</a>
@@ -48,19 +59,18 @@
 
                                             <div class="swiper-slide">
                                                 <div class="friend-count" data-swiper-parallax="-500">
-                                                    <a href="#" class="friend-count-item"   >
+                                                    <a href="javascript:void(0)" class="friend-count-item"   >
                                                         <div class="h6">{{ photo.media.length }}</div>
                                                         <div class="title">Photos</div>
                                                     </a>
-                                                    <a href="#" class="friend-count-item">
+                                                    <a href="javascript:void(0)" class="friend-count-item">
                                                         <div class="h6">{{ photo.comments.total }}</div>
                                                         <div class="title">Comments</div>
                                                     </a>
                                                 </div>
                                             </div>
                                         </div>
-                                            <div class="swiper-pagination"></div>
-
+                                        <div class="swiper-pagination"></div>
                                     </div>
                                 </div>
 
@@ -76,6 +86,7 @@
             </div>
 
         </div>
+        <action-detail :showAction.sync = "showAction" :dataAction = "dataAction"></action-detail>
     </div>
 </template>
 
@@ -83,6 +94,7 @@
 import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
 import ShowText from '../../libs/ShowText.vue'
+import ActionDetail from '../../event/ActionDetail.vue'
 
 export default {
     created() {
@@ -91,8 +103,16 @@ export default {
     updated() {
         this.swiper()
     },
+    data: () => ({
+        showAction: false,
+        dataAction: {}
+    }),
     computed: {
         ...mapState('campaign', [ 'listPhotos']),
+        ...mapState('auth', {
+            authenticated: state => state.authenticated,
+            user: state => state.user
+        }),
     },
     mounted() {
         $(window).scroll(() => {
@@ -190,10 +210,18 @@ export default {
             }
 
             this.loadMorePhotos(data)
+        },
+        detailAction(data, user) {
+            console.log('data', data)
+            this.showAction = true
+            data.user = user
+            this.dataAction = data
+            console.log(this.showAction)
         }
     },
     components: {
-        ShowText
+        ShowText,
+        ActionDetail
     }
 }
 </script>

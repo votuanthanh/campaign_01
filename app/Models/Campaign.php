@@ -31,7 +31,12 @@ class Campaign extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
-    protected $appends = ['usersJoined', 'authJoniedOrNot', 'likes', 'checkLike'];
+    protected $appends = [
+        'usersJoined',
+        'authJoniedOrNot',
+        'likes',
+        'checkLike',
+        ];
 
     public function users()
     {
@@ -148,6 +153,6 @@ class Campaign extends BaseModel
 
     public function getCheckLikeAttribute()
     {
-         return !is_null($this->likes()->where('user_id', \Auth::guard('api')->user()->id)->first());
+        return !is_null($this->likes()->where('user_id', \Auth::guard('api')->user()->id)->first());
     }
 }

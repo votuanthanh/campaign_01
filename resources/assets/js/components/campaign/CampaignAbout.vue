@@ -1,15 +1,6 @@
 <template lang="html">
     <div class="row">
-        <div class="col-xl-6 push-xl-3 col-lg-12 push-lg-0 col-sm-12 col-xs-12">
-            <div ref="scrollContainer" id ="data-loadmore">
-                <list-events></list-events>
-            </div>
-
-            <a ref="loadmore" href="javascript:void(0)" class="btn btn-control btn-more" data-container="newsfeed-items-grid">
-                <i  v-show="loading" class="fa fa-spinner fa-spin"></i>
-                <div class="ripple-container"></div>
-            </a>
-        </div>
+        <div class="col-xl-6 push-xl-3 col-lg-12 push-lg-0 col-sm-12 col-xs-12">{{ campaign.description }}</div>
 
         <left-campaign ></left-campaign>
         <right-campaign></right-campaign>
@@ -18,7 +9,6 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import ListEvents from './ListEvents.vue'
 import LeftCampaign from './LeftCampaign.vue'
 import RightCampaign from './RightCampaign.vue'
 
@@ -39,9 +29,6 @@ export default {
             }
         })
     },
-    beforeDestroy() {
-        $(window).off()
-    },
     methods: {
         ...mapActions('campaign', ['fetchData']),
         loadMore() {
@@ -49,9 +36,7 @@ export default {
             this.fetchData(data)
         }
     },
-
     components: {
-        ListEvents,
         LeftCampaign,
         RightCampaign
     }

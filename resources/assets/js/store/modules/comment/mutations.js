@@ -81,6 +81,8 @@ export default {
                 comments[data.modelId][index[0]].sub_comment.data = []
                 comments[data.modelId][index[0]].sub_comment.data = dataComment
             } else {
+                let total = comments[data.modelId][index[0]].sub_comment.total
+                comments[data.modelId][index[0]].sub_comment.total = total + 1
                 comments[data.modelId][index[0]].sub_comment.data = comments[data.modelId][index[0]].sub_comment.data.concat(data.comments)
             }
         }

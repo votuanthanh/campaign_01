@@ -5,20 +5,22 @@ export const changeComment = ({ commit }, comments) => {
     commit(types.CHANGE_COMMENT, comments)
 };
 
-export const addComment = ({ commit }, data) => {
-
+export const addComment = ({ commit, rootState }, data) => {
+    console.log('add', data)
     return new Promise((resolve, reject) => {
         post(`comment/create-comment/${data.modelId}/${data.commentParentId}/${data.flag}`, data.comment)
             .then(res => {
                 if (res.data.http_status.status) {
 
                     if (data.commentParentId == 0) { //when comment is parent
+                        rootState.like.commentTotal['event' + data.modelId] = data.commentTotal + 1
                         commit(types.PARENT_COMMENT, {
                             comments: res.data.createComment,
                             modelId: data.modelId,
                             flag: data.flag,
                             flagAction: data.flagAction
                         })
+
                     } else {
                         commit(types.SUB_COMMENT, {
                             comments: res.data.createComment,
@@ -32,6 +34,7 @@ export const addComment = ({ commit }, data) => {
                 }
             })
             .catch(err => {
+                console.log(err)
                 reject(err)
             })
     })

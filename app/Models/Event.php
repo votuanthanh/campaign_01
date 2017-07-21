@@ -26,7 +26,11 @@ class Event extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
-    protected $appends = ['comments', 'likes', 'checkLike'];
+    protected $appends = [
+        'comments',
+        'likes',
+        'checkLike',
+    ];
 
     public function actions()
     {

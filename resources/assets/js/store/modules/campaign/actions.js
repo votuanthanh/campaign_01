@@ -65,6 +65,7 @@ export const loadMorePhotos = ({ commit }, data) => {
             get(`campaign/list-photos/${data.campaignId}?page=${(parseInt(data.currentPage) + 1)}`)
                 .then(res => {
                     commit(types.LOAD_MORE_LIST_PHOTOS, res.data.list_photos)
+                    resolve(res.data.http_status.status)
                 })
                 .catch(err => {
                     reject(err)
