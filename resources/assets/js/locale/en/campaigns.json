@@ -42,5 +42,9 @@
     "view-more": "View more comments",
     "create-event": "Create event",
     "leave": "Leave",
-    "aproving": "Aproving"
+    "aproving": "Aproving",
+    "photos": "Photos",
+    "statistics": "Statistics",
+    "videos": "Videos",
+    "campaign-related": "Campaigns related"
 }

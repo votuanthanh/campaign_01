@@ -28,80 +28,79 @@
                 <a href="#" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
             </div>
             <div class="ui-block-content">
-                <ul class="widget w-last-photo js-zoom-gallery">
-                    <li>
-                        <a href="/images/last-photo1-large.jpg">
-                            <img src="/images/last-photo1-large.jpg" alt="photo">
+                <ul class="widget w-last-photo js-zoom-gallery"  v-if="listPhotos.data">
+                    <li v-for="photo in listPhotos.data">
+                        <a :href="photo.media[0].url_file">
+                            <img :src="photo.media[0].url_file" alt="photo">
                         </a>
                     </li>
-
-                    <li>
-                        <a href="/images/last-photo1-large.jpg">
-                            <img src="/images/last-photo1-large.jpg" alt="photo">
-                        </a>
+                    <li v-if="listPhotos.total > 8">
+                        <a href="#" class="all-users">+ {{ remainingData(listPhotos.total) }}</a>
                     </li>
                 </ul>
             </div>
         </div>
 
-            <div class="ui-block">
-                <div class="ui-block-title">
-                    <h6 class="title">{{ $t('campaigns.list-members') }}</h6>
-                    <a href="#" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
-                </div>
-                <div class="ui-block-content">
-                    <ul class="widget w-pool">
-                        <li>
-                            <div class="skills-item">
-                                <div class="counter-friends">{{ totalMemberCurrent }} {{ $t('campaigns.lbl-members') }}</div>
-
-                                <ul class="friends-harmonic">
-                                    <li v-for="member in listMembers.members">
-                                        <a href="#">
-                                            <img :src="member.url_file" :alt="member.name">
-                                        </a>
-                                    </li>
-                                    <li v-if="totalMemberCurrent >= 10">
-                                        <a href="#" class="all-users">+ {{ remainingMembers }}</a>
-                                    </li>
-                                </ul>
-
-                            </div>
-                        </li>
-                    </ul>
-                    <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
-                        v-if="listMembers.memberIds.indexOf(user.id) < 0"
-                        @click="comfirmJoinCampaign()">{{ $t('campaigns.join-now') }}</a>
-
-                    <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
-                        v-if="listMembers.memberIds.indexOf(user.id) >= 0"
-                        @click="comfirmLeaveCampaign()" >
-                            {{ $t('campaigns.leave') }}
-                        </a>
-                </div>
+        <div class="ui-block">
+            <div class="ui-block-title">
+                <h6 class="title">{{ $t('campaigns.list-members') }}</h6>
+                <a href="#" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
             </div>
-            <!-- form comfirm join campaign -->
-            <modal :show.sync="flag_confirm_join">
-                <h5 class="exclamation-header" slot="header">
-                    {{ $t('messages.comfirm-join-campaign') }}
-                </h5>
-                <div class="body-modal" slot="main">
-                    <a href="javascript:void(0)" class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="joinCampaigns">{{ $t('form.button.agree') }}</a>
-                    <a href="javascript:void(0)" class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="cancelJoinCampaign">{{ $t('form.button.cancel') }}</a>
-                </div>
-            </modal>
+            <div class="ui-block-content">
+                <ul class="widget w-pool">
+                    <li>
+                        <div class="skills-item">
+                            <div class="counter-friends">{{ totalMemberCurrent }} {{ $t('campaigns.lbl-members') }}</div>
 
-            <!-- form comfirm leave campaign -->
-            <modal :show.sync="flag_confirm_leave">
-                <h5 class="exclamation-header" slot="header">
-                    {{ $t('messages.comfirm-join-campaign') }}
-                </h5>
-                <div class="body-modal" slot="main">
-                    <a href="javascript:void(0)" class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="leaveCampaigns">{{ $t('form.button.agree') }}</a>
-                    <a href="javascript:void(0)" class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="cancelLeaveCampaign">{{ $t('form.button.cancel') }}</a>
-                </div>
-            </modal>
+                            <ul class="widget w-faved-page js-zoom-gallery">
+                                <li v-for="member in listMembers.members">
+                                    <router-link :to="{ name: 'user.timeline', params: { id: member.id }}"><img :src="member.url_file" :alt="member.name"></router-link>
+
+                                </li>
+                                <li class="all-users" v-if="totalMemberCurrent >= 10">
+                                    <a href="#">
+                                        + {{ remainingMembers }}
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </li>
+                </ul>
+                <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                    v-if="listMembers.memberIds.indexOf(user.id) < 0"
+                    @click="comfirmJoinCampaign()">{{ $t('campaigns.join-now') }}</a>
+
+                <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                    v-if="listMembers.memberIds.indexOf(user.id) >= 0"
+                    @click="comfirmLeaveCampaign()" >
+                        {{ $t('campaigns.leave') }}
+                    </a>
+            </div>
         </div>
+
+        <!-- form comfirm join campaign -->
+        <modal :show.sync="flag_confirm_join">
+            <h5 class="exclamation-header" slot="header">
+                {{ $t('messages.comfirm-join-campaign') }}
+            </h5>
+            <div class="body-modal" slot="main">
+                <a href="javascript:void(0)" class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="joinCampaigns">{{ $t('form.button.agree') }}</a>
+                <a href="javascript:void(0)" class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="cancelJoinCampaign">{{ $t('form.button.cancel') }}</a>
+            </div>
+        </modal>
+
+        <!-- form comfirm leave campaign -->
+        <modal :show.sync="flag_confirm_leave">
+            <h5 class="exclamation-header" slot="header">
+                {{ $t('messages.comfirm-join-campaign') }}
+            </h5>
+            <div class="body-modal" slot="main">
+                <a href="javascript:void(0)" class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="leaveCampaigns">{{ $t('form.button.agree') }}</a>
+                <a href="javascript:void(0)" class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="cancelLeaveCampaign">{{ $t('form.button.cancel') }}</a>
+            </div>
+        </modal>
+    </div>
 </template>
 
 <style>
@@ -125,12 +124,20 @@
     import noty from '../../helpers/noty'
 
     export default {
+        created() {
+            this.getlistPhotos(this.$route.params.id)
+        },
         data: () =>({
                 flag_confirm_join: false,
                 flag_confirm_leave: false
             }),
         computed: {
-            ...mapState('campaign', ['campaign', 'tags', 'listMembers']),
+            ...mapState('campaign', [
+                'campaign',
+                'tags',
+                'listMembers',
+                'listPhotos'
+            ]),
             ...mapState('auth', {
                 authenticated: state => state.authenticated,
                 user: state => state.user
@@ -152,7 +159,7 @@
             }
         },
         methods: {
-            ...mapActions('campaign', ['attendCampaign']),
+            ...mapActions('campaign', ['attendCampaign', 'getlistPhotos']),
             comfirmJoinCampaign() {
                 this.flag_confirm_join = true
             },
@@ -190,6 +197,9 @@
                         const message = this.$i18n.t('messages.leave_campaign_fail')
                         noty({ text: message, force: true, container: false })
                     })
+            },
+            remainingData(data) {
+                return data - 8
             }
         },
         components: {

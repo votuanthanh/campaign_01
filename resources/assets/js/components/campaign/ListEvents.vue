@@ -5,7 +5,7 @@
                 <div class="post__author author vcard inline-items">
                     <img :src="event.media[0].url_file" alt="event">
                     <div class="author-date">
-                        <a class="h6 post__author-name fn" href="#">{{ event.title }}</a>
+                        <router-link :to="{ name: 'event.index', params: { event_id: event.id }}">{{ event.title }}</router-link>
                         <div class="post__date">
                             <timeago
                                 :max-time="86400 * 365"
@@ -19,9 +19,6 @@
                         <ul class="more-dropdown">
                             <li>
                                 <a href="#">{{ $t('events.edit-event') }}</a>
-                            </li>
-                            <li>
-                                <a href="#">{{ $t('events.delete-event') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -37,11 +34,11 @@
 
                     <a href="#" class="post-add-icon inline-items">
                         <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
-                        <span v-if="event.likes != null">{{ event.likes.length }}</span>
+                        <span v-if="event.likes">{{ event.likes.total }}</span>
                     </a>
 
                     <ul class="friends-harmonic">
-                        <li v-for="(like, index) in event.likes" v-if="index <= 10">
+                        <li v-for="(like, index) in event.likes.data" v-if="index <= 10">
                             <a href="#">
                                 <img :src="like.user.url_file" alt="friend">
                             </a>
@@ -54,9 +51,9 @@
                     </div>
 
                     <div class="comments-shared">
-                        <a href="#" class="post-add-icon inline-items">
+                        <a href="javascript:void(0)" class="post-add-icon inline-items">
                             <svg class="olymp-speech-balloon-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-speech-balloon-icon"></use></svg>
-                            <span v-if="event.comments != null">{{ event.comments.length }}</span>
+                            <span v-if="event.comments != null">{{ event.comments.total }}</span>
                         </a>
                     </div>
                 </div>
@@ -98,14 +95,15 @@ import ShowText from '../libs/ShowText.vue'
 
 export default {
     data: () => ({
-        model: 'event'
+        model: 'event',
+        flagComments: []
     }),
     computed: {
         ...mapState('campaign', ['campaign', 'events', 'loading']),
         ...mapState('auth', {
             authenticated: state => state.authenticated,
             user: state => state.user
-        }),
+        })
     },
     methods: {
         //

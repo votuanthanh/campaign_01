@@ -70,6 +70,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::get('/{id}/timeline/event', 'CampaignController@getListEvent');
             Route::get('member/{campaignId}', 'CampaignController@members')->name('members');
             Route::post('attend-campaign/{id}/{flag}', 'CampaignController@attendCampaign')->name('attendCampaign');
+            Route::get('list-photos/{id}', 'CampaignController@listPhotos');
         });
 
         Route::resource('campaign', 'CampaignController', ['only' => ['store', 'update', 'destroy', 'show']]);

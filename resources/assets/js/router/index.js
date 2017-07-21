@@ -7,6 +7,7 @@ import { getUser } from './router'
 // Register Components to router
 import Campaign from '../components/campaign/Campaign.vue'
 import TimelineCampaign from '../components/campaign/TimelineCampaign.vue'
+import PhotoCampaign from '../components/campaign/Photo/PhotoCampaign.vue'
 import App from '../components/layout/App.vue'
 import Followers from '../components/user/Followers.vue'
 import MasterUser from '../components/user/MasterUser.vue'
@@ -60,7 +61,8 @@ const router = [
                 path: 'campaign/:id',
                 component: Campaign,
                 children: [
-                    { path: 'timeline', component: TimelineCampaign, name: 'campaign.timeline' }
+                    { path: 'timeline', component: TimelineCampaign, name: 'campaign.timeline' },
+                    { path: 'photo', component: PhotoCampaign, name: 'campaign.photo' }
                 ]
             },
             { path: '/event/:event_id/index.html', component: HomeEvent, name: 'event.index' }

@@ -7,6 +7,8 @@ export const FETCH_DATA = 'FETCH_DATA'
 export const LOADING = 'LOADING'
 export const JOIN_CAMPAIGN = 'JOIN_CAMPAIGN'
 export const LEAVE_CAMPAIGN = 'LEAVE_CAMPAIGN'
+export const LIST_PHOTOS = 'LIST_PHOTOS'
+export const LOAD_MORE_LIST_PHOTOS = 'LOAD_MORE_LIST_PHOTOS'
 
 export default {
     CAMPAIGN_DETAIL,
@@ -17,5 +19,7 @@ export default {
     FETCH_DATA,
     LOADING,
     JOIN_CAMPAIGN,
-    LEAVE_CAMPAIGN
+    LEAVE_CAMPAIGN,
+    LIST_PHOTOS,
+    LOAD_MORE_LIST_PHOTOS
 }
