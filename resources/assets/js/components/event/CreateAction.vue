@@ -25,8 +25,7 @@
                             data-vv-name="description"
                             id="description"
                             :options="editorOption"
-                            v-model="newAction.description"
-                            v-validate="'max:500'">
+                            v-model="newAction.description">
                         </quill-editor>
                     </form>
                     <div :class="{ 'upload-file': true, 'has-error': hasError }">
@@ -41,7 +40,7 @@
                             @vdropzone-success="showSuccess"
                             @vdropzone-removed-file="deleteFile"
                             @vdropzone-queue-complete="queueComplete"
-                            @vdropzone-file-added="fileAdded">
+                            @vdropzone-files-added="fileAdded">
                         </dropzone>
                     </div>
                     <a href="javascript:void(0)" class="btn btn-secondary btn-lg btn--half-width" @click="onClose">
@@ -99,6 +98,7 @@
                 }
             }
         },
+
         methods: {
             ...mapActions('event', [
                 'get_event'

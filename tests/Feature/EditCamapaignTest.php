@@ -57,11 +57,11 @@ class EditCamapaignTest extends TestCase
             'settings' => [
                 [
                     'key' => 1,
-                    'value' => 2,
+                    'value' => '2',
                 ],
                 [
                     'key' => 2,
-                    'value' => 3,
+                    'value' => '3',
                 ],
             ],
             'media' => UploadedFile::fake()->image('update.png', 600, 600),
@@ -104,11 +104,11 @@ class EditCamapaignTest extends TestCase
             'settings' => [
                 [
                     'key' => 1,
-                    'value' => 2,
+                    'value' => '2',
                 ],
                 [
                     'key' => 2,
-                    'value' => 3,
+                    'value' => '3',
                 ],
             ],
             'media' => UploadedFile::fake()->image('update.png', 600, 600),
@@ -162,11 +162,11 @@ class EditCamapaignTest extends TestCase
             'settings' => [
                 [
                     'key' => 1,
-                    'value' => 2,
+                    'value' => '2',
                 ],
                 [
                     'key' => 2,
-                    'value' => 3,
+                    'value' => '3',
                 ],
                 'key' => 3,
                 'value' => null,

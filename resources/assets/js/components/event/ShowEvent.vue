@@ -21,7 +21,7 @@
                                 <img :src="event.user.url_file" alt="author">
 
                                 <div class="author-date">
-                                    <router-link :to="{ name: 'user.timeline', params: { id: user.id } }">
+                                    <router-link :to="{ name: 'user.timeline', params: { id: event.user.id } }">
                                         <a class="h6 post__author-name fn" href="javascript.void(0)">{{ event.user.name }}</a>
                                     </router-link>
                                     <div class="post__date">
@@ -63,7 +63,7 @@
                                 <div class="float-comment-shared comments-shared">
                                     <a href="javascript:void(0)" class="post-add-icon inline-items">
                                         <svg class="olymp-speech-balloon-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-speech-balloon-icon"></use></svg>
-                                        <span>{{ event.comments.length }}</span>
+                                        <span>{{ event.comments.total }}</span>
                                     </a>
                                 </div>
 
@@ -82,21 +82,30 @@
                             </div>
 
                         </article>
-
-                        <div class="show-comment">
-                            <comment :comments="event.comments" :model-id ="event.id" :flag="model"></comment>
-                        </div>
+                        <comment
+                            :comments="event.comments"
+                            :model-id ="event.id"
+                            :flag="model"
+                            :classListComment="'list-comment-event'"
+                            :classFormComment="'input-comment-event'">
+                        </comment>
 
                     </div>
                 </div>
             </div>
         </div>
-        <show-text
-            :text="event.description"
-            :show_char=100
-            :show="$t('events.show_more')"
-            :hide="$t('events.show_less')">
-        </show-text>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="ui-block">
+                    <show-text
+                        :text="event.description"
+                        :show_char=500
+                        :show="$t('events.show_more')"
+                        :hide="$t('events.show_less')">
+                    </show-text>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -131,6 +140,8 @@
         mounted() {
             this.checkLike
             this.numberLike = this.event.likes.length
+            this.setScrollBar()
+            this.eventPostComment()
         },
 
         methods: {
@@ -146,6 +157,18 @@
                 this.numberLike += this.isLiked ? - 1 : 1
                 this.isLiked = !this.isLiked
                 this.like_event(this.$route.params.event_id)
+            },
+
+            setScrollBar() {
+                $(".list-comment-event")[0].scrollTop = $(".list-comment-event")[0].scrollHeight-320;
+            },
+
+            eventPostComment() {
+                $(".input-comment-event textarea").on('keyup', function(e) {
+                    if(e.keyCode == 13) {
+                        $(".list-comment-event")[0].scrollTop = $(".list-comment-event")[0].scrollHeight-320;
+                    }
+                })
             }
         },
 
@@ -200,6 +223,31 @@
                 &:hover {
                     background-color: #9a9fbf !important;
                 }
+            }
+        }
+        .list-comment-event {
+            height: 231px;
+            overflow-y: scroll;
+            &::-webkit-scrollbar {
+                display: none;
+            }
+            .has-children {
+                padding: 4px 16px;
+                div {
+                    margin: 0px;
+                }
+                span {
+                    padding: 10px 0px;
+                }
+                ul {
+                    margin: -3px -22px 0;
+                }
+            }
+        }
+        .input-comment-event {
+            padding: 3px 14px;
+            textarea {
+                min-height: 60px !important
             }
         }
     }
