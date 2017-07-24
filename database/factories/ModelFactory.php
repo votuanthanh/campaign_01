@@ -12,8 +12,10 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+use App\Models\User;
+use App\Models\Role;
 
-$factory->define(App\Models\User::class, function (Faker\Generator $faker) {
+$factory->define(User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->email,
@@ -32,12 +34,20 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Models\Role::class, function (Faker\Generator $faker) {
+$factory->define(Role::class, function (Faker\Generator $faker) {
     static $typeId;
 
     return [
         'name' => $faker->word,
         'type' => $faker->randomElement([1, 2]),
+    ];
+});
+
+$factory->state(User::class, Role::ROLE_ADMIN, function () {
+    return [
+        'name' => 'Admin',
+        'email' => 'admin@gmail.com',
+        'status' => User::ACTIVE,
     ];
 });
 
@@ -68,8 +78,6 @@ $factory->define(App\Models\Event::class, function (Faker\Generator $faker) {
     static $campaignId;
 
     return [
-        'user_id' => $faker->randomElement($userId ?: $userId = App\Models\User::pluck('id')->toArray()),
-        'campaign_id' => $faker->randomElement($campaignId ?: $campaignId = App\Models\Campaign::pluck('id')->toArray()),
         'title' => $faker->sentence(10),
         'description' => $faker->paragraph(),
         'longitude' => $faker->longitude,

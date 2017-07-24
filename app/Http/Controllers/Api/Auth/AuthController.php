@@ -14,6 +14,7 @@ use App\Exceptions\Api\NotFoundException;
 class AuthController extends ApiController
 {
     protected $dataSelected = [
+        'id',
         'name',
         'email',
         'birthday',

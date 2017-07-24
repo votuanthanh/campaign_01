@@ -20,17 +20,21 @@ class UserTableSeeder extends Seeder
         \DB::table('relationships')->truncate();
         \DB::table('tag_user')->truncate();
 
-        factory(User::class)->create([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'status' => 1,
-        ])->roles()->attach([1]);
+        // Create user admin and set role for admin
+        $idRoleAdmin = Role::ofRole(Role::TYPE_SYSTEM, Role::ROLE_ADMIN)->get();
+
+        factory(User::class)
+            ->states(Role::ROLE_ADMIN)
+            ->create()
+            ->roles()
+            ->attach($idRoleAdmin);
 
         factory(User::class, 20)->create()->each(function ($user) {
-            $roleIds = Role::pluck('id')->toArray();
+            $idRoleUser = Role::ofRole(Role::TYPE_SYSTEM, Role::ROLE_USER)->get();
+
             $tagIds = Tag::pluck('id')->toArray();
             $userIds = User::where('id', '<>', $user->id)->pluck('id')->toArray();
-            $user->roles()->attach($this->getRandomElement($roleIds, 2, 4));
+            $user->roles()->attach($idRoleUser);
             $user->followings()->attach($this->getRandomElement($userIds, 4, 19));
             $user->tags()->attach($this->getRandomElement($tagIds, 2, 4));
         });
