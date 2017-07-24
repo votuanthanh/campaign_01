@@ -11,5 +11,23 @@
     "search_action" : "Search action",
     "search" : "Search",
     "not_found_action": "Not Found Action",
-    "events": "Events"
+    "events": "Events",
+    "donation": {
+        "donate": "Donate",
+        "donation_details": "Donation details",
+        "title": "Donate for this event",
+        "receive": "We have received",
+        "select_type": "Select what you want to donate",
+        "how_much": "How much would you like to donate?",
+        "thank_title": "Thank you for your donation!",
+        "thank_message": "This is your donation information, please check it. We will contact you as soon as possible, thank you!",
+        "goal": "Goal",
+        "goal_des": "Event goal",
+        "received": "Received",
+        "with": "with",
+        "donations": "donation(s)",
+        "over": "over",
+        "list_support": "List of supporters",
+        "actions": "Actions"
+    }
 }

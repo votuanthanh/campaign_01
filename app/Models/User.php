@@ -55,7 +55,14 @@ class User extends Authenticatable
 
     protected $dates = ['deleted_at'];
 
-    protected $appends = ['image_thumbnail', 'image_default'];
+    protected $appends = [
+        'image_default',
+        'image_thumbnail',
+        'image_small',
+        'image_medium',
+        'image_large',
+        'default_header',
+    ];
 
     public function actions()
     {
@@ -141,6 +148,11 @@ class User extends Authenticatable
     public function settings()
     {
         return $this->morphMany(Setting::class, 'settingable');
+    }
+
+    public function getDefaultHeaderAttribute()
+    {
+        return $this->factoryImage($this->head_photo);
     }
 
     protected static function boot()

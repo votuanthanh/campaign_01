@@ -6,6 +6,7 @@ export const SET_FLAG_SEARCH = 'SET_FLAG_SEARCH'
 export const SET_LOAD_SEARCH = 'SET_LOAD_SEARCH'
 export const SET_LOAD_PAGINATE = 'SET_LOAD_PAGINATE'
 export const SET_DETAIL_EVENT = 'SET_DETAIL_EVENT'
+export const UPDATE_DONATION = 'UPDATE_DONATION'
 
 export default {
     SET_EVENT,
@@ -16,4 +17,5 @@ export default {
     SET_LOAD_SEARCH,
     SET_LOAD_PAGINATE,
     SET_DETAIL_EVENT,
+    UPDATE_DONATION
 }

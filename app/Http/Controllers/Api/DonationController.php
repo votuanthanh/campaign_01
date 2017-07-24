@@ -23,6 +23,24 @@ class DonationController extends ApiController
         $this->eventRepository = $eventRepository;
     }
 
+    public function createMany(Request $request)
+    {
+        $event = $this->eventRepository->findOrFail($request->get('event_id'));
+        $donateData = [];
+
+        foreach ($request->get('goal_id') as $key => $value) {
+            $donateData[$key]['goal_id'] = $value;
+            $donateData[$key]['value'] = $request->get('value')[$key];
+            $donateData[$key]['user_id'] = $this->user->id;
+            $donateData[$key]['status'] = Donation::NOT_ACCEPT;
+            $donateData[$key]['campaign_id'] = $event->campaign_id;
+        }
+
+        return $this->doAction(function () use ($event, $donateData) {
+            $this->compacts['donations'] = $event->donations()->createMany($donateData);
+        });
+    }
+
     public function store(DonationRequest $request)
     {
         $input = $request->only('event_id', 'goal_id', 'value');
@@ -34,7 +52,7 @@ class DonationController extends ApiController
             throw new UnknowException('Permission error: User can not donate.');
         }
 
-        $input['status'] = ($this->user->can('manage', $event)) 
+        $input['status'] = ($this->user->can('manage', $event))
             ? Donation::ACCEPT
             : Donation::NOT_ACCEPT;
 

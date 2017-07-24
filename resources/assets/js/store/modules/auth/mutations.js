@@ -45,11 +45,12 @@ export default {
     },
 
     [CHANGE_HEADER_PHOTO](state, image) {
-        state.user.head_photo = image.url_file
+        state.user.default_header = '/images/' + image.url_file
     },
 
     [CHANGE_AVATAR](state, image) {
-        state.user.url_file = image.url_file
+        state.user.image_small = '/images/' + image.url_file + '?p=small'
+        state.user.image_thumbnail = '/images/' + image.url_file + '?p=thumbnail'
     },
 
     [UPLOAD_IMAGES](state, imageArr) {

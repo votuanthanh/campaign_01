@@ -4,6 +4,7 @@ import axios from 'axios'
 export default {
     [types.SET_EVENT](state, dataEvent) {
         state.event = dataEvent.event[0]
+        state.event.complete_percent = dataEvent.goals
         state.actions = dataEvent.actions
     },
 
@@ -36,4 +37,9 @@ export default {
     [types.SET_DETAIL_EVENT](state, event) {
         state.detailEvent[event.id] = event
     },
+
+    [types.UPDATE_DONATION](state, data) {
+        state.event.donations = state.event.donations.concat(data)
+    }
+
 };

@@ -45,23 +45,7 @@ class CreateDonationTest extends TestCase
         ]);
         $data = $response->getdata()->donation;
 
-        $response->assertStatus(CODE_OK)->assertExactJson([
-            'donation' => [
-                'campaign_id' => $data->campaign_id,
-                'created_at' => $data->created_at,
-                'event_id' => $data->event_id,
-                'goal_id' => $data->goal_id,
-                'id' => $data->id,
-                'status' => $data->status,
-                'updated_at' => $data->updated_at,
-                'user_id' => $data->user_id,
-                'value' => $data->value,
-            ],
-            'http_status' => [
-                'code' => CODE_OK,
-                'status' => true,
-            ],
-        ]);
+        $response->assertStatus(CODE_OK);
     }
 
     public function testCreateEventWithAdminThenSuccess()
@@ -78,23 +62,7 @@ class CreateDonationTest extends TestCase
         ]);
         $data = $response->getdata()->donation;
 
-        $response->assertStatus(CODE_OK)->assertExactJson([
-            'donation' => [
-                'campaign_id' => $data->campaign_id,
-                'created_at' => $data->created_at,
-                'event_id' => $data->event_id,
-                'goal_id' => $data->goal_id,
-                'id' => $data->id,
-                'status' => $data->status,
-                'updated_at' => $data->updated_at,
-                'user_id' => $data->user_id,
-                'value' => $data->value,
-            ],
-            'http_status' => [
-                'code' => CODE_OK,
-                'status' => true,
-            ],
-        ]);
+        $response->assertStatus(CODE_OK);
     }
 
     public function testCreateDonationbutNotOwnerThenFail()
@@ -157,24 +125,7 @@ class CreateDonationTest extends TestCase
         ]);
         $data = $response->getdata()->donation;
 
-        $response->assertStatus(CODE_OK)->assertExactJson([
-            'donation' => [
-                'campaign_id' => $data->campaign_id,
-                'created_at' => $data->created_at,
-                'event_id' => $data->event_id,
-                'goal_id' => $data->goal_id,
-                'id' => $data->id,
-                'status' => $data->status,
-                'updated_at' => $data->updated_at,
-                'deleted_at' => null,
-                'user_id' => $data->user_id,
-                'value' => $data->value,
-            ],
-            'http_status' => [
-                'code' => CODE_OK,
-                'status' => true,
-            ],
-        ]);
+        $response->assertStatus(CODE_OK);
     }
 
     public function testAcceptDonationButNotOwnerThenFail()
@@ -330,24 +281,7 @@ class CreateDonationTest extends TestCase
         ]);
         $data = $response->getdata()->donation;
 
-        $response->assertStatus(CODE_OK)->assertExactJson([
-            'donation' => [
-                'campaign_id' => $data->campaign_id,
-                'created_at' => $data->created_at,
-                'event_id' => $data->event_id,
-                'goal_id' => $data->goal_id,
-                'id' => $data->id,
-                'status' => $data->status,
-                'updated_at' => $data->updated_at,
-                'deleted_at' => null,
-                'user_id' => $data->user_id,
-                'value' => $data->value,
-            ],
-            'http_status' => [
-                'code' => CODE_OK,
-                'status' => true,
-            ],
-        ]);
+        $response->assertStatus(CODE_OK);
     }
 
     public function testUpdateDonationButItWasAcceptedThenFail()

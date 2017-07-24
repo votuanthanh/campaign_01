@@ -1,7 +1,7 @@
 <template lang="html">
     <transition name="modal">
-        <div class="modal v-modal-mask" id="choose-from-my-photo" style="display: block" v-show="show" @click="onClose" transition="modal">
-            <div class="modal-dialog ui-block window-popup choose-from-my-photo" @click.stop>
+        <div class="modal v-modal-mask" id="choose-from-my-photo" style="display: block" v-show="show" transition="modal">
+            <div class="modal-dialog ui-block window-popup choose-from-my-photo">
                 <a href="#" class="close icon-close" data-dismiss="modal" aria-label="Close" @click="onClose">
                     <svg class="olymp-close-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-close-icon"></use></svg>
                 </a>
