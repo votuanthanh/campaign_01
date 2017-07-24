@@ -5,7 +5,7 @@ const config = {
     layout: 'topRight',
     theme: 'metroui',
     timeout: 3000,
-    progressBar: true,
+    progressBar: false,
     closeWith: ['click', 'button'],
     id: false,
     force: false,

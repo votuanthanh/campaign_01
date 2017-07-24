@@ -22,8 +22,8 @@ export default function router(routes) {
     router.beforeEach((to, from, next) => {
         const access_token = localStorage.getItem('access_token')
 
-        // check access token exists within Api local storage
-        if (!store.state.auth.user && access_token) {
+        //check access token exists within Api local storage
+        if (!store.state.auth.user.id && access_token) {
             store.dispatch('auth/check')
                 // get info user
             get(getUser).then((res) => {
