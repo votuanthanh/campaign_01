@@ -55,6 +55,10 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\DonationTypeInterface::class,
             \App\Repositories\Eloquent\DonationTypeRepository::class,
         ],
+        'like' => [
+            \App\Repositories\Contracts\LikeInterface::class,
+            \App\Repositories\Eloquent\LikeRepository::class,
+        ],
     ];
 
     /**

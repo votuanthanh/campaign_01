@@ -137,4 +137,19 @@ class EventController extends ApiController
                 ->get();
         });
     }
+
+    public function getComment(Request $request)
+    {
+        $event = $request->event;
+
+        if ($event instanceof Illuminate\Database\Eloquent\Model) {
+            return $this->getData(function () use ($event) {
+                $this->compacts['comments'] = $event->comments;
+            });
+        }
+
+        return $this->getData(function () use ($event) {
+            $this->compacts['comments'] = [];
+        });
+    }
 }

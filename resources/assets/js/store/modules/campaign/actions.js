@@ -7,7 +7,7 @@
  */
 
 import * as types from './mutation-types';
-import { get, post } from '../../../helpers/api'
+import { post, get } from '../../../helpers/api'
 
 export const campaignDetail = ({ commit }, campaignId) => {
     get(`campaign/${campaignId}`)
@@ -58,8 +58,9 @@ export const attendCampaign = ({ commit }, data) => {
     })
 };
 
+
 export const loadMorePhotos = ({ commit }, data) => {
-    if ((parseInt(data.currentPage) + 1) <= data.lastPage ) {
+    if ((parseInt(data.currentPage) + 1) <= data.lastPage) {
         return new Promise((resolve, reject) => {
             get(`campaign/list-photos/${data.campaignId}?page=${(parseInt(data.currentPage) + 1)}`)
                 .then(res => {
@@ -72,10 +73,15 @@ export const loadMorePhotos = ({ commit }, data) => {
     }
 };
 
+export const setDetailcampaign = ({ commit }, data) => {
+    commit(types.SET_DETAIL_CAMPAIGN, data)
+};
+
 export default {
     campaignDetail,
     fetchData,
     attendCampaign,
     getlistPhotos,
-    loadMorePhotos
+    loadMorePhotos,
+    setDetailcampaign
 };

@@ -9,5 +9,7 @@ export default {
     pageCurrentEvent: [],
     tags: [],
     loading: true,
-    listPhotos: []
+    listPhotos: [],
+    detailCampaign: {},
+    showCampaignDetail: []
 }

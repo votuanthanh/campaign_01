@@ -5,6 +5,8 @@ namespace App\Repositories\Eloquent;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Campaign;
+use App\Models\Action;
+use App\Models\event;
 use App\Repositories\Contracts\UserInterface;
 use App\Jobs\SendEmail;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -150,7 +152,15 @@ class UserRepository extends BaseRepository implements UserInterface
 
     public function getTimeline($user)
     {
-        $activities = $user->activities()->with('activitiable')->get();
+        $activities = $user->activities()
+            ->with('activitiable')
+            ->with('activitiable.media')
+            ->whereIn('activitiable_type', [
+                Campaign::class,
+                Action::class,
+                Event::class,
+            ])
+            ->paginate(config('setting.pagination.timeline'));
 
         return [
             'currentPageUser' => $user,
@@ -172,7 +182,7 @@ class UserRepository extends BaseRepository implements UserInterface
         })
             ->distinct()
             ->orderBy($orderBy, $direction)
-            ->simplePaginate(3);
+            ->simplePaginate(config('settings.pagination.following_campaign'));
     }
 
     /**

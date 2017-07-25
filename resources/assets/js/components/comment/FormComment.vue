@@ -10,6 +10,7 @@
                 :placeholder="$t('campaigns.write-comment')"
                 v-model="comment.content"
                 v-validate="'required'"
+                @input="input($event)"
                 @keydown="addComments">
             </textarea>
         </div>
@@ -54,6 +55,7 @@ export default {
                     .then(status => {
                         if (status) {
                             this.comment.content = ''
+                            e.target.style.height = "5px";
                         }
                     })
                     .catch(err => {
@@ -64,13 +66,25 @@ export default {
                     noty({ text: message, force: true, container: false })
                 }
             }
+        },
+        input(e) {
+            e.target.style.height = "5px";
+            e.target.style.height = (e.target.scrollHeight)+"px";
         }
-    },
-    components: {
-        //
     }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.comment-form textarea {
+    resize: none;
+    overflow: hidden;
+    min-height: 45px;
+    height: 45px;
+    padding: 12px;
+
+    &:focus {
+        min-height: 70px;
+    }
+}
 </style>

@@ -17,9 +17,9 @@
             <li v-for="(comment, index) in comments[modelId]" class="has-children comment">
                 <div class="post__author author vcard inline-items" v-if="comment.user != null">
                     <img :src="comment.user.url_file" alt="author">
-
                     <div class="author-date">
                         <a class="h6 post__author-name fn" href="#"> {{ comment.user.name }}</a>
+                        <span class="comment-text" style="display:none;" v-html="convertToHTML(comment.content)"></span>
                         <div class="post__date">
                             <timeago
                                 :max-time="86400 * 365"
@@ -28,7 +28,6 @@
                             </timeago>
                         </div>
                     </div>
-
                     <div class="more" v-if="comment.user.id == user.id">
                         <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                         <ul class="more-dropdown" >
@@ -46,55 +45,54 @@
                             </li>
                         </ul>
                     </div>
-
                 </div>
-
-                <show-text
-                    :text="comment.content"
-                    :show_char=100
-                    :show="$t('events.show_more')"
-                    :hide="$t('events.show_less')"
-                    v-if="flagEdit != comment.id">
-                </show-text>
+                <div class="show-text">
+                    <show-text
+                        :type="false"
+                        :text="comment.content"
+                        :show_char=100
+                        :show="$t('events.show_more')"
+                        :hide="$t('events.show_less')"
+                        :number_char_show=70
+                        v-if="flagEdit != comment.id">
+                    </show-text>
+                </div>
                 <form-comment-edit
                     :parentComment="comment"
-                    v-if="flagEdit == comment.id"
                     :flagEdit="flagEdit"
                     :classFormComment="''"
-                    @changeFlagEdit="changeFlagEdit">
+                    @changeFlagEdit="changeFlagEdit"
+                    v-if="flagEdit == comment.id">
                 </form-comment-edit>
-
-                <a href="#" class="post-add-icon inline-items">
-                    <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
-                    <span v-if="comment.likes != null">{{ comment.likes.total }}</span>
-                </a>
-
+                <like :type="'likeComment'"
+                    :checkLike="comment.checkLike"
+                    :likes="comment.likes"
+                    :model="'comment'"
+                    :modelId="comment.id"
+                ></like>
                 <a href="javascript:void(0)" @click="showSubComment(comment, index)" class="reply">{{ $t('campaigns.reply') }}</a>
-
                 <a href="javascript:void(0)"
                     @click="showSubComment(comment, index)"
-                    v-if ="comment.sub_comment"
+                    v-if="comment.sub_comment.data != null"
                     class="reply">
                     <span>
                         {{ comment.sub_comment.total }}
-                        {{ $t('form.answers') }}
                     </span>
                 </a>
-
                 <a href="javascript:void(0)"
                     @click="hideSubComment()"
                     class="reply"
                     v-if="flagReply == comment.id">
-                {{ $t('form.hidden') }}</a>
-
-                <ul class="children" v-if ="comment.sub_comment" >
+                    {{ $t('form.hidden') }}
+                </a>
+                <ul class="children" v-if ="comment.sub_comment.data != null" >
                     <li v-show="loading == comment.id">
                         <a ref="loadmore" href="javascript:void(0)" class="btn btn-control btn-more" data-container="newsfeed-items-grid" >
                             <i class="fa fa-spinner fa-spin"></i>
                             <div class="ripple-container"></div>
                         </a>
                     </li>
-                    <li v-if="comment.sub_comment.data.length < comment.sub_comment.total && flagReply == comment.id">
+                    <li class="view-more" v-if="comment.sub_comment.data.length < comment.sub_comment.total && flagReply == comment.id">
                         <a href="javascript:void(0)" class="more-comments"
                             @click="handelLoadMoreSubComment({
                                 commentParentId: comment.id,
@@ -109,7 +107,6 @@
                     <li v-for="subComment in comment.sub_comment.data" v-if="flagReply == comment.id">
                         <div class="post__author author vcard inline-items">
                             <img :src="subComment.user.url_file" alt="author">
-
                             <div class="author-date">
                                 <a class="h6 post__author-name fn" href="#">{{ subComment.user.name }}</a>
                                 <div class="post__date">
@@ -120,9 +117,10 @@
                                     </timeago>
                                 </div>
                             </div>
-
                             <div class="more" v-if="subComment.user.id == user.id">
-                                <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
+                                <svg class="olymp-three-dots-icon">
+                                    <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
+                                </svg>
                                 <ul class="more-dropdown" >
                                     <li>
                                         <a href="javascript:void(0)" @click="editComments(subComment, index)">{{ $t('form.edit') }}</a>
@@ -139,15 +137,17 @@
                                 </ul>
                             </div>
                         </div>
-
-                        <show-text
-                            :text="subComment.content"
-                            :show_char=100
-                            :show="$t('events.show_more')"
-                            :hide="$t('events.show_less')"
-                            v-if="flagEdit != subComment.id">
-                        </show-text>
-
+                        <div class="show-text">
+                            <show-text
+                                :type="false"
+                                :text="subComment.content"
+                                :show_char=100
+                                :show="$t('events.show_more')"
+                                :hide="$t('events.show_less')"
+                                :number_char_show=70
+                                v-if="flagEdit != subComment.id">
+                            </show-text>
+                        </div>
                         <form-comment-edit
                             :parentComment="subComment"
                             v-if="flagEdit == subComment.id"
@@ -155,14 +155,14 @@
                             :classFormComment="''"
                             @changeFlagEdit="changeFlagEdit">
                         </form-comment-edit>
-
-                        <a href="#" class="post-add-icon inline-items">
-                            <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
-                            <span v-if="subComment.likes != null">{{ subComment.likes.length }}</span>
-                        </a>
+                        <like :type="'likeComment'"
+                            :checkLike="subComment.checkLike"
+                            :likes="subComment.likes"
+                            :model="'comment'"
+                            :modelId="subComment.id"
+                        ></like>
                     </li>
                 </ul>
-
                 <form-comment
                     :model-id="modelId"
                     :comment-parent-id="comment.id"
@@ -172,7 +172,6 @@
                 </form-comment>
             </li>
         </ul>
-
     </div>
 </template>
 
@@ -181,12 +180,14 @@ import { mapState, mapActions } from 'vuex'
 import FormComment from './FormComment.vue'
 import FormCommentEdit from './FormCommentEdit.vue'
 import ShowText from '../libs/ShowText.vue'
+import Like from '../user/timeline/Like.vue'
 
 export default {
     data: () => ({
         flagEdit: '',
         flagReply: '',
-        loading: ''
+        loading: '',
+        flagMore: true
     }),
     props: [
         'modelId',
@@ -247,15 +248,102 @@ export default {
                     this.$Progress.fail()
                     this.loading = ''
                 })
+        },
+        convertToHTML(text) {
+            return text.replace(/(?:\r\n|\r|\n)/g, '<br />');
         }
     },
     components: {
         FormComment,
         FormCommentEdit,
-        ShowText
+        ShowText,
+        Like
     }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+    .comments-list {
+        li {
+            border-bottom: 0px;
+            padding: 15px 20px 0px 20px;
+        }
+
+        .children {
+            margin: 12px -20px 0px -20px;
+            li {
+                border-bottom: 1px solid #e6ecf5;
+                padding-bottom: 10px;
+                &:last-child {
+                    border-bottom: 0px;
+                }
+            }
+        }
+        .view-more {
+            padding: 0px !important;
+            &:before {
+                background-color: initial;
+                border: 0px;
+            }
+        }
+    }
+
+    .more {
+        margin-right: 0px;
+         > .more-dropdown {
+            top: 75%;
+            right: -20px;
+            width: 110px;
+            padding: 2px 15px;
+             > li {
+                padding: initial;
+                border-bottom: initial;
+                background-color: initial;
+                position: initial;
+                border-left: 0px;
+                &:before {
+                    background-color: initial;
+                    border: 0px;
+                }
+                i {
+                    margin-right: 3px;
+                }
+            }
+        }
+    }
+
+    .has-children {
+        .post__author {
+            margin-bottom: 5px;
+             .more {
+                float: right;
+                font-size: 16px;
+                margin-right: 0px;
+            }
+        }
+    }
+
+    .btn-control.btn-more {
+        fill: #fff;
+        background: initial;
+        margin: 20px auto;
+        line-height: initial;
+        margin: 20px auto -25px;
+
+        > i {
+            font-size: 30px;
+            color: #b6b6b6;
+        }
+    }
+
+    .show-text {
+        margin-bottom: 5px;
+        margin-left: 40px;
+    }
+
+    .comment-form {
+        background: white;
+        border-bottom: 1px solid #e6ecf5;
+    }
+
 </style>

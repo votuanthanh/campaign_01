@@ -86,8 +86,8 @@ class CommentController extends ApiController
             throw new UnknowException('Permission error: User can not edit this comment.');
         }
 
-        return $this->doAction(function () use ($id) {
-            $this->compacts['deleteComment'] = $this->commentRepository->delete($id);
+        return $this->doAction(function () use ($comment) {
+            $this->compacts['deleteComment'] = $this->commentRepository->delete($comment);
         });
     }
 

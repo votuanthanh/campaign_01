@@ -97,12 +97,14 @@
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="ui-block">
-                    <show-text
-                        :text="event.description"
-                        :show_char=500
-                        :show="$t('events.show_more')"
-                        :hide="$t('events.show_less')">
-                    </show-text>
+                    <span class="ui-block-title">
+                        <show-text
+                            :text="event.description"
+                            :show_char=500
+                            :show="$t('events.show_more')"
+                            :hide="$t('events.show_less')">
+                        </show-text>
+                    </span>
                 </div>
             </div>
         </div>
@@ -160,13 +162,13 @@
             },
 
             setScrollBar() {
-                $(".list-comment-event")[0].scrollTop = $(".list-comment-event")[0].scrollHeight-320;
+                $(".list-comment-event")[0].scrollTop = $(".list-comment-event")[0].scrollHeight;
             },
 
             eventPostComment() {
                 $(".input-comment-event textarea").on('keyup', function(e) {
                     if(e.keyCode == 13) {
-                        $(".list-comment-event")[0].scrollTop = $(".list-comment-event")[0].scrollHeight-320;
+                        $(".list-comment-event")[0].scrollTop = $(".list-comment-event")[0].scrollHeight;
                     }
                 })
             }
@@ -232,15 +234,11 @@
                 display: none;
             }
             .has-children {
-                padding: 4px 16px;
                 div {
                     margin: 0px;
                 }
                 span {
                     padding: 10px 0px;
-                }
-                ul {
-                    margin: -3px -22px 0;
                 }
             }
         }
