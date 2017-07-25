@@ -111,7 +111,7 @@
                                         class="selectpicker form-control"
                                         tabindex="-98"
                                         v-model="feature">
-                                        <option v-for="name in status" :value="{ value: String(name.value) }">
+                                        <option v-for="name in status" :value="{ value: name.value }">
                                             {{ name.name }}
                                         </option>
                                     </select>
@@ -150,6 +150,7 @@
                                     {{ $t('campaigns.upload_image') }}
                                 </button>
                                 <button type="button"
+                                    v-show="campaign.media"
                                     class="btn btn-primary"
                                     @click="cancelFile($event)">
                                     {{ $t('campaigns.cancel_image') }}
@@ -261,13 +262,17 @@ export default {
                     return
                 }
 
+                this.$Progress.start()
                 post(storeCampaign, this.campaign)
                     .then(res => {
                         const message = this.$i18n.t('messages.create_success')
+                        this.$Progress.finish()
                         noty({ text: message, container: false, force: true, type: 'success'})
+                        this.$router.push({ name: 'campaign.timeline', params: { id: res.data.campaign.id }})
                     })
                     .catch(err => {
                         const message = this.$i18n.t('messages.create_fail')
+                        this.$Progress.fail()
                         noty({ text: message, container: false, force: true})
                     })
             })
@@ -304,7 +309,7 @@ export default {
 
             this.campaign.settings.map(function (setting) {
                 if (setting.key == key) {
-                    setting.value = value
+                    setting.value = String(value)
                     flag = true
                 }
             })
@@ -312,7 +317,7 @@ export default {
             if (!flag) {
                 let setting = {
                     key: key,
-                    value: value
+                    value: String(value)
                 }
 
                 this.campaign.settings.push(setting)
