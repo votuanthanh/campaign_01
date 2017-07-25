@@ -31,7 +31,7 @@ class CommentRepository extends BaseRepository implements CommentInterface
 
     public function getComment($modelId)
     {
-        return $this->with('likes', 'user')->where('parent_id', config('settings.comment_parent'))
+        return $this->with('user')->where('parent_id', config('settings.comment_parent'))
             ->where('commentable_id', $modelId)->orderBy('created_at', 'desc')
             ->paginate(config('settings.paginate_comment'));
     }
@@ -41,8 +41,18 @@ class CommentRepository extends BaseRepository implements CommentInterface
         $comment = $this->findOrFail($id);
 
         return $comment->subComment()
-           ->with('user', 'likes.user')
+           ->with('user')
            ->orderBy('created_at', 'desc')
            ->paginate(config('settings.paginate_comment'));
+    }
+
+    public function delete($comment)
+    {
+        $comment->activities()->delete();
+        $comment->likes()->delete();
+        $comment->user()->delete();
+        $comment->subComment()->delete();
+
+        return $comment->delete();
     }
 }

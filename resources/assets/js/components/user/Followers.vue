@@ -146,7 +146,7 @@
         mounted() {
             $(window).scroll(() => {
                 if (this.dataNotEmpty && !this.searchKey) {
-                    if ($(document).height() <= $(window).scrollTop() + $(window).height()) {
+                    if ($(document).height() - $(window).height() < $(window).scrollTop() + 1) {
                         this.loadMore()
                     }
                 }
@@ -238,7 +238,6 @@
                             })
                         });
                 }
-
             },
             search: _.debounce(function () {
                 if (!this.searchKey.trim()) {

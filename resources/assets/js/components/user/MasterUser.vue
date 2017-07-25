@@ -1,6 +1,27 @@
 <template>
     <div>
         <div class="loader" v-if="loading"></div>
+        <div class="modal fade show" id="create-friend-group-add-friends" v-if="showModal && listUserliked.length">
+            <div class="modal-dialog ui-block window-popup create-friend-group create-friend-group-add-friends">
+                <a href="javascript:void(0)" @click="hideUsersLiked" class="close icon-close" data-dismiss="modal" aria-label="Close">
+                    <svg class="olymp-close-icon">
+                        <use xlink:href="/frontend/icons/icons.svg#olymp-close-icon"></use>
+                    </svg>
+                </a>
+                <div class="ui-block-title">
+                    <i class="fa fa-heart" aria-hidden="true"></i>
+                    <h6 class="title">The users liked this activity ({{ listUserliked.length }})</h6>
+                </div>
+                <div class="list-user-liked ui-block-content">
+                    <ul>
+                        <li v-for="(user, index) in listUserliked">
+                            <img :src="user.user.url_file"></img>
+                            {{ user.user.name }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <!-- Top Header -->
         <div class="container">
             <div class="row">
@@ -233,8 +254,6 @@
 
     export default {
         data: () => ({
-            currentPageUser: {},
-            loading: true,
             showAvatar: false,
             showAllAvatar: false,
             showHeader: false,
@@ -242,12 +261,14 @@
             selectImage: {
                 url_file: ''
             }
-
         }),
-        created() {
-            this.getUser();
-        },
         computed: {
+            ...mapState('user',[
+                'currentPageUser',
+                'listActivity',
+                'loading',
+            ]),
+            ...mapState('like',['showModal', 'listUserliked']),
             ...mapState('auth', {
                 authUser: 'user'
             }),
@@ -255,28 +276,19 @@
                 return this.$route.params.id
             }
         },
+        created() {
+            this.getUser(this.userId)
+        },
         watch: {
             // call again the method if the route changes
-            '$route': 'getUser'
+            $route () {
+                this.getUser(this.userId)
+            }
         },
         methods: {
             ...mapActions('auth', ['updateHeaderPhoto', 'changeAvatar', 'uploadImage']),
-            getUser() {
-                this.loading = true
-                get('user/' + this.userId + '/get-user')
-                    .then(response => {
-                        this.loading = false
-                        this.currentPageUser = response.data.data
-                    })
-                    .catch(function(error) {
-                        noty({
-                            text: this.$i18n.t('messages.create_fail'),
-                            type: 'error',
-                            force: false,
-                            container: false
-                        })
-                    });
-            },
+            ...mapActions('like', ['hideUsersLiked']),
+            ...mapActions('user', ['getUser']),
             showUpload(el) {
                 $(el).click()
             },
@@ -322,5 +334,48 @@
     }
     .clickable:hover {
         cursor: pointer;
+    }
+
+    .list-user-liked {
+        >ul {
+            border: 1px solid #e6ecf5;
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 400px;
+            border-radius: 2px;
+            >li {
+                line-height: 45px;
+                padding-left: 10px;
+                font-size: 0.875rem;
+                font-weight: 700;
+                color: #515365;
+                &:hover {
+                    background: #e6ecf5;
+                    border-radius: 2px;
+                }
+            }
+        }
+        img {
+            width: 32px;
+            height: 32px;
+            border-radius: 22px;
+            margin-right: 7px;
+            border-radius: 15px;
+        }
+    }
+
+    #create-friend-group-add-friends {
+        display: block;
+        background: rgba(59, 59, 60, 0.57);
+    }
+
+    .fa-heart {
+        color: #ff5e3a;
+        font-size: 20px;
+        margin-right: -5px;
+    }
+
+    .ui-block-title {
+        border-top: 0px;
     }
 </style>

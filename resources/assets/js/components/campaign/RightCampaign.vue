@@ -3,7 +3,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css" rel="stylesheet">
         <div class="ui-block">
             <div class="ui-block-title">
-                <router-link :to="{ name: 'event.create', params: { campaignId: campaign.id }}" class="btn btn-md-2 btn-border-think custom-color c-grey full-width">{{ $t('campaigns.create-event') }}</router-link>
+                <router-link :to="{ name: 'event.create', params: { campaign_id: campaign.id }}" class="btn btn-md-2 btn-border-think custom-color c-grey full-width">{{ $t('campaigns.create-event') }}</router-link>
             </div>
         </div>
 

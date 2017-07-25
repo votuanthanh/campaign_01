@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Event extends BaseModel
 {
@@ -79,7 +80,7 @@ class Event extends BaseModel
 
     public function getCommentsAttribute()
     {
-        return $this->comments()
+        return $this->comments()->with('user')
             ->where('parent_id', config('settings.comment_parent'))
             ->orderBy('created_at', 'desc')
             ->paginate(config('settings.paginate_comment'));
@@ -87,7 +88,7 @@ class Event extends BaseModel
 
     public function getLikesAttribute()
     {
-        return $this->likes()->with('user')->paginate(config('settings.paginate_event'));
+        return $this->likes()->with('user')->paginate(config('settings.pagination.like'));
     }
 
     public function getCheckLikeAttribute()

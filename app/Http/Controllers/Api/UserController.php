@@ -213,13 +213,6 @@ class UserController extends ApiController
         });
     }
 
-    public function getUser($id)
-    {
-        return $this->getData(function () use ($id) {
-            $this->compacts['data'] = $this->repository->find($id);
-        });
-    }
-
     public function searchFollowers($id, $data)
     {
         return $this->getData(function () use ($id, $data) {
@@ -248,6 +241,7 @@ class UserController extends ApiController
         });
     }
 
+
     public function getListFollow()
     {
         return $this->getData(function () {
@@ -270,6 +264,13 @@ class UserController extends ApiController
                     'hashtag',
                     'title',
                 ]);
+        });
+    }
+
+    public function getUser($id)
+    {
+        return $this->getData(function () use ($id) {
+            $this->compacts['data'] = $this->repository->getTimeLine($id);
         });
     }
 }

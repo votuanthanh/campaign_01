@@ -73,24 +73,22 @@
                                     </li>
                                 </ul>
                             </div>
-
                         </div>
                         <p>
-                            <show-text
-                                :text="dataAction.description"
-                                :show_char=500
-                                :show="$t('events.show_more')"
-                                :hide="$t('events.show_less')">
-                            </show-text>
+                            <span class="ui-block-title">
+                                <show-text
+                                    :text="dataAction.description"
+                                    :show_char=500
+                                    :show="$t('events.show_more')"
+                                    :hide="$t('events.show_less')">
+                                </show-text>
+                            </span>
                         </p>
-
                         <div class="post-additional-info inline-items">
-
                             <a href="javascript:void(0)" class="post-add-icon inline-items">
                                 <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
                                 <span>148</span>
                             </a>
-
                             <ul class="friends-harmonic">
                                 <li>
                                     <a href="javascript:void(0)">
@@ -289,14 +287,14 @@
 
             setScrollBar() {
                 if ($(".list-comment-action")[0]) {
-                    $(".list-comment-action")[0].scrollTop = $(".list-comment-action")[0].scrollHeight-480;
+                    $(".list-comment-action")[0].scrollTop = $(".list-comment-action")[0].scrollHeight;
                 }
             },
 
             eventPostComment() {
                 $(".input-comment-action textarea").on('keyup', function(e) {
                     if(e.keyCode == 13) {
-                        $(".list-comment-action")[0].scrollTop = $(".list-comment-action")[0].scrollHeight-480;
+                        $(".list-comment-action")[0].scrollTop = $(".list-comment-action")[0].scrollHeight;
                     }
                 })
             }

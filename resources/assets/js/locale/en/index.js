@@ -6,6 +6,7 @@ import messages from './messages.json'
 import user from './user.json'
 import chat from './chat.json'
 import actions from './actions.json'
+import post from './post.json'
 
 export default {
     campaigns,
@@ -15,5 +16,6 @@ export default {
     messages,
     user,
     chat,
-    actions
+    actions,
+    post
 }

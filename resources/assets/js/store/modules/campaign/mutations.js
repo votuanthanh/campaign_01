@@ -28,9 +28,9 @@ export default {
 
     [types.LEAVE_CAMPAIGN](state, data) {
         let list_members = state.listMembers
-        list_members.memberIds.splice($.inArray(data.id, list_members.memberIds),1);
-        list_members.members = $.grep(list_members.members, function(user){
-             return user.id != data.id;
+        list_members.memberIds.splice($.inArray(data.id, list_members.memberIds), 1);
+        list_members.members = $.grep(list_members.members, function (user) {
+            return user.id != data.id;
         });
 
         state.listMembers = list_members
@@ -44,5 +44,9 @@ export default {
         listPhotos.data = [...state.listPhotos.data, ...listPhotos.data]
         state.listPhotos = []
         state.listPhotos = listPhotos
-    }
+    },
+
+    [types.SET_DETAIL_CAMPAIGN](state, campaign) {
+        state.detailCampaign[campaign.id] = campaign
+    },
 };

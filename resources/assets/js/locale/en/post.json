@@ -1,0 +1,15 @@
+{
+    "like": {
+        "liked_this": "liked this",
+        "more_like": "more liked this",
+        "like_first": "Be the first to like this post",
+        "and": "and"
+    },
+    "campaign": {
+        "created_a": "created a",
+        "new_campaign": "new campaign"
+    },
+    "created_a_event": "created a event",
+    "created_a_post": "created a post",
+    "read_more": "Read More"
+}
