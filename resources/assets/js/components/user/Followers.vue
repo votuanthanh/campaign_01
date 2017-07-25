@@ -376,7 +376,7 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .friend-avatar {
         .author-thumb {
             >img {

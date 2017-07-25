@@ -5,7 +5,7 @@
                 <ul class="chat-users" v-for="friend in friends">
                     <li class="inline-items" @click="addChatComponent(friend.id, friend.name, true)">
                         <div class="author-thumb">
-                            <img alt="author" :src="friend.url_file" class="avatar">
+                            <img alt="author" :src="friend.image_thumbnail" class="avatar">
                             <span class="icon-status online"></span>
                         </div>
                     </li>
@@ -33,7 +33,7 @@
                 <ul class="chat-users" v-for="friend in friends">
                     <li class="inline-items">
                         <div class="author-thumb">
-                            <img alt="author" :src="friend.url_file" class="avatar">
+                            <img alt="author" :src="friend.image_thumbnail" class="avatar">
                             <span class="icon-status online"></span>
                         </div>
                         <div class="author-status">
@@ -76,7 +76,7 @@
                     <li class="inline-items" v-for="group in groups">
                         <div class="author-thumb">
                             <img alt="author"
-                                :src="group.media[0].url_file"
+                                :src="group.media[0].image_thumbnail"
                                 class="avatar">
                             <span class="icon-status online"></span>
                         </div>
@@ -94,7 +94,7 @@
                                         data-placement="top"
                                         data-original-title="START CONVERSATION"
                                         class="olymp-comments-post-icon"
-                                        @click="addChatComponent(group.hashtag, group.title, false)">
+                                        @click="addChatComponent(group.hashtag, group.hashtag, false)">
                                         <use xlink:href='/frontend/icons/icons.svg#olymp-comments-post-icon'></use>
                                     </svg>
                                 </li>

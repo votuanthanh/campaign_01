@@ -6,10 +6,12 @@
                 <span class="icon-status online"></span>
                 <h6 class="title">{{ receiveName }}</h6>
                 <div class="more">
-                    <p class="olymp-three-dots-icon">
-                    </p>
-                    <p class="olymp-little-delete" @click="closeComponent">
-                    </p>
+                    <svg class="olymp-three-dots-icon">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
+                    </svg>
+                    <svg class="olymp-little-delete" @click="closeComponent">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/frontend/icons/icons.svg#olymp-little-delete"></use>
+                    </svg>
                 </div>
             </div>
             <div class="mCustomScrollbar ps ps--theme_default ps--active-y"
@@ -17,20 +19,23 @@
                 data-ps-id="08dcf30a-ed2f-f4fc-dd34-a543d06407f1"
                 :id="replaceSpace(receiveUser)">
                 <ul class="notification-list chat-message chat-message-field">
-                    <li v-for="(message, index) in messages"
-                        :class="((user.id == message.userId) ? '' : 'li-friend')
-                            + ((index > 0 && message.userId != messages[index - 1].userId) ? ' mrg-top' : '' )">
-                        <div :class="((user.id == message.userId) ? ' img-auth' : '') + ' author-thumb'"
-                            v-if="index > 0 && message.userId != messages[index - 1].userId">
-                            <img class="avatar"
-                                src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Default-avatar.jpg"
-                                alt="author">
-                        </div>
-                        <div class="notification-event">
-                            <span :class="((user.id == message.userId) ? 'message-auth' : 'chat-friend') + ' chat-message-item'">
-                                {{ message.message }}
-                            </span>
-                        </div>
+                    <li v-for="(subMessage, index) in organizedMessage"
+                        :class="subMessage[0].userId == user.id ? 'popup-chat-myself' : 'popup-chat-friend'">
+                            <div class="author-thumb">
+                                <img :src="subMessage[0].avatar" alt="author">
+                            </div>
+                            <div class="box-notification-event">
+                                <div class="notification-event">
+                                    <span class="chat-message-item" v-for="mess in subMessage">
+                                        {{ mess.message }}
+                                    </span>
+                                    <span class="notification-date">
+                                        <time class="entry-date updated" datetime="2004-07-24T18:18">
+                                            {{ calendarTime(organizedMessage[index][subMessage.length - 1].time) }}
+                                        </time>
+                                    </span>
+                                </div>
+                            </div>
                     </li>
                 </ul>
                 <div class="ps__scrollbar-x-rail">
@@ -41,7 +46,7 @@
                 </div>
             </div>
             <form>
-                <div class="div-input-chat form-group label-floating is-empty">
+                <div class="div-input-chat form-group label-floating">
                     <textarea class="form-control"
                         placeholder=""
                         name="message"
@@ -158,7 +163,9 @@ export default {
                             if (res.data.messages[index]) {
                                 let mess = {
                                     userId: res.data.messages[index].userId,
-                                    message: res.data.messages[index].message
+                                    message: res.data.messages[index].message,
+                                    avatar: res.data.messages[index].avatar,
+                                    time: res.data.messages[index].time
                                 }
 
                                 this.messages.unshift(mess)
@@ -191,7 +198,9 @@ export default {
                 var message = JSON.parse(socketData.message)
                 let mess = {
                     userId: socketData.from,
-                    message: message.message
+                    message: message.message,
+                    avatar: message.avatar,
+                    time: message.time
                 }
 
                 this.messages.push(mess)
@@ -199,6 +208,10 @@ export default {
                 $('#' + this.replaceSpace(this.receiveUser))
                     .scrollTop($('#' + this.replaceSpace(this.receiveUser))[0].scrollHeight)
             }
+        },
+        calendarTime(time)
+        {
+            return moment(time).calendar()
         }
     },
     mounted() {
@@ -211,8 +224,27 @@ export default {
     computed: {
         ...mapState('auth', {
             user: state => state.user
-        })
+        }),
+        organizedMessage() {
+            let messages = []
+            let childMessage = []
 
+            for (let i = 0; i < this.messages.length; i++) {
+                if (this.messages.length != i + 1 && this.messages[i].userId != this.messages[i + 1].userId) {
+                    childMessage.push(this.messages[i])
+                    messages.push(childMessage)
+                    childMessage = []
+                } else {
+                    childMessage.push(this.messages[i])
+
+                    if (this.messages.length == i + 1) {
+                        messages.push(childMessage)
+                    }
+                }
+            }
+
+            return messages
+        }
     },
     sockets: {
         singleChat: function (data) {
@@ -224,7 +256,7 @@ export default {
     }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .ps__scrollbar-x-rail {
     left: 0px;
     bottom: 0px;
@@ -252,41 +284,74 @@ export default {
 
 .popup-chat {
     .chat-message-field {
-        li:nth-child(2n) {
-            .author-thumb {
-                float: initial;
-            }
-
-            .chat-message-item {
-                float: initial;
-                background-color: #f0f4f9;
-                color: #8b8da8;
-            }
-
-            .notification-event {
-                float: initial;
-                padding-left: initial;
-                padding-right: initial;
-            }
-        }
-
         li {
-            padding: 0px 20px 0px 10px;
-
-            .notification-event {
-                float: right !important;
-                padding-left: initial;
-                padding-right: initial;
+            &:nth-child(2n) {
+                .notification-event {
+                    float: none;
+                    padding: 0;
+                }
             }
         }
-
-        .li-friend:nth-child(2n) {
-            padding: 15px 10px !important;
+        .box-notification-event {
+            width: 75%;
+        }
+        .popup-chat-friend {
+            display: flex;
+            flex-direction: row;
+            .box-notification-event {
+                padding-left: 10px;
+            }
+            .notification-event {
+                display: flex;
+                flex-flow: column wrap;
+                align-items: flex-start;
+            }
+            .chat-message-item {
+                background-color: #f0f4f9;
+                color: #888da8;
+            }
+        }
+        .popup-chat-myself {
+            display: flex;
+            flex-direction: row-reverse;
+            .box-notification-event {
+                padding-right: 10px;
+            }
+            .notification-event {
+                display: flex;
+                flex-flow: column wrap;
+                align-items: flex-end;
+            }
+            .chat-message-item {
+                background-color: #7c5ac2;
+                color: #fff;
+            }
+        }
+        .notification-event {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 0px;
+        }
+        .chat-message-item {
+            padding: 5px 12px;
+            word-break: break-all;
+        }
+        .author-thumb {
+            img {
+                width: 26px;
+                height: 26px;
+            }
         }
     }
 
     .mCustomScrollbar {
         max-height: 350px !important;
+    }
+
+    textarea {
+        &:focus {
+            min-height: 60px;
+        }
     }
 
     position: fixed !important;
@@ -318,9 +383,5 @@ export default {
 
 .mrg-top {
     margin-top: 10px;
-}
-
-.div-input-chat {
-    padding: 0px 10px;
 }
 </style>

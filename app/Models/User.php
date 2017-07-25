@@ -55,6 +55,8 @@ class User extends Authenticatable
 
     protected $dates = ['deleted_at'];
 
+    protected $appends = ['image_thumbnail', 'image_default'];
+
     public function actions()
     {
         return $this->hasMany(Action::class);

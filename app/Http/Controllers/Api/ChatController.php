@@ -119,7 +119,6 @@ class ChatController extends ApiController
 
             return $this->successAction($request->channel, $data);
         } catch (Exception $e) {
-
             return $this->failAction($request->channel);
         }
     }
@@ -178,6 +177,9 @@ class ChatController extends ApiController
         $message = json_encode([
             'groupKey' => $keys['group'],
             'userId' => $this->user->id,
+            'avatar' => $this->user->image_thumbnail,
+            'name' => $this->user->name,
+            'time' => \Carbon\Carbon::now()->format('m/d/Y H:i:s'),
             'message' => $content,
         ]);
 
