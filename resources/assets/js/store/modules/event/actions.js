@@ -1,7 +1,7 @@
 import * as types from './mutation-types'
-import { get, post } from '../../../helpers/api'
+import { post, get } from '../../../helpers/api'
 
-export const get_event = ({ commit } , event_id) => {
+export const get_event = ({ commit }, event_id) => {
     commit('SET_LOADING', false, { root: true })
 
     return new Promise((resolve, reject) => {
@@ -18,8 +18,8 @@ export const get_event = ({ commit } , event_id) => {
     })
 };
 
-export const load_action = ({ commit } , para) => {
-    if (para.actions.to < para.actions.total){
+export const load_action = ({ commit }, para) => {
+    if (para.actions.to < para.actions.total) {
         commit(types.SET_LOAD_PAGINATE, true)
 
         if (!para.flag_search) {
@@ -61,9 +61,14 @@ export const like_event = ({ commit }, event_id) => {
     post(`event/like/${event_id}`)
 };
 
+export const setDetailEvent = ({ commit }, data) => {
+    commit(types.SET_DETAIL_EVENT, data)
+};
+
 export default {
     get_event,
     load_action,
     search_action,
-    like_event
+    like_event,
+    setDetailEvent
 }

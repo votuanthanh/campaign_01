@@ -1,13 +1,5 @@
-/* ============
- * Actions for the account module
- * ============
- *
- * The actions that are available on the
- * account module.
- */
-
 import * as types from './mutation-types';
-import { get, post, patch, del } from '../../../helpers/api'
+import { post, patch, del, get } from '../../../helpers/api'
 
 export const changeComment = ({ commit }, comments) => {
     commit(types.CHANGE_COMMENT, comments)
