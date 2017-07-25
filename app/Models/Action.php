@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Action extends BaseModel
 {
@@ -23,7 +24,7 @@ class Action extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
-    protected $appends = ['comments'];
+    protected $appends = ['comments', 'likes', 'checkLike'];
 
     public function user()
     {
@@ -55,14 +56,6 @@ class Action extends BaseModel
         return $this->morphMany(Activity::class, 'activitiable');
     }
 
-    public function getCommentsAttribute()
-    {
-        return $this->comments()
-            ->where('parent_id', config('settings.comment_parent'))
-            ->orderBy('created_at', 'desc')
-            ->paginate(config('settings.paginate_comment'));
-    }
-
     protected $searchable = [
         'columns' => [
             'actions.caption' => 10,
@@ -73,4 +66,22 @@ class Action extends BaseModel
             'users' => ['actions.user_id', 'users.id'],
         ],
     ];
+
+    public function getCommentsAttribute()
+    {
+        return $this->comments()->with('user')
+            ->where('parent_id', config('settings.comment_parent'))
+            ->orderBy('created_at', 'desc')
+            ->paginate(config('settings.paginate_comment'));
+    }
+
+    public function getLikesAttribute()
+    {
+        return $this->likes()->with('user')->paginate(config('settings.pagination.like'));
+    }
+
+    public function getCheckLikeAttribute()
+    {
+        return !is_null($this->likes()->where('user_id', \Auth::guard('api')->user()->id)->first());
+    }
 }

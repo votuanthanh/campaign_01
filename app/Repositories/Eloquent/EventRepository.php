@@ -66,7 +66,7 @@ class EventRepository extends BaseRepository implements EventInterface
             }
         }
 
-        return true;
+        return $event;
     }
 
     private function createDataMedias($data)

@@ -14,6 +14,8 @@ return [
         'timeout_campaign' => 3, // set timeout for campaign
         'start_day' => 9,
         'end_day' => 10,
+        'not_approve' => 0,
+        'approve' => 1,
     ],
     'events' => [
         'start_day' => 7,
@@ -34,6 +36,8 @@ return [
     'pagination' => [
         'follow' => 12,
         'timeline' => 5,
+        'following_campaign' => 3,
+        'like' => 20,
     ],
     'group_chat' => 'groupChat',
     'single_chat' => 'singleChat',

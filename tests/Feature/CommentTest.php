@@ -43,7 +43,7 @@ class CommentTest extends TestCase
     public function testCreateCommentEventWithOwnerThenSuccess()
     {
         $faker = \Faker\Factory::create();
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->create(['status' => 1]);
         $user->roles()->attach([Role::ROLE_MEMBER]);
         $roleCampaign = Role::where('name', Role::ROLE_MEMBER)->first();
         $campaign = factory(Campaign::class)->create([
@@ -138,7 +138,8 @@ class CommentTest extends TestCase
     public function testUpdateCommentWithOwnerThenSuccess()
     {
         $faker = \Faker\Factory::create();
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->create(['status' => 1]);
+        $this->actingAs($user, 'api');
         $user->roles()->attach([Role::ROLE_MEMBER]);
         $roleCampaign = Role::where('name', Role::ROLE_MEMBER)->first();
         $campaign = factory(Campaign::class)->create([
@@ -162,7 +163,6 @@ class CommentTest extends TestCase
         ])->toArray();
 
         $commented = $event->comments()->create($comment);
-        $this->actingAs($user, 'api');
 
         $response = $this->json('PATCH', route('comment.update', ['comment' => $commented->id]), [
             'content' => $faker->sentence(10),
@@ -176,10 +176,11 @@ class CommentTest extends TestCase
     public function testUpdateCommentWithoutOwnerThenFail()
     {
         $faker = \Faker\Factory::create();
-        $user = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
+        $user = factory(User::class)->create(['status' => 1]);
+        $user2 = factory(User::class)->create(['status' => 1]);
         $user->roles()->attach([Role::ROLE_MEMBER]);
         $user2->roles()->attach([Role::ROLE_MEMBER]);
+        $this->actingAs($user, 'api');
         $roleCampaign = Role::where('name', Role::ROLE_MEMBER)->first();
         $campaign = factory(Campaign::class)->create([
             'hashtag' => 'Heath socical',
@@ -206,7 +207,6 @@ class CommentTest extends TestCase
         ])->toArray();
 
         $commented = $event->comments()->create($comment);
-        $this->actingAs($user, 'api');
 
         $response = $this->json('PATCH', route('comment.update', ['comment' => $commented->id]), [
             'content' => $faker->sentence(10),
@@ -220,8 +220,9 @@ class CommentTest extends TestCase
     public function testDeleteCommentWithOwnerThenSuccess()
     {
         $faker = \Faker\Factory::create();
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->create(['status' => 1]);
         $user->roles()->attach([Role::ROLE_MEMBER]);
+        $this->actingAs($user, 'api');
         $roleCampaign = Role::where('name', Role::ROLE_MEMBER)->first();
         $campaign = factory(Campaign::class)->create([
             'hashtag' => 'Heath socical',
@@ -244,7 +245,6 @@ class CommentTest extends TestCase
         ])->toArray();
 
         $commented = $event->comments()->create($comment);
-        $this->actingAs($user, 'api');
 
         $response = $this->json('PATCH', route('comment.destroy', ['comment' => $commented->id]), [
             'content' => $faker->sentence(10),
@@ -258,10 +258,11 @@ class CommentTest extends TestCase
     public function testDeleteCommentWithoutOwnerThenFail()
     {
         $faker = \Faker\Factory::create();
-        $user = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
+        $user = factory(User::class)->create(['status' => 1]);
+        $user2 = factory(User::class)->create(['status' => 1]);
         $user->roles()->attach([Role::ROLE_MEMBER]);
         $user2->roles()->attach([Role::ROLE_MEMBER]);
+        $this->actingAs($user, 'api');
         $roleCampaign = Role::where('name', Role::ROLE_MEMBER)->first();
         $campaign = factory(Campaign::class)->create([
             'hashtag' => 'Heath socical',
@@ -288,7 +289,6 @@ class CommentTest extends TestCase
         ])->toArray();
 
         $commented = $event->comments()->create($comment);
-        $this->actingAs($user, 'api');
 
         $response = $this->json('PATCH', route('comment.destroy', ['comment' => $commented->id]), [
             'content' => $faker->sentence(10),

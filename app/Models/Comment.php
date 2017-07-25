@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Comment extends BaseModel
 {
@@ -27,6 +28,7 @@ class Comment extends BaseModel
         'sub_comment',
         'likes',
         'user',
+        'checkLike',
     ];
 
     public function user()
@@ -56,18 +58,23 @@ class Comment extends BaseModel
 
     public function getSubCommentAttribute()
     {
-        return $this->subComment()->with('user', 'likes.user')
+        return $this->subComment()->with('user')
            ->orderBy('created_at', 'desc')
            ->paginate(config('settings.paginate_comment'));
     }
 
     public function getLikesAttribute()
     {
-        return $this->likes()->with('user')->paginate(config('settings.paginate_comment'));
+        return $this->likes()->with('user')->paginate(config('settings.pagination.like'));
     }
 
     public function getUserAttribute()
     {
         return $this->user()->first();
+    }
+
+    public function getCheckLikeAttribute()
+    {
+        return !is_null($this->likes()->where('user_id', \Auth::guard('api')->user()->id)->first());
     }
 }
