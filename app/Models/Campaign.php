@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Campaign extends BaseModel
 {
@@ -30,6 +31,7 @@ class Campaign extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
+    protected $appends = ['usersJoined', 'authJoniedOrNot', 'likes', 'checkLike'];
 
     public function users()
     {
@@ -116,5 +118,36 @@ class Campaign extends BaseModel
         \Carbon\Carbon::setLocale($locale);
 
         return \Carbon\Carbon::parse($date)->diffForHumans();
+    }
+
+    public function getUsersJoinedAttribute()
+    {
+        $roleId = Role::where('name', Role::ROLE_MEMBER)->first()->id;
+
+        return $this->users()
+            ->wherePivot('role_id', $roleId)
+            ->wherePivot('status',  config('settings.campaigns.approve'))
+            ->get();
+    }
+
+    public function getAuthJoniedOrNotAttribute()
+    {
+        $roleIds = Role::whereIn('name', [Role::ROLE_MEMBER, Role::ROLE_OWNER])->pluck('id')->all();
+
+        return !!$this->users()
+            ->wherePivotIn('role_id', $roleIds)
+            ->wherePivot('status', config('settings.campaigns.approve'))
+            ->wherePivot('user_id', \Auth::guard('api')->user()->id)
+            ->first();
+    }
+
+    public function getLikesAttribute()
+    {
+        return $this->likes()->with('user')->paginate(config('settings.pagination.like'));
+    }
+
+    public function getCheckLikeAttribute()
+    {
+         return !is_null($this->likes()->where('user_id', \Auth::guard('api')->user()->id)->first());
     }
 }

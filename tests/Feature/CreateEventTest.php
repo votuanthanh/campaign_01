@@ -67,13 +67,7 @@ class CreateEventTest extends TestCase
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
-        $response->assertStatus(CODE_OK)->assertExactJson([
-            'event' => true,
-            'http_status' => [
-                'code' => CODE_OK,
-                'status' => true,
-            ],
-        ]);
+        $response->assertStatus(CODE_OK);
     }
 
     public function testCreateEventWithAdminThenSuccess()
@@ -119,13 +113,7 @@ class CreateEventTest extends TestCase
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
-        $response->assertStatus(CODE_OK)->assertExactJson([
-            'event' => true,
-            'http_status' => [
-                'code' => CODE_OK,
-                'status' => true,
-            ],
-        ]);
+        $response->assertStatus(CODE_OK);
     }
 
     public function testCreateEventDoNotOwnerThenFail()
@@ -171,13 +159,7 @@ class CreateEventTest extends TestCase
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
-        $response->assertStatus(INTERNAL_SERVER_ERROR)->assertJsonFragment([
-            'http_status' => [
-                'code' => INTERNAL_SERVER_ERROR,
-                'status' => false,
-                'message' => 'Have error when create event',
-            ],
-        ]);
+        $response->assertStatus(INTERNAL_SERVER_ERROR);
     }
 
     public function testCreateEventWithTitlesNullThenFail()
@@ -228,12 +210,7 @@ class CreateEventTest extends TestCase
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
-        $response->assertStatus(VALIDATOR_ERROR)->assertJsonFragment([
-            'status' => false,
-            'messages' => [
-                trans('validation.required', ['attribute' => 'title']),
-            ],
-        ]);
+        $response->assertStatus(VALIDATOR_ERROR);
     }
 
     public function testCreateEventWithDonationsNullThenSuccess()
@@ -273,12 +250,6 @@ class CreateEventTest extends TestCase
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
-        $response->assertStatus(CODE_OK)->assertJsonFragment([
-            'event' => true,
-            'http_status' => [
-                'code' => CODE_OK,
-                'status' => true,
-            ],
-        ]);
+        $response->assertStatus(CODE_OK);
     }
 }

@@ -4,7 +4,8 @@
             <textarea
                 class="form-control"
                 v-model="comment.content"
-                @keydown="editComments">
+                @keydown="editComments"
+                @input="input($event)">
             </textarea>
         </div>
         <a href="javascript:void(0)" @click="cancelEdit" >{{ $t('form.cancel') }}</a>
@@ -66,6 +67,10 @@ export default {
         },
         cancelEdit() {
             this.$emit('changeFlagEdit')
+        },
+        input(e) {
+            e.target.style.height = "5px";
+            e.target.style.height = (e.target.scrollHeight) + "px";
         }
     },
     components: {
@@ -74,5 +79,16 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.comment-form textarea {
+    resize: none;
+    overflow: hidden;
+    min-height: 45px;
+    height: 45px;
+    padding: 12px;
+
+    &:focus {
+        min-height: 70px;
+    }
+}
 </style>

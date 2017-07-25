@@ -25,7 +25,7 @@ class Event extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
-    protected $appends = ['comments', 'likes'];
+    protected $appends = ['comments', 'likes', 'checkLike'];
 
     public function actions()
     {
@@ -88,5 +88,10 @@ class Event extends BaseModel
     public function getLikesAttribute()
     {
         return $this->likes()->with('user')->paginate(config('settings.paginate_event'));
+    }
+
+    public function getCheckLikeAttribute()
+    {
+        return !is_null($this->likes()->where('user_id', \Auth::guard('api')->user()->id)->first());
     }
 }
