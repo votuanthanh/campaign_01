@@ -5,26 +5,33 @@ trait UrlImage
 {
     public function getImageDefaultAttribute($value)
     {
-        return app('glide.url')->getUrl($this->url_file);
+        return $this->factoryImage($this->url_file);
     }
 
     public function getImageThumbnailAttribute($value)
     {
-        return app('glide.url')->getUrl($this->url_file, ['p' => 'thumbnail']);
+        return $this->factoryImage($this->url_file, 'thumbnail');
     }
 
     public function getImageSmallAttribute($value)
     {
-        return app('glide.url')->getUrl($this->url_file, ['p' => 'small']);
+        return $this->factoryImage($this->url_file, 'small');
     }
 
     public function getImageMediumAttribute($value)
     {
-        return app('glide.url')->getUrl($this->url_file, ['p' => 'medium']);
+        return $this->factoryImage($this->url_file, 'medium');
     }
 
     public function getImageLargeAttribute($value)
     {
-        return app('glide.url')->getUrl($this->url_file, ['p' => 'large']);
+        return $this->factoryImage($this->url_file, 'large');
+    }
+
+    private function factoryImage($value, $type = '')
+    {
+        return preg_match('#^(http)|(https).*$#', $value)
+            ? $value
+            : app('glide.url')->getUrl($value, $type ? ['p' => $type] : []);
     }
 }

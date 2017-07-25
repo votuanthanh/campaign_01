@@ -26,10 +26,12 @@ class Media extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
+    
     protected $appends = [
         'image_default',
         'image_medium',
         'image_small',
+        'image_thumbnail',
     ];
 
     public function mediable()

@@ -98,3 +98,11 @@ multiselect__input {
     }
 
 }
+
+.chat-users {
+    .author-thumb {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
