@@ -106,11 +106,8 @@ $factory->define(App\Models\Action::class, function (Faker\Generator $faker) {
     static $userId;
 
     return [
-        'event_id' => $faker->randomElement($eventId ?: $eventId = App\Models\Event::pluck('id')->toArray()),
-        'user_id' => $faker->randomElement($userId ?: $userId = App\Models\User::pluck('id')->toArray()),
         'caption' => $faker->sentence(10),
         'description' => $faker->paragraph(),
-
     ];
 });
 

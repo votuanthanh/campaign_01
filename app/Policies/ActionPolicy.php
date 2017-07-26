@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\Action;
 use App\Models\Role;
+use App\Models\Campaign;
 
 class ActionPolicy extends BasePolicy
 {

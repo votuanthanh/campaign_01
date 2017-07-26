@@ -510,7 +510,7 @@
                             </ul>
                         </div>
                     </div>
-                    <a href="02-ProfilePage.html" class="author-name fn">
+                    <router-link :to="{ name: 'user.timeline', params: { id: user.id } }" class="author-name fn">
                         <div class="author-title">
                             {{ user.name }}
                             <svg class="olymp-dropdown-arrow-icon">
@@ -518,7 +518,7 @@
                             </svg>
                         </div>
                         <span class="author-subtitle">{{ user.email }}</span>
-                    </a>
+                    </router-link>
                 </div>
             </div>
             <!--End: control-block -->
