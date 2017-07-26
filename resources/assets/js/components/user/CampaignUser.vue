@@ -59,7 +59,7 @@
                             <img :src="campaign.media[0].image_default" alt="photo">
                         </div>
 
-                        <a href="#" class="h2 post-title">{{ shorten(campaign.title, 40) }}</a>
+                        <router-link :to="{ name: 'campaign.timeline', params: { id: campaign.id }}"  class="h2 post-title">{{ shorten(campaign.title, 40) }}</router-link>
 
                         <p>{{ shorten(strip(campaign.description), 200) }}</p>
 
