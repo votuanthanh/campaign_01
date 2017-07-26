@@ -65,42 +65,13 @@
 
                         <router-link :to="{ name: 'campaign.timeline', params: { id: campaign.id }}" class="btn btn-md-2 btn-border-think c-grey btn-transparent custom-color">{{ $t('user.button.read_more') }}</router-link>
 
-                        <div class="post-additional-info inline-items">
 
-                            <a href="#" class="post-add-icon inline-items">
-                                <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
-                                <span>15</span>
-                            </a>
-
-                            <ul class="friends-harmonic">
-                                <li v-for="(user, key) in campaign.users" v-if="key < 5">
-                                    <a href="#">
-                                        <img :src="user.image_thumbnail" alt="friend">
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <div class="names-people-likes">
-                                <a href="#" v-for="(user, key) in campaign.users" v-if="key < 2">{{ user.name }} </a>
-                                <em v-if="campaign.users.length > 2">and {{ campaign.users.length - 2}} others</em>
-                                <em><br v-if="campaign.users.length > 2">joined in this campaign</em>
-                            </div>
-
-
-                            <div class="comments-shared">
-                                <a href="#" class="post-add-icon inline-items">
-                                    <svg class="olymp-speech-balloon-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-speech-balloon-icon"></use></svg>
-                                    <span>16</span>
-                                </a>
-
-                                <a href="#" class="post-add-icon inline-items">
-                                    <svg class="olymp-share-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use></svg>
-                                    <span>0</span>
-                                </a>
-                            </div>
-
-
-                        </div>
+                        <like :type="'likeInfo'"
+                            :checkLike="campaign.checkLike"
+                            :likes="campaign.likes"
+                            :model="'campaign'"
+                            :modelId="campaign.id"
+                        ></like>
 
                         <div class="control-block-button post-control-button">
 
@@ -132,6 +103,7 @@
 
 <script>
 import axios from 'axios'
+import Like from './timeline/Like.vue'
 
 export default {
     data() {
@@ -144,6 +116,9 @@ export default {
     },
     created() {
         this.fetchData()
+    },
+    components: {
+        Like
     },
     mounted() {
         $(window).scroll(() => {

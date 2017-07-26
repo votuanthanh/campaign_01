@@ -21,24 +21,13 @@
                 </ul>
 
                 <div class="widget w-socials">
-                    <h6 class="title">Other Social Networks:</h6>
-                    <a href="#" class="social-item bg-facebook">
-                        <i class="fa fa-facebook" aria-hidden="true"></i>
-                        Facebook
-                    </a>
-                    <a href="#" class="social-item bg-twitter">
-                        <i class="fa fa-twitter" aria-hidden="true"></i>
-                        Twitter
-                    </a>
-                    <a href="#" class="social-item bg-dribbble">
-                        <i class="fa fa-dribbble" aria-hidden="true"></i>
-                        Dribbble
-                    </a>
+                    <h6 class="title"></h6>
+                    <router-link class="social-item bg-facebook" :to="{ name: 'campaign.create'}">Create Campain</router-link>
                 </div>
             </div>
         </div>
 
-        <div class="ui-block">
+        <div class="ui-block" style="display: none;">
             <div class="ui-block-title">
                 <h6 class="title">James’s Badges</h6>
             </div>
@@ -103,7 +92,7 @@
             </div>
         </div>
 
-        <div class="ui-block">
+        <div class="ui-block" style="display: none;">
             <div class="ui-block-title">
                 <h6 class="title">My Spotify Playlist</h6>
             </div>

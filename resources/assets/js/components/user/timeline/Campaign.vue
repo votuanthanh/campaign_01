@@ -32,13 +32,12 @@
             </div>
         </div>
         <div class="post-thumb">
-            <img :src="campaignDetail.media[0].url_file" alt="photo">
+            <img :src="campaignDetail.media[0].image_medium" alt="photo">
         </div>
-        <a href="#" data-toggle="modal" data-target="#blog-post-popup" class="h2 post-title">
-            {{ campaignDetail.title }}
-        </a>
-        <p>{{ campaignDetail.description }}</p>
-        <a href="#"
+        <router-link data-toggle="modal" data-target="#blog-post-popup" class="h2 post-title"
+            :to="{ name: 'campaign.timeline', params: { id:campaignDetail.id }}">{{ campaignDetail.title }}</router-link>
+        <p v-html="campaignDetail.description"></p>
+        <a href="#" style="display: none;"
             data-toggle="modal"
             data-target="#blog-post-popup"
             class="btn btn-md-2 btn-border-think c-grey btn-transparent custom-color">
