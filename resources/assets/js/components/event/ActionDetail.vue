@@ -84,56 +84,12 @@
                                 </show-text>
                             </span>
                         </p>
-                        <div class="post-additional-info inline-items">
-                            <a href="javascript:void(0)" class="post-add-icon inline-items">
-                                <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
-                                <span>148</span>
-                            </a>
-                            <ul class="friends-harmonic">
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img src="img/friend-harmonic7.jpg" alt="friend">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img src="img/friend-harmonic8.jpg" alt="friend">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img src="img/friend-harmonic9.jpg" alt="friend">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img src="img/friend-harmonic10.jpg" alt="friend">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img src="img/friend-harmonic11.jpg" alt="friend">
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <div class="names-people-likes">
-                                <a href="javascript:void(0)">Diana</a>, <a href="javascript:void(0)">Nicholas</a> and
-                                <br>13 more liked this
-                            </div>
-
-
-                            <div class="comments-shared">
-                                <a href="javascript:void(0)" class="post-add-icon inline-items">
-                                    <svg class="olymp-speech-balloon-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-speech-balloon-icon"></use></svg>
-                                    <span>61</span>
-                                </a>
-                                <a href="javascript:void(0)" class="post-add-icon inline-items">
-                                    <svg class="olymp-share-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use></svg>
-                                    <span>32</span>
-                                </a>
-                            </div>
-                        </div>
+                        <like :type="'likeInfo'"
+                            :checkLike="dataAction.checkLike"
+                            :likes="dataAction.likes"
+                            :model="'action'"
+                            :modelId="dataAction.id"
+                        ></like>
 
                         <div class="control-block-button post-control-button">
                             <a href="javascript:void(0)" class="btn btn-control">
@@ -170,6 +126,8 @@
     import { mapState, mapActions } from 'vuex'
     import ShowText from '../libs/ShowText.vue'
     import Comment from '../comment/Comment.vue'
+    import Like from '../user/timeline/Like.vue'
+
     export default {
         props: [
             'showAction',
@@ -302,7 +260,8 @@
 
         components: {
             ShowText,
-            Comment
+            Comment,
+            Like
         }
     }
 </script>
