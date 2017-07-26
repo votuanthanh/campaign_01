@@ -102,6 +102,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
 
         Route::group(['prefix' => '/donation'], function () {
             Route::patch('/update-status/{id}', 'DonationController@updateStatus')->name('update-status');
+            Route::post('create-many', 'DonationController@createMany');
             Route::resource('donation', 'DonationController', ['only' => ['store', 'update', 'destroy']]);
         });
     });

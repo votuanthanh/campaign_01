@@ -29,10 +29,10 @@
                     <div class="ui-block">
                         <div class="top-header">
                             <div class="top-header-thumb clickable" @click="showHeader = true" v-if="authUser.id == currentPageUser.id">
-                                <img :src="authUser.head_photo" alt="nature">
+                                <img :src="authUser.default_header" alt="nature">
                             </div>
                             <div class="top-header-thumb" v-else>
-                                <img :src="currentPageUser.head_photo" alt="nature">
+                                <img :src="currentPageUser.default_header" alt="nature">
                             </div>
                             <div class="profile-section">
                                 <div class="row">
@@ -108,8 +108,8 @@
                             </div>
                             <div class="top-header-author">
                                 <a href="#" class="author-thumb">
-                                    <img :src="authUser.url_file" alt="author" v-if="authUser.id == currentPageUser.id" @click.prevent="showAvatar = true">
-                                    <img :src="currentPageUser.url_file" alt="author" v-else @click.prevent>
+                                    <img :src="authUser.image_small" alt="author" v-if="authUser.id == currentPageUser.id" @click.prevent="showAvatar = true">
+                                    <img :src="currentPageUser.image_small" alt="author" v-else @click.prevent>
                                 </a>
                                 <div class="author-content">
                                     <a href="02-ProfilePage.html" class="h4 author-name">{{ currentPageUser.name }}</a>
@@ -168,7 +168,7 @@
                         <div class="radio">
                             <label class="custom-radio">
                                 <img :src="image.image_default" alt="photo">
-                                <input type="radio" name="optionsRadios" v-model="selectImage.url_file" :value="image.image_default">
+                                <input type="radio" name="optionsRadios" v-model="selectImage.url_file" :value="image.image_small">
                             </label>
                         </div>
                     </div>
@@ -186,7 +186,7 @@
                 <a href="#"
                     class="btn btn-primary btn-lg btn--half-width"
                     @click.prevent="handleUpdate('avatar ')"
-                    v-if="authUser.media.length">
+                    v-if="authUser.media.length && selectImage.url_file">
                     {{ $t('user.upload.confirm') }}
                 </a>
             </div>
@@ -220,7 +220,7 @@
                         <div class="radio">
                             <label class="custom-radio">
                                 <img :src="image.image_default" alt="photo">
-                                <input type="radio" name="optionsRadios" v-model="selectImage.url_file" :value="image.image_default">
+                                <input type="radio" name="optionsRadios" v-model="selectImage.url_file" :value="image.image_small">
                             </label>
                         </div>
                     </div>
@@ -238,7 +238,7 @@
                 <a href="#"
                     class="btn btn-primary btn-lg btn--half-width"
                     @click.prevent="handleUpdate('header')"
-                    v-if="authUser.media.length">
+                    v-if="authUser.media.length && selectImage.url_file">
                     {{ $t('user.upload.confirm') }}
                 </a>
             </div>
@@ -262,6 +262,12 @@
                 url_file: ''
             }
         }),
+        created() {
+            this.getUser()
+        },
+        mounted() {
+            $.material.init()
+        },
         computed: {
             ...mapState('user',[
                 'currentPageUser',
@@ -274,6 +280,12 @@
             }),
             userId: function () {
                 return this.$route.params.id
+            },
+            imageSelect() {
+                let img = this.selectImage.url_file.substring(8)
+                return {
+                    url_file: img.substring(img.lastIndexOf('?'), -255)
+                }
             }
         },
         created() {
@@ -311,9 +323,9 @@
             },
             handleUpdate(type) {
                 if (type == 'header')
-                    this.updateHeaderPhoto(this.selectImage)
+                    this.updateHeaderPhoto(this.imageSelect)
                 else
-                    this.changeAvatar(this.selectImage)
+                    this.changeAvatar(this.imageSelect)
                 this.showAvatar = false
                 this.showAllAvatar = false
                 this.showHeader = false
@@ -329,7 +341,7 @@
 <style lang="scss" scoped>
     .author-thumb {
         >img {
-            max-width: 100%;
+            max-height: 100%;
         }
     }
     .clickable:hover {
@@ -377,5 +389,12 @@
 
     .ui-block-title {
         border-top: 0px;
+    }
+
+    .top-header-thumb {
+        >img {
+            max-height: 500px;
+            object-fit: cover;
+        }
     }
 </style>

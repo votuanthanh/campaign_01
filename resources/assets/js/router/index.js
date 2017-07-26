@@ -24,6 +24,9 @@ import Profile from '../components/user/Profile.vue'
 import Setting from '../components/user/Setting.vue'
 import CampaignUser from '../components/user/CampaignUser.vue'
 import HomeEvent from '../components/event/HomeEvent.vue'
+import ListAction from '../components/event/ListAction.vue'
+import DonationList from '../components/event/DonationList.vue'
+import DonationInfo from '../components/event/DonationInfo.vue'
 
 const router = [
     ...authGuard([{
@@ -65,7 +68,15 @@ const router = [
                     { path: 'photo', component: PhotoCampaign, name: 'campaign.photo' }
                 ]
             },
-            { path: '/event/:event_id/index.html', component: HomeEvent, name: 'event.index' }
+            {
+                path: 'event/:event_id',
+                component: HomeEvent,
+                children: [
+                    { path: 'index.html', component: ListAction, name: 'event.index' },
+                    { path: 'donation', component: DonationList, name: 'event.donation' },
+                    { path: 'donation/:id', component: DonationInfo, name: 'event.goal' }
+                ]
+            }
         ]
     }]),
 

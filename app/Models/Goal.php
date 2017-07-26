@@ -22,12 +22,12 @@ class Goal extends BaseModel
 
     public function event()
     {
-        return $this->belongTo(Event::class);
+        return $this->belongsTo(Event::class);
     }
 
     public function donationType()
     {
-        return $this->belongTo(DonationType::class);
+        return $this->belongsTo(DonationType::class);
     }
 
     public function donations()

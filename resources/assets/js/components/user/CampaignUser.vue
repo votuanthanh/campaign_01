@@ -25,7 +25,7 @@
                     <article class="hentry post has-post-thumbnail thumb-full-width">
 
                         <div class="post__author author vcard inline-items">
-                            <img :src="campaign.owner[0].url_file" alt="author">
+                            <img :src="campaign.owner[0].image_thumbnail" alt="author">
 
                             <div class="author-date">
                                 <a class="h6 post__author-name fn" href="02-ProfilePage.html">{{ campaign.owner[0].name }}</a> {{ $t('user.quote.create_campaign') }}
@@ -56,14 +56,14 @@
                         </div>
 
                         <div class="post-thumb">
-                            <img :src="campaign.media[0].url_file" alt="photo">
+                            <img :src="campaign.media[0].image_default" alt="photo">
                         </div>
 
                         <a href="#" class="h2 post-title">{{ shorten(campaign.title, 40) }}</a>
 
-                        <p>{{ shorten(campaign.description, 200) }}</p>
+                        <p>{{ shorten(strip(campaign.description), 200) }}</p>
 
-                        <a href="#" data-toggle="modal" data-target="#blog-post-popup" class="btn btn-md-2 btn-border-think c-grey btn-transparent custom-color">{{ $t('user.button.read_more') }}</a>
+                        <router-link :to="{ name: 'campaign.timeline', params: { id: campaign.id }}" class="btn btn-md-2 btn-border-think c-grey btn-transparent custom-color">{{ $t('user.button.read_more') }}</router-link>
 
                         <div class="post-additional-info inline-items">
 
@@ -75,14 +75,15 @@
                             <ul class="friends-harmonic">
                                 <li v-for="(user, key) in campaign.users" v-if="key < 5">
                                     <a href="#">
-                                        <img :src="user.url_file" alt="friend">
+                                        <img :src="user.image_thumbnail" alt="friend">
                                     </a>
                                 </li>
                             </ul>
 
                             <div class="names-people-likes">
-                                <a href="#" v-for="(user, key) in campaign.users" v-if="key < 2">{{ user.name }}</a>
-                                <em v-html="$t('user.quote.more_user', [ campaign.users.length - 2 ])"></em>
+                                <a href="#" v-for="(user, key) in campaign.users" v-if="key < 2">{{ user.name }} </a>
+                                <em v-if="campaign.users.length > 2">and {{ campaign.users.length - 2}} others</em>
+                                <em><br v-if="campaign.users.length > 2">joined in this campaign</em>
                             </div>
 
 
@@ -178,6 +179,11 @@ export default {
                 return string.substring(0, length - 3) + '...'
             }
             return string
+        },
+        strip(html) {
+           let tmp = document.createElement("DIV")
+           tmp.innerHTML = html
+           return tmp.textContent || tmp.innerText || ""
         }
     },
 }

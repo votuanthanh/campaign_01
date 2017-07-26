@@ -2,7 +2,7 @@
     <div v-if="loading">
         <show-event></show-event>
         <search-action></search-action>
-        <list-action></list-action>
+        <router-view></router-view>
     </div>
 </template>
 
@@ -37,8 +37,7 @@
 
         components: {
             ShowEvent,
-            SearchAction,
-            ListAction,
+            SearchAction
         }
     }
 </script>

@@ -135,6 +135,16 @@ class EventController extends ApiController
                     'likes',
                 ])
                 ->get();
+            $this->compacts['goals'] = $event
+                ->goals()
+                ->select('id', 'donation_type_id', 'goal')
+                ->with([
+                    'donations' => function ($query) {
+                        return $query->with('user')->where('status', \App\Models\Donation::ACCEPT)->latest();
+                    },
+                    'donationType.quality',
+                ])
+                ->get();
         });
     }
 

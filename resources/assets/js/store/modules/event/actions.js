@@ -65,10 +65,18 @@ export const setDetailEvent = ({ commit }, data) => {
     commit(types.SET_DETAIL_EVENT, data)
 };
 
+export const update_donate = ({ commit }, payload) => {
+    post('donation/create-many', payload)
+        .then(res => {
+            commit(types.UPDATE_DONATION, res.data.donations)
+        })
+}
+
 export default {
     get_event,
     load_action,
     search_action,
     like_event,
-    setDetailEvent
+    setDetailEvent,
+    update_donate
 }

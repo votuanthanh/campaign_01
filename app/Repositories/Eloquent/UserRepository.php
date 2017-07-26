@@ -74,7 +74,7 @@ class UserRepository extends BaseRepository implements UserInterface
             ->with('users', 'owner', 'media')
             ->wherePivot('role_id', app(RoleRepository::class)->findRoleOrFail(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)->id)
             ->orderBy($orderBy, $direction)
-            ->simplePaginate();
+            ->simplePaginate(2);
     }
 
     /**
@@ -91,7 +91,7 @@ class UserRepository extends BaseRepository implements UserInterface
                 Role::ROLE_MEMBER,
             ], Role::TYPE_CAMPAIGN)->pluck('id')->all())
             ->orderBy($orderBy, $direction)
-            ->simplePaginate();
+            ->simplePaginate(2);
     }
 
     /**
@@ -101,7 +101,9 @@ class UserRepository extends BaseRepository implements UserInterface
     public function listFollower($id, $orderBy = 'created_at', $direction = 'desc')
     {
         $user = $this->findOrFail($id);
-        $listFollower = $user->followers()
+        $listFollower = $user
+            ->followers()
+            ->where('status', User::ACTIVE)
             ->with('followers', 'followed')
             //"followers" -> this statement will get all follower who is following user
             //"followed" -> this will check followers of current page user is following auth or not
@@ -121,7 +123,9 @@ class UserRepository extends BaseRepository implements UserInterface
     public function listFollowing($id, $orderBy = 'created_at', $direction = 'desc')
     {
         $user = $this->findOrFail($id);
-        $listFollower = $user->followings()
+        $listFollower = $user
+            ->followings()
+            ->where('status', User::ACTIVE)
             ->with('followers', 'followed')
             ->orderBy($orderBy, $direction)
             ->paginate(config('settings.pagination.follow'));
