@@ -48,10 +48,10 @@
             <form>
                 <div class="div-input-chat form-group label-floating">
                     <textarea class="form-control"
-                        placeholder=""
                         name="message"
                         v-model="content"
-                        @keyup.enter="handleChat">
+                        @keyup.enter="handleChat"
+                        :placeholder="$t('chat.send_message')">
                     </textarea>
                 </div>
             </form>
