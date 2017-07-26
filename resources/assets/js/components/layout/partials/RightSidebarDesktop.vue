@@ -18,7 +18,7 @@
                     </svg>
                 </a>
             </div>
-            <a href="34-YourAccount-ChatMessages.html" class="olympus-chat inline-items">
+            <a href="javascript:void(0)" class="olympus-chat inline-items">
                 <svg class="olymp-chat---messages-icon">
                     <use xlink:href='/frontend/icons/icons.svg#olymp-chat---messages-icon'></use>
                 </svg>
@@ -33,7 +33,9 @@
                 <ul class="chat-users" v-for="friend in friends">
                     <li class="inline-items">
                         <div class="author-thumb">
-                            <img alt="author" :src="friend.image_thumbnail" class="avatar">
+                            <img alt="author" :src="friend.image_thumbnail"
+                                class="avatar"
+                                @click="addChatComponent(friend.id, friend.name, true)">
                             <span class="icon-status online"></span>
                         </div>
                         <div class="author-status">
@@ -77,7 +79,8 @@
                         <div class="author-thumb">
                             <img alt="author"
                                 :src="group.media[0].image_thumbnail"
-                                class="avatar">
+                                class="avatar"
+                                @click="addChatComponent(group.hashtag, group.hashtag, false)">
                             <span class="icon-status online"></span>
                         </div>
                         <div class="author-status">
@@ -117,7 +120,7 @@
                 <form class="form-group">
                     <input class="form-control" :placeholder="$t('chat.search_friends')" value="" type="text">
                 </form>
-                <a href="29-YourAccount-AccountSettings.html" class="settings">
+                <a href="javascript:void(0)" class="settings">
                     <svg class="olymp-settings-icon">
                         <use xlink:href='/frontend/icons/icons.svg#olymp-settings-icon'></use>
                     </svg>
@@ -128,7 +131,7 @@
                     </svg>
                 </a>
             </div>
-            <a href="34-YourAccount-ChatMessages.html" class="olympus-chat inline-items">
+            <a href="javascript:void(0)" class="olympus-chat inline-items">
                 <h6 class="olympus-chat-title">{{ $t('chat.campaign_chat') }}</h6>
                 <svg class="olymp-chat---messages-icon">
                     <use xlink:href='/frontend/icons/icons.svg#olymp-chat---messages-icon'></use>
