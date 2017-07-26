@@ -1,6 +1,5 @@
 <template>
     <div class="post-additional-info inline-items" v-if="type == 'likeInfo'">
-    {{ model + modelId }}
         <span>
             <a href="javascript:void(0)"
                 class="post-add-icon inline-items"

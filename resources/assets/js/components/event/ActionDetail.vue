@@ -44,7 +44,7 @@
                     <article class="hentry post">
 
                         <div class="post__author author vcard inline-items">
-                            <img :src="dataAction.user.url_file" alt="author">
+                            <img :src="dataAction.user.image_thumbnail" alt="author">
 
                             <div class="author-date">
                                 <router-link :to="{ name: 'user.timeline', params: { id: dataAction.user_id } }">

@@ -26,7 +26,8 @@
         "register_campaign": "Register to Campaign",
         "add_donation": "Add Donation",
         "profile": "Personal Information",
-        "change_password": "Change your password"
+        "change_password": "Change your password",
+        "upload_images": "Upload images"
     },
     "button": {
         "login": "Login",

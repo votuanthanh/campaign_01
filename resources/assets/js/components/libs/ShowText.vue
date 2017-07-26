@@ -19,19 +19,15 @@
             }
         },
         props : {
-            type: {
-                type: Boolean,
-                default: true,
-            },
             text: {
                 type: String,
             },
             show_char: {
-                default: 100,
+                default: 1000,
                 type: Number,
             },
             number_char_show: {
-                default: 100,
+                default: 700,
                 type: Number,
             },
             show: {

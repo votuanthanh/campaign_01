@@ -28,6 +28,11 @@ trait UrlImage
         return $this->factoryImage($this->url_file, 'large');
     }
 
+    public function getImageSliderAttribute($value)
+    {
+        return $this->factoryImage($this->url_file, 'slider');
+    }
+
     private function factoryImage($value, $type = '')
     {
         return preg_match('#^(http)|(https).*$#', $value)

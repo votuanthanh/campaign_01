@@ -39,6 +39,7 @@ export default {
             }
         })
     },
+
     methods: {
         ...mapActions('campaign', ['fetchData']),
         loadMore() {
@@ -46,6 +47,7 @@ export default {
             this.fetchData(data)
         }
     },
+
     components: {
         ListEvents,
         LeftCampaign,

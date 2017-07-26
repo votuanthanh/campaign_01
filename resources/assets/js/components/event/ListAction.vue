@@ -11,7 +11,7 @@
                 <div class="ui-block" v-for="(action, index) in actions.data" v-if="!(index % 2)">
                     <article class="hentry post has-post-thumbnail thumb-full-width">
                         <div class="post__author author vcard inline-items">
-                            <img :src="action.user.url_file" alt="author">
+                            <img :src="action.user.image_thumbnail" alt="author">
                             <div class="author-date">
                                 <router-link :to="{ name: 'user.timeline', params: { id: action.user.id } }">
                                     <a class="h6 post__author-name fn" href="javascript:void(0)">{{ action.user.name }}</a>
@@ -61,53 +61,15 @@
                             :show="$t('events.show_more')"
                             :hide="$t('events.show_less')">
                         </show-text>
-                        <div class="post-additional-info inline-items">
-                            <a href="javascript:void(0)" class="post-add-icon inline-items">
-                                <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
-                                <span>{{ action.likes.length }}</span>
-                            </a>
-                            <ul class="friends-harmonic">
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img :src="action.user.url_file" alt="friend">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img :src="action.user.url_file" alt="friend">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img :src="action.user.url_file" alt="friend">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img :src="action.user.url_file" alt="friend">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img :src="action.user.url_file" alt="friend">
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="names-people-likes">
-                                <a href="javascript:void(0)">Jenny </a>, <a href="#">Robert</a> and
-                                <br>6 more liked this
-                            </div>
-                            <div class="comments-shared">
-                                <a href="javascript:void(0)" class="post-add-icon inline-items">
-                                    <svg class="olymp-speech-balloon-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-speech-balloon-icon"></use></svg>
-                                    <span>{{ action.comments.length }}</span>
-                                </a>
-                                <a href="javascript:void(0)" class="post-add-icon inline-items">
-                                    <svg class="olymp-share-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use></svg>
-                                    <span>0</span>
-                                </a>
-                            </div>
-                        </div>
+
+                        <like :type="'likeInfo'"
+                            :checkLike="action.checkLike"
+                            :likes="action.likes"
+                            :model="'action'"
+                            :modelId="action.id"
+                        ></like>
+
+
                         <div class="control-block-button post-control-button">
                             <a href="javascript:void(0)" class="btn btn-control">
                                 <svg class="olymp-like-post-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-like-post-icon"></use></svg>
@@ -126,7 +88,7 @@
                 <div class="ui-block" v-for="(action, index) in actions.data" v-if="index % 2">
                     <article class="hentry post has-post-thumbnail thumb-full-width">
                         <div class="post__author author vcard inline-items">
-                            <img :src="action.user.url_file" alt="author">
+                            <img :src="action.user.image_thumbnail" alt="author">
                             <div class="author-date">
                                 <router-link :to="{ name: 'user.timeline', params: { id: action.user.id } }">
                                     <a class="h6 post__author-name fn" href="javascript:void(0)">{{ action.user.name }}</a>
@@ -138,9 +100,9 @@
                                 </div>
                             </div>
                             <div class="more">
-                                <svg class="olymp-three-dots-icon">
-                                    <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                                </svg>
+                            <svg class="olymp-three-dots-icon">
+                                <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
+                            </svg>
                                 <ul class="more-dropdown">
                                     <li v-if="user.id === action.user_id">
                                         <a href="javascript:void(0)">{{ $t('actions.edit_action') }}</a>
@@ -176,68 +138,24 @@
                             :show="$t('events.show_more')"
                             :hide="$t('events.show_less')">
                         </show-text>
-                        <div class="post-additional-info inline-items">
-                            <a href="javascript:void(0)" class="post-add-icon inline-items">
-                                <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
-                                <span>{{ action.likes.length }}</span>
-                            </a>
-                            <ul class="friends-harmonic">
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img :src="action.user.url_file" alt="friend">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img :src="action.user.url_file" alt="friend">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img :src="action.user.url_file" alt="friend">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img :src="action.user.url_file" alt="friend">
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)">
-                                        <img :src="action.user.url_file" alt="friend">
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="names-people-likes">
-                                <a href="javascript:void(0)">Jenny </a>, <a href="#">Robert</a> and
-                                <br>6 more liked this
-                            </div>
-                            <div class="comments-shared">
-                                <a href="javascript:void(0)" class="post-add-icon inline-items">
-                                    <svg class="olymp-speech-balloon-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-speech-balloon-icon"></use></svg>
-                                    <span>{{ action.comments.length }}</span>
-                                </a>
-                                <a href="javascript:void(0)" class="post-add-icon inline-items">
-                                    <svg class="olymp-share-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use></svg>
-                                    <span>0</span>
-                                </a>
-                            </div>
-                        </div>
+
+                        <like :type="'likeInfo'"
+                            :checkLike="action.checkLike"
+                            :likes="action.likes"
+                            :model="'action'"
+                            :modelId="action.id"
+                        ></like>
+
+
                         <div class="control-block-button post-control-button">
                             <a href="javascript:void(0)" class="btn btn-control">
-                                <svg class="olymp-like-post-icon">
-                                    <use xlink:href="/frontend/icons/icons.svg#olymp-like-post-icon">
-                                </use></svg>
+                                <svg class="olymp-like-post-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-like-post-icon"></use></svg>
                             </a>
                             <a href="javascript:void(0)" class="btn btn-control">
-                                <svg class="olymp-comments-post-icon">
-                                    <use xlink:href="/frontend/icons/icons.svg#olymp-comments-post-icon"></use>
-                                </svg>
+                                <svg class="olymp-comments-post-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-comments-post-icon"></use></svg>
                             </a>
                             <a href="javascript:void(0)" class="btn btn-control">
-                                <svg class="olymp-share-icon">
-                                    <use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use>
-                                </svg>
+                                <svg class="olymp-share-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use></svg>
                             </a>
                         </div>
                     </article>
@@ -252,6 +170,7 @@
     import { mapState, mapActions } from 'vuex'
     import ShowText from '../libs/ShowText.vue'
     import ActionDetail from './ActionDetail.vue'
+    import Like from '../user/timeline/Like.vue'
 
     export default {
         data: () => ({
@@ -308,7 +227,8 @@
 
         components : {
             ShowText,
-            ActionDetail
+            ActionDetail,
+            Like
         }
     }
 </script>
