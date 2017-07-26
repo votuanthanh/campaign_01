@@ -12,7 +12,7 @@
                         </router-link>
                     </div>
                     <div class="birthday-author-name">
-                        <router-link :to="{ name: 'event.goal', params: { id: goal.id }}" class="h6 author-name">{{ goal.donation_type.name }} ({{ Math.round(donateInfo[i]/goal.goal*100) }})%</router-link>
+                        <router-link :to="{ name: 'event.goal', params: { id: goal.id }}" class="h6 author-name">{{ goal.donation_type.name }} ({{ Math.round(donateInfo[i]/goal.goal*100) }}%)</router-link>
                         <div class="birthday-date">{{ $t('events.donation.receive') }} {{ donateInfo[i] }}/{{ goal.goal }} {{ goal.donation_type.quality.name }} {{ goal.donation_type.name }} with {{ goal.donations.length }} donation(s)</div>
                     </div>
 

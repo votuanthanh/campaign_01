@@ -63,7 +63,7 @@
                     <ul class="notification-list">
                         <li v-for="donation in goals.donations">
                             <div class="author-thumb">
-                                <img :src="donation.user.url_file" alt="author" style="max-height: 100%">
+                                <img :src="donation.user.image_thumbnail" alt="author" style="max-height: 100%">
                             </div>
                             <div class="notification-event">
                                 <a href="#" class="h6 notification-friend">{{ donation.user.name }}</a> donate {{ donation.value }} {{ goals.donation_type.quality.name }} {{ goals.donation_type.name }}.

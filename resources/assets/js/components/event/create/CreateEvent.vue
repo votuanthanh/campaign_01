@@ -1,10 +1,6 @@
 <template lang="html">
     <div class="fade show" id="create-event" style="display: block">
         <div class="modal-dialog ui-block window-popup create-event">
-            <a href="#" class="close icon-close" data-dismiss="modal" aria-label="Close">
-                <svg class="olymp-close-icon"><use xlink:href="icons/icons.svg#olymp-close-icon"></use></svg>
-            </a>
-
             <div class="ui-block-title">
                 <h6 class="title">{{ $t('events.create_event') }}</h6>
             </div>
@@ -77,19 +73,22 @@
                 </div>
 
                 <div class="form-group label-floating">
-                    <p>Upload image</p>
-                    <dropzone
-                        ref="vueDropzone"
-                        id="myVueDropzone"
-                        url="/api/file/upload"
-                        acceptedFileTypes='image/*'
-                        :autoProcessQueue="true"
-                        :maxNumberOfFiles="maxFile"
-                        :maxFileSizeInMB='maxSizeFile'
-                        @vdropzone-success="showSuccess"
-                        @vdropzone-removed-file="deleteFile">
-                        <input type="hidden" name="token" value="file">
-                    </dropzone>
+                    <p>{{ $t('form.title.upload_images') }}</p>
+                    <div :class="{ 'upload-file': true, 'has-error-upload': hasErrorFiles }">
+                        <dropzone
+                            id="myVueDropzoneId"
+                            ref="myVueDropzone"
+                            url="/api/file/upload"
+                            acceptedFileTypes='image/*'
+                            :autoProcessQueue="false"
+                            :maxNumberOfFiles="maxFile"
+                            :maxFileSizeInMB='maxSizeFile'
+                            @vdropzone-success="showSuccess"
+                            @vdropzone-removed-file="deleteFile"
+                            @vdropzone-queue-complete="queueComplete"
+                            @vdropzone-files-added="fileAdded">
+                        </dropzone>
+                    </div>
                 </div>
                 <button class="btn btn-breez btn-lg full-width" @click="createEvent">{{ $t('form.button.create_event') }}</button>
             </div>
@@ -143,7 +142,8 @@
                 address: ' ',
                 donations: []
             },
-            editorOption
+            editorOption,
+            hasErrorFiles: false
         }),
 
         methods: {
@@ -249,18 +249,43 @@
                 this.newEvent.files.push(response)
             },
 
-            deleteFile(file, error, xhr) {
-                let index = this.newEvent.files.indexOf(file.xhr.response)
-                let url = this.newEvent.files.splice(index, 1)
-                del(`file/delete/${url}`)
-            },
-
             createEvent() {
+                this.hasErrorFiles = this.$refs.myVueDropzone.getRejectedFiles().length
                 this.$validator.validateAll().then((result) => {
                     if (!this.flag || this.hasErrorDonation()) {
                         return
                     }
 
+                    if (!this.hasErrorFiles) {
+                        this.$refs.myVueDropzone.processQueue()
+
+                        if (!this.$refs.myVueDropzone.getUploadingFiles().length) {
+                            this.queueComplete()
+                        }
+                    }
+                })
+            },
+
+            hasErrorDonation() {
+                let errorDonations = []
+
+                for(let index in this.errorBags) {
+                    // Triger validation children donation
+                    this.errorBags[index].validateAll().catch(() => {})
+                    errorDonations.push(this.errorBags[index].getErrors())
+                }
+
+                return !errorDonations.every(item => !item.count())
+            },
+
+            deleteFile(file, error, xhr) {
+                this.hasErrorFiles = this.$refs.myVueDropzone.getRejectedFiles().length
+            },
+
+            queueComplete(file, xhr, formData) {
+                this.hasErrorFiles = this.$refs.myVueDropzone.getRejectedFiles().length
+
+                if (!this.hasErrorFiles) {
                     this.newEvent.campaign_id = this.$route.params.campaign_id
                     this.getDonation()
                     this.addSettings()
@@ -282,19 +307,11 @@
                                 container: false
                             })
                         })
-                })
+                }
             },
 
-            hasErrorDonation() {
-                let errorDonations = []
-
-                for(let index in this.errorBags) {
-                    // Triger validation children donation
-                    this.errorBags[index].validateAll().catch(() => {})
-                    errorDonations.push(this.errorBags[index].getErrors())
-                }
-
-                return !errorDonations.every(item => !item.count())
+            fileAdded() {
+                this.hasErrorFiles = this.$refs.myVueDropzone.getRejectedFiles().length
             }
         },
 
@@ -306,30 +323,55 @@
     }
 </script>
 
-<style type="text/css">
+<style lang="scss">
     .create-event {
         width: 80% !important;
-    }
-    #delete-donation:hover {
-        color: #ff5e3a;
-        cursor: pointer;
-    }
-    #add-donation:hover {
-        color: #08ddc1;
-        cursor: pointer;
-    }
-    .store-icon {
-        padding-left: 5px;
-        margin-bottom: 25px;
-    }
-    .icon-donation {
-        font-size: 1.5em !important;
-        padding-left: 5px;
-    }
-    #delete-donation {
-        margin-top: 1em;
-    }
-    .visible:hover {
-        cursor: not-allowed !important;
+        #add-donation {
+            &:hover {
+                color: #08ddc1;
+                cursor: pointer;
+            }
+        }
+        .store-icon {
+            padding-left: 5px;
+            margin-bottom: 25px;
+        }
+        .icon-donation {
+            font-size: 1.5em !important;
+            padding-left: 5px;
+        }
+        #delete-donation {
+            margin-top: 1em;
+            &:hover {
+                color: #ff5e3a;
+                cursor: pointer;
+            }
+        }
+        .visible:hover {
+            cursor: not-allowed !important;
+        }
+        .upload-file {
+            min-height: 300px;
+            form {
+                min-height: 300px;
+            }
+        }
+        .has-error-upload {
+            border: 1px solid red;
+            border-radius: 2px;
+        }
+        .vue-dropzone {
+            .dz-preview {
+                .dz-error-mark {
+                    i {
+                        color: red !important;
+                    }
+                }
+            }
+        }
+        .dz-error-message {
+            top: 5px !important;
+            left: 59px !important;
+        }
     }
 </style>

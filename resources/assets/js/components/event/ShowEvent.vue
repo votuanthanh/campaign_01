@@ -7,7 +7,7 @@
                         <slider animation="fade" height="100%" :interval="300000">
                             <slider-item v-for="(i, index) in event.media" :key="index">
                                 <div :style="style">
-                                    <img :src="i.url_file" class="image-event">
+                                    <img :src="i.image_slider" class="image-event">
                                 </div>
                             </slider-item>
                         </slider>
@@ -18,7 +18,7 @@
                         <article class="hentry post info-event">
 
                             <div class="post__author author vcard inline-items user-event">
-                                <img :src="event.user.url_file" alt="author">
+                                <img :src="event.user.image_thumbnail" alt="author">
 
                                 <div class="author-date">
                                     <router-link :to="{ name: 'user.timeline', params: { id: event.user.id } }">
@@ -55,7 +55,7 @@
 
                             <div class="post-additional-info inline-items like-comment-event">
 
-                                <a href="javascript:void(0)" class="post-add-icon inline-items">
+                                <a href="javascript:void(0)" :class="{ 'post-add-icon': true, 'inline-items': true, 'color-like': isLiked }">
                                     <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
                                     <span>{{ numberLike }}</span>
                                 </a>
@@ -101,6 +101,7 @@
                         <show-text
                             :text="event.description"
                             :show_char=500
+                            :number_char_show=300
                             :show="$t('events.show_more')"
                             :hide="$t('events.show_less')">
                         </show-text>
@@ -252,5 +253,11 @@
     .show-comment {
         max-height: 300px;
         overflow-y: scroll;
+    }
+    .color-like {
+        fill: #ff5e3a !important;
+        &:hover {
+            fill: #9a9fbf !important;
+        }
     }
 </style>
