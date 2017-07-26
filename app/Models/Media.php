@@ -33,6 +33,7 @@ class Media extends BaseModel
         'image_small',
         'image_thumbnail',
         'image_slider',
+        'image_large',
     ];
 
     public function mediable()

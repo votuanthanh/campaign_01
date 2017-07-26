@@ -4,6 +4,7 @@ export default {
     [types.SET_LIKE](state, data) {
         state.like[data.model + data.modelId] = data.like
         state.checkLiked[data.model + data.modelId] = data.checkLiked
+        state.commentTotal[data.model + data.modelId] = data.commentTotal
     },
 
     [types.LIKE_ACTIVITY](state, data) {

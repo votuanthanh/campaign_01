@@ -8,6 +8,8 @@ import { getUser } from './router'
 import Campaign from '../components/campaign/Campaign.vue'
 import TimelineCampaign from '../components/campaign/TimelineCampaign.vue'
 import PhotoCampaign from '../components/campaign/Photo/PhotoCampaign.vue'
+import CampaignRelated from '../components/campaign/CampaignRelated.vue'
+import CampaignAbout from '../components/campaign/CampaignAbout.vue'
 import App from '../components/layout/App.vue'
 import Followers from '../components/user/Followers.vue'
 import MasterUser from '../components/user/MasterUser.vue'
@@ -65,7 +67,9 @@ const router = [
                 component: Campaign,
                 children: [
                     { path: 'timeline', component: TimelineCampaign, name: 'campaign.timeline' },
-                    { path: 'photo', component: PhotoCampaign, name: 'campaign.photo' }
+                    { path: 'photo', component: PhotoCampaign, name: 'campaign.photo' },
+                    { path: 'campaign-related', component: CampaignRelated, name: 'campaign.campaign_related' },
+                    { path: 'campaign-about', component: CampaignAbout, name: 'campaign.about' }
                 ]
             },
             {

@@ -22,6 +22,8 @@ export default {
     [types.JOIN_CAMPAIGN](state, data) {
         let list_members = state.listMembers
         list_members.memberIds.push(data.id)
+        data.pivot = []
+        data.pivot.status = 0
         list_members.members.push(data)
         state.listMembers = list_members
     },

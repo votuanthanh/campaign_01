@@ -33,9 +33,7 @@ class CommentController extends ApiController
             throw new UnknowException('Event_id is null');
         }
 
-        if ($parentId != config('settings.comment_parent')) {
-            $data['parent_id'] = $parentId;
-        }
+        $data['parent_id'] = $parentId;
 
         $data['content'] = $request->content;
         $data['user_id'] = $this->user->id;

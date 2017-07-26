@@ -1,7 +1,9 @@
 <template lang="html">
     <form class="comment-form inline-items" @submit.prevent="addComment" :class="classFormComment">
         <div class="post__author author vcard inline-items">
-            <img :src="user.url_file" :alt="user.name">
+            <router-link :to="{ name: 'user.timeline', params: { id: user.id }}">
+                <img :src="user.image_thumbnail" :alt="user.name">
+            </router-link>
         </div>
         <div class="form-group with-icon-right">
             <textarea
@@ -39,6 +41,7 @@ export default {
             authenticated: state => state.authenticated,
             user: state => state.user
         }),
+        ...mapState('comment', ['paginates']),
     },
     methods: {
         ...mapActions('comment', ['addComment']),
@@ -50,7 +53,8 @@ export default {
                         commentParentId: this.commentParentId,
                         flag: this.flag,
                         comment: this.comment,
-                        flagAction: this.flagAction
+                        flagAction: this.flagAction,
+                        commentTotal: this.paginates[this.modelId].total
                     })
                     .then(status => {
                         if (status) {

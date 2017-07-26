@@ -299,4 +299,19 @@ class CampaignController extends ApiController
             $this->compacts['list_photos'] = $this->actionRepository->getActionPhotos($actions);
         });
     }
+
+    /**
+     * get campaign related
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getCampaignRelated($id)
+    {
+        $campaign = $this->campaignRepository->findOrFail($id);
+        $userId = $this->user->id;
+
+        return $this->doAction(function () use ($campaign, $userId) {
+            $this->compacts['campaign_related'] = $this->campaignRepository->getCampaignRelated($campaign, $userId);
+        });
+    }
 }

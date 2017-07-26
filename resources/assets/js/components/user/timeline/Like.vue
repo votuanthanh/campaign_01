@@ -26,7 +26,7 @@
         <ul class="friends-harmonic" v-if="like[model + modelId].total">
             <li v-for="(item, key, index) in like[model + modelId].data" v-if="key < 4">
                 <a>
-                    <img :src="item.user.url_file" alt="friend">
+                    <img :src="item.user.image_thumbnail" alt="friend">
                 </a>
             </li>
         </ul>
@@ -50,7 +50,7 @@
                 <svg class="olymp-speech-balloon-icon">
                     <use xlink:href="/frontend/icons/icons.svg#olymp-speech-balloon-icon"></use>
                 </svg>
-                <span>{{ numberOfComments }}</span>
+                <span>{{ commentTotal[model + modelId] }}</span>
             </a>
             <a href="#" class="post-add-icon inline-items">
                 <svg class="olymp-share-icon">
@@ -110,24 +110,33 @@ export default {
         model: '',
         modelId: '',
         checkLike: true,
-        numberOfComments: 0,
+        numberOfComments: 0
     },
     created() {
         this.setLike({
             like: this.likes,
             modelId: this.modelId,
             model: this.model,
-            checkLiked: this.checkLike
+            checkLiked: this.checkLike,
+            commentTotal: this.numberOfComments
         })
     },
     computed: {
         ...mapState('auth', {
             user: state => state.user
         }),
-        ...mapState('like', ['like', 'checkLiked']),
+        ...mapState('like', [
+            'like',
+            'checkLiked',
+            'commentTotal'
+        ]),
     },
     methods: {
-        ...mapActions('like', ['setLike', 'likeActivity', 'showUsersLiked']),
+        ...mapActions('like', [
+            'setLike',
+            'likeActivity',
+            'showUsersLiked'
+        ]),
     }
 }
 </script>

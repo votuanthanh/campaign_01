@@ -16,14 +16,16 @@
         <ul class="comments-list">
             <li v-for="(comment, index) in comments[modelId]" class="has-children comment">
                 <div class="post__author author vcard inline-items" v-if="comment.user != null">
-                    <img :src="comment.user.url_file" alt="author">
+                    <router-link :to="{ name: 'user.followers', params: { id: comment.user.id }}" class="h6 post__author-name fn">
+                        <img :src="comment.user.image_thumbnail" :alt="comment.user.name">
+                    </router-link>
+
                     <div class="author-date">
-                        <a class="h6 post__author-name fn" href="#"> {{ comment.user.name }}</a>
-                        <span class="comment-text" style="display:none;" v-html="convertToHTML(comment.content)"></span>
+                        <router-link :to="{ name: 'user.followers', params: { id: comment.user.id }}" class="h6 post__author-name fn">{{ comment.user.name }}</router-link>
                         <div class="post__date">
                             <timeago
                                 :max-time="86400 * 365"
-                                class="published"
+                                class="published date-format"
                                 :since="comment.created_at">
                             </timeago>
                         </div>
@@ -57,6 +59,7 @@
                         v-if="flagEdit != comment.id">
                     </show-text>
                 </div>
+
                 <form-comment-edit
                     :parentComment="comment"
                     :flagEdit="flagEdit"
@@ -64,12 +67,14 @@
                     @changeFlagEdit="changeFlagEdit"
                     v-if="flagEdit == comment.id">
                 </form-comment-edit>
+
                 <like :type="'likeComment'"
                     :checkLike="comment.checkLike"
                     :likes="comment.likes"
                     :model="'comment'"
                     :modelId="comment.id"
                 ></like>
+
                 <a href="javascript:void(0)" @click="showSubComment(comment, index)" class="reply">{{ $t('campaigns.reply') }}</a>
                 <a href="javascript:void(0)"
                     @click="showSubComment(comment, index)"
@@ -99,20 +104,26 @@
                                 modelId: modelId,
                                 pageCurrent: comment.sub_comment.current_page,
                                 lastPage: comment.sub_comment.last_page
-                            })" >
+                            })">
                             {{ $t('campaigns.more-comment') }}
                             <span>+</span>
                         </a>
                     </li>
                     <li v-for="subComment in comment.sub_comment.data" v-if="flagReply == comment.id">
                         <div class="post__author author vcard inline-items">
-                            <img :src="subComment.user.url_file" alt="author">
+
+                            <router-link :to="{ name: 'user.followers', params: { id: subComment.user.id }}" class="h6 post__author-name fn">
+                                <img :src="subComment.user.image_thumbnail" :alt="subComment.user.name">
+                            </router-link>
+
                             <div class="author-date">
-                                <a class="h6 post__author-name fn" href="#">{{ subComment.user.name }}</a>
+                                <router-link :to="{ name: 'user.followers', params: { id: subComment.user.id }}" class="h6 post__author-name fn">
+                                    {{ subComment.user.name }}
+                                </router-link>
                                 <div class="post__date">
                                     <timeago
                                         :max-time="86400 * 365"
-                                        class="published"
+                                        class="published date-format"
                                         :since="subComment.created_at">
                                     </timeago>
                                 </div>
@@ -148,6 +159,7 @@
                                 v-if="flagEdit != subComment.id">
                             </show-text>
                         </div>
+
                         <form-comment-edit
                             :parentComment="subComment"
                             v-if="flagEdit == subComment.id"
@@ -155,12 +167,14 @@
                             :classFormComment="''"
                             @changeFlagEdit="changeFlagEdit">
                         </form-comment-edit>
+
                         <like :type="'likeComment'"
                             :checkLike="subComment.checkLike"
                             :likes="subComment.likes"
                             :model="'comment'"
                             :modelId="subComment.id"
                         ></like>
+
                     </li>
                 </ul>
                 <form-comment
@@ -344,6 +358,11 @@ export default {
     .comment-form {
         background: white;
         border-bottom: 1px solid #e6ecf5;
+    }
+
+    .date-format {
+        font-size: 13px;
+        color: #bbb;
     }
 
 </style>

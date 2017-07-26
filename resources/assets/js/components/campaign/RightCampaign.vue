@@ -1,16 +1,23 @@
 <template lang="html">
     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+         <!-- <p>{{ listMembers.members }}</p> -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css" rel="stylesheet">
         <div class="ui-block">
             <div class="ui-block-title">
-                <router-link :to="{ name: 'event.create', params: { campaign_id: campaign.id }}" class="btn btn-md-2 btn-border-think custom-color c-grey full-width">{{ $t('campaigns.create-event') }}</router-link>
+                <router-link
+                    :to="{ name: 'event.create', params: { campaign_id: campaign.id }}"
+                    class="btn btn-md-2 btn-border-think custom-color c-grey full-width">
+                    {{ $t('campaigns.create-event') }}
+                </router-link>
             </div>
         </div>
 
         <div class="ui-block">
             <div class="ui-block-title">
                 <h6 class="title">{{ $t('campaigns.tags') }}</h6>
-                <a href="#" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
+                <a href="javascript:void(0)" class="more">
+                    <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
+                </a>
             </div>
             <div class="ui-block-content">
                     <p v-for="tag, index in tags" class="div-tags">
@@ -25,17 +32,17 @@
         <div class="ui-block">
             <div class="ui-block-title">
                 <h6 class="title">{{ $t('campaigns.typical-images') }}</h6>
-                <a href="#" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
+                <a href="javascript:void(0)" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
             </div>
             <div class="ui-block-content">
-                <ul class="widget w-last-photo js-zoom-gallery"  v-if="listPhotos.data">
+                <ul class="widget w-last-photo js-zoom-gallery" v-if="listPhotos.total > 0">
                     <li v-for="photo in listPhotos.data">
-                        <a :href="photo.media[0].url_file">
-                            <img :src="photo.media[0].url_file" alt="photo">
+                        <a :href="photo.media[0].image_small">
+                            <img :src="photo.media[0].image_small" alt="photo">
                         </a>
                     </li>
                     <li v-if="listPhotos.total > 8">
-                        <a href="#" class="all-users">+ {{ remainingData(listPhotos.total) }}</a>
+                        <a href="javascript:void(0)" class="all-users">+ {{ remainingData(listPhotos.total) }}</a>
                     </li>
                 </ul>
             </div>
@@ -44,7 +51,7 @@
         <div class="ui-block">
             <div class="ui-block-title">
                 <h6 class="title">{{ $t('campaigns.list-members') }}</h6>
-                <a href="#" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
+                <a href="javascript:void(0)" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
             </div>
             <div class="ui-block-content">
                 <ul class="widget w-pool">
@@ -52,15 +59,14 @@
                         <div class="skills-item">
                             <div class="counter-friends">{{ totalMemberCurrent }} {{ $t('campaigns.lbl-members') }}</div>
 
-                            <ul class="widget w-faved-page js-zoom-gallery">
-                                <li v-for="member in listMembers.members">
-                                    <router-link
-                                        :to="{ name: 'user.timeline', params: { id: member.id }}">
+                            <ul class="widget w-faved-page js-zoom-gallery" v-if="listMembers.members">
+                                <li v-for="(member, index) in listMembers.members" v-if="index < 10">
+                                    <router-link :to="{ name: 'user.timeline', params: { id: member.id }}">
                                         <img :src="member.image_thumbnail" :alt="member.name">
                                     </router-link>
                                 </li>
                                 <li class="all-users" v-if="totalMemberCurrent >= 10">
-                                    <a href="#">
+                                    <a href="javascript:void(0)">
                                         + {{ remainingMembers }}
                                     </a>
                                 </li>
@@ -69,15 +75,19 @@
                         </div>
                     </li>
                 </ul>
+
                 <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
                     v-if="listMembers.memberIds.indexOf(user.id) < 0"
                     @click="comfirmJoinCampaign()">{{ $t('campaigns.join-now') }}</a>
 
                 <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
-                    v-if="listMembers.memberIds.indexOf(user.id) >= 0"
+                    v-if="listMembers.memberIds.indexOf(user.id) >= 0 && checkStausJoinCampaign(user.id)"
                     @click="comfirmLeaveCampaign()" >
-                        {{ $t('campaigns.leave') }}
-                    </a>
+                    {{ $t('campaigns.leave') }}</a>
+
+                <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                    v-if="listMembers.memberIds.indexOf(user.id) >= 0 && !checkStausJoinCampaign(user.id)">
+                    {{ $t('campaigns.aproving') }}</a>
             </div>
         </div>
 
@@ -103,7 +113,7 @@
         <!-- form comfirm leave campaign -->
         <modal :show.sync="flag_confirm_leave">
             <h5 class="exclamation-header" slot="header">
-                {{ $t('messages.comfirm-join-campaign') }}
+                {{ $t('messages.comfirm-leave-campaign') }}
             </h5>
             <div class="body-modal" slot="main">
                 <a href="javascript:void(0)"
@@ -145,10 +155,10 @@
         created() {
             this.getlistPhotos(this.$route.params.id)
         },
-        data: () =>({
-                flag_confirm_join: false,
-                flag_confirm_leave: false
-            }),
+        data: () => ({
+            flag_confirm_join: false,
+            flag_confirm_leave: false
+        }),
         computed: {
             ...mapState('campaign', [
                 'campaign',
@@ -218,10 +228,20 @@
             },
             remainingData(data) {
                 return data - 8
+            },
+            checkStausJoinCampaign(userId) {
+                let checkStatus = false
+                    this.listMembers.members.forEach(function(item, index){
+                        if (item.id == userId && item.pivot.status == 1) {
+                            checkStatus = true
+                        }
+                    });
+
+                return checkStatus
             }
         },
         components: {
-           Modal
+           Modal,
         }
     }
 </script>

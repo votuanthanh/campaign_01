@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 
 class CampaignRepository extends BaseRepository implements CampaignInterface
 {
@@ -218,7 +219,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         $campaign['owner'] = $campaign['members']->where('pivot.role_id', $roleIdOwner)->first();
         $campaign['memberIds'] = $campaign['members']->pluck('id')->all();
         // images campaign
-        $campaign['campaign_images'] = $campaign->media()->first(['url_file', 'type']);
+        $campaign['campaign_images'] = $campaign->media()->first();
 
         return [
             'campaign' => $campaign,
@@ -360,9 +361,27 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
     public function listPhotos($campaign)
     {
         return $campaign->events()->with(['actions' => function ($query) {
-            $query->with(['media' => function ($subQuery) {
+            $query->with(['user', 'media' => function ($subQuery) {
                 $subQuery->orderBy('created_at', 'desc')->first();
-            }])->orderBy('created_at', 'desc')->first();
+            }])->orderBy('created_at', 'desc')->get();
         }])->orderBy('created_at', 'desc')->paginate(config('settings.paginate_default'));
+    }
+
+    /**
+     * get campaign related
+     * @param  App\Models\Campaign $campaign
+     * @param  int $campaign
+     * @return mixed
+    */
+    public function getCampaignRelated($campaign, $userId)
+    {
+        $tagIds = $campaign->tags()->pluck('tag_id')->all();
+
+        return $this->whereHas('tags', function ($query) use ($tagIds) {
+            $query->whereIn('tag_id', $tagIds);
+        })->whereHas('settings', function ($query) {
+            $query->where('key', config('settings.campaigns.start_day'))->where('value', '>=', Carbon::now());
+        })->with('media', 'users', 'tags')
+        ->paginate(config('settings.paginate_default'));
     }
 }
