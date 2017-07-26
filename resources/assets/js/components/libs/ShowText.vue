@@ -1,10 +1,10 @@
 <template>
     <span v-if="flag">
-        <span v-html="convertToHTML(shot_text)"></span>
+        <span class="show-text" v-html="convertToHTML(shot_text)"></span>
         <a href="javascript:void(0)" @click="show_hide" v-if="show_link">{{ show }}</a>
     </span>
-    <span v-else="!flag">
-        <span v-html="convertToHTML(text)"></span>
+    <span v-else>
+        <span class="show-text" v-html="convertToHTML(text)"></span>
         <a href="javascript:void(0)" @click="show_hide">{{ hide }}</a>
     </span>
 </template>
@@ -58,6 +58,8 @@
     }
 </script>
 
-<style type="scss">
-
+<style type="scss" scoped>
+    .show-text {
+        word-wrap: break-word;
+    }
 </style>

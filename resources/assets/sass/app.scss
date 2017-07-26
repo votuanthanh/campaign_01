@@ -107,3 +107,12 @@
         }
     }
 }
+
+.post {
+    p {
+        margin: 0;
+        &:last-child {
+            margin-bottom: 10px;
+        }
+    }
+}

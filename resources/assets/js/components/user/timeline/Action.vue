@@ -32,7 +32,7 @@
                     </ul>
                 </div>
             </div>
-            <p>{{ action.description }}</p>
+            <p v-html="actionDetail.description"></p>
             <like :type="'likeInfo'"
                 :checkLike="actionDetail.checkLike"
                 :numberOfComments ="actionDetail.comments.total"

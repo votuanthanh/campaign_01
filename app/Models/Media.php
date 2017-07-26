@@ -32,6 +32,7 @@ class Media extends BaseModel
         'image_medium',
         'image_small',
         'image_thumbnail',
+        'image_large',
         'image_slider',
         'image_large',
     ];

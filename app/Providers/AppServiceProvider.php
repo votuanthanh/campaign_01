@@ -44,27 +44,27 @@ class AppServiceProvider extends ServiceProvider
                     'thumbnail' => [
                         'w' => 100,
                         'h' => 100,
-                        'fit' => 'crop',
+                        'fit' => 'max',
                     ],
                     'small' => [
                         'w' => 320,
                         'h' => 240,
-                        'fit' => 'crop',
+                        'fit' => 'max',
                     ],
                     'medium' => [
                         'w' => 640,
                         'h' => 480,
-                        'fit' => 'crop',
+                        'fit' => 'max',
                     ],
                     'large' => [
                         'w' => 800,
                         'h' => 600,
-                        'fit' => 'crop',
+                        'fit' => 'max',
                     ],
                     'slider' => [
                         'w' => 900,
                         'h' => 450,
-                        'fit' => 'crop',
+                        'fit' => 'max',
                     ],
                 ],
                 'response' => new LaravelResponseFactory(app('request')),

@@ -34,7 +34,8 @@
                 </ul>
             </div>
         </div>
-        <p>{{ event.description }}</p>
+        <p v-html="eventDetail.description"></p>
+
         <like :type="'likeInfo'"
             :checkLike="eventDetail.checkLike"
             :numberOfComments ="eventDetail.comments.total"

@@ -45,7 +45,7 @@
             <a href="#">{{ like[model + modelId].data[1].user.name }}</a>
             <br>{{ $t('post.like.and') }} {{ like[model + modelId].total - 2 }} {{ $t('post.like.more_like') }}
         </div>
-        <div :class="{ 'mrg-top': (like[model + modelId].total < 3), 'comments-shared': true }">
+        <div :class="{ 'mrg-top': (like[model + modelId].total < 3), 'comments-shared': true }" style="display: none !important;">
             <a href="#" class="post-add-icon inline-items">
                 <svg class="olymp-speech-balloon-icon">
                     <use xlink:href="/frontend/icons/icons.svg#olymp-speech-balloon-icon"></use>
@@ -59,8 +59,6 @@
                 <span>0</span>
             </a>
         </div>
-
-
     </div>
 
     <span v-else-if="type == 'likeComment'" class="info-like">
