@@ -164,6 +164,7 @@ class UserRepository extends BaseRepository implements UserInterface
                 Action::class,
                 Event::class,
             ])
+            ->orderBy('id', 'DESC')
             ->paginate(config('setting.pagination.timeline'));
 
         return [
