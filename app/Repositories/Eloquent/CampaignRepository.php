@@ -56,6 +56,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             'longitude' => $inputs['longitude'],
             'latitude' => $inputs['latitude'],
             'status' => Campaign::ACTIVE,
+            'address' => empty($inputs['address']) ? null : $inputs['address'],
         ];
 
         $campaign = parent::create($data);
@@ -84,6 +85,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         ]);
         $campaign->users()->attach($inputs['user_id'], [
             'role_id' => $inputs['role_id'],
+            'status' => Campaign::APPROVED,
         ]);
 
         if ($inputs['tags'] && is_array($inputs['tags'])) {

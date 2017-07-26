@@ -8,10 +8,10 @@
                     <div class="ui-block">
                         <div class="top-header top-header-favorit">
                             <div class="top-header-thumb" v-if="campaign.campaign_images != null">
-                                <img :src="campaign.campaign_images.url_file" alt="nature">
+                                <img :src="campaign.campaign_images.image_default" alt="nature">
                                 <div class="top-header-author">
                                     <div class="author-thumb" v-if="campaign.owner != null">
-                                        <img :src="campaign.owner.url_file" alt="author">
+                                        <img :src="campaign.owner.image_thumbnail" alt="author">
                                     </div>
                                         <a href="#" class="h3 author-name">{{ campaign.title }}</a>
                                         <div class="country">#{{ campaign.hashtag }}</div>
@@ -22,19 +22,25 @@
                                     <div class="col-xl-8 offset-xl-2 col-lg-8 offset-lg-2 col-md-12 offset-md-0">
                                         <ul class="profile-menu">
                                             <li>
-                                                <router-link :to="{ name: 'campaign.timeline', params: { id: campaign.id }}" :class="checkActiveUrl('campaign.timeline')">{{ $t('campaigns.timeline') }}</router-link>
+                                                <router-link :to="{ name: 'campaign.timeline', params: { id: campaign.id }}"
+                                                    :class="checkActiveUrl('campaign.timeline')">
+                                                    {{ $t('campaigns.timeline') }}
+                                                </router-link>
                                             </li>
                                             <li>
-                                                <router-link :to="{ name: 'campaign.photo', params: { id: campaign.id }}" :class="checkActiveUrl('campaign.photo')">{{ $t('campaigns.photos') }}</router-link>
+                                                <router-link :to="{ name: 'campaign.photo', params: { id: campaign.id }}"
+                                                    :class="checkActiveUrl('campaign.photo')">
+                                                    {{ $t('campaigns.photos') }}
+                                                </router-link>
                                             </li>
                                             <li>
-                                                <a href="09-ProfilePage-Videos.html">{{ $t('campaigns.videos') }}</a>
+                                                <a href="#">{{ $t('campaigns.videos') }}</a>
                                             </li>
                                             <li>
-                                                <a href="14-FavouritePage-Statistics.html">{{ $t('campaigns.statistics') }}</a>
+                                                <a href="#">{{ $t('campaigns.statistics') }}</a>
                                             </li>
                                             <li>
-                                                <a href="15-FavouritePage-Events.html">Events</a>
+                                                <a href="#">{{ $t('events.events') }}</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -42,11 +48,15 @@
 
                                 <div class="control-block-button">
                                     <a href="#" class="btn btn-control bg-primary">
-                                        <svg class="olymp-star-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use></svg>
+                                        <svg class="olymp-star-icon">
+                                            <use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use>
+                                        </svg>
                                     </a>
 
                                     <a href="#" class="btn btn-control bg-purple">
-                                        <svg class="olymp-chat---messages-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-chat---messages-icon"></use></svg>
+                                        <svg class="olymp-chat---messages-icon">
+                                            <use xlink:href="/frontend/icons/icons.svg#olymp-chat---messages-icon"></use>
+                                        </svg>
                                     </a>
 
                                 </div>
