@@ -10,5 +10,6 @@
     "show_less" : "Show less",
     "search_action" : "Search action",
     "search" : "Search",
-    "not_found_action": "Not Found Action"
+    "not_found_action": "Not Found Action",
+    "events": "Events"
 }

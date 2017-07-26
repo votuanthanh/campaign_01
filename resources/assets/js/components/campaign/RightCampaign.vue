@@ -54,8 +54,10 @@
 
                             <ul class="widget w-faved-page js-zoom-gallery">
                                 <li v-for="member in listMembers.members">
-                                    <router-link :to="{ name: 'user.timeline', params: { id: member.id }}"><img :src="member.url_file" :alt="member.name"></router-link>
-
+                                    <router-link
+                                        :to="{ name: 'user.timeline', params: { id: member.id }}">
+                                        <img :src="member.image_thumbnail" :alt="member.name">
+                                    </router-link>
                                 </li>
                                 <li class="all-users" v-if="totalMemberCurrent >= 10">
                                     <a href="#">
@@ -85,8 +87,16 @@
                 {{ $t('messages.comfirm-join-campaign') }}
             </h5>
             <div class="body-modal" slot="main">
-                <a href="javascript:void(0)" class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="joinCampaigns">{{ $t('form.button.agree') }}</a>
-                <a href="javascript:void(0)" class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="cancelJoinCampaign">{{ $t('form.button.cancel') }}</a>
+                <a href="javascript:void(0)"
+                    class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12"
+                    @click="joinCampaigns">
+                    {{ $t('form.button.agree') }}
+                </a>
+                <a href="javascript:void(0)"
+                    class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12"
+                    @click="cancelJoinCampaign">
+                    {{ $t('form.button.cancel') }}
+                </a>
             </div>
         </modal>
 
@@ -96,8 +106,16 @@
                 {{ $t('messages.comfirm-join-campaign') }}
             </h5>
             <div class="body-modal" slot="main">
-                <a href="javascript:void(0)" class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="leaveCampaigns">{{ $t('form.button.agree') }}</a>
-                <a href="javascript:void(0)" class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12" @click="cancelLeaveCampaign">{{ $t('form.button.cancel') }}</a>
+                <a href="javascript:void(0)"
+                    class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12"
+                    @click="leaveCampaigns">
+                    {{ $t('form.button.agree') }}
+                </a>
+                <a href="javascript:void(0)"
+                    class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12"
+                    @click="cancelLeaveCampaign">
+                    {{ $t('form.button.cancel') }}
+                </a>
             </div>
         </modal>
     </div>
