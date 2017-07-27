@@ -34,4 +34,9 @@ class Goal extends BaseModel
     {
         return $this->hasMany(Donation::class);
     }
+
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class);
+    }
 }

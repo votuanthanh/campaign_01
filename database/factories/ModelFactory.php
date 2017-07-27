@@ -173,3 +173,19 @@ $factory->define(App\Models\Media::class, function (Faker\Generator $faker) {
         'type' => rand(0, 1),
     ];
 });
+
+$factory->define(App\Models\Expense::class, function (Faker\Generator $faker) {
+    static $userId;
+    static $eventId;
+    static $goalId;
+
+    return [
+        'user_id' => $faker->randomElement($userId ?: $userId = App\Models\User::pluck('id')->toArray()),
+        'event_id' => $faker->randomElement($eventId ?: $eventId = App\Models\Event::pluck('id')->toArray()),
+        'goal_id' => $faker->randomElement($goalId ?: $goalId = App\Models\Goal::pluck('id')->toArray()),
+        'time' => $faker->dateTime(),
+        'cost' => rand(10, 100),
+        'type' => rand(0, 1),
+        'reason' => $faker->paragraph(),
+    ];
+});
