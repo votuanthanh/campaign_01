@@ -151,24 +151,24 @@
                     <svg class="olymp-chat---messages-icon">
                         <use xlink:href="/frontend/icons/icons.svg#olymp-chat---messages-icon"></use>
                     </svg>
-                    <div class="label-avatar bg-purple">2</div>
+                    <div class="label-avatar bg-purple">{{ messages.length }}</div>
                     <div class="more-dropdown more-with-triangle triangle-top-center">
                         <div class="ui-block-title ui-block-title-small">
                             <h6 class="title">Chat / Messages</h6>
                             <a href="#">Mark all as read</a>
                             <a href="#">Settings</a>
                         </div>
-                        <div class="mCustomScrollbar" data-mcs-theme="dark">
+                        <div class="mCustomScrollbar" data-mcs-theme="dark" id="notification_messages">
                             <ul class="notification-list chat-message">
-                                <li class="message-unread">
+                                <li v-for="mess in messages" :class="mess.class">
                                     <div class="author-thumb">
-                                        <img src="/images/avatar59-sm.jpg" alt="author">
+                                        <img :src="mess.showAvatar" alt="author">
                                     </div>
                                     <div class="notification-event">
-                                        <a href="#" class="h6 notification-friend">Diana Jameson</a>
-                                        <span class="chat-message-item">Hi James! It’s Diana, I just wanted to let you know that we have to reschedule...</span>
+                                        <a href="#" class="h6 notification-friend">{{ mess.showName }}</a>
+                                        <span class="chat-message-item" v-html="mess.sendName + mess.message"></span>
                                         <span class="notification-date">
-                                            <time class="entry-date updated" datetime="2004-07-24T18:18">4 hours ago</time>
+                                            <time class="entry-date updated" datetime="2004-07-24T18:18">{{ calendarTime(mess.time) }}</time>
                                         </span>
                                     </div>
                                     <span class="notification-icon">
@@ -182,79 +182,12 @@
                                         </svg>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="author-thumb">
-                                        <img src="/images/avatar60-sm.jpg" alt="author">
-                                    </div>
-                                    <div class="notification-event">
-                                        <a href="#" class="h6 notification-friend">Jake Parker</a>
-                                        <span class="chat-message-item">Great, I’ll see you tomorrow!.</span>
-                                        <span class="notification-date">
-                                            <time class="entry-date updated" datetime="2004-07-24T18:18">4 hours ago</time>
-                                        </span>
-                                    </div>
-                                    <span class="notification-icon">
-                                        <svg class="olymp-chat---messages-icon">
-                                            <use xlink:href="/frontend/icons/icons.svg#olymp-chat---messages-icon"></use>
-                                        </svg>
-                                    </span>
-                                    <div class="more">
-                                        <svg class="olymp-three-dots-icon">
-                                            <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                                        </svg>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="author-thumb">
-                                        <img src="/images/avatar61-sm.jpg" alt="author">
-                                    </div>
-                                    <div class="notification-event">
-                                        <a href="#" class="h6 notification-friend">Elaine Dreyfuss</a>
-                                        <span class="chat-message-item">We’ll have to check that at the office and see if the client is on board with...</span>
-                                        <span class="notification-date">
-                                            <time class="entry-date updated" datetime="2004-07-24T18:18">Yesterday at 9:56pm</time>
-                                        </span>
-                                    </div>
-                                    <span class="notification-icon">
-                                        <svg class="olymp-chat---messages-icon">
-                                            <use xlink:href="/frontend/icons/icons.svg#olymp-chat---messages-icon"></use>
-                                        </svg>
-                                    </span>
-                                    <div class="more">
-                                        <svg class="olymp-three-dots-icon">
-                                            <use xlink:href={{ asset('frontend/icons/icons.svg#olymp-three-dots-icon') }}></use>
-                                        </svg>
-                                    </div>
-                                </li>
-                                <li class="chat-group">
-                                    <div class="author-thumb">
-                                        <img src="/images/avatar11-sm.jpg" alt="author">
-                                        <img src="/images/avatar12-sm.jpg" alt="author">
-                                        <img src="/images/avatar13-sm.jpg" alt="author">
-                                        <img src="/images/avatar10-sm.jpg" alt="author">
-                                    </div>
-                                    <div class="notification-event">
-                                        <a href="#" class="h6 notification-friend">You, Faye, Ed &amp; Jet +3</a>
-                                        <span class="last-message-author">Ed:</span>
-                                        <span class="chat-message-item">Yeah! Seems fine by me!</span>
-                                        <span class="notification-date">
-                                            <time class="entry-date updated" datetime="2004-07-24T18:18">March 16th at 10:23am</time>
-                                        </span>
-                                    </div>
-                                    <span class="notification-icon">
-                                        <svg class="olymp-chat---messages-icon">
-                                            <use xlink:href="/frontend/icons/icons.svg#olymp-chat---messages-icon"></use>
-                                        </svg>
-                                    </span>
-                                    <div class="more">
-                                        <svg class="olymp-three-dots-icon">
-                                            <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                                        </svg>
-                                    </div>
-                                </li>
+
                             </ul>
                         </div>
-                        <a href="#" class="view-all bg-purple">View All Messages</a>
+                        <a href="javascript:void(0)" class="view-all bg-purple" @click="getMessagesNotification">
+                            {{ $t('messages.more_messages') }}
+                        </a>
                     </div>
                 </div>
                 <div class="control-icon more has-items">
@@ -533,14 +466,24 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { logout } from '../../../router/router'
-import { post } from '../../../helpers/api'
+import { logout, showNotification } from '../../../router/router'
+import { post, get } from '../../../helpers/api'
+import noty from '../../../helpers/noty'
 
 export default {
+    data: () => ({
+        messages: [],
+        paginate: 0,
+        continue: true
+    }),
+    created () {
+        this.getMessagesNotification()
+    },
     computed: {
         ...mapState('auth', {
             authenticated: state => state.authenticated,
-            user: state => state.user
+            user: state => state.user,
+            groups: state => state.groups
         })
     },
     methods: {
@@ -554,6 +497,102 @@ export default {
             }).catch(err => {
                 this.$router.push('/')
             })
+        },
+        getMessagesNotification() {
+            if (this.continue) {
+                get(`${showNotification}?paginate=${this.paginate}`)
+                    .then(res => {
+                        if (res.data.status == 200) {
+                            let noty = res.data.notifications
+
+                            for (var index = 0; index < noty.length; index++) {
+                                let isSendToUser = Number.isInteger(Number(noty[index].receive))
+                                let mess = {
+                                    form: noty[index].userId,
+                                    sendName: (noty[index].userId == this.user.id)
+                                        ? this.$i18n.t('messages.you')
+                                        : noty[index].name + ": ",
+                                    to: noty[index].receive,
+                                    groupChat: noty[index].groupKey,
+                                    message: noty[index].message,
+                                    showName: (noty[index].userId == this.user.id || !isSendToUser)
+                                        ? noty[index].nameReceive
+                                        : noty[index].name,
+                                    showAvatar: (noty[index].userId == this.user.id || !isSendToUser)
+                                        ? noty[index].avatarReceive
+                                        : noty[index].avatar,
+                                    class: isSendToUser ? "" : "group-chat",
+                                    time: noty[index].time
+                                }
+
+                                this.messages.push(mess)
+                            }
+
+                            this.paginate = res.data.paginate
+                        }
+
+                        this.continue = res.data.continue
+                    })
+                    .catch(err => {
+                        const message = this.$i18n.t('messages.load_notification_message_fail')
+                        noty({ text: message, container: false, force: true})
+                    })
+            }
+        },
+        receiveMessage(data, option) {
+            var socketData = JSON.parse(data)
+
+            if (socketData.success ) {
+                var message = JSON.parse(socketData.message)
+                let index = this.messages.findIndex(mess => mess.groupChat == socketData.groupChat)
+
+                let mess = {
+                    from: socketData.from,
+                    sendName: (socketData.from == this.user.id)
+                        ? this.$i18n.t('messages.you')
+                        : socketData.name + ": ",
+                    to: socketData.to,
+                    groupChat: socketData.groupChat,
+                    message: message.message,
+                    showName: (socketData.from == this.user.id || !option)
+                        ? message.nameReceive
+                        : message.name,
+                    showAvatar: (socketData.from == this.user.id || !option)
+                        ? message.avatarReceive
+                        : message.avatar,
+                    class: Number.isInteger(socketData.to) ? "" : "group-chat",
+                    time: message.time
+                }
+
+                if (index == -1) {
+                    this.messages.unshift(mess)
+                } else {
+                    this.messages.splice(index, 1)
+                    this.messages.unshift(mess)
+                }
+
+                this.paginate++
+            }
+        },
+        calendarTime(time)
+        {
+            return moment(time).calendar()
+        },
+    },
+    mounted() {
+        const vm = this
+        $('#notification_messages').on('scroll', function() {
+            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                vm.getMessagesNotification()
+            }
+        })
+    },
+    sockets: {
+        singleChat: function (data) {
+            this.receiveMessage(data, true)
+        },
+        groupChat: function (data) {
+            this.receiveMessage(data, false)
         }
     }
 }
@@ -565,5 +604,9 @@ export default {
         width: 36px;
         height: 36px;
     }
+}
+
+#notification_messages {
+    overflow-y: scroll !important;
 }
 </style>

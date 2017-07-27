@@ -51,6 +51,12 @@ io.on('connection', function (socket) {
         callOnline(socket, listFriend, userLogin)
     })
 
+    socket.on('notification', data => {
+        for (var index = 0; index < data.groups.length; index++) {
+            socket.join('hashtag:' + data.groups[index].hashtag)
+        }
+    })
+
     socket.on('disconnect', function() {
         var index = userConnection.findIndex(user => user.socketId === socket.id)
 

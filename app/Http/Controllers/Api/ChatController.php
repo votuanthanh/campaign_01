@@ -5,20 +5,29 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Repositories\Contracts\UserInterface;
 use App\Repositories\Contracts\CampaignInterface;
+use App\Repositories\Contracts\RoleInterface;
 use LRedis;
 use Exception;
+use App\Models\User;
+use App\Models\Campaign;
+use App\Models\Role;
 
 class ChatController extends ApiController
 {
     private $redis;
     private $userRepository;
     private $campaignRepository;
+    private $roleRepository;
 
-    public function __construct(UserInterface $userRepository, CampaignInterface $campaignRepository)
-    {
+    public function __construct(
+        UserInterface $userRepository,
+        CampaignInterface $campaignRepository,
+        RoleInterface $roleRepository
+    ) {
         parent::__construct();
         $this->userRepository = $userRepository;
         $this->campaignRepository = $campaignRepository;
+        $this->roleRepository = $roleRepository;
         $this->redis = LRedis::connection();
     }
 
@@ -42,6 +51,7 @@ class ChatController extends ApiController
         if (!$keyMessages) {
             return response()->json([
                 'status' => NOT_FOUND,
+                'continue' => $start === 0,
             ]);
         }
 
@@ -60,6 +70,7 @@ class ChatController extends ApiController
             'status' => CODE_OK,
             'messages' => $messages,
             'paginate' => ++$stop,
+            'continue' => true,
         ]);
     }
 
@@ -174,6 +185,15 @@ class ChatController extends ApiController
             throw new Exception();
         }
 
+        if (is_numeric($toReceive)) {
+            $receive = $this->userRepository->findOrFail($toReceive);
+        } else {
+            $receive = $this->campaignRepository
+                ->where('hashtag', explode(':', $toReceive)[1])
+                ->with('media')
+                ->first();
+        }
+
         $message = json_encode([
             'groupKey' => $keys['group'],
             'userId' => $this->user->id,
@@ -181,9 +201,15 @@ class ChatController extends ApiController
             'name' => $this->user->name,
             'time' => \Carbon\Carbon::now()->format('m/d/Y H:i:s'),
             'message' => $content,
+            'receive' => $toReceive,
+            'nameReceive' => is_numeric($toReceive) ? $receive->name : $receive->hashtag,
+            'avatarReceive' => is_numeric($toReceive)
+                ? $receive->image_thumbnail
+                : ($receive->media->first()) ? $receive->media->first()->image_thumbnail : null,
         ]);
 
         $this->redis->set($keys['idMessage'], $message);
+        $this->setNotificationWhenSendMessage($keys['group'], $receive);
 
         $data = [
             'from' => (string)$this->user->id,
@@ -214,6 +240,85 @@ class ChatController extends ApiController
 
         return response()->json([
             'status' => CODE_OK,
+        ]);
+    }
+
+    private function setNotificationWhenSendMessage($groupKey, $receive)
+    {
+        if ($receive instanceof User) {
+            $ids = explode('-', $groupKey);
+            $this->storeNotification($groupKey, $ids[0]);
+            $this->storeNotification($groupKey, $ids[1]);
+        } else {
+            $roleIds = $this->roleRepository->whereIn('name', [
+                    Role::ROLE_OWNER,
+                    Role::ROLE_MODERATOR,
+                    Role::ROLE_MEMBER,
+                ])
+                ->lists('id');
+            $ids = $receive->users()
+                ->where('users.status', User::ACTIVE)
+                ->wherePivotIn('role_id', $roleIds)
+                ->wherePivot('status', Campaign::APPROVED)
+                ->pluck('users.id');
+
+            foreach ($ids as $id) {
+                $this->storeNotification($groupKey, $id);
+            }
+        }
+    }
+
+    private function storeNotification($groupKey, $userId)
+    {
+        $lastMessage = $this->redis->command('zrange', [config('settings.notifications') . $userId, -1, -1]);
+        $score = 0;
+
+        if ($lastMessage) {
+            $score = $this->redis->command('zscore', [config('settings.notifications') . $userId, $lastMessage[0]]);
+            $score++;
+        }
+
+        $this->redis->command('zadd', [config('settings.notifications') . $userId, $score, $groupKey]);
+    }
+
+    public function getNotification(Request $request)
+    {
+        $start = json_decode($request->paginate);
+        $stop = $start + config('settings.paginate_notification');
+        $keyGroups = $this->redis->command('zrevrange', [
+            config('settings.notifications') . $this->user->id,
+            $start,
+            $stop,
+        ]);
+
+        if (!$keyGroups) {
+            return response()->json([
+                'status' => NOT_FOUND,
+                'continue' => $start === 0,
+            ]);
+        }
+
+        $keyMessage = [];
+        $notifications = [];
+
+        foreach ($keyGroups as $key) {
+            $idMessage = $this->redis->command('lrange', [$key, 0, 0]);
+            $content = json_decode($this->redis->get($idMessage[0]));
+
+            if ($content) {
+                if (!is_numeric($content->receive)) {
+                    $content->groupKey = $content->nameReceive;
+                }
+
+                $notifications[] = $content;
+            }
+        }
+
+        return response()->json([
+            'status' => CODE_OK,
+            'notifications' => $notifications,
+            'paginate' => ++$stop,
+            'continue' => true,
         ]);
     }
 }

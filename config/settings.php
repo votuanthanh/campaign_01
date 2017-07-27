@@ -4,6 +4,7 @@ return [
     'admin_system' => 'admin system',
     'comment_parent' => 0,
     'paginate_default' => 15,
+    'paginate_notification' => 5,
     'paginate_comment' => 2,
     'paginate_event' => 4,
     'flag_join' => 'join',
@@ -42,4 +43,5 @@ return [
     'group_chat' => 'groupChat',
     'single_chat' => 'singleChat',
     'head_room_name' => 'hashtag:',
+    'notifications' => 'notifications',
 ];

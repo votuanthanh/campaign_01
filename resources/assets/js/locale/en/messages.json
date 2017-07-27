@@ -23,5 +23,9 @@
     "comment_not_empty": "Comment not empty!",
     "not_found_campaign": "Not found campaign!",
     "members" : "Members",
-    "search" : "Search"
+    "search" : "Search",
+    "load_notification_message_fail": "Could't load messages",
+    "you": "You :",
+    "more_messages": "View More Messages",
+    "connection_error": "Connect error"
 }
