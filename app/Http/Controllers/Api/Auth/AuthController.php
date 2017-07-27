@@ -10,6 +10,8 @@ use App\Repositories\Contracts\UserInterface;
 use App\Models\User;
 use App\Exceptions\Api\UnknowException;
 use App\Exceptions\Api\NotFoundException;
+use LRedis;
+use Exception;
 
 class AuthController extends ApiController
 {
@@ -45,6 +47,14 @@ class AuthController extends ApiController
         return $this->getData(function () use ($passport, $data, $user) {
             $this->compacts['auth'] = $passport->requestGrantToken($data);
             $this->compacts['user'] = $user;
+            LRedis::publish('activies', json_encode([
+                'userId' => $user->id,
+                'listFollow' => $user->followings()
+                    ->where('status', User::ACTIVE)
+                    ->pluck('users.id')
+                    ->all(),
+                'status' => true,
+            ]));
         });
     }
 
@@ -54,7 +64,15 @@ class AuthController extends ApiController
             throw new UnknowException('Access token was invalid');
         }
 
-        $this->user->token()->revoke();
+        try {
+            $this->user->token()->revoke();
+            LRedis::publish('activies', json_encode([
+                'userId' => $this->user->id,
+                'status' => false,
+            ]));
+        } catch (Exception $e) {
+            return $this->responseFail();
+        }
 
         return $this->trueJson();
     }

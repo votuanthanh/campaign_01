@@ -2,11 +2,12 @@
     <div class="fixed-sidebar right" :class="{ open: isOpen }">
         <div class="fixed-sidebar-right sidebar--small" id="sidebar-right">
             <div class="mCustomScrollbar" data-mcs-theme="dark" id="listClose">
-                <ul class="chat-users" v-for="friend in friends">
+                <ul class="chat-users" v-for="friend in listUsers">
                     <li class="inline-items" @click="addChatComponent(friend.id, friend.name, true)">
                         <div class="author-thumb">
                             <img alt="author" :src="friend.image_thumbnail" class="avatar">
-                            <span class="icon-status online"></span>
+                            <span class="icon-status online" v-if="friend.online"></span>
+                            <span class="icon-status disconected" v-else></span>
                         </div>
                     </li>
                 </ul>
@@ -30,17 +31,20 @@
                     <a href="#" class="title">{{ $t('chat.close_friends') }}s</a>
                     <a href="#">{{ $t('chat.settings') }}</a>
                 </div>
-                <ul class="chat-users" v-for="friend in friends">
+                <ul class="chat-users" v-for="friend in listUsers">
                     <li class="inline-items">
                         <div class="author-thumb">
                             <img alt="author" :src="friend.image_thumbnail"
                                 class="avatar"
                                 @click="addChatComponent(friend.id, friend.name, true)">
-                            <span class="icon-status online"></span>
+                            <span class="icon-status online" v-if="friend.online"></span>
+                            <span class="icon-status disconected" v-else></span>
                         </div>
                         <div class="author-status">
                             <a href="#" class="h6 author-name">{{ friend.name }}</a>
-                            <span class="status">ONLINE</span>
+                            <span class="status">
+                                {{ friend.online ? $t('user.connect.online') : $t('user.connect.offline') }}
+                            </span>
                         </div>
                         <div class="more">
                             <svg class="olymp-three-dots-icon">
@@ -169,14 +173,30 @@ export default {
         widthDefault: 320,
         marginDefault: 70,
         marginWhenOpen: 280,
-        maxList: 3
+        maxList: 3,
+        listOnline: []
     }),
     computed: {
         ...mapState('auth', {
             user: state => state.user,
             friends: state => state.listContact,
             groups: state => state.groups
-        })
+        }),
+        listUsers() {
+            let listUsers = []
+
+            for (var index = 0; index < this.friends.length; index++) {
+                let check = this.listOnline.findIndex(user => user.id == this.friends[index].id)
+                listUsers.push({
+                    id: this.friends[index].id,
+                    name: this.friends[index].name,
+                    online: (check != -1) ? this.listOnline[check].status : false,
+                    image_thumbnail: this.friends[index].image_thumbnail
+                })
+            }
+
+            return listUsers
+        }
     },
     watch: {
         isOpen() {
@@ -268,6 +288,24 @@ export default {
                         this.addChatComponent(socketData.to, this.friends[index].name, true)
                         break
                     }
+                }
+            }
+        },
+        online: function (data) {
+            if (data.type) {
+                let index = this.listOnline.findIndex(user => user.id == data.id)
+
+                if (index == -1) {
+                    this.listOnline.push({ id: data.id, status: data.status })
+                } else {
+                    this.listOnline[index].status = data.status
+                }
+            } else {
+                for (var index = 0; index < data.listOnline.length; index++) {
+                    this.listOnline.push({
+                        id: data.listOnline[index].id,
+                        status: data.listOnline[index].status
+                    })
                 }
             }
         }
