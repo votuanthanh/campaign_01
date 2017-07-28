@@ -40,8 +40,6 @@ class LikeController extends ApiController
             throw new UnknowException('modelId is null');
         }
 
-        $userId = $this->user->id;
-
         if ($flag) {
             switch ($flag) {
                 case 'campaign':
@@ -65,8 +63,8 @@ class LikeController extends ApiController
             throw new UnknowException('Permission error: User can not like in this post.');
         }
 
-        return $this->doAction(function () use ($model, $userId) {
-            $this->compacts['like'] = $this->likeRepository->likeOrUnlike($model, $userId);
+        return $this->doAction(function () use ($model) {
+            $this->compacts['like'] = $this->likeRepository->likeOrUnlike($model, $this->user);
         });
     }
 }

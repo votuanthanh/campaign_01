@@ -3,7 +3,12 @@
         <span>
             <a href="javascript:void(0)"
                 class="post-add-icon inline-items"
-                @click="likeActivity({ model: model, modelId: modelId, userId: user.id })"
+                @click="likeActivity({
+                    model: model,
+                    modelId: modelId,
+                    user: authUser,
+                    commentTotal: numberOfComments
+                })"
             >
                 <svg class="olymp-heart-icon">
                     <use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"
@@ -45,12 +50,12 @@
             <a href="#">{{ like[model + modelId].data[1].user.name }}</a>
             <br>{{ $t('post.like.and') }} {{ like[model + modelId].total - 2 }} {{ $t('post.like.more_like') }}
         </div>
-        <div :class="{ 'mrg-top': (like[model + modelId].total < 3), 'comments-shared': true }" style="display: none !important;">
+        <div :class="{ 'mrg-top': (like[model + modelId].total < 3), 'comments-shared': true }">
             <a href="#" class="post-add-icon inline-items">
                 <svg class="olymp-speech-balloon-icon">
                     <use xlink:href="/frontend/icons/icons.svg#olymp-speech-balloon-icon"></use>
                 </svg>
-                <span>{{ commentTotal[model + modelId] }}</span>
+                <span>{{ commentTotal[model + modelId] }} {{ model + modelId }}</span>
             </a>
             <a href="#" class="post-add-icon inline-items">
                 <svg class="olymp-share-icon">
@@ -60,11 +65,15 @@
             </a>
         </div>
     </div>
-
     <span v-else-if="type == 'likeComment'" class="info-like">
         <a href="javascript:void(0)"
             class="post-add-icon inline-items"
-            @click="likeActivity({ model: model, modelId: modelId, userId: user.id })"
+            @click="likeActivity({
+                model: model,
+                modelId: modelId,
+                user: authUser,
+                commentTotal: numberOfComments
+            })"
         >
             <svg class="olymp-heart-icon">
                 <use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"
@@ -87,7 +96,12 @@
 
     <a href="javascript:void(0)" v-else
         :class="{ liked: checkLiked[model + modelId], btn: true, 'btn-control': true }"
-        @click="likeActivity({ model: model, modelId: modelId, userId: user.id })"
+        @click="likeActivity({
+            model: model,
+            modelId: modelId,
+            user: authUser,
+            commentTotal: numberOfComments
+        })"
     >
         <svg class="olymp-like-post-icon">
             <use xlink:href="/frontend/icons/icons.svg#olymp-like-post-icon"></use>
@@ -108,7 +122,10 @@ export default {
         model: '',
         modelId: '',
         checkLike: true,
-        numberOfComments: 0
+        numberOfComments: {
+            default: 0,
+            type: Number,
+        }
     },
     created() {
         this.setLike({
@@ -128,6 +145,9 @@ export default {
             'checkLiked',
             'commentTotal'
         ]),
+        ...mapState('auth', {
+            authUser: 'user'
+        }),
     },
     methods: {
         ...mapActions('like', [
@@ -199,4 +219,7 @@ export default {
         margin-bottom: 0px;
     }
 
+    .comments-shared {
+        display: none;
+    }
 </style>

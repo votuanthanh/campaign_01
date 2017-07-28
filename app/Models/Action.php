@@ -72,12 +72,12 @@ class Action extends BaseModel
         return $this->comments()->with('user')
             ->where('parent_id', config('settings.comment_parent'))
             ->orderBy('created_at', 'desc')
-            ->paginate(config('settings.paginate_comment'));
+            ->paginate(config('settings.paginate_comment'), ['*'], 1);
     }
 
     public function getLikesAttribute()
     {
-        return $this->likes()->with('user')->paginate(config('settings.pagination.like'));
+        return $this->likes()->with('user')->paginate(config('settings.pagination.like'), ['*'], 1);
     }
 
     public function getCheckLikeAttribute()

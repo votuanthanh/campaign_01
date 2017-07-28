@@ -14,32 +14,31 @@ class LikeRepository extends BaseRepository implements LikeInterface
         return Like::class;
     }
 
-    public function likeOrUnlike($model, $userId)
+    public function likeOrUnlike($model, $user)
     {
-        if (!is_numeric($userId) || !$model) {
+        if (!$user || !$model) {
             return false;
         }
 
-        if ($model->likes->where('user_id', $userId)->isEmpty()) {
+        if ($model->likes->where('user_id', $user->id)->isEmpty()) {
             $like = $model->likes()->create([
-                'user_id' => $userId
+                'user_id' => $user->id
             ]);
-
             $like->activities()->create([
-                'user_id' => $userId,
+                'user_id' => $user->id,
                 'name' => Activity::CREATE,
             ]);
 
-            return $like;
+            return $like->setAttribute('user', $user);;
         }
 
-        $this->where('user_id', $userId)
+        $this->where('user_id', $user->id)
             ->where('likeable_id', $model->id)
             ->where('likeable_type', get_class($model))
             ->activities()
             ->first()
             ->delete();
 
-        return $model->likes()->where('user_id', $userId)->first()->forceDelete();
+        return $model->likes()->where('user_id', $user->id)->first()->forceDelete();
     }
 }

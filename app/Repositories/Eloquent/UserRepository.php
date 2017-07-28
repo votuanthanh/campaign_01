@@ -97,7 +97,6 @@ class UserRepository extends BaseRepository implements UserInterface
     public function getTimeline($user)
     {
         $activities = $user->activities()
-            ->with('activitiable')
             ->with('activitiable.media')
             ->whereIn('activitiable_type', [
                 Campaign::class,

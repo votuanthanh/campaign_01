@@ -72,5 +72,11 @@
     "connect": {
         "online": "ONLINE",
         "offline": "OFFLINE"
+    },
+    "sidebar": {
+        "about_me": "About me",
+        "birthday": "Birthday",
+        "Address": "Address",
+        "profile_intro": "Profile Intro"
     }
 }

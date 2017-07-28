@@ -7,6 +7,7 @@
     },
     "campaign": {
         "created_a": "created a",
+        "joined": "joined",
         "new_campaign": "new campaign"
     },
     "created_a_event": "created a event",

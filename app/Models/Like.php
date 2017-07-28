@@ -20,7 +20,6 @@ class Like extends BaseModel
         'likeable_type',
     ];
 
-    protected $appends = ['user'];
     protected $dates = ['deleted_at'];
 
     public function user()
@@ -36,10 +35,5 @@ class Like extends BaseModel
     public function activities()
     {
         return $this->morphMany(Activity::class, 'activitiable');
-    }
-
-    public function getUserAttribute()
-    {
-        return $this->user()->first();
     }
 }
