@@ -28,6 +28,14 @@
         "donations": "donation(s)",
         "over": "over",
         "list_support": "List of supporters",
-        "actions": "Actions"
+        "actions": "Actions",
+        "dont_have_donation": "No one has donated this event",
+        "accept_confirm": "Have you received this support yet? This action can not be undone.",
+        "donate_by": "By",
+        "donate_at": "At",
+        "yes": "Yes",
+        "no": "No",
+        "manage": "Donation management",
+        "list": "Confirmed donation"
     }
 }

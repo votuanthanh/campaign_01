@@ -5,6 +5,7 @@ export default {
     [types.SET_EVENT](state, dataEvent) {
         state.event = dataEvent.event[0]
         state.event.complete_percent = dataEvent.goals
+        state.event.manage = dataEvent.manage
         state.actions = dataEvent.actions
     },
 
@@ -39,7 +40,19 @@ export default {
     },
 
     [types.UPDATE_DONATION](state, data) {
-        state.event.donations = state.event.donations.concat(data)
+        let event = state.event
+        event.complete_percent = data
+        state.event = []
+        state.event = event
+    },
+
+    [types.CHANGE_DONATION_STATUS](state, data) {
+        let event = state.event
+        let i = event.complete_percent.findIndex(goal => goal.id == data.goal_id)
+        let index = event.complete_percent[i].donations.findIndex(donation => donation.id == data.id)
+        event.complete_percent[i].donations.splice(index, 1, data)
+        state.event = []
+        state.event = event
     }
 
 };

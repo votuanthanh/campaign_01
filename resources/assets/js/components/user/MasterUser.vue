@@ -29,10 +29,10 @@
                     <div class="ui-block">
                         <div class="top-header">
                             <div class="top-header-thumb clickable" @click="showHeader = true" v-if="authUser.id == currentPageUser.id">
-                                <img :src="authUser.image_default" alt="nature">
+                                <img :src="authUser.default_header" alt="nature">
                             </div>
                             <div class="top-header-thumb" v-else>
-                                <img :src="currentPageUser.image_default" alt="nature">
+                                <img :src="currentPageUser.default_header" alt="nature">
                             </div>
                             <div class="profile-section">
                                 <div class="row">

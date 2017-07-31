@@ -95,7 +95,7 @@
                         <div
                             class="progress-bar progress-bar-striped bg-success active"
                             role="progressbar"
-                            style="width: 100%"
+                            :style="{ width: 100 * (1 - goal.goal/donateInfo[i]) + '%' }"
                             v-show="donateInfo[i]/goal.goal > 1">
                             {{ Math.round(donateInfo[i]/goal.goal*100)- 100 }}% over
                         </div>
@@ -178,7 +178,7 @@
             donateInfo() {
                 let donated = []
                 this.event.complete_percent.forEach((value, index) => {
-                    donated[index] = value.donations.reduce((sum, value) => sum + value.value, 0)
+                    donated[index] = value.donations.filter(donation => donation.status == 1).reduce((sum, value) => sum + value.value, 0)
                 })
                 return donated
             },
@@ -228,8 +228,8 @@
                 }
             }
         },
-        created() {
-            console.log(this.$route)
+        mounted() {
+            $(this.$refs.select).selectpicker('show')
         },
         components: {
             Modal,
