@@ -27,8 +27,10 @@ import Setting from '../components/user/Setting.vue'
 import CampaignUser from '../components/user/CampaignUser.vue'
 import HomeEvent from '../components/event/HomeEvent.vue'
 import ListAction from '../components/event/ListAction.vue'
-import DonationList from '../components/event/DonationList.vue'
-import DonationInfo from '../components/event/DonationInfo.vue'
+import DonationList from '../components/event/donation/DonationList.vue'
+import DonationInfo from '../components/event/donation/DonationInfo.vue'
+import DonationReceived from '../components/event/donation/DonationReceived.vue'
+import DonationManage from '../components/event/donation/DonationManage.vue'
 
 const router = [
     ...authGuard([{
@@ -78,7 +80,14 @@ const router = [
                 children: [
                     { path: 'index.html', component: ListAction, name: 'event.index' },
                     { path: 'donation', component: DonationList, name: 'event.donation' },
-                    { path: 'donation/:id', component: DonationInfo, name: 'event.goal' }
+                    {
+                        path: 'donation/:id',
+                        component: DonationInfo,
+                        children: [
+                            { path: '', component: DonationReceived, name: 'donation.received' },
+                            { path: 'manage', component: DonationManage, name: 'donation.manage' }
+                        ]
+                    }
                 ]
             }
         ]

@@ -140,11 +140,12 @@ class EventController extends ApiController
                 ->select('id', 'donation_type_id', 'goal')
                 ->with([
                     'donations' => function ($query) {
-                        return $query->with('user')->where('status', \App\Models\Donation::ACCEPT)->latest();
+                        return $query->with('user')->latest();
                     },
                     'donationType.quality',
                 ])
                 ->get();
+            $this->compacts['manage'] = $this->user->can('manage', $event);
         });
     }
 
@@ -161,5 +162,12 @@ class EventController extends ApiController
         return $this->getData(function () use ($event) {
             $this->compacts['comments'] = [];
         });
+    }
+
+    public function checkIfUserCanManageEvent($id)
+    {
+        $event = $this->eventRepository->findOrFail($id);
+
+        return response()->json($this->user->can('manage', $event));
     }
 }

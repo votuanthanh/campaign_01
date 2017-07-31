@@ -6,14 +6,14 @@
             <div class="ui-block">
                 <div class="birthday-item inline-items badges" v-for="(goal, i) in event.complete_percent">
                     <div class="author-thumb">
-                        <router-link :to="{ name: 'event.goal', params: { id: goal.id }}" class="h6 author-name">
+                        <router-link :to="{ name: 'donation.received', params: { id: goal.id }}" class="h6 author-name">
                             <img src="/images/badge3.png" alt="author">
-                            <div class="label-avatar bg-primary">{{ goal.donations.length }}</div>
+                            <div class="label-avatar bg-primary">{{ goal.donations.filter(d => d.status == 1).length }}</div>
                         </router-link>
                     </div>
                     <div class="birthday-author-name">
-                        <router-link :to="{ name: 'event.goal', params: { id: goal.id }}" class="h6 author-name">{{ goal.donation_type.name }} ({{ Math.round(donateInfo[i]/goal.goal*100) }}%)</router-link>
-                        <div class="birthday-date">{{ $t('events.donation.receive') }} {{ donateInfo[i] }}/{{ goal.goal }} {{ goal.donation_type.quality.name }} {{ goal.donation_type.name }} with {{ goal.donations.length }} donation(s)</div>
+                        <router-link :to="{ name: 'donation.received', params: { id: goal.id }}" class="h6 author-name">{{ goal.donation_type.name }} ({{ Math.round(donateInfo[i]/goal.goal*100) }}%)</router-link>
+                        <div class="birthday-date">{{ $t('events.donation.receive') }} {{ donateInfo[i] }}/{{ goal.goal }} {{ goal.donation_type.quality.name }} {{ goal.donation_type.name }} with {{ goal.donations.filter(d => d.status == 1).length }} donation(s)</div>
                     </div>
 
                     <div class="skills-item">
@@ -56,7 +56,7 @@
             donateInfo() {
                 let donated = []
                 this.event.complete_percent.forEach((value, index) => {
-                    donated[index] = value.donations.reduce((sum, value) => sum + value.value, 0)
+                    donated[index] = value.donations.filter(donation => donation.status == 1).reduce((sum, value) => sum + value.value, 0)
                 })
                 return donated
             },

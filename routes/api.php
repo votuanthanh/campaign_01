@@ -84,6 +84,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::post('like/{eventId}', 'EventController@like')->name('like');
             Route::get('show/{id}', 'EventController@show');
             Route::get('donation', 'EventController@getTypeQuality')->name('getTypeQuality');
+            Route::get('check-permission/{id}', 'EventController@checkIfUserCanManageEvent')->name('check-permission');
         });
 
         Route::group(['prefix' => '/action', 'as' => 'action.'], function () {

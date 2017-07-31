@@ -37,7 +37,17 @@ class DonationController extends ApiController
         }
 
         return $this->doAction(function () use ($event, $donateData) {
-            $this->compacts['donations'] = $event->donations()->createMany($donateData);
+            $event->donations()->createMany($donateData);
+            $this->compacts['donations'] = $event
+                ->goals()
+                ->select('id', 'donation_type_id', 'goal')
+                ->with([
+                    'donations' => function ($query) {
+                        return $query->with('user')->latest();
+                    },
+                    'donationType.quality',
+                ])
+                ->get();
         });
     }
 
@@ -79,7 +89,7 @@ class DonationController extends ApiController
         return $this->doAction(function () use ($request, $donation) {
             $this->compacts['donation'] = $this->donationRepository->update($donation->id, [
                 'status' => $request->status,
-            ]);
+            ])->load('user');
         });
     }
 

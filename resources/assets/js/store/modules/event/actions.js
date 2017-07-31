@@ -1,5 +1,5 @@
 import * as types from './mutation-types'
-import { post, get } from '../../../helpers/api'
+import { post, get, patch } from '../../../helpers/api'
 
 export const get_event = ({ commit }, event_id) => {
     commit('SET_LOADING', false, { root: true })
@@ -72,11 +72,19 @@ export const update_donate = ({ commit }, payload) => {
         })
 }
 
+export const change_donate_status = ({ commit }, data) => {
+    patch(`donation/update-status/${data.id}`, { status: data.status })
+        .then(res => {
+            commit(types.CHANGE_DONATION_STATUS, res.data.donation)
+        })
+}
+
 export default {
     get_event,
     load_action,
     search_action,
     like_event,
     setDetailEvent,
-    update_donate
+    update_donate,
+    change_donate_status
 }
