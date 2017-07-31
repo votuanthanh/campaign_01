@@ -106,10 +106,13 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::post('create-many', 'DonationController@createMany');
             Route::resource('donation', 'DonationController', ['only' => ['store', 'update', 'destroy']]);
         });
+
+        Route::resource('expense', 'ExpenseController', ['only' => ['store', 'update', 'destroy']]);
+
+        Route::group(['prefix' => 'file', 'as' => 'file'], function () {
+            Route::post('upload', 'UploadController@upload')->name('upload');
+            Route::delete('delete/{path?}', 'UploadController@delete')->name('delete')->where('path', '.+');
+        });
     });
 });
 
-Route::group(['prefix' => 'file', 'as' => 'file'], function () {
-    Route::post('upload', 'Api\UploadController@upload')->name('upload');
-    Route::delete('delete/{path?}', 'Api\UploadController@delete')->name('delete')->where('path', '.+');
-});

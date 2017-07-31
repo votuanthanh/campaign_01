@@ -99,4 +99,9 @@ class Event extends BaseModel
     {
         return !is_null($this->likes()->where('user_id', \Auth::guard('api')->user()->id)->first());
     }
+
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class);
+    }
 }

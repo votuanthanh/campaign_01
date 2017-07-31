@@ -59,6 +59,14 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\LikeInterface::class,
             \App\Repositories\Eloquent\LikeRepository::class,
         ],
+        'expense' => [
+            \App\Repositories\Contracts\ExpenseInterface::class,
+            \App\Repositories\Eloquent\ExpenseRepository::class,
+        ],
+        'product' => [
+            \App\Repositories\Contracts\ProductInterface::class,
+            \App\Repositories\Eloquent\ProductRepository::class,
+        ],
     ];
 
     /**
