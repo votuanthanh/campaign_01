@@ -13,6 +13,7 @@ storage/*.key
 storage/debugbar/
 storage/files/
 storage/2017/
+storage/cache/
 vendor
 .idea
 .env

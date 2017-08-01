@@ -41,14 +41,15 @@
                             <img :src="photo.media[0].image_small" alt="photo">
                         </a>
                     </li>
-                    <li v-if="listPhotos.total > 8">
-                        <a href="javascript:void(0)" class="all-users">+ {{ remainingData(listPhotos.total) }}</a>
+                    <li class="all-users" v-if="listPhotos.total > 8">
+                        <a href="javascript:void(0)">+ {{ remainingData(listPhotos.total) }}</a>
                     </li>
                 </ul>
             </div>
         </div>
 
         <div class="ui-block">
+            <member :flagShowListMember.sync="flag_show_list_member"></member>
             <div class="ui-block-title">
                 <h6 class="title">{{ $t('campaigns.list-members') }}</h6>
                 <a href="javascript:void(0)" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
@@ -58,7 +59,6 @@
                     <li>
                         <div class="skills-item">
                             <div class="counter-friends">{{ totalMemberCurrent }} {{ $t('campaigns.lbl-members') }}</div>
-
                             <ul class="widget w-faved-page js-zoom-gallery" v-if="listMembers.members">
                                 <li v-for="(member, index) in listMembers.members" v-if="index < 10">
                                     <router-link :to="{ name: 'user.timeline', params: { id: member.id }}">
@@ -66,7 +66,7 @@
                                     </router-link>
                                 </li>
                                 <li class="all-users" v-if="totalMemberCurrent >= 10">
-                                    <a href="javascript:void(0)">
+                                    <a href="javascript:void(0)" @click="showListMember()">
                                         + {{ remainingMembers }}
                                     </a>
                                 </li>
@@ -90,7 +90,6 @@
                     {{ $t('campaigns.aproving') }}</a>
             </div>
         </div>
-
         <!-- form comfirm join campaign -->
         <modal :show.sync="flag_confirm_join">
             <h5 class="exclamation-header" slot="header">
@@ -150,6 +149,7 @@
     import { mapState, mapActions } from 'vuex'
     import Modal from '../libs/Modal.vue'
     import noty from '../../helpers/noty'
+    import Member from './Member.vue'
 
     export default {
         created() {
@@ -157,7 +157,8 @@
         },
         data: () => ({
             flag_confirm_join: false,
-            flag_confirm_leave: false
+            flag_confirm_leave: false,
+            flag_show_list_member : false
         }),
         computed: {
             ...mapState('campaign', [
@@ -188,6 +189,9 @@
         },
         methods: {
             ...mapActions('campaign', ['attendCampaign', 'getlistPhotos']),
+            showListMember() {
+                this.flag_show_list_member = true
+            },
             comfirmJoinCampaign() {
                 this.flag_confirm_join = true
             },
@@ -242,6 +246,7 @@
         },
         components: {
            Modal,
+           Member
         }
     }
 </script>
