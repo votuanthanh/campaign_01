@@ -11,6 +11,7 @@ use App\Models\Role;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Traits\Eloquent\ConvertEmptyStringToNull;
+use App\Notifications\ResetPassword;
 
 class User extends Authenticatable
 {
@@ -162,5 +163,10 @@ class User extends Authenticatable
             $user->token_confirm = Str::random(60);
             $user->birthday = is_null($user->birthday) ? null : Carbon::parse($user->birthday);
         });
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
     }
 }

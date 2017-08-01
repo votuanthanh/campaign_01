@@ -15,6 +15,8 @@ export const follow = 'list-user-following'
 export const updateHeaderImage = 'settings/header-photo'
 export const updateAvatar = 'settings/avatar'
 export const uploadImages = 'settings/upload-files/'
+export const passwordEmail = 'password/email'
+export const passwordReset = 'password/reset'
 
 export default {
     getUser,
@@ -31,5 +33,7 @@ export default {
     follow,
     updateHeaderImage,
     updateAvatar,
-    uploadImages
+    uploadImages,
+    passwordEmail,
+    passwordReset
 }
