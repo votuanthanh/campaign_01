@@ -47,8 +47,7 @@
                                     data-toggle="modal"
                                     data-target="#update-header-photo">
                                     {{ $t('events.donation.donation_details') }}
-                                </router-link
-                                    tag="button">
+                                </router-link>
                             </div>
                             <div class="btn-group">
                                 <router-link
@@ -267,5 +266,10 @@
     }
     .progress {
         margin-bottom: 15px !important;
+    }
+    .btn-group {
+        .bg-breez {
+            border-color: #5bc0de;
+        }
     }
 </style>

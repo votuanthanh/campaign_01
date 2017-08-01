@@ -122,6 +122,9 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
 
         Route::post('expense-create-buy', 'ExpenseController@createBy')->name('expense-create-buy');
         Route::patch('expense-buy/{id}', 'ExpenseController@updateExpenseBuy')->name('expense-update-buy');
+        Route::get('event/{id}/statistic', 'ExpenseController@statistic')->name('expense-statistic');
+        Route::get('get-list-expense', 'ExpenseController@getList')->name('get-list-expense');
+        Route::get('get-statistic-data', 'ExpenseController@getStatisticData')->name('get-statistic-data');
         Route::resource('expense', 'ExpenseController', ['only' => ['index', 'store', 'update', 'destroy']]);
         Route::resource('product', 'ProductController', ['only' => ['index']]);
         Route::resource('goal', 'GoalController', ['only' => ['index']]);

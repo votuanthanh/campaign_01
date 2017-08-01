@@ -120,4 +120,61 @@ class ExpenseController extends ApiController
             $this->compacts['expense'] = $this->expenseRepository->delete($expense);
         });
     }
+
+    public function statistic($eventId)
+    {
+        $event = $this->eventRepository->findOrFail($eventId);
+
+        return $this->getData(function () use ($event) {
+            $this->compacts['goal'] = $event->goals->each(function($goal) {
+                $goal->makeVisible(['calculate'])->load('donationType.quality');
+            });
+        });
+    }
+
+    public function getList(Request $request)
+    {
+        $event = $this->eventRepository->findOrFail($request->get('event_id'));
+
+        return $this->getData(function () use ($request, $event) {
+            $expenses = $event
+                ->expenses()
+                ->with('goal.donationType')
+                ->orderBy($request->get('order_by'), 'desc');
+
+            if ($request->has('goal_id')) {
+                $expenses->where('goal_id', $request->goal_id);
+            }
+
+            $this->compacts['expenses'] = $expenses->take(config('settings.pagination.expense_statistic'))->get();
+        });
+    }
+
+    public function getStatisticData(Request $request)
+    {
+        $event = $this->eventRepository->findOrFail($request->get('event_id'));
+        $query = $event
+            ->expenses()
+            ->select(\DB::raw('count(*) as count, time, sum(cost) as cost'))
+            ->groupBy('time');
+
+        if ($request->has('goal_id')) {
+            $query->where('goal_id', $request->goal_id);
+        }
+
+        $statistic = new \stdClass();
+        $locale = \App::getLocale();
+        \Carbon\Carbon::setLocale($locale);
+
+        $statistic->time = $query->pluck('time')->map(function($time) {
+            return \Carbon\Carbon::parse($time)->toDateString();
+        });
+
+        $statistic->cost = $query->pluck('cost');
+        $statistic->count = $query->pluck('count');
+
+        return $this->getData(function () use ($event, $request, $statistic) {
+            $this->compacts['statistic'] = $statistic;
+        });
+    }
 }

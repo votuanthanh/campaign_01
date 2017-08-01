@@ -1,7 +1,7 @@
 <template>
     <div class='container expense'>
         <div class='row direct'>
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3">
                 <router-link
                     tag="button"
                     class="btn btn-primary btn-md-2 bg-breez"
@@ -12,7 +12,7 @@
                     {{ $t('events.expenses.list_expense') }}
                 </router-link>
             </div>
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3">
                 <router-link
                     tag="button"
                     class="btn btn-primary btn-md-2 bg-breez"
@@ -23,7 +23,7 @@
                     {{ $t('events.expenses.create_expense') }}
                 </router-link>
             </div>
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3">
                 <router-link
                     tag="button"
                     class="btn btn-primary btn-md-2 bg-breez"
@@ -32,6 +32,17 @@
                     data-toggle="modal"
                     data-target="#update-header-photo">
                     {{ $t('events.expenses.create_expense_buy') }}
+                </router-link>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <router-link
+                    tag="button"
+                    class="btn btn-primary btn-md-2 bg-breez"
+                    :to="{ name: 'expense.statictis' }"
+                    active-class="active"
+                    data-toggle="modal"
+                    data-target="#update-header-photo">
+                    {{ $t('events.expenses_statistic.statistic') }}
                 </router-link>
             </div>
         </div>

@@ -100,6 +100,11 @@
                                 id: target.attr('data-id'),
                                 status: 1
                             }).then(
+                                this.$socket.emit('accept_donation', {
+                                    donate_id: target.attr('data-id'),
+                                    status: 1,
+                                    goal_id: this.$route.params.id
+                                }),
                                 n.close(),
                                 target.prop('checked', false)
                             )

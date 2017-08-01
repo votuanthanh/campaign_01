@@ -18,6 +18,15 @@ class Goal extends BaseModel
         'donation_type_id',
         'goal',
     ];
+
+    protected $hidden = [
+        'calculate',
+    ];
+
+    protected $appends = [
+        'calculate',
+    ];
+
     protected $dates = ['deleted_at'];
 
     public function event()
@@ -38,5 +47,16 @@ class Goal extends BaseModel
     public function expenses()
     {
         return $this->hasMany(Expense::class);
+    }
+
+    public function getCalculateAttribute()
+    {
+        $calculate = new \stdClass();
+        $calculate->donation_sum = $this->donations()->sum('value');
+        $calculate->donation_count = $this->donations()->count();
+        $calculate->expense_sum = $this->expenses()->sum('cost');
+        $calculate->expense_count = $this->expenses()->count();
+
+        return $calculate;
     }
 }

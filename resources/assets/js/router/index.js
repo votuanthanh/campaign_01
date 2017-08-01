@@ -42,6 +42,7 @@ import ListExpense from '../components/event/expense/ListExpense.vue'
 import CreateExpense from '../components/event/expense/CreateExpense.vue'
 import UpdateExpense from '../components/event/expense/UpdateExpense.vue'
 import CreateExpenseBuy from '../components/event/expense/CreateExpenseBuy.vue'
+import ExpenseStatistic from '../components/event/expense/Statistic.vue'
 
 const router = [
     ...authGuard([{
@@ -110,14 +111,15 @@ const router = [
                     {
                         path: 'expense',
                         component: Expense,
-                        name: 'event.expense',
+                        name: 'event.expenses',
                         children: [
                             { path: 'list', component: ListExpense, name: 'expense.list' },
                             { path: 'create', component: CreateExpense, name: 'expense.create' },
                             { path: 'buy/create', component: CreateExpenseBuy, name: 'expense.create.buy' },
-                            { path: 'update/:id', component: UpdateExpense, name: 'expense.update' }
+                            { path: 'update/:id', component: UpdateExpense, name: 'expense.update' },
+                            { path: 'statictis', component: ExpenseStatistic, name: 'expense.statictis' }
                         ]
-                    }
+                    },
                 ]
             }
         ]
