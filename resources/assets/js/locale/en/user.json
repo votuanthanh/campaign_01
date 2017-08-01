@@ -59,5 +59,9 @@
         "confirm": "Confirm Photo",
         "update_header_photo": "Update your header photo",
         "no_photo_msg": "You don't have any images, please upload"
+    },
+    "connect": {
+        "online": "ONLINE",
+        "offline": "OFFLINE"
     }
 }

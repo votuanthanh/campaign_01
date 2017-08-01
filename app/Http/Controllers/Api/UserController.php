@@ -15,21 +15,45 @@ use Carbon\Carbon;
 use Hash;
 use App\Models\User;
 use App\Models\Campaign;
+use App\Models\Role;
+use App\Repositories\Contracts\RoleInterface;
+use LRedis;
+use Exception;
 
 class UserController extends ApiController
 {
     use UploadableTrait;
 
     protected $tagRepository;
+    protected $roleRepository;
 
-    public function __construct(UserInterface $userRepository, TagInterface $tagRepository)
-    {
+    public function __construct(
+        UserInterface $userRepository,
+        TagInterface $tagRepository,
+        RoleInterface $roleRepository
+    ) {
         parent::__construct($userRepository);
         $this->tagRepository = $tagRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     public function authUser()
     {
+        try {
+            LRedis::publish('activies', json_encode([
+                'userId' => $this->user->id,
+                'listFollow' => $this->user->followings()
+                    ->where('status', User::ACTIVE)
+                    ->pluck('users.id')
+                    ->all(),
+                'status' => true,
+            ]));
+        } catch (Exception $e) {
+            activity()->log($e->getMessage());
+
+            return $this->responseFail();
+        }
+
         return $this->user->load(['media' => function ($query) {
             $query->latest();
         }]);
@@ -253,7 +277,17 @@ class UserController extends ApiController
                     'email',
                     'url_file',
                 ]);
+
+            $roleIds = $this->roleRepository->whereIn('name', [
+                    Role::ROLE_OWNER,
+                    Role::ROLE_MODERATOR,
+                    Role::ROLE_MEMBER,
+                ])
+                ->lists('id')
+                ->all();
             $this->compacts['groups'] = $this->user->campaigns()
+                ->wherePivot('status', Campaign::APPROVED)
+                ->wherePivotIn('role_id', $roleIds)
                 ->where('campaigns.status', Campaign::ACTIVE)
                 ->with(['media', 'users' => function ($query) {
                     return $query->select(['users.id', 'users.email', 'users.name'])
