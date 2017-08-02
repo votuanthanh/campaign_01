@@ -20,6 +20,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
     Route::group(['namespace' => 'Auth'], function () {
         Route::post('login', 'AuthController@login')->name('login');
         Route::post('register', 'RegisterController@register')->name('register');
+        Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail');
+        Route::post('password/reset', 'ResetPasswordController@reset');
     });
 
     Route::post('check-exist', 'CommonController@checkExist');

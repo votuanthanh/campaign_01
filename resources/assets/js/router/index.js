@@ -18,6 +18,9 @@ import Photo from '../components/user/Photo.vue'
 import Video from '../components/user/Video.vue'
 import About from '../components/user/About.vue'
 import Auth from '../components/auth/Auth.vue'
+import PasswordReset from '../components/auth/PasswordReset.vue'
+import PasswordForm from '../components/auth/PasswordForm.vue'
+import PasswordVerify from '../components/auth/PasswordVerify.vue'
 import AddCampaign from '../components/campaign/AddCampaign.vue'
 import CreateEvent from '../components/event/create/CreateEvent.vue'
 import User from '../components/user/User.vue'
@@ -96,6 +99,14 @@ const router = [
     ...guestGuard([
         { path: '/register', component: Auth, name: 'register' },
         { path: '/login', component: Auth, name: 'login' },
+        {
+            path: '/password',
+            component: PasswordReset,
+            children: [
+                { path: 'reset', component: PasswordForm, name: 'password.reset'},
+                { path: 'reset/:token', component: PasswordVerify }
+            ]
+        },
     ])
 ]
 

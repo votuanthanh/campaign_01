@@ -27,7 +27,8 @@
         "add_donation": "Add Donation",
         "profile": "Personal Information",
         "change_password": "Change your password",
-        "upload_images": "Upload images"
+        "upload_images": "Upload images",
+        "reset_password": "Reset password to your account"
     },
     "button": {
         "login": "Login",
@@ -41,7 +42,9 @@
         "save": "Save all Changes",
         "change_password": "Change Password Now!",
         "agree": "Agree",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "password": "Send Reminder",
+        "reset_password": "Reset Password"
     },
     "quote": {
         "confirm_account": "Don’t you have an account?",

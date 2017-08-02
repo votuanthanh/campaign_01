@@ -35,7 +35,9 @@
                                 {{ $t('form.label.remember_me') }}
                             </label>
                         </div>
-                        <a href="#" class="forgot">{{ $t('form.label.forgot_password') }}</a>
+                        <router-link :to="{ name: 'password.reset' }" class="forgot">
+                            {{ $t('form.label.forgot_password') }}
+                        </router-link>
                     </div>
 
                     <button type="submit" class="btn btn-lg btn-primary full-width" :disabled="loading">

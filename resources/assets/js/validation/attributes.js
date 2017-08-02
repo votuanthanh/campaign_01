@@ -1,6 +1,7 @@
 export const en = {
     name: 'name',
     password: 'password',
+    password_confirmation: 'password confirmation',
     email: 'email',
     goal: 'goal',
     type: 'type',
