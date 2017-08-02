@@ -26,9 +26,7 @@
                             </div>
                             <div class="box-notification-event">
                                 <div class="notification-event">
-                                    <span class="chat-message-item" v-for="mess in subMessage">
-                                        {{ mess.message }}
-                                    </span>
+                                    <span class="chat-message-item" v-for="mess in subMessage" v-html="mess.message"></span>
                                     <span class="notification-date">
                                         <time class="entry-date updated" datetime="2004-07-24T18:18">
                                             {{ calendarTime(organizedMessage[index][subMessage.length - 1].time) }}
@@ -53,6 +51,28 @@
                         @keyup.enter="handleChat"
                         :placeholder="$t('chat.send_message')">
                     </textarea>
+                    <div class="add-options-message">
+                        <a href="#" class="options-message">
+                            <svg class="olymp-computer-icon">
+                                <use xlink:href="/frontend/icons/icons.svg#olymp-computer-icon"></use>
+                            </svg>
+                        </a>
+                        <div class="options-message smile-block">
+                            <svg class="olymp-happy-sticker-icon">
+                                <use xlink:href="/frontend/icons/icons.svg#olymp-happy-sticker-icon"></use>
+                            </svg>
+                            <ul class="more-dropdown more-with-triangle triangle-bottom-right">
+                                <li v-for="number in 27">
+                                    <a href="#">
+                                        <img :src="'/images/icon-chat' + number + '.png'"
+                                            alt="icon"
+                                            @click="addIcon(number)">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <span class="material-input"></span>
                 </div>
             </form>
         </div>
@@ -86,7 +106,8 @@ export default {
             listChat: this.list,
             right: this.marginRight,
             paginate: 0,
-            isLoad: false
+            isLoad: false,
+            continue: true
         }
     },
     watch: {
@@ -156,28 +177,34 @@ export default {
                 })
         }, 300),
         getMessage() {
-            get(`${showMessage}/${this.receiveUser}?type=${this.type}&paginate=${this.paginate}`)
-                .then(res => {
-                    if (res.data.status == 200) {
-                        for (var index = 0; index < res.data.messages.length; index++ ) {
-                            if (res.data.messages[index]) {
-                                let mess = {
-                                    userId: res.data.messages[index].userId,
-                                    message: res.data.messages[index].message,
-                                    avatar: res.data.messages[index].avatar,
-                                    time: res.data.messages[index].time
-                                }
+            if (this.continue) {
+                get(`${showMessage}/${this.receiveUser}?type=${this.type}&paginate=${this.paginate}`)
+                    .then(res => {
+                        if (res.data.status == 200) {
+                            for (var index = 0; index < res.data.messages.length; index++ ) {
+                                let data = res.data.messages[index]
 
-                                this.messages.unshift(mess)
+                                if (data) {
+                                    let mess = {
+                                        userId: data.userId,
+                                        message: data.message,
+                                        avatar: data.avatar,
+                                        time: data.time
+                                    }
+
+                                    this.messages.unshift(mess)
+                                }
                             }
+
+                            this.paginate = res.data.paginate
                         }
 
-                        this.paginate = res.data.paginate
-                    }
-                })
-                .catch(err => {
-                    this.messages.push(this.$i18n.t('chat.get_message_error'))
-                })
+                        this.continue = res.data.continue
+                    })
+                    .catch(err => {
+                        this.messages.push(this.$i18n.t('chat.get_message_error'))
+                    })
+            }
         },
         closeComponent() {
             this.$emit('deleteChatIndex', this.index)
@@ -212,6 +239,9 @@ export default {
         calendarTime(time)
         {
             return moment(time).calendar()
+        },
+        addIcon(number) {
+            this.content += "<img src='/images/icon-chat" + number + ".png' alt='icon'>"
         }
     },
     mounted() {

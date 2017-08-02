@@ -40,15 +40,18 @@ export const setUser = ({ commit }, user) => {
 };
 
 export const getListFollow = ({ commit }, list) => {
-    get(routes.follow)
-        .then(res => {
-            commit(types.GET_LIST_FOLLOW, res.data.followings);
-            commit(types.GET_GROUPS, res.data.groups)
-        })
-        .catch(err => {
-            commit(types.GET_LIST_FOLLOW, []);
-            reject(err)
-        })
+    return new Promise((resolve, reject) => {
+        get(routes.follow)
+            .then(res => {
+                commit(types.GET_LIST_FOLLOW, res.data.followings);
+                commit(types.GET_GROUPS, res.data.groups)
+                resolve(res.data.http_status.status)
+            })
+            .catch(err => {
+                commit(types.GET_LIST_FOLLOW, []);
+                reject(err)
+            })
+    })
 };
 
 export const updateHeaderPhoto = ({ commit }, image) => {

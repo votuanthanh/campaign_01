@@ -17,6 +17,7 @@ export const updateAvatar = 'settings/avatar'
 export const uploadImages = 'settings/upload-files/'
 export const passwordEmail = 'password/email'
 export const passwordReset = 'password/reset'
+export const showNotification = 'show-notifications'
 
 export default {
     getUser,
@@ -35,5 +36,6 @@ export default {
     updateAvatar,
     uploadImages,
     passwordEmail,
-    passwordReset
+    passwordReset,
+    showNotification
 }

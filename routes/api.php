@@ -47,6 +47,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::post('send-message', 'ChatController@sendMessage');
         Route::post('send-message-to-group', 'ChatController@sendMessageToGroup');
         Route::get('show-message/{id}', 'ChatController@showMessages');
+        Route::get('show-notifications', 'ChatController@getNotification');
         Route::post('like/{modelId}/{flag}', 'LikeController@like')->name('like');
 
         Route::group(['as' => 'user.'], function () {

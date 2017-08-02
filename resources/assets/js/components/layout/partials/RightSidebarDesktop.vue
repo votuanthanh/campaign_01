@@ -164,6 +164,7 @@ import { get } from '../../../helpers/api'
 import { follow } from '../../../router/router'
 import { mapState, mapActions } from 'vuex'
 import Chat from '../../../components/chat/Chat.vue'
+import noty from '../../../helpers/noty'
 
 export default {
     data: () => ({
@@ -221,6 +222,15 @@ export default {
     created () {
         this.$socket.emit('register', { id: this.user.id, type: true })
         this.getListFollow()
+            .then(res => {
+                if (res) {
+                    this.emitListCampaign()
+                }
+            })
+            .catch(err => {
+                const message = this.$i18n.t('messages.connection_error')
+                noty({ text: message, container: false, force: true })
+            })
     },
     methods: {
         ...mapActions('auth', [
@@ -269,6 +279,20 @@ export default {
 
             this.marginRight -= this.widthDefault
             this.chats.splice(index, 1)
+        },
+        emitListCampaign() {
+            const listGroups = []
+
+            for (var index = 0; index < this.groups.length; index++) {
+                let group = {
+                    campaignId: this.groups[index].id,
+                    hashtag: this.groups[index].hashtag
+                }
+
+                listGroups.push(group)
+            }
+
+            this.$socket.emit('notification', { userId: this.user.id, groups: listGroups })
         }
     },
     components: {
