@@ -20,7 +20,7 @@
                     <svg class="olymp-happy-face-icon">
                         <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
                     </svg>
-                    <div class="label-avatar bg-blue">{{ count }}</div>
+                    <div class="label-avatar bg-blue" v-show="count">{{ count }}</div>
                     <div class="more-dropdown more-with-triangle triangle-top-center">
                         <div class="ui-block-title ui-block-title-small">
                             <h6 class="title">{{ $t('messages.friend_popup') }}</h6>
@@ -67,14 +67,14 @@
                                 </li>
                             </ul>
                         </div>
-                        <a href="javascript:void(0)" @click="getListRequest()" class="view-all bg-blue">{{ $t('messages.show_more') }}</a>
+                        <a href="javascript:void(0)" @click="getListRequest()" class="view-all bg-blue" v-show="count">{{ $t('messages.show_more') }}</a>
                     </div>
                 </div>
                 <div class="control-icon more has-items">
                     <svg class="olymp-chat---messages-icon">
                         <use xlink:href="/frontend/icons/icons.svg#olymp-chat---messages-icon"></use>
                     </svg>
-                    <div class="label-avatar bg-purple">{{ messages.length }}</div>
+                    <div class="label-avatar bg-purple">{{ countReadMessage }}</div>
                     <div class="more-dropdown more-with-triangle triangle-top-center">
                         <div class="ui-block-title ui-block-title-small">
                             <h6 class="title">Chat / Messages</h6>
@@ -91,7 +91,12 @@
                                         <a href="#" class="h6 notification-friend">{{ mess.showName }}</a>
                                         <span class="chat-message-item" v-html="mess.sendName + mess.message"></span>
                                         <span class="notification-date">
-                                            <time class="entry-date updated" datetime="2004-07-24T18:18">{{ calendarTime(mess.time) }}</time>
+                                            <time class="entry-date updated" datetime="2004-07-24T18:18" v-if="mess.read">
+                                                Read at {{ calendarTime(mess.time) }}
+                                            </time>
+                                            <time class="entry-date updated" datetime="2004-07-24T18:18" v-else>
+                                                {{ calendarTime(mess.time) }}
+                                            </time>
                                         </span>
                                     </div>
                                     <span class="notification-icon">
@@ -111,7 +116,9 @@
                         <a href="javascript:void(0)" class="view-all bg-purple" @click="getMessagesNotification">
                             {{ $t('messages.more_messages') }}
                         </a>
-                    </div>">
+                    </div>
+                </div>
+                <div class="control-icon more has-items">
                     <svg class="olymp-thunder-icon">
                         <use xlink:href="/frontend/icons/icons.svg#olymp-thunder-icon"></use>
                     </svg>
@@ -406,7 +413,8 @@ export default {
         listRequest: [],
         count: 0,
         skipFriend: 0,
-        continueForGetListRequest: true
+        continueForGetListRequest: true,
+        countReadMessage: 0
     }),
     created () {
         this.getMessagesNotification()
@@ -440,24 +448,29 @@ export default {
                             let noty = res.data.notifications
 
                             for (var index = 0; index < noty.length; index++) {
-                                let isSendToUser = Number.isInteger(Number(noty[index].receive))
+                                let isSendToUser = Number.isInteger(Number(noty[index].content.receive))
                                 let mess = {
-                                    form: noty[index].userId,
-                                    sendName: (noty[index].userId == this.user.id)
+                                    form: noty[index].content.userId,
+                                    sendName: (noty[index].content.userId == this.user.id)
                                         ? this.$i18n.t('messages.you')
-                                        : noty[index].name + ": ",
-                                    to: noty[index].receive,
-                                    groupChat: noty[index].groupKey,
-                                    message: noty[index].message,
-                                    showName: (noty[index].userId == this.user.id || !isSendToUser)
-                                        ? noty[index].nameReceive
-                                        : noty[index].name,
-                                    showAvatar: (noty[index].userId == this.user.id || !isSendToUser)
-                                        ? noty[index].avatarReceive
-                                        : noty[index].avatar,
-                                    class: isSendToUser ? "" : "group-chat",
-                                    time: noty[index].time
+                                        : noty[index].content.name + ": ",
+                                    to: noty[index].content.receive,
+                                    groupChat: noty[index].content.groupKey,
+                                    message: noty[index].content.message,
+                                    showName: (noty[index].content.userId == this.user.id || !isSendToUser)
+                                        ? noty[index].content.nameReceive
+                                        : noty[index].content.name,
+                                    showAvatar: (noty[index].content.userId == this.user.id || !isSendToUser)
+                                        ? noty[index].content.avatarReceive
+                                        : noty[index].content.avatar,
+                                    class: isSendToUser ? (noty[index].isRead ? "" : "message-unread") : "group-chat",
+                                    time: noty[index].isRead ? noty[index].time : noty[index].content.time,
+                                    read: noty[index].isRead
                                 }
+
+                                this.countReadMessage = !mess.read
+                                    ? (this.countReadMessage + 1)
+                                    : this.countReadMessage
 
                                 this.messages.push(mess)
                             }
@@ -495,11 +508,13 @@ export default {
                         ? message.avatarReceive
                         : message.avatar,
                     class: Number.isInteger(socketData.to) ? "" : "group-chat",
-                    time: message.time
+                    time: message.time,
+                    read: false
                 }
 
                 if (index == -1) {
                     this.messages.unshift(mess)
+                    this.countReadMessage += 1
                 } else {
                     this.messages.splice(index, 1)
                     this.messages.unshift(mess)

@@ -66,11 +66,25 @@ class ChatController extends ApiController
             }
         }
 
+        $read = !$start ? $this->redis->get('read' . $groupKey) : false;
+
+        if ($read) {
+            $read = json_decode($read);
+            $time = $read->time;
+            $lastMessage = $this->redis->command('lrange', [$groupKey, 0, 0]);
+            $read = $read->id == $lastMessage[0]
+                ? json_decode($this->redis->get($read->id))->userId
+                : null;
+            $read = $read ? true : false;
+        }
+
         return response()->json([
             'status' => CODE_OK,
             'messages' => $messages,
             'paginate' => ++$stop,
             'continue' => true,
+            'read' => $read,
+            'time' => ($read) ? $time : null,
         ]);
     }
 
@@ -306,11 +320,21 @@ class ChatController extends ApiController
             $content = json_decode($this->redis->get($idMessage[0]));
 
             if ($content) {
+                $read = null;
+                $time = null;
                 if (!is_numeric($content->receive)) {
                     $content->groupKey = $content->nameReceive;
+                } else {
+                    $read = json_decode($this->redis->get('read' . $key));
+                    $time = ($read && $read->id === $idMessage[0]) ? $read->time : null;
+                    $read = ($read && $read->id === $idMessage[0]);
                 }
 
-                $notifications[] = $content;
+                $notifications[] = [
+                    'content' => $content,
+                    'isRead' => $read,
+                    'time' => $time,
+                ];
             }
         }
 

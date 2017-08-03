@@ -47,9 +47,9 @@ class UserController extends ApiController
             $this->redis->publish('activies', json_encode([
                 'userId' => $this->user->id,
                 'listFollow' => $this->user
-                ->friends()
-                ->pluck('id')
-                ->all(),
+                    ->friends()
+                    ->pluck('id')
+                    ->all(),
                 'status' => true,
             ]));
         } catch (Exception $e) {

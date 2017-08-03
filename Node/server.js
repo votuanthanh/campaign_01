@@ -2,6 +2,7 @@ var app = require('express')()
 var server = require('http').Server(app)
 var io = require('socket.io')(server)
 var redis = require('redis')
+var moment = require('moment-timezone');
 
 server.listen(8890)
 var userConnection = []
@@ -9,6 +10,7 @@ var userLogin = null
 var listFriend = []
 
 var redisClient = redis.createClient(6379, 'redis')
+var client = redis.createClient(6379, 'redis')
 redisClient.subscribe('singleChat', 'groupChat', 'activies', 'noty')
 redisClient.on('message', function(channel, data) {
 
@@ -30,6 +32,14 @@ redisClient.on('message', function(channel, data) {
             io.to(message.to).emit(channel, data)
         }
     }
+})
+
+redisClient.on('error', function (err) {
+    client.lpush('err', 'Exception: ' + err)
+});
+
+client.on('error', function (err) {
+    client.lpush('err', 'Exception: ' + err)
 })
 
 io.on('connection', function (socket) {
@@ -73,6 +83,26 @@ io.on('connection', function (socket) {
         callOnline(io.sockets, listFriend, userLogin)
         io.sockets.in(data.userId).emit('acceptRequestSuccess', { status: true, data: data })
         socket.emit('acceptRequestSuccess', { status: true, data: data })
+    })
+
+    socket.on('markRead', data => {
+        if (parseInt(data.receive)) {
+            let key = (parseInt(data.receive) > parseInt(data.send))
+                ? parseInt(data.send) + '-' + parseInt(data.receive)
+                : parseInt(data.receive) + '-' + parseInt(data.send)
+            let now = moment().tz('Asia/Ho_Chi_Minh').format('MM-DD-YYYY HH:mm:ss')
+            client.lrange(key, 0, 0, function (err, replies) {
+                let idMessage = replies[0]
+                let message = {
+                    id: idMessage,
+                    time: now
+                }
+
+                client.set('read' + key, JSON.stringify(message))
+            })
+
+            socket.to(data.receive).emit('read', { id: data.receive, status : true, time: now })
+        }
     })
 
     socket.on('disconnect', function() {

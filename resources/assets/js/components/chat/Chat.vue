@@ -21,19 +21,26 @@
                 <ul class="notification-list chat-message chat-message-field">
                     <li v-for="(subMessage, index) in organizedMessage"
                         :class="subMessage[0].userId == user.id ? 'popup-chat-myself' : 'popup-chat-friend'">
-                            <div class="author-thumb">
-                                <img :src="subMessage[0].avatar" alt="author">
+                        <div class="author-thumb">
+                            <img :src="subMessage[0].avatar" alt="author">
+                        </div>
+                        <div class="box-notification-event">
+                            <div class="notification-event">
+                                <span class="chat-message-item" v-for="mess in subMessage" v-html="mess.message"></span>
+                                <span class="notification-date">
+                                    <time class="entry-date updated"
+                                        datetime="2004-07-24T18:18"
+                                        v-if="index == (organizedMessage.length - 1)
+                                            && read
+                                            && messages[messages.length - 1].userId == user.id ">
+                                        {{ $t('messages.read_at') + calendarTime(readAt) }}
+                                    </time>
+                                    <time class="entry-date updated" datetime="2004-07-24T18:18"v-else>
+                                        {{ calendarTime(organizedMessage[index][subMessage.length - 1].time) }}
+                                    </time>
+                                </span>
                             </div>
-                            <div class="box-notification-event">
-                                <div class="notification-event">
-                                    <span class="chat-message-item" v-for="mess in subMessage" v-html="mess.message"></span>
-                                    <span class="notification-date">
-                                        <time class="entry-date updated" datetime="2004-07-24T18:18">
-                                            {{ calendarTime(organizedMessage[index][subMessage.length - 1].time) }}
-                                        </time>
-                                    </span>
-                                </div>
-                            </div>
+                        </div>
                     </li>
                 </ul>
                 <div class="ps__scrollbar-x-rail">
@@ -49,6 +56,8 @@
                         name="message"
                         v-model="content"
                         @keyup.enter="handleChat"
+                        @keyup.prevent="markRead"
+                        @click.prevent="markRead"
                         :placeholder="$t('chat.send_message')">
                     </textarea>
                     <div class="add-options-message">
@@ -107,7 +116,9 @@ export default {
             right: this.marginRight,
             paginate: 0,
             isLoad: false,
-            continue: true
+            continue: true,
+            read: false,
+            readAt: ''
         }
     },
     watch: {
@@ -181,6 +192,9 @@ export default {
                 get(`${showMessage}/${this.receiveUser}?type=${this.type}&paginate=${this.paginate}`)
                     .then(res => {
                         if (res.data.status == 200) {
+                            this.read = res.data.read
+                            this.readAt = res.data.time
+
                             for (var index = 0; index < res.data.messages.length; index++ ) {
                                 let data = res.data.messages[index]
 
@@ -232,6 +246,7 @@ export default {
 
                 this.messages.push(mess)
                 this.paginate++
+                this.read = false
                 $('#' + this.replaceSpace(this.receiveUser))
                     .scrollTop($('#' + this.replaceSpace(this.receiveUser))[0].scrollHeight)
             }
@@ -241,6 +256,14 @@ export default {
         },
         addIcon(number) {
             this.content += "<img src='/images/icon-chat" + number + ".png' alt='icon'>"
+        },
+        markRead() {
+            if (this.messages[this.messages.length - 1].userId != this.user.id) {
+                this.$socket.emit('markRead', {
+                    receive: this.receiveUser,
+                    send: this.user.id
+                })
+            }
         }
     },
     mounted() {
@@ -281,6 +304,10 @@ export default {
         },
         groupChat: function (data) {
             this.receiveMessage(data)
+        },
+        read: function (data) {
+            this.read = data.status
+            this.readAt = data.time
         }
     }
 }
