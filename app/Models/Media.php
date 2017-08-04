@@ -11,6 +11,8 @@ class Media extends BaseModel
 
     const IMAGE = 0;
     const VIDEO = 1;
+    const EDITOR_QUILL = 2;
+    
 
     public function __construct($attributes = [])
     {

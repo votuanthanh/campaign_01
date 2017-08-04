@@ -48,6 +48,7 @@
                     data-vv-name="description"
                     id="description"
                     :options="editorOption"
+                    ref="description"
                     v-model="newEvent.description"
                     v-validate="'required'">
                 </quill-editor>
@@ -92,6 +93,11 @@
                 </div>
                 <button class="btn btn-breez btn-lg full-width" @click="createEvent">{{ $t('form.button.create_event') }}</button>
             </div>
+            <upload-quill
+                :uploadVisible.sync="uploadVisible"
+                :imageInsert="imageInsert"
+                @insertImage="insertImageToContent">
+            </upload-quill>
         </div>
     </div>
 </template>
@@ -106,6 +112,7 @@
     import { config, editorOption } from '../../../config'
     import { post, del } from '../../../helpers/api'
     import noty from '../../../helpers/noty'
+    import uploadedImage from '../../../helpers/mixin/uploadedImage'
 
     Vue.use(Dropzone)
     Vue.use(VueGoogleMaps, {
@@ -143,9 +150,11 @@
                 donations: []
             },
             editorOption,
-            hasErrorFiles: false
+            hasErrorFiles: false,
+            uploadVisible: false,
+            imageInsert: ''
         }),
-
+        mixins: [uploadedImage],
         methods: {
             addErrors(index, value) {
                 this.errorBags[index] = value
