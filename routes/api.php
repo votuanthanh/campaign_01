@@ -115,8 +115,9 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
 
         Route::group(['prefix' => 'file', 'as' => 'file'], function () {
             Route::post('upload', 'UploadController@upload')->name('upload');
+            Route::post('upload-image-for-editor', 'CommonController@uploadImageForEditor');
+            Route::get('quill-uploaded-images', 'CommonController@quillUploadedImages');
             Route::delete('delete/{path?}', 'UploadController@delete')->name('delete')->where('path', '.+');
         });
     });
 });
-

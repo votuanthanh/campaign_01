@@ -177,8 +177,10 @@
                             <quill-editor name="description"
                                 data-vv-name="description"
                                 id="description"
+                                ref="description"
                                 class="form-control"
                                 v-model="campaign.description"
+                                :options="editorOption"
                                 v-validate="'required'">
                             </quill-editor>
                             <span v-show="errors.has('description')" class="material-input text-danger">
@@ -192,6 +194,11 @@
                 </form>
             </div>
         </div>
+        <upload-quill
+            :uploadVisible.sync="uploadVisible"
+            :imageInsert="imageInsert"
+            @insertImage="insertImageToContent">
+        </upload-quill>
     </div>
 </template>
 
@@ -202,9 +209,9 @@ import { storeCampaign, tags } from '../../router/router'
 import Multiselect from 'vue-multiselect'
 import noty from '../../helpers/noty'
 import SettingDate from '../libs/SettingDate.vue'
-import { quillEditor } from 'vue-quill-editor'
 import * as VueGoogleMaps from 'vue2-google-maps'
-import { config } from '../../config'
+import { config, editorOption } from '../../config'
+import uploadedImage from '../../helpers/mixin/uploadedImage'
 
 export default {
     data: () => ({
@@ -230,8 +237,13 @@ export default {
         showMap: false,
         zoom: config.zoom,
         latLng: { lat: 0, lng: 0 },
-        center: { lat: 0, lng: 0 }
+        center: { lat: 0, lng: 0 },
+        editorOption,
+        hasErrorFiles: false,
+        uploadVisible: false,
+        imageInsert: ''
     }),
+    mixins: [uploadedImage],
     created () {
         this.getTags()
     },
@@ -391,8 +403,7 @@ export default {
     components: {
         DatePicker,
         Multiselect,
-        SettingDate,
-        quillEditor
+        SettingDate
     }
 }
 </script>

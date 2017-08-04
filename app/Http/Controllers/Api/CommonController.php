@@ -5,9 +5,22 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ApiController;
 use Illuminate\Support\Facades\DB;
+use App\Traits\Common\UploadableTrait;
+use App\Models\Media;
 
 class CommonController extends ApiController
 {
+    use UploadableTrait;
+
+    protected $dataSelect = [
+        'image_default',
+        'image_large',
+        'image_medium',
+        'image_slider',
+        'image_small',
+        'image_thumbnail',
+    ];
+
     public function checkExist(Request $request)
     {
         $data = $request->only('column', 'database', 'value', 'idIgnore');
@@ -21,5 +34,44 @@ class CommonController extends ApiController
 
             $this->compacts['valid'] = $query->exists();
         });
+    }
+
+    public function uploadImageForEditor(Request $request)
+    {
+        $dataQuill = collect($request->input('file'))->map(function ($file) {
+            return [
+                'type' => Media::EDITOR_QUILL,
+                'url_file' => $this->getName($file),
+            ];
+        })->toArray();
+
+        return $this->doAction(function () use ($dataQuill) {
+            $this->compacts['media'] = $this->user
+                ->media()
+                ->createMany($dataQuill)
+                ->map(function ($media) {
+                    return $media->setVisible($this->dataSelect);
+                });
+        });
+    }
+
+    public function quillUploadedImages()
+    {
+        return $this->getData(function () {
+            $this->compacts['images'] = $this->user->media()
+                ->whereType(Media::EDITOR_QUILL)
+                ->latest()
+                ->get()
+                ->map(function ($media) {
+                    return $media->setVisible($this->dataSelect);
+                });
+        });
+    }
+
+    protected function getName($file)
+    {
+        $path = config('settings.folderQuill') . '/' . $this->user->id;
+
+        return $this->uploadFile($file, $path);
     }
 }
