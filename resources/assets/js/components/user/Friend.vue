@@ -1,18 +1,15 @@
 <template>
     <div class="follow">
-        <div class="load-follower loader" v-if="loading">
-        </div>
-        <!--end Top Header -->
         <div class="container">
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="ui-block">
                         <div class="ui-block-title">
-                            <div class="h6 title">{{ this.info }}</div>
+                            <div class="h6 title">{{ $t('user.friend.friends') }}</div>
                             <form class="w-search">
                                 <div class="form-group with-button">
-                                    <input class="form-control" @input="search" v-model="searchKey" type="text" placeholder="Search Friends...">
-                                    <button>
+                                    <input class="form-control" v-model="searchKey" @input="search" type="text" :placeholder="$t('user.friend.search')">
+                                    <button @click.prevent="search">
                                         <svg class="olymp-magnifying-glass-icon">
                                             <use xlink:href="/frontend/icons/icons.svg#olymp-magnifying-glass-icon"></use>
                                         </svg>
@@ -24,9 +21,8 @@
                                     <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
                                 </svg>
                                 <ul class="more-dropdown">
-                                    <li><router-link :to="'/user/' + currentPageUser.id + '/followings'" class="h5 author-name">List following</router-link></li>
-                                    <li><a>{{ $t('user.follow.block') }}</a></li>
-                                    <li><a>{{ $t('user.follow.turn_off_notifications') }}</a></li>
+                                    <li><a>{{ $t('user.friend.block') }}</a></li>
+                                    <li><a>{{ $t('user.friend.turn_off_notifications') }}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -37,29 +33,35 @@
         <!-- Friends -->
         <div class="container">
             <div class="row">
-                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-6" v-for="(user, index) in followers">
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-6" v-for="(user, index) in friends">
                     <div class="ui-block animated zoomIn">
                         <div class="friend-item">
                             <div class="friend-header-thumb">
-                                <img :src="user.head_photo" alt="friend">
+                                <img :src="user.default_header" alt="friend">
                             </div>
                             <div class="friend-item-content">
-                                <div class="more">
+                                <div class="more" v-show="authUser.id != user.id">
                                     <svg class="olymp-three-dots-icon">
                                         <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
                                     </svg>
                                     <ul class="more-dropdown">
-                                        <li><a @click="follow($event, user.id)">{{ parseTextRelation(user) }}</a></li>
-                                        <li><a>{{ $t('user.follow.block') }}</a></li>
-                                        <li><a>{{ $t('user.follow.turn_off_notifications') }}</a></li>
+                                        <li><a>{{ $t('user.friend.block') }}</a></li>
+                                        <li><a>{{ $t('user.friend.turn_off_notifications') }}</a></li>
+                                        <li v-if="user.is_friend"><a href="#" @click.prevent="unfriend(user)">{{ $t('user.friend.unfriend') }}</a></li>
+                                        <li v-if="user.has_pending_request"><a href="#" @click.prevent="sendRequest(user)">{{ $t('user.friend.cancel_request') }}</a></li>
+                                        <li v-if="user.has_send_request">
+                                            <a href="#" @click.prevent="acceptRequest(user)">{{ $t('user.friend.accept_request') }}</a>
+                                            <a href="#" @click.prevent="denyRequest(user)">{{ $t('user.friend.reject_request') }}</a>
+                                        </li>
+                                        <li v-if="!user.is_friend && !user.has_pending_request && !user.has_send_request"><a href="#" @click.prevent="sendRequest(user)">{{ $t('user.friend.add_friend') }}</a></li>
                                     </ul>
                                 </div>
                                 <div class="friend-avatar">
                                     <div class="author-thumb">
-                                        <img :src="user.url_file" alt="author">
+                                        <img :src="user.image_small" alt="author">
                                     </div>
                                     <div class="author-content">
-                                        <router-link :to="{ name: 'user', params: { id: user.id } }" class="h5 author-name">{{ user.name }}</router-link>
+                                        <router-link :to="{ name: 'user.timeline', params: { id: user.id } }" class="h5 author-name">{{ user.name }}</router-link>
                                         <div class="country">{{ user.address }}</div>
                                     </div>
                                 </div>
@@ -68,40 +70,39 @@
                                         <div class="swiper-slide">
                                             <div class="friend-count" data-swiper-parallax="-500">
                                                 <a class="friend-count-item">
-                                                    <div class="h6">{{ user.followers.length }}</div>
-                                                    <div class="title">{{ $t('user.follow.followers') }}</div>
+                                                    <div class="h6">{{ user.friends_count }}</div>
+                                                    <div class="title">{{ $t('user.friend.friends') }}</div>
                                                 </a>
                                                 <a class="friend-count-item">
-                                                    <div class="h6">240</div>
-                                                    <div class="title">{{ $t('user.follow.photo') }}</div>
+                                                    <div class="h6">{{ user.photos_count }}</div>
+                                                    <div class="title">{{ $t('user.friend.photo') }}</div>
                                                 </a>
                                                 <a class="friend-count-item">
-                                                    <div class="h6">16</div>
-                                                    <div class="title">{{ $t('user.follow.video') }}</div>
+                                                    <div class="h6">{{ user.videos_count }}</div>
+                                                    <div class="title">{{ $t('user.friend.video') }}</div>
                                                 </a>
                                             </div>
                                             <div class="control-block-button" data-swiper-parallax="-100">
-                                                <a class="btn btn-control bg-blue">
+                                                <a class="btn btn-control" :class="{ 'bg-blue': user.is_friend, 'bg-gray': !user.is_friend }">
                                                     <svg class="olymp-happy-face-icon">
                                                         <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
                                                     </svg>
                                                 </a>
-                                                <a :class="((!user.followed.length) ? 'red ' : '') + 'btn btn-control bg-purple link-svg' + user.id">
-                                                    <svg :class="'olymp-' + ((!user.followed.length) ? 'close-icon' : 'check-icon')">
-                                                        <use :xlink:href="'/frontend/icons/icons.svg#olymp-' + ((!user.followed.length) ? 'close-icon' : 'check-icon')"></use>
-                                                    </svg>
+                                                <a href="#" class="btn btn-control bg-purple">
+                                                    <svg class="olymp-chat---messages-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-chat---messages-icon"></use></svg>
+                                                    <div class="ripple-container"></div>
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="swiper-slide">
                                             <p class="friend-about" data-swiper-parallax="-500">
-                                                {{ $t('user.follow.birthday') }}: {{ user.birthday }}<br>
-                                                {{ $t('user.follow.gender') }}: {{ (user.gender) ? $t('user.follow.male') : $t('user.follow.female') }}<br>
-                                                {{ $t('user.follow.email') }}: {{ slipEmail(user.email) }}<br>
-                                                {{ $t('user.follow.phone') }}: {{ user.phone }}<br>
+                                                {{ $t('user.friend.birthday') }}: {{ user.birthday }}<br>
+                                                {{ $t('user.friend.gender') }}: {{ (user.gender) ? $t('user.friend.male') : $t('user.friend.female') }}<br>
+                                                {{ $t('user.friend.email') }}: {{ slipEmail(user.email) }}<br>
+                                                {{ $t('user.friend.phone') }}: {{ user.phone }}<br>
                                             </p>
                                             <div class="friend-since" data-swiper-parallax="-100">
-                                                <h6>{{ $t('user.follow.follow_since') }}:</h6>
+                                                <h6>{{ $t('user.friend.follow_since') }}:</h6>
                                                 <div class="h6">{{ user.pivot.created_at }}</div>
                                             </div>
                                         </div>
@@ -114,10 +115,11 @@
                 </div>
             </div>
         </div>
-        <div class="spinner-load-more" v-if="loadingMore">
+        <div class="spinner-load-more" v-if="loading">
             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-            <span>{{ $t('user.follow.loading') }}</span>
+            <span>{{ $t('user.friend.loading') }}</span>
         </div>
+        <h4 class="text-center" v-show="(!friends.length && searchKey) || (!hasData && !friends.length)">Nothing found</h4>
     </div>
 </template>
 
@@ -126,28 +128,24 @@
     import DatePicker from '../libs/DatePicker.vue'
     import Modal from '../libs/Modal.vue'
     import noty from '../../helpers/noty'
-    import { get, patch } from '../../helpers/api'
+    import { get, patch, post } from '../../helpers/api'
+    import Noty from 'noty'
     export default {
         data: () => ({
-            followers: [],
-            currentPageUser: {},
-            info: '',
-            dataNotEmpty: true,
-            loadingMore: false,
-            loading: false,
-            pageNumber: 0,
+            searchKey: '',
+            friends: [],
             page: 0,
-            checkPageIsFollowers: true,
-            searchKey: ''
+            hasData: true,
+            loading: false,
         }),
         created() {
             this.listUser();
         },
         mounted() {
             $(window).scroll(() => {
-                if (this.dataNotEmpty && !this.searchKey) {
+                if (this.hasData && !this.searchKey) {
                     if ($(document).height() - $(window).height() < $(window).scrollTop() + 1) {
-                        this.loadMore()
+                        this.listUser()
                     }
                 }
             })
@@ -155,15 +153,8 @@
         updated() {
             this.swiper()
         },
-        watch: {
-            // call again the method if the route changes
-            '$route': 'listUser',
-        },
         computed: {
-            ...mapState('auth', {
-                authenticated: state => state.authenticated,
-                user: state => state.user
-            })
+            ...mapState('auth', { authUser: 'user' })
         },
         methods: {
             slipEmail(email) {
@@ -173,99 +164,27 @@
 
                 return email
             },
-            parseTextRelation(user) {
-                return (!user.followed.length) ? this.$i18n.t('user.follow.follow') : this.$i18n.t('user.follow.unfollow')
-            },
             listUser() {
-                this.page = 1
-                this.dataNotEmpty = true
-                let link = 'user/' + this.$route.params.id
-                this.checkPageIsFollowers = ((this.$route.path).indexOf('followers') >= 0)
-
-                if (this.checkPageIsFollowers) {
-                    link += '/followers'
-                } else {
-                    link += '/followings'
-                }
-
-                get(link)
-                    .then(response => {
-                        let listFollower = response.data.data
-                        this.pageNumber = listFollower.total / window.Laravel.pagination.follow
-                            + (!(listFollower.total % window.Laravel.pagination.follow) ? 0 : 1 )
-                        this.followers = listFollower.data
-                        this.currentPageUser = response.data.currentPageUser
-                        this.info = (this.checkPageIsFollowers)
-                        ? this.$i18n.t('user.follow.info.there_are') + listFollower.total
-                            + this.$i18n.t('user.follow.info.people_following') + this.currentPageUser.name + '.'
-                        : this.currentPageUser.name + this.$i18n.t('user.follow.info.is_following')
-                            + listFollower.total + this.$i18n.t('user.follow.people')
+                this.page++
+                this.loading = true
+                get(`user/${this.$route.params.id}/friends/${this.page}`)
+                    .then(res => {
+                        this.loading = false
+                        if(!res.data.data.length)
+                            this.hasData = false
+                        this.friends = this.friends.concat(res.data.data)
                     })
-                    .catch(function(error) {
-                        noty({
-                            text: this.$i18n.t('messages.load_fail'),
-                            type: 'error',
-                            force: false,
-                            container: false
-                        })
-                    });
-            },
-            loadMore() {
-                let link = 'user/' + this.$route.params.id
-
-                if (this.checkPageIsFollowers) {
-                    link += '/followers/?page=' + (++this.page)
-                } else {
-                    link += '/followings/?page=' + (++this.page)
-                }
-
-                if (this.page > this.pageNumber) {
-                    this.dataNotEmpty = false
-                } else {
-                    this.loadingMore = true
-                    get(link)
-                        .then(response => {
-                            this.followers = $.merge( this.followers, response.data.data.data)
-                            this.currentPageUser = response.data.currentPageUser
-                            this.loadingMore = false
-                        })
-                        .catch(function(error) {
-                            noty({
-                                text: this.$i18n.t('messages.load_fail'),
-                                type: 'error',
-                                force: false,
-                                container: false
-                            })
-                        });
-                }
             },
             search: _.debounce(function () {
                 if (!this.searchKey.trim()) {
+                    this.page = 0
+                    this.hasData = true
                     this.listUser()
                 } else {
-                    let link = 'user/' + this.$route.params.id
                     this.loading = true
-
-                    if (this.checkPageIsFollowers) {
-                        link += '/search-followers/' + this.searchKey
-                    } else {
-                        link += '/search-followings/' + this.searchKey
-                    }
-
-                    get(link)
+                    get(`user/${this.$route.params.id}/search-friends/${this.searchKey}`)
                         .then(response => {
-                            this.followers = response.data.data
-
-                            if (!this.followers.length) {
-                                this.info = this.$i18n.t('user.follow.info.there_are_no')
-                            } else if (this.followers.length == 1) {
-                                this.info = this.$i18n.t('user.follow.info.there_is')
-                            } else {
-                                this.info = this.$i18n.t('user.follow.info.there_are')
-                                    + this.followers.length + this.$i18n.t('user.follow.info.result_for')
-                            }
-
-                            this.info += '"' + this.searchKey + '".'
+                            this.friends = response.data.data
                             this.loading = false
                         })
                         .catch(function(error) {
@@ -277,7 +196,7 @@
                             })
                         });
                 }
-            }, 1000),
+            }, 500),
             follow(event, id) {
                 patch('follow/' + id)
                     .then(response => {
@@ -301,6 +220,56 @@
                             container: false
                         })
                     });
+            },
+            modal(text, callback) {
+                let n = new Noty({
+                    text: text,
+                    modal: true,
+                    layout: 'center',
+                    closeWith: 'button',
+                    buttons: [
+                        Noty.button(this.$t('events.donation.yes'), 'btn-upper btn btn-primary btn--half-width', () => {
+                            callback()
+                            n.close()
+                        }),
+                        Noty.button(this.$t('events.donation.no'), 'btn-upper btn btn-secondary btn--half-width', () => {
+                            n.close()
+                        })
+                    ]
+                }).show();
+            },
+            unfriend(user) {
+                this.modal(`<h4 class="text-center">${this.$t('user.quote.unfriend_msg')}</h4>`, () => {
+                    let key = this.friends.indexOf(user)
+                    post(`unfriend/${user.id}`)
+                        then(() => {
+                            this.friends[key].is_friend = false
+                            if (this.$route.params.id == this.authUser.id) {
+                                this.friends.splice(this.friends.indexOf(user), 1)
+                            }
+                        })
+                })
+            },
+            // send request or cancel request
+            sendRequest(user) {
+                let key = this.friends.indexOf(user)
+                post(`send-friend-request/${user.id}`)
+                this.friends[key].has_pending_request = !this.friends[key].has_pending_request
+            },
+            acceptRequest(user) {
+                let key = this.friends.indexOf(user)
+                post(`accept-friend-requset/${user.id}`)
+                this.friends[key].has_send_request = false
+                this.friends[key].is_friend = true
+            },
+            denyRequest(user) {
+                this.modal(`<h4 class="text-center">${this.$t('user.quote.deny_request_msg')}</h4>`, () => {
+                    let key = this.friends.indexOf(user)
+                    post(`deny-friend-request/${user.id}`)
+                        .then(() => {
+                            this.friends[key].has_send_request = false
+                        })
+                })
             },
             swiper() {
                 var initIterator = 0;
@@ -419,12 +388,8 @@
         margin-right: 10px;
     }
 
-    .bg-purple {
-        background-color: #429175;
-    }
-
-    .bg-purple {
-        background-color: #fe9c52;
+    .bg-gray {
+        background-color: darkgray;
     }
 
     .btn-control {

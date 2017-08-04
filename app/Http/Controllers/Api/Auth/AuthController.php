@@ -49,10 +49,7 @@ class AuthController extends ApiController
             $this->compacts['user'] = $user;
             LRedis::publish('activies', json_encode([
                 'userId' => $user->id,
-                'listFollow' => $user->followings()
-                    ->where('status', User::ACTIVE)
-                    ->pluck('users.id')
-                    ->all(),
+                'listFollow' => $user->friends()->pluck('id')->all(),
                 'status' => true,
             ]));
         });

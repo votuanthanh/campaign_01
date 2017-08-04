@@ -13,4 +13,7 @@ export default {
     [types.SET_LOADING](state, loading) {
         state.loading = loading
     },
+    [types.UPDATE_CURRENT_PAGE_USER](state, data) {
+        state.currentPageUser = data
+    }
 };

@@ -129,7 +129,7 @@
         }
     }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     .notification-list .notification-icon {
         &:hover, &:active {
             fill: #515365;

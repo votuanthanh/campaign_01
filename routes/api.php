@@ -28,15 +28,13 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
 
     Route::group(['prefix' => 'user/{id}', 'as' => 'user.'], function () {
         Route::get('/', 'UserController@getTimeLine')->name('getTimeLine');
-        Route::get('followers', 'UserController@listFollower')->name('follower');
-        Route::get('followings', 'UserController@listFollowing')->name('following');
+        Route::get('friends/{page}', 'UserController@listFriends')->name('friends');
+        Route::get('search-friends/{keyword}', 'UserController@searchFriends')->name('search_friend');
         Route::get('owned-campaign', 'UserController@listOwnedCampaign')->name('owned-campaign');
         Route::get('joined-campaign', 'UserController@listJoinedCampaign')->name('joined-campaign');
         Route::get('following-campaign', 'UserController@listFollowingCampaign')->name('following-campaign');
         Route::get('following-tag', 'UserController@listFollowingTag')->name('following-tag');
         Route::get('get-user', 'UserController@getUser')->name('user');
-        Route::get('search-followers/{data}', 'UserController@searchFollowers')->name('search-followers');
-        Route::get('search-followings/{data}', 'UserController@searchFollowings')->name('search-followings');
     });
 
     Route::resource('tag', 'TagController', ['only' => ['index', 'show']]);
@@ -62,6 +60,10 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::patch('follow-tag/{id}', 'UserController@followTag')->name('follow-tag');
             Route::patch('join-campaign/{id}', 'UserController@joinCampaign')->name('join-campaign');
             Route::get('list-user-following', 'UserController@getListFollow')->name('list-user-following');
+            Route::post('unfriend/{id}', 'UserController@unfriend')->name('unfriend');
+            Route::post('send-friend-request/{id}', 'UserController@sendFriendRequestTo')->name('send-friend-request');
+            Route::post('accept-friend-requset/{id}', 'UserController@acceptFriendRequestFrom')->name('accept-friend-request');
+            Route::post('deny-friend-request/{id}', 'UserController@denyFriendRequestFrom')->name('deny-friend-request');
         });
 
         Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {

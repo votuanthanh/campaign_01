@@ -42,10 +42,10 @@ class UserController extends ApiController
         try {
             LRedis::publish('activies', json_encode([
                 'userId' => $this->user->id,
-                'listFollow' => $this->user->followings()
-                    ->where('status', User::ACTIVE)
-                    ->pluck('users.id')
-                    ->all(),
+                'listFollow' => $this->user
+                ->friends()
+                ->pluck('id')
+                ->all(),
                 'status' => true,
             ]));
         } catch (Exception $e) {
@@ -132,29 +132,28 @@ class UserController extends ApiController
         });
     }
 
-    /**
-     * List all user's follower
-     * @return \Illuminate\Http\Response
-     */
-    public function listFollower($id)
+    public function listFriends($id, $page)
     {
-        return $this->getData(function () use ($id) {
-            $data = $this->repository->listFollower($id);
-            $this->compacts['currentPageUser'] = $data['currentPageUser'];
-            $this->compacts['data'] = $data['follower'];
+        $user = $this->repository->findOrFail($id);
+
+        return $this->getData(function () use ($user, $page) {
+            $this->compacts['data'] = $user->friends()->forPage($page, 4)->values();
         });
     }
 
-    /**
-     * List all user that this user are following
-     * @return \Illuminate\Http\Response
-     */
-    public function listFollowing($id)
+    public function searchFriends($id, $keyword)
     {
-        return $this->getData(function () use ($id) {
-            $data = $this->repository->listFollowing($id);
-            $this->compacts['currentPageUser'] = $data['currentPageUser'];
-            $this->compacts['data'] = $data['follower'];
+        $user = $this->repository->findOrFail($id);
+
+        $recipient = $user->friendsIAmSender()
+            ->wherePivot('status', User::ACCEPTED)
+            ->where('name', 'like', '%' . $keyword . '%')->get();
+        $sender = $user->friendsIAmRecipient()
+            ->wherePivot('status', User::ACCEPTED)
+            ->where('name', 'like', '%' . $keyword . '%')->get();
+
+        return $this->getData(function () use ($recipient, $sender) {
+            $this->compacts['data'] = collect()->push([$recipient, $sender])->flatten();
         });
     }
 
@@ -180,14 +179,38 @@ class UserController extends ApiController
         });
     }
 
-    /**
-     * Toggle follow or unfollow user
-     * @return \Illuminate\Http\Response
-     */
-    public function follow($id)
+    public function sendFriendRequestTo($id)
+    {
+        $user = $this->repository->findOrFail($id);
+
+        if ($user->id == $this->user->id || $user->status == User::IN_ACTIVE) {
+            throw new Exception('Error Processing Request');
+        }
+
+        return $this->doAction(function () use ($id) {
+            $this->user->friendsIAmSender()->toggle($id);
+        });
+    }
+
+    public function acceptFriendRequestFrom($id)
     {
         return $this->doAction(function () use ($id) {
-            $this->user->followings()->toggle($id);
+            $this->user->pendingFriends()->updateExistingPivot($id, ['status' => User::ACCEPTED]);
+        });
+    }
+
+    public function denyFriendRequestFrom($id)
+    {
+        return $this->doAction(function () use ($id) {
+            $this->user->friendsIAmRecipient()->detach($id);
+        });
+    }
+
+    public function unfriend($id)
+    {
+        return $this->doAction(function () use ($id) {
+            $this->user->friendsIAmRecipient()->detach($id);
+            $this->user->friendsIAmSender()->detach($id);
         });
     }
 
@@ -237,20 +260,6 @@ class UserController extends ApiController
         });
     }
 
-    public function searchFollowers($id, $data)
-    {
-        return $this->getData(function () use ($id, $data) {
-            $this->compacts['data'] = $this->repository->searchFollowers($id, $data);
-        });
-    }
-
-    public function searchFollowings($id, $data)
-    {
-        return $this->getData(function () use ($id, $data) {
-            $this->compacts['data'] = $this->repository->searchFollowings($id, $data);
-        });
-    }
-
     /**
      * Timeline of user
      * @param int $id
@@ -269,14 +278,12 @@ class UserController extends ApiController
     public function getListFollow()
     {
         return $this->getData(function () {
-            $this->compacts['followings'] = $this->user->followings()
-                ->where('status', User::ACTIVE)
-                ->get([
-                    'users.id',
-                    'name',
-                    'email',
-                    'url_file',
-                ]);
+            $this->compacts['followings'] = $this->user->friends([
+                'users.id',
+                'name',
+                'email',
+                'url_file',
+            ]);
 
             $roleIds = $this->roleRepository->whereIn('name', [
                     Role::ROLE_OWNER,

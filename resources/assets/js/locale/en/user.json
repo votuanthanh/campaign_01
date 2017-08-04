@@ -1,5 +1,5 @@
 {
-    "follow": {
+    "friend": {
         "block": "Block Profile",
         "report": "Report Profile",
         "turn_off_notifications": "Turn Off Notifications",
@@ -11,7 +11,6 @@
         "male": "Male",
         "female": "Female",
         "loading": "Loading...",
-        "followers": "Followers",
         "is_following": " is following ",
         "people": " people.",
         "people_following": " people following ",
@@ -29,7 +28,14 @@
         "follow": "Follow",
         "unfollow": "Unfollow",
         "photo": "Photos",
-        "video": "Videos"
+        "video": "Videos",
+        "friends": "Friends",
+        "search": "Search Friends...",
+        "unfriend": "Unfriend",
+        "cancel_request": "Cancel friend request",
+        "accept_request": "Accept friend request",
+        "reject_request": "Reject friend request",
+        "add_friend": "Add friend"
     },
     "title": {
         "login": "Login to your Account",
@@ -38,7 +44,8 @@
     "label": {
         "following_campaign": "Following Campaigns",
         "joined_campaign": "Joined Campaigns",
-        "owned_campaign": "Owned Campaigns"
+        "owned_campaign": "Owned Campaigns",
+        "account_setting": "Account Settings"
     },
     "button": {
         "read_more": "Read more"
@@ -46,7 +53,9 @@
     "quote": {
         "create_campaign": "create a new campaign",
         "more_user": "and <br> {0} more joined in this",
-        "no_data": "no more data..."
+        "no_data": "no more data...",
+        "unfriend_msg": "Do you want to unfriend with this person?",
+        "deny_request_msg": "Do you want to decline this friend request?"
     },
     "upload": {
         "update_avatar": "Update your avatar",
