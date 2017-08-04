@@ -29,6 +29,10 @@ class User extends Authenticatable
     const BAN = 2;
     const ACTIVE_LINK_SEND = 'emails.active';
 
+    // Relationship status
+    const PENDING = 0;
+    const ACCEPTED = 1;
+
     protected $fillable = [
         'name',
         'email',
@@ -63,6 +67,14 @@ class User extends Authenticatable
         'image_medium',
         'image_large',
         'default_header',
+        'friends_count',
+        'is_friend',
+        'has_pending_request',
+        'has_send_request',
+    ];
+
+    protected $casts = [
+        'is_friend' => 'boolean',
     ];
 
     public function actions()
@@ -105,19 +117,100 @@ class User extends Authenticatable
         return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 
-    public function followings()
+    public function friendsIAmSender()
     {
-        return $this->belongsToMany(User::class, 'relationships', 'user_id', 'following_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'relationships', 'sender_id', 'recipient_id')
+            ->where('users.status', self::ACTIVE)
+            ->withTimestamps()
+            ->withPivot('status');
     }
 
-    public function followers()
+    public function friendsIAmRecipient()
     {
-        return $this->belongsToMany(User::class, 'relationships', 'following_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'relationships', 'recipient_id', 'sender_id')
+            ->where('users.status', self::ACTIVE)
+            ->withTimestamps()
+            ->withPivot('status');
     }
 
-    public function followed()
+    public function friends($select = ['*'])
     {
-        return $this->belongsToMany(User::class, 'relationships', 'following_id', 'user_id')->where('user_id', \Auth::guard('api')->user()->id);
+        $friends = collect();
+        $friends->push($this->friendsIAmSender()
+            ->withCount([
+                'media AS photos' => function ($query) {
+                    $query->where('type', Media::IMAGE);
+                },
+                'media AS videos' => function ($query) {
+                    $query->where('type', Media::VIDEO);
+                },
+            ])
+            ->wherePivot('status', self::ACCEPTED)
+            ->get($select));
+        $friends->push($this->friendsIAmRecipient()
+            ->withCount([
+                'media AS photos' => function ($query) {
+                    $query->where('type', Media::IMAGE);
+                },
+                'media AS videos' => function ($query) {
+                    $query->where('type', Media::VIDEO);
+                },
+            ])
+            ->wherePivot('status', self::ACCEPTED)
+            ->get($select));
+        $friends = $friends->flatten()->unique('id');
+
+        return $friends;
+    }
+
+    public function getFriendsCountAttribute()
+    {
+        return $this->friends()->count();
+    }
+
+    public function getIsFriendAttribute()
+    {
+        $id = auth()->guard('api')->id();
+        return $id ? $this->isFriendWith(auth()->guard('api')->id()) : false;
+    }
+
+    public function getHasPendingRequestAttribute()
+    {
+        $id = auth()->guard('api')->id();
+        return $id ? $this->hasPendingRequestFrom($id) : false;
+    }
+
+    public function getHasSendRequestAttribute()
+    {
+        $id = auth()->guard('api')->id();
+        return $id ? $this->hasSendRequestTo($id) : false;
+    }
+
+    public function pendingFriends()
+    {
+        return $this->friendsIAmRecipient()
+            ->wherePivot('status', self::PENDING);
+    }
+
+    public function isFriendWith($id)
+    {
+        return $this->friends()->where('id', $id)->count();
+    }
+
+    public function hasPendingRequestFrom($id)
+    {
+        return $this->friendsIAmRecipient()
+            ->where('users.id', $id)
+            ->wherePivot('status', self::PENDING)
+            ->exists();
+    }
+
+    public function hasSendRequestTo($id)
+    {
+        return $this->friendsIAmSender()
+            ->where('users.id', $id)
+            ->wherePivot('status', self::PENDING)
+            ->exists();
     }
 
     public function setPasswordAttribute($value)

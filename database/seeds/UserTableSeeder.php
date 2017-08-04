@@ -35,7 +35,7 @@ class UserTableSeeder extends Seeder
             $tagIds = Tag::pluck('id')->toArray();
             $userIds = User::where('id', '<>', $user->id)->pluck('id')->toArray();
             $user->roles()->attach($idRoleUser);
-            $user->followings()->attach($this->getRandomElement($userIds, 4, 19));
+            $user->friendsIAmSender()->attach($this->getRandomElement($userIds, 4, 19), ['status' => rand(0, 1)]);
             $user->tags()->attach($this->getRandomElement($tagIds, 2, 4));
         });
     }

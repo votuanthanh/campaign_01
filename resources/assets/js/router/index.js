@@ -11,7 +11,7 @@ import PhotoCampaign from '../components/campaign/Photo/PhotoCampaign.vue'
 import CampaignRelated from '../components/campaign/CampaignRelated.vue'
 import CampaignAbout from '../components/campaign/CampaignAbout.vue'
 import App from '../components/layout/App.vue'
-import Followers from '../components/user/Followers.vue'
+import Friend from '../components/user/Friend.vue'
 import MasterUser from '../components/user/MasterUser.vue'
 import Timeline from '../components/user/Timeline.vue'
 import Photo from '../components/user/Photo.vue'
@@ -59,8 +59,7 @@ const router = [
                 name: 'user',
                 children: [
                     { path: '', component: Timeline, name: 'user.timeline' },
-                    { path: 'followers', component: Followers, name: 'user.followers' },
-                    { path: 'followings', component: Followers, name: 'user.followings' },
+                    { path: 'friends', component: Friend, name: 'user.friends' },
                     { path: 'photo', component: Photo, name: 'user.photo' },
                     { path: 'about', component: About, name: 'user.about' },
                     { path: 'video', component: Video, name: 'user.video' },

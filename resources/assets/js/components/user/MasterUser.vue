@@ -1,6 +1,5 @@
 <template>
     <div>
-        <div class="loader" v-if="loading"></div>
         <div class="modal fade show" id="create-friend-group-add-friends" v-if="showModal && listUserliked.length">
             <div class="modal-dialog ui-block window-popup create-friend-group create-friend-group-add-friends">
                 <a href="javascript:void(0)" @click="hideUsersLiked" class="close icon-close" data-dismiss="modal" aria-label="Close">
@@ -39,23 +38,23 @@
                                     <div class="col-lg-5 col-md-5 ">
                                         <ul class="profile-menu">
                                             <li>
-                                                <router-link :to="{ name: 'user.timeline', params: { userId }}">Timeline</router-link>
+                                                <router-link :to="{ name: 'user.timeline', params: { userId }}">{{ $t('campaigns.timeline') }}</router-link>
                                             </li>
                                             <li>
                                                 <router-link :to="{ name: 'user.about', params: { userId }}">About</router-link>
                                             </li>
                                             <li>
-                                                <router-link :to="{ name: 'user.followers', params: { userId }}">Followers</router-link>
+                                                <router-link :to="{ name: 'user.friends', params: { userId }}">{{ $t('user.friend.friends') }}</router-link>
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="col-lg-5 offset-lg-2 col-md-5 offset-md-2">
                                         <ul class="profile-menu">
                                             <li>
-                                                <router-link :to="{ name: 'user.photo', params: { userId }}">Photos</router-link>
+                                                <router-link :to="{ name: 'user.photo', params: { userId }}">{{ $t('user.friend.photo') }}</router-link>
                                             </li>
                                             <li>
-                                                <router-link :to="{ name: 'user.video', params: { userId }}">Videos</router-link>
+                                                <router-link :to="{ name: 'user.video', params: { userId }}">{{ $t('user.friend.video') }}</router-link>
                                             </li>
                                             <li>
                                                 <div class="more">
@@ -84,10 +83,49 @@
                                     </div>
                                 </div>
                                 <div class="control-block-button">
-                                    <a href="35-YourAccount-FriendsRequests.html" class="btn btn-control bg-blue">
-                                        <svg class="olymp-happy-face-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use></svg>
-                                    </a>
-                                    <a href="#" class="btn btn-control bg-purple">
+                                    <div v-show="currentPageUser.id !== authUser.id" style="all:unset;">
+                                        <a href="#"
+                                            class="btn btn-control bg-blue"
+                                            @click.prevent="unfriend(currentPageUser.id)"
+                                            v-if="currentPageUser.is_friend">
+                                            <svg class="olymp-happy-face-icon">
+                                                <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
+                                            </svg>
+                                        </a>
+                                        <a href="#"
+                                            class="btn btn-control bg-blue"
+                                            @click.prevent="sendRequest(currentPageUser.id)"
+                                            v-if="currentPageUser.has_pending_request">
+                                            <svg class="olymp-share-icon">
+                                                <use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use>
+                                            </svg>
+                                        </a>
+                                        <a href="#"
+                                            v-if="currentPageUser.has_send_request"
+                                            @click.prevent="acceptRequest(currentPageUser.id)"
+                                            class="btn btn-control bg-blue">
+                                            <svg class="olymp-check-icon">
+                                                <use xlink:href="/frontend/icons/icons.svg#olymp-check-icon"></use>
+                                            </svg>
+                                        </a>
+                                        <a href="#"
+                                            v-if="currentPageUser.has_send_request"
+                                            @click.prevent="denyRequest(currentPageUser.id)"
+                                            class="btn btn-control bg-secondary">
+                                            <svg class="olymp-close-icon">
+                                                <use xlink:href="/frontend/icons/icons.svg#olymp-close-icon"></use>
+                                            </svg>
+                                        </a>
+                                        <a href="#"
+                                            class="btn btn-control bg-blue"
+                                            @click.prevent="sendRequest(currentPageUser.id)"
+                                            v-if="!currentPageUser.is_friend && !currentPageUser.has_pending_request && !currentPageUser.has_send_request">
+                                            <svg class="olymp-plus-icon">
+                                                <use xlink:href="/frontend/icons/icons.svg#olymp-plus-icon"></use>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <a href="#" class="btn btn-control bg-purple" v-show="currentPageUser.id != authUser.id">
                                         <svg class="olymp-chat---messages-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-chat---messages-icon"></use></svg>
                                     </a>
                                     <div class="btn btn-control bg-primary more" v-show="authUser.id == currentPageUser.id">
@@ -100,7 +138,7 @@
                                                 <a href="#" @click.prevent="showHeader = true">{{ $t('user.upload.update_header_photo') }}</a>
                                             </li>
                                             <li>
-                                                <router-link :to="{ name: 'setting.profile' }">Account Settings</router-link>
+                                                <router-link :to="{ name: 'setting.profile' }">{{ $t('user.label.account_setting') }}</router-link>
                                             </li>
                                         </ul>
                                     </div>
@@ -248,9 +286,10 @@
 
 <script>
     import noty from '../../helpers/noty'
-    import { mapState, mapActions } from 'vuex'
-    import { get } from '../../helpers/api'
+    import { mapState, mapActions, mapMutations } from 'vuex'
+    import { get, post } from '../../helpers/api'
     import ImageModal from '../libs/SelectImageModal.vue'
+    import Noty from 'noty'
 
     export default {
         data: () => ({
@@ -301,6 +340,9 @@
             ...mapActions('auth', ['updateHeaderPhoto', 'changeAvatar', 'uploadImage']),
             ...mapActions('like', ['hideUsersLiked']),
             ...mapActions('user', ['getUser']),
+            ...mapMutations('user', {
+                updateCurrentPageUser: 'UPDATE_CURRENT_PAGE_USER'
+            }),
             showUpload(el) {
                 $(el).click()
             },
@@ -330,7 +372,62 @@
                 this.showAllAvatar = false
                 this.showHeader = false
                 this.showAllImage = false
-            }
+            },
+            modal(text, callback) {
+                let n = new Noty({
+                    text: text,
+                    modal: true,
+                    layout: 'center',
+                    closeWith: 'button',
+                    buttons: [
+                        Noty.button(this.$t('events.donation.yes'), 'btn-upper btn btn-primary btn--half-width', () => {
+                            callback()
+                            n.close()
+                        }),
+                        Noty.button(this.$t('events.donation.no'), 'btn-upper btn btn-secondary btn--half-width', () => {
+                            n.close()
+                        })
+                    ]
+                }).show();
+            },
+            unfriend(id) {
+                this.modal(`<h4 class="text-center">${this.$t('user.quote.unfriend_msg')}</h4>`, () => {
+                    post(`unfriend/${id}`)
+                        .then(() => {
+                            let data = _.cloneDeep(this.currentPageUser)
+                            data.is_friend = false
+                            this.updateCurrentPageUser(data)
+                        })
+                })
+            },
+            // send request or cancel request
+            sendRequest(id) {
+                post(`send-friend-request/${id}`)
+                    .then(() => {
+                        let data = _.cloneDeep(this.currentPageUser)
+                        data.has_pending_request = !data.has_pending_request
+                        this.updateCurrentPageUser(data)
+                    })
+            },
+            acceptRequest(id) {
+                post(`accept-friend-requset/${id}`)
+                    .then(() => {
+                        let data = _.cloneDeep(this.currentPageUser)
+                        data.has_send_request = false
+                        data.is_friend = true
+                        this.updateCurrentPageUser(data)
+                    })
+            },
+            denyRequest(id) {
+                this.modal(`<h4 class="text-center">${this.$t('user.quote.deny_request_msg')}</h4>`, () => {
+                    post(`deny-friend-request/${id}`)
+                        .then(() => {
+                            let data = _.cloneDeep(this.currentPageUser)
+                            data.has_send_request = false
+                            this.updateCurrentPageUser(data)
+                        })
+                })
+            },
         },
         components: {
             ImageModal
@@ -338,7 +435,7 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .author-thumb {
         >img {
             max-height: 100%;
@@ -395,6 +492,25 @@
         >img {
             max-height: 500px;
             object-fit: cover;
+        }
+    }
+    .control-block-button
+    .btn-control {
+        margin-right: 0;
+    }
+    .btn--half-width {
+        margin-left: 5px;
+    }
+    .control-block-button {
+        .btn-control{
+            .olymp-share-icon,
+            .olymp-check-icon,
+            .olymp-close-icon,
+            .olymp-plus-icon,
+            .olymp-happy-face-icon {
+                width: 23px;
+                height: 20px;
+            }
         }
     }
 </style>
