@@ -4,10 +4,12 @@
             <img :src="currentPageUser.url_file" alt="author" class="image-auth">
             <div class="author-date">
                 <a class="h6 post__author-name fn" href="javascript:void(0)">{{ currentPageUser.name }}</a>
-                    {{ $t('post.campaign.created_a') }} <a href="#">{{ $t('post.campaign.new_campaign') }}</a>
+                <span v-if="type == 'create'">{{ $t('post.campaign.created_a') }}</span>
+                <span v-else>{{ $t('post.campaign.joined') }}</span>
+                <a href="#">{{ $t('post.campaign.new_campaign') }}</a>
                 <div class="post__date">
                     <time class="published">
-                        {{ timeAgo(campaignDetail.created_at) }}
+                        {{ campaignDetail.created_at }}
                     </time>
                 </div>
             </div>
@@ -77,25 +79,24 @@
         created() {
             this.setDetailcampaign(this.campaign)
         },
-       props: ['campaign'],
-       components: {
-           Like
-       },
-       computed: {
-           ...mapState('user', {
-               currentPageUser: state => state.currentPageUser,
-           }),
-           ...mapState('campaign', ['detailCampaign']),
-           campaignDetail () {
-               return this.detailCampaign[this.campaign.id]
-           }
-       },
-       methods: {
-           ...mapActions('campaign', ['setDetailcampaign']),
-
-           timeAgo(time) {
-               return moment(time, "YYYY-MM-DD h:mm:ss").fromNow()
-           },
-       }
-   }
+        props: {
+            campaign: {},
+            type: ''
+        },
+        components: {
+            Like
+        },
+        computed: {
+            ...mapState('user', {
+                currentPageUser: state => state.currentPageUser,
+            }),
+            ...mapState('campaign', ['detailCampaign']),
+            campaignDetail () {
+                return this.detailCampaign[this.campaign.id]
+            }
+        },
+        methods: {
+            ...mapActions('campaign', ['setDetailcampaign']),
+        }
+    }
 </script>

@@ -50,7 +50,6 @@
                 </div>
                 <div class="show-text">
                     <show-text
-                        :type="false"
                         :text="comment.content"
                         :show_char=100
                         :show="$t('events.show_more')"
@@ -150,7 +149,6 @@
                         </div>
                         <div class="show-text">
                             <show-text
-                                :type="false"
                                 :text="subComment.content"
                                 :show_char=100
                                 :show="$t('events.show_more')"

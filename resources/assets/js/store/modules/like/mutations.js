@@ -11,7 +11,7 @@ export default {
         var like = state.like
         if (typeof (data.like) == 'boolean') {
             let dataLike = $.grep(like[data.model + data.modelId].data, function (item, index) {
-                return item.user_id !== data.userId
+                return item.user_id !== data.user.id
             });
 
             like[data.model + data.modelId].data = dataLike
@@ -19,13 +19,14 @@ export default {
             state.like = []
             state.like = like
             state.checkLiked[data.model + data.modelId] = false
-
+            state.commentTotal[data.model + data.modelId] = data.commentTotal
         } else {
             like[data.model + data.modelId].data = like[data.model + data.modelId].data.concat(data.like)
             like[data.model + data.modelId].total = state.like[data.model + data.modelId].total + 1
             state.like = []
             state.like = like
             state.checkLiked[data.model + data.modelId] = true
+            state.commentTotal[data.model + data.modelId] = data.commentTotal
         }
     },
     [types.SHOW_MODAL](state, data) {

@@ -6,7 +6,8 @@
             <div class="col-xl-6 push-xl-3 col-lg-12 push-lg-0 col-md-12 col-sm-12 col-xs-12">
                 <div id="newsfeed-items-grid">
                     <div class="ui-block" v-for="(activity, index) in listActivity.data">
-                        <Campaign v-if="(activity.activitiable_type === 'App\\Models\\Campaign') && (activity.name === 'create')" :campaign="activity.activitiable"></Campaign>
+
+                        <Campaign v-if="activity.activitiable_type === 'App\\Models\\Campaign'" :type="activity.name" :campaign="activity.activitiable"></Campaign>
                         <Event v-if="activity.activitiable_type === 'App\\Models\\Event'" :event="activity.activitiable"></Event>
                         <Action v-if="activity.activitiable_type === 'App\\Models\\Action'" :action="activity.activitiable"></Action>
                     </div>

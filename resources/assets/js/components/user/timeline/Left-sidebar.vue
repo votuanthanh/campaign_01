@@ -2,21 +2,21 @@
     <div class="col-xl-3 pull-xl-6 col-lg-6 pull-lg-0 col-md-6 col-sm-12 col-xs-12">
         <div class="ui-block">
             <div class="ui-block-title">
-                <h6 class="title">Profile Intro</h6>
+                <h6 class="title">{{ $t('user.sidebar.profile_intro') }}</h6>
             </div>
             <div class="ui-block-content">
                 <ul class="widget w-personal-info item-block">
                     <li>
-                        <span class="title">About Me:</span>
-                        <span class="text">Hi, I’m James, I’m 36 and I work as a Digital Designer for the  “Daydreams” Agency in Pier 56.</span>
+                        <span class="title">{{ $t('user.sidebar.about_me') }}:</span>
+                        <span class="text">{{ authUser.about }}</span>
                     </li>
                     <li>
-                        <span class="title">Favourite TV Shows:</span>
-                        <span class="text">Breaking Good, RedDevil, People of Interest, The Running Dead, Found,  American Guy.</span>
+                        <span class="title">{{ $t('user.sidebar.birthday') }}:</span>
+                        <span class="text">{{ authUser.birthday }}</span>
                     </li>
                     <li>
-                        <span class="title">Favourite Music Bands / Artists:</span>
-                        <span class="text">Iron Maid, DC/AC, Megablow, The Ill, Kung Fighters, System of a Revenge.</span>
+                        <span class="title">{{ $t('user.sidebar.address') }}:</span>
+                        <span class="text">{{ authUser.address }}</span>
                     </li>
                 </ul>
 
@@ -336,7 +336,19 @@
 </template>
 
 <script>
-    export default {}
+    import { mapState, mapActions, mapGetters } from 'vuex'
+    import ShowText from '../../libs/ShowText.vue'
+
+    export default {
+        computed: {
+            ...mapState('auth', {
+                authUser: 'user'
+            }),
+        },
+        components: {
+            ShowText
+        },
+    }
 </script>
 
 <style lang="scss">

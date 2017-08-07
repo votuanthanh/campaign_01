@@ -131,7 +131,7 @@ class Campaign extends BaseModel
 
         return $this->users()
             ->wherePivot('role_id', $roleId)
-            ->wherePivot('status',  config('settings.campaigns.approve'))
+            ->wherePivot('status', config('settings.campaigns.approve'))
             ->get();
     }
 
@@ -139,16 +139,16 @@ class Campaign extends BaseModel
     {
         $roleIds = Role::whereIn('name', [Role::ROLE_MEMBER, Role::ROLE_OWNER])->pluck('id')->all();
 
-        return !!$this->users()
+        return !is_null($this->users()
             ->wherePivotIn('role_id', $roleIds)
             ->wherePivot('status', config('settings.campaigns.approve'))
             ->wherePivot('user_id', \Auth::guard('api')->user()->id)
-            ->first();
+            ->first());
     }
 
     public function getLikesAttribute()
     {
-        return $this->likes()->with('user')->paginate(config('settings.pagination.like'));
+        return $this->likes()->with('user')->paginate(config('settings.pagination.like'), ['*'], 1);
     }
 
     public function getCheckLikeAttribute()

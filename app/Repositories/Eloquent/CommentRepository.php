@@ -50,7 +50,6 @@ class CommentRepository extends BaseRepository implements CommentInterface
     {
         $comment->activities()->delete();
         $comment->likes()->delete();
-        $comment->user()->delete();
         $comment->subComment()->delete();
 
         return $comment->delete();

@@ -14,7 +14,8 @@ export const likeActivity = ({ commit }, data) => {
                         like: res.data.like,
                         modelId: data.modelId,
                         model: data.model,
-                        userId: data.userId
+                        user: data.user,
+                        commentTotal: data.commentTotal
                     })
                     resolve(res.data.http_status.status)
                 }
