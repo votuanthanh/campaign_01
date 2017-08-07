@@ -35,7 +35,8 @@
         "profile": "Personal Information",
         "change_password": "Change your password",
         "upload_images": "Upload images",
-        "reset_password": "Reset password to your account"
+        "reset_password": "Reset password to your account",
+        "insert_images": "Insert Images"
     },
     "button": {
         "login": "Login",

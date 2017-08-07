@@ -6,7 +6,7 @@
                     <button type="button" class="close" aria-label="Close" @click.stop="onClose">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h5>Insert Images</h5>
+                    <h5>{{ $t('form.title.insert_images') }}</h5>
                 </div>
                 <transition name="fade">
                     <div class="alert alert-danger" v-if="uploadedErrors.length">

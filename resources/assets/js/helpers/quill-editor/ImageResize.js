@@ -28,6 +28,7 @@ export class ImageResize {
                 // we were just focused on another image
                 this.hide();
             }
+
             // clicked on an image inside the editor
             this.show(evt.target);
         }
@@ -40,6 +41,7 @@ export class ImageResize {
     show(img) {
         // keep track of this img element
         this.img = img;
+
         this.showResizers();
         this.showSizeDisplay();
         // position the resize handles at the corners
@@ -95,7 +97,7 @@ export class ImageResize {
             border: '1px solid #777',
             boxSizing: 'border-box',
             opacity: '0.80',
-            zIndex: 9,
+            zIndex: 23,
             cursor: cursor,
         };
         this.extend(box.style, styles, this.options.handleStyles || {});
