@@ -40,22 +40,6 @@
                                 <img :src="user.default_header" alt="friend">
                             </div>
                             <div class="friend-item-content">
-                                <div class="more" v-show="authUser.id != user.id">
-                                    <svg class="olymp-three-dots-icon">
-                                        <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                                    </svg>
-                                    <ul class="more-dropdown">
-                                        <li><a>{{ $t('user.friend.block') }}</a></li>
-                                        <li><a>{{ $t('user.friend.turn_off_notifications') }}</a></li>
-                                        <li v-if="user.is_friend"><a href="#" @click.prevent="unfriend(user)">{{ $t('user.friend.unfriend') }}</a></li>
-                                        <li v-if="user.has_pending_request"><a href="#" @click.prevent="sendRequest(user)">{{ $t('user.friend.cancel_request') }}</a></li>
-                                        <li v-if="user.has_send_request">
-                                            <a href="#" @click.prevent="acceptRequest(user)">{{ $t('user.friend.accept_request') }}</a>
-                                            <a href="#" @click.prevent="denyRequest(user)">{{ $t('user.friend.reject_request') }}</a>
-                                        </li>
-                                        <li v-if="!user.is_friend && !user.has_pending_request && !user.has_send_request"><a href="#" @click.prevent="sendRequest(user)">{{ $t('user.friend.add_friend') }}</a></li>
-                                    </ul>
-                                </div>
                                 <div class="friend-avatar">
                                     <div class="author-thumb">
                                         <img :src="user.image_small" alt="author">
@@ -70,7 +54,7 @@
                                         <div class="swiper-slide">
                                             <div class="friend-count" data-swiper-parallax="-500">
                                                 <a class="friend-count-item">
-                                                    <div class="h6">{{ user.friends_count }}</div>
+                                                    <div class="h6">{{ user.sender_count + user.recipient_count}}</div>
                                                     <div class="title">{{ $t('user.friend.friends') }}</div>
                                                 </a>
                                                 <a class="friend-count-item">
@@ -237,39 +221,6 @@
                         })
                     ]
                 }).show();
-            },
-            unfriend(user) {
-                this.modal(`<h4 class="text-center">${this.$t('user.quote.unfriend_msg')}</h4>`, () => {
-                    let key = this.friends.indexOf(user)
-                    post(`unfriend/${user.id}`)
-                        then(() => {
-                            this.friends[key].is_friend = false
-                            if (this.$route.params.id == this.authUser.id) {
-                                this.friends.splice(this.friends.indexOf(user), 1)
-                            }
-                        })
-                })
-            },
-            // send request or cancel request
-            sendRequest(user) {
-                let key = this.friends.indexOf(user)
-                post(`send-friend-request/${user.id}`)
-                this.friends[key].has_pending_request = !this.friends[key].has_pending_request
-            },
-            acceptRequest(user) {
-                let key = this.friends.indexOf(user)
-                post(`accept-friend-requset/${user.id}`)
-                this.friends[key].has_send_request = false
-                this.friends[key].is_friend = true
-            },
-            denyRequest(user) {
-                this.modal(`<h4 class="text-center">${this.$t('user.quote.deny_request_msg')}</h4>`, () => {
-                    let key = this.friends.indexOf(user)
-                    post(`deny-friend-request/${user.id}`)
-                        .then(() => {
-                            this.friends[key].has_send_request = false
-                        })
-                })
             },
             swiper() {
                 var initIterator = 0;

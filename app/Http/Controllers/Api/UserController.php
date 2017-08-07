@@ -267,7 +267,12 @@ class UserController extends ApiController
      */
     public function getTimeline($id)
     {
-        $user = $this->repository->findOrFail($id);
+        $user = $this->repository->findOrFail($id)->makeVisible([
+            'friends_count',
+            'is_friend',
+            'has_pending_request',
+            'has_send_request',
+        ]);
 
         return $this->doAction(function () use ($user) {
             $this->compacts['data'] = $this->repository->getTimeline($user);
