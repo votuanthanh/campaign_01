@@ -56,6 +56,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'friends_count',
+        'is_friend',
+        'has_pending_request',
+        'has_send_request',
     ];
 
     protected $dates = ['deleted_at'];
@@ -137,28 +141,40 @@ class User extends Authenticatable
     {
         $friends = collect();
         $friends->push($this->friendsIAmSender()
+            ->wherePivot('status', self::ACCEPTED)
+            ->select($select)
             ->withCount([
+                'friendsIAmSender as sender' => function ($query) {
+                    $query->where('relationships.status', self::ACCEPTED);
+                },
+                'friendsIAmRecipient as recipient' => function ($query) {
+                    $query->where('relationships.status', self::ACCEPTED);
+                },
                 'media AS photos' => function ($query) {
                     $query->where('type', Media::IMAGE);
                 },
                 'media AS videos' => function ($query) {
                     $query->where('type', Media::VIDEO);
                 },
-            ])
-            ->wherePivot('status', self::ACCEPTED)
-            ->get($select));
+            ])->get());
         $friends->push($this->friendsIAmRecipient()
+            ->wherePivot('status', self::ACCEPTED)
+            ->select($select)
             ->withCount([
+                'friendsIAmSender as sender' => function ($query) {
+                    $query->where('relationships.status', self::ACCEPTED);
+                },
+                'friendsIAmRecipient as recipient' => function ($query) {
+                    $query->where('relationships.status', self::ACCEPTED);
+                },
                 'media AS photos' => function ($query) {
                     $query->where('type', Media::IMAGE);
                 },
                 'media AS videos' => function ($query) {
                     $query->where('type', Media::VIDEO);
                 },
-            ])
-            ->wherePivot('status', self::ACCEPTED)
-            ->get($select));
-        $friends = $friends->flatten()->unique('id');
+            ])->get());
+        $friends = $friends->flatten()->unique('id')->values();
 
         return $friends;
     }

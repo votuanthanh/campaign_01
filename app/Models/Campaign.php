@@ -31,6 +31,7 @@ class Campaign extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
+
     protected $appends = [
         'usersJoined',
         'authJoniedOrNot',
