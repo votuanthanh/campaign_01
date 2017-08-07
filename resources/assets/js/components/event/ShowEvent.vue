@@ -35,10 +35,10 @@
                                     <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                                     <ul class="more-dropdown">
                                         <li>
-                                            <a href="#">Edit Post</a>
+                                            <a href="#">{{ $t('events.edit-event') }}</a>
                                         </li>
                                         <li>
-                                            <a href="#">Delete Post</a>
+                                            <a href="javascript:void(0)" @click="show()">{{ $t('events.manage_expense') }}</a>
                                         </li>
                                         <li>
                                             <a href="#">Turn Off Notifications</a>
@@ -123,7 +123,8 @@
             style: { width: '100%', height: '100%' },
             isLiked: null,
             numberLike: 0,
-            model: 'event'
+            model: 'event',
+            showExpense: false
         }),
 
         computed : {
@@ -172,6 +173,10 @@
                         $(".list-comment-event")[0].scrollTop = $(".list-comment-event")[0].scrollHeight;
                     }
                 })
+            },
+
+            show() {
+                this.showExpense = true
             }
         },
 
@@ -209,6 +214,12 @@
                 padding-bottom: 5px !important;
                 margin-bottom: 0px;
                 padding: 0;
+                .author-date {
+                    width: 60%;
+                }
+                .more {
+                    margin-right: 5px;
+                }
             }
             .title-event {
                 padding: 0px !important;

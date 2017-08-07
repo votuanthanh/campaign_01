@@ -19,7 +19,14 @@
         "current_password": "Confirm Current Password",
         "new_password": "Your New Password",
         "confirm_password": "Confirm New Password",
-        "search_action" : "Search action"
+        "search_action": "Search action",
+        "goal": "Goal",
+        "time": "Time",
+        "cost": "Cost",
+        "reason": "Reason",
+        "name_product": "Name product",
+        "quantity": "Quantity",
+        "quality": "Quality"
     },
     "title": {
         "login": "Login to your Account",
@@ -57,6 +64,7 @@
     "hidden": "hidden",
     "placeholder": {
         "choose_quality": "Choose quality",
-        "choose_type": "Choose type"
+        "choose_type": "Choose type",
+        "choose_product": "Choose Product"
     }
 }

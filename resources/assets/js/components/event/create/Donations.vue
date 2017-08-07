@@ -3,7 +3,7 @@
     <div class="row donation">
         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
             <div class="form-group label-floating" :class="{ 'has-danger': this.errors.has('goal') }">
-                <label class="control-label">Goal</label>
+                <label class="control-label">{{ $t('form.label.goal') }}</label>
                 <input class="form-control"
                     name="goal"
                     type="text"
@@ -18,7 +18,8 @@
 
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
             <multiselect
-                v-model="type"
+                @input="(value, id) => { type = value }"
+                :value="donation.type"
                 v-validate="'required'"
                 data-vv-name="type"
                 :class="{ 'has-danger': this.errors.has('type') }"
@@ -34,7 +35,8 @@
 
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
             <multiselect
-                v-model="quality"
+                @input="(value, id) => { quality = value }"
+                :value="donation.quality"
                 v-validate="'required'"
                 data-vv-name="quality"
                 :class="{ 'has-danger': this.errors.has('quality') }"

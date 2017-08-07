@@ -112,8 +112,10 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::post('create-many', 'DonationController@createMany');
             Route::resource('donation', 'DonationController', ['only' => ['store', 'update', 'destroy']]);
         });
-
-        Route::resource('expense', 'ExpenseController', ['only' => ['store', 'update', 'destroy']]);
+        Route::post('expense-create-buy', 'ExpenseController@createBy')->name('expense-create-buy');
+        Route::resource('expense', 'ExpenseController', ['only' => ['index', 'store', 'update', 'destroy']]);
+        Route::resource('product', 'ProductController', ['only' => ['index']]);
+        Route::resource('goal', 'GoalController', ['only' => ['index']]);
 
         Route::group(['prefix' => 'file', 'as' => 'file'], function () {
             Route::post('upload', 'UploadController@upload')->name('upload');

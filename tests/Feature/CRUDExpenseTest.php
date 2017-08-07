@@ -11,10 +11,11 @@ use App\Models\Expense;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+
 class CRUDExpenseTest extends TestCase
 {
     use DatabaseTransactions;
-    
+
     public function testCreateExpenseWithAminThenSuccess()
     {
         $faker = \Faker\Factory::create();
@@ -26,36 +27,12 @@ class CRUDExpenseTest extends TestCase
         $goal = factory(Goal::class)->create(['event_id' => $event->id]);
 
         $response = $this->json('POST', route('expense.store'), [
-            'type' => [
-                0 => [
-                    0 => [
-                          "event_id" => $event->id,
-                          "user_id" => $user->id,
-                          "goal_id" => $goal->id,
-                          "cost" => 13.54,
-                          "time" => '2017-07-30',
-                          "type" => 0,
-                          "reason" => $faker->sentence(10),
-                    ],
-                ],
-                1 => [
-                    0 => [
-                          "expense" => [
-                            "event_id" => $event->id,
-                              "user_id" => $user->id,
-                              "goal_id" => $goal->id,
-                              "cost" => 13.54,
-                              "time" => '2017-07-30',
-                              "type" => 1,
-                              "reason" => $faker->sentence(10),
-                        ],
-                          "quantity" => 300,
-                          "name" => $faker->word,
-                          "quality" => $faker->word,
-                    ],
-                ],
-                "event_id" => $event->id,
-            ],
+            'event_id' => $event->id,
+            'goal_id' => $goal->id,
+            'cost' => 13.54,
+            'time' => '2017-07-30',
+            'type' => 0,
+            'reason' => $faker->sentence(10),
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
@@ -73,37 +50,18 @@ class CRUDExpenseTest extends TestCase
         $event = factory(Event::class)->create(['user_id' => $user->id]);
         $goal = factory(Goal::class)->create(['event_id' => $event->id]);
 
-        $response = $this->json('POST', route('expense.store'), [
-            'type' => [
-                0 => [
-                    0 => [
-                          "event_id" => $event->id,
-                          "user_id" => $user->id,
-                          "goal_id" => $goal->id,
-                          "cost" => 13.54,
-                          "time" => '2017-07-30',
-                          "type" => 0,
-                          "reason" => $faker->sentence(10),
-                    ],
-                ],
-                1 => [
-                    0 => [
-                          "expense" => [
-                            "event_id" => $event->id,
-                              "user_id" => $user->id,
-                              "goal_id" => $goal->id,
-                              "cost" => 13.54,
-                              "time" => '2017-07-30',
-                              "type" => 1,
-                              "reason" => $faker->sentence(10),
-                        ],
-                          "quantity" => 300,
-                          "name" => $faker->word,
-                          "quality" => $faker->word,
-                    ],
-                ],
-                "event_id" => $event->id,
+        $response = $this->json('POST', route('expense-create-buy'), [
+            'expense' => [
+                    'event_id' => $event->id,
+                    'goal_id' => $goal->id,
+                    'cost' => 13.54,
+                    'time' => '2017-07-30',
+                    'type' => 1,
+                    'reason' => $faker->sentence(10),
             ],
+                'quantity' => 300,
+                'name' => $faker->word,
+                'quality' => $faker->word,
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
@@ -124,36 +82,12 @@ class CRUDExpenseTest extends TestCase
         $goal = factory(Goal::class)->create(['event_id' => $event->id]);
 
         $response = $this->json('POST', route('expense.store'), [
-            'type' => [
-                0 => [
-                    0 => [
-                          "event_id" => $event->id,
-                          "user_id" => $user2->id,
-                          "goal_id" => $goal->id,
-                          "cost" => 13.54,
-                          "time" => '2017-07-30',
-                          "type" => 0,
-                          "reason" => $faker->sentence(10),
-                    ],
-                ],
-                1 => [
-                    0 => [
-                          "expense" => [
-                            "event_id" => $event->id,
-                              "user_id" => $user2->id,
-                              "goal_id" => $goal->id,
-                              "cost" => 13.54,
-                              "time" => '2017-07-30',
-                              "type" => 1,
-                              "reason" => $faker->sentence(10),
-                        ],
-                          "quantity" => 300,
-                          "name" => $faker->word,
-                          "quality" => $faker->word,
-                    ],
-                ],
-                "event_id" => $event->id,
-            ],
+            'event_id' => $event->id,
+            'goal_id' => $goal->id,
+            'cost' => 13.54,
+            'time' => '2017-07-30',
+            'type' => 0,
+            'reason' => $faker->sentence(10),
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user2->createToken('myToken')->accessToken,
         ]);
@@ -172,36 +106,13 @@ class CRUDExpenseTest extends TestCase
         $goal = factory(Goal::class)->create(['event_id' => $event->id]);
 
         $response = $this->json('POST', route('expense.store'), [
-            'type' => [
-                0 => [
-                    0 => [
-                        "event_id" => -1,
-                        "user_id" => $user->id,
-                        "goal_id" => $goal->id,
-                        "cost" => 13.54,
-                        "time" => '2017-07-30',
-                        "type" => 0,
-                        "reason" => $faker->sentence(10),
-                    ],
-                ],
-                1 => [
-                    0 => [
-                        "expense" => [
-                            "event_id" => -1,
-                            "user_id" => $user->id,
-                            "goal_id" => $goal->id,
-                            "cost" => 13.54,
-                            "time" => '2017-07-30',
-                            "type" => 1,
-                            "reason" => $faker->sentence(10),
-                            ],
-                            "quantity" => 300,
-                            "name" => $faker->word,
-                            "quality" => $faker->word,
-                    ],
-                ],
-                "event_id" => -1,
-            ],
+            'event_id' => -1,
+            'user_id' => $user->id,
+            'goal_id' => $goal->id,
+            'cost' => 13.54,
+            'time' => '2017-07-30',
+            'type' => 0,
+            'reason' => $faker->sentence(10),
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
@@ -224,8 +135,7 @@ class CRUDExpenseTest extends TestCase
             'goal_id' => $goal->id,
         ]);
 
-        $response = $this->json('DELETE', route('expense.destroy', ['expense' => $expense->id]),
-        [
+        $response = $this->json('DELETE', route('expense.destroy', ['expense' => $expense->id]), [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
@@ -247,8 +157,7 @@ class CRUDExpenseTest extends TestCase
             'goal_id' => $goal->id,
         ]);
 
-        $response = $this->json('DELETE', route('expense.destroy', ['expense' => $expense->id]),
-        [
+        $response = $this->json('DELETE', route('expense.destroy', ['expense' => $expense->id]), [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
@@ -272,8 +181,7 @@ class CRUDExpenseTest extends TestCase
             'goal_id' => $goal->id,
         ]);
 
-        $response = $this->json('DELETE', route('expense.destroy', ['expense' => $expense->id]),
-        [
+        $response = $this->json('DELETE', route('expense.destroy', ['expense' => $expense->id]), [
             'HTTP_Authorization' => 'Bearer ' . $user2->createToken('myToken')->accessToken,
         ]);
 
@@ -295,8 +203,7 @@ class CRUDExpenseTest extends TestCase
             'goal_id' => $goal->id,
         ]);
 
-        $response = $this->json('DELETE', route('expense.destroy', ['expense' => -1]),
-        [
+        $response = $this->json('DELETE', route('expense.destroy', ['expense' => -1]), [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
@@ -318,15 +225,14 @@ class CRUDExpenseTest extends TestCase
         ]);
 
         $response = $this->json('PATCH', route('expense.update', ['expense' => $expense->id]), [
-            "event_id" => $event->id,
-            "user_id" => $user->id,
-            "goal_id" => $goal->id,
-            "cost" => 13.54,
-            "time" => '2017-07-30',
-            "type" => 0,
-            "reason" => $faker->sentence(10),
-        ],
-        [
+            'event_id' => $event->id,
+            'user_id' => $user->id,
+            'goal_id' => $goal->id,
+            'cost' => 13.54,
+            'time' => '2017-07-30',
+            'type' => 0,
+            'reason' => $faker->sentence(10),
+        ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
@@ -349,18 +255,17 @@ class CRUDExpenseTest extends TestCase
         ]);
 
         $response = $this->json('PATCH', route('expense.update', ['expense' => $expense->id]), [
-            "event_id" => $event->id,
-            "user_id" => $user->id,
-            "goal_id" => $goal->id,
-            "cost" => 13.54,
-            "time" => '2017-07-30',
-            "type" => 1,
-            "reason" => $faker->sentence(10),
-            "quantity" => 300,
-            "name" => $faker->word,
-            "quality" => $faker->word,
-        ],
-        [
+            'event_id' => $event->id,
+            'user_id' => $user->id,
+            'goal_id' => $goal->id,
+            'cost' => 13.54,
+            'time' => '2017-07-30',
+            'type' => 1,
+            'reason' => $faker->sentence(10),
+            'quantity' => 300,
+            'name' => $faker->word,
+            'quality' => $faker->word,
+        ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
@@ -385,18 +290,17 @@ class CRUDExpenseTest extends TestCase
         ]);
 
         $response = $this->json('PATCH', route('expense.update', ['expense' => $expense->id]), [
-            "event_id" => $event->id,
-            "user_id" => $user2->id,
-            "goal_id" => $goal->id,
-            "cost" => 13.54,
-            "time" => '2017-07-30',
-            "type" => 1,
-            "reason" => $faker->sentence(10),
-            "quantity" => 300,
-            "name" => $faker->word,
-            "quality" => $faker->word,
-        ],
-        [
+            'event_id' => $event->id,
+            'user_id' => $user2->id,
+            'goal_id' => $goal->id,
+            'cost' => 13.54,
+            'time' => '2017-07-30',
+            'type' => 1,
+            'reason' => $faker->sentence(10),
+            'quantity' => 300,
+            'name' => $faker->word,
+            'quality' => $faker->word,
+        ], [
             'HTTP_Authorization' => 'Bearer ' . $user2->createToken('myToken')->accessToken,
         ]);
 

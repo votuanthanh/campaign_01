@@ -16,21 +16,17 @@ class ExpenseRepository extends BaseRepository implements ExpenseInterface
         return Expense::class;
     }
 
-    public function multiCreate($data)
+    public function createExpenseBuy($data)
     {
-        parent::multiCreate($data[0]);
+        $expense = $this->create($data['expense']);
+        $qualityId = app(QualityRepository::class)->firstOrCreate(['name' => $data['quality']])->id;
+        $productId = app(ProductRepository::class)->firstOrCreate(['name' => $data['name']])->id;
+        $expense->products()->attach($productId, [
+            'quality_id' => $qualityId,
+            'quantity' => $data['quantity'],
+        ]);
 
-        foreach ($data[1] as $value) {
-            $expense = parent::create($value['expense']);
-            $qualityId = app(QualityRepository::class)->firstOrCreate(['name' => $value['quality']])->id;
-            $productId = app(ProductRepository::class)->firstOrCreate(['name' => $value['name']])->id;
-            $expense->products()->attach($productId, [
-                'quality_id' => $qualityId,
-                'quantity' => $value['quantity'],
-            ]);
-        }
-
-        return true;
+        return $expense;
     }
 
     public function update($id, $data)

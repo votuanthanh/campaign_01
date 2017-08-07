@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\ExpenseRequest;
+use App\Http\Requests\ExpenseBuyRequest;
 use App\Repositories\Contracts\ExpenseInterface;
 use App\Repositories\Contracts\EventInterface;
 
@@ -21,9 +22,32 @@ class ExpenseController extends ApiController
         $this->eventRepository = $eventRepository;
     }
 
+    public function index(Request $request) {
+        $event = $this->eventRepository->findOrFail($request->event_id);
+
+        if ($this->user->cant('view', $event)) {
+            throw new UnknowException('You can not see expenses in this event');
+        }
+
+        $expenses = $event
+            ->expenses()
+            ->with([
+                'goal.donationType',
+                'products',
+                'qualitys',
+            ])
+            ->orderBy('time', 'desc')
+            ->get();
+
+        return $this->doAction(function () use ($expenses) {
+            $this->compacts['expenses'] = $expenses;
+        });
+    }
+
     public function store(ExpenseRequest $request)
     {
-        $data = $request->get('type');
+        $data = $request->all();
+        $data['user_id'] = $this->user->id;
         $event = $this->eventRepository->findOrFail($data['event_id']);
 
         if ($this->user->cant('manage', $event)) {
@@ -31,7 +55,21 @@ class ExpenseController extends ApiController
         }
 
         return $this->doAction(function () use ($data, $event) {
-            $this->compacts['expense'] = $this->expenseRepository->multiCreate($data);
+            $this->compacts['expense'] = $this->expenseRepository->create($data);
+        });
+    }
+
+    public function createBy(ExpenseBuyRequest $request) {
+        $data = $request->all();
+        $data['expense']['user_id'] = $this->user->id;
+        $event = $this->eventRepository->findOrFail($data['expense']['event_id']);
+
+        if ($this->user->cant('manage', $event)) {
+            throw new UnknowException('Have error when create expense');
+        }
+
+        return $this->doAction(function () use ($data, $event) {
+            $this->compacts['expense'] = $this->expenseRepository->createExpenseBuy($data);
         });
     }
 
