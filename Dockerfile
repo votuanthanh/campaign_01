@@ -48,6 +48,8 @@ EXPOSE 80
 # Update the default apache site with the config we created.
 ADD conf.d/vhosts.conf /etc/apache2/sites-enabled/000-default.conf
 
-# By default start up apache in the foreground, override with /bin/bash for interative.
-CMD systemctl restart apache2
-CMD /usr/sbin/apache2ctl -D FOREGROUND
+ADD conf.d/startup.sh /usr/bin/startup.sh
+RUN chmod +x /usr/bin/startup.sh
+# Execute the containers startup script which will start many processes/services
+
+CMD ["/bin/bash", "/usr/bin/startup.sh"]
