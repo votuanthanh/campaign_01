@@ -27,5 +27,9 @@
     "load_notification_message_fail": "Could't load messages",
     "you": "You :",
     "more_messages": "View More Messages",
-    "connection_error": "Connect error"
+    "connection_error": "Connect error",
+    "delete_success": "Delete successfully",
+    "delete_fail": "Delete fail",
+    "comfirm_delete_expense": "Are you sure delete this expense",
+    "update_success": "Update successfully"
 }

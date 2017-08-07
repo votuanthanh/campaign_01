@@ -254,14 +254,16 @@ class CRUDExpenseTest extends TestCase
             'goal_id' => $goal->id,
         ]);
 
-        $response = $this->json('PATCH', route('expense.update', ['expense' => $expense->id]), [
-            'event_id' => $event->id,
-            'user_id' => $user->id,
-            'goal_id' => $goal->id,
-            'cost' => 13.54,
-            'time' => '2017-07-30',
-            'type' => 1,
-            'reason' => $faker->sentence(10),
+        $response = $this->json('PATCH', route('expense-update-buy', ['id' => $expense->id]), [
+            'expense' => [
+                'event_id' => $event->id,
+                'user_id' => $user->id,
+                'goal_id' => $goal->id,
+                'cost' => 13.54,
+                'time' => '2017-07-30',
+                'type' => 1,
+                'reason' => $faker->sentence(10),
+            ],
             'quantity' => 300,
             'name' => $faker->word,
             'quality' => $faker->word,
@@ -289,14 +291,16 @@ class CRUDExpenseTest extends TestCase
             'goal_id' => $goal->id,
         ]);
 
-        $response = $this->json('PATCH', route('expense.update', ['expense' => $expense->id]), [
-            'event_id' => $event->id,
-            'user_id' => $user2->id,
-            'goal_id' => $goal->id,
-            'cost' => 13.54,
-            'time' => '2017-07-30',
-            'type' => 1,
-            'reason' => $faker->sentence(10),
+        $response = $this->json('PATCH', route('expense-update-buy', ['id' => $expense->id]), [
+            'expense' => [
+                'event_id' => $event->id,
+                'user_id' => $user2->id,
+                'goal_id' => $goal->id,
+                'cost' => 13.54,
+                'time' => '2017-07-30',
+                'type' => 1,
+                'reason' => $faker->sentence(10),
+            ],
             'quantity' => 300,
             'name' => $faker->word,
             'quality' => $faker->word,

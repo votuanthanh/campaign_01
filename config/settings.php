@@ -45,4 +45,7 @@ return [
     'head_room_name' => 'hashtag:',
     'notifications' => 'notifications',
     'folderQuill' => 'quill',
+    'expense' => [
+        'paginate_list' => 10,
+    ],
 ];

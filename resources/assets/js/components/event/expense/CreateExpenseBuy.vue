@@ -124,7 +124,6 @@
                 {{ $t('events.expenses.save_create_new_other') }}
             </button>
         </div>
-        {{ newExpense }}
     </div>
 </template>
 
@@ -162,7 +161,6 @@
             qualitys: [],
             newExpense: {
                 expense: {
-
                     time: null,
                     goal_id: null,
                     event_id: null,
@@ -244,6 +242,7 @@
                             this.newExpense.quantity = ''
                             this.newExpense.quality = ''
                             this.newExpense.name = ''
+                            this.callApi()
                             this.$router.push({ name: nameRouter, params: { event_id: this.$route.params.event_id }})
                         })
                         .catch(err => {
@@ -266,17 +265,20 @@
                 }
 
                 return ''
+            },
+
+            callApi() {
+                get(`goal?event_id=${this.$route.params.event_id}`).then(res => {
+                    this.dataGoals = res.data.goals
+                    this.types = this.dataGoals.map(goal => goal.donation_type.name)
+                })
             }
         },
 
         created() {
-            get(`goal?event_id=${this.$route.params.event_id}`).then(res => {
-                this.dataGoals = res.data.goals
-                this.types = this.dataGoals.map(goal => goal.donation_type.name)
-            })
-
+            this.callApi()
             this.newExpense.expense.event_id = this.$route.params.event_id
-            this.time = moment().format('L');
+            this.time = moment().format('L')
 
             get('event/donation').then(res => {
                 this.qualitys = res.data.qualitys.map(quality => quality.name)

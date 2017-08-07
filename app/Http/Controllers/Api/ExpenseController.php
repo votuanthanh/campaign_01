@@ -22,25 +22,28 @@ class ExpenseController extends ApiController
         $this->eventRepository = $eventRepository;
     }
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $event = $this->eventRepository->findOrFail($request->event_id);
 
         if ($this->user->cant('view', $event)) {
             throw new UnknowException('You can not see expenses in this event');
         }
 
+        $isManager = $this->user->can('manage', $event);
         $expenses = $event
             ->expenses()
             ->with([
-                'goal.donationType',
+                'goal.donationType.quality',
                 'products',
                 'qualitys',
             ])
             ->orderBy('time', 'desc')
-            ->get();
+            ->paginate(config('settings.expense.paginate_list'));
 
-        return $this->doAction(function () use ($expenses) {
+        return $this->getData(function () use ($expenses, $isManager) {
             $this->compacts['expenses'] = $expenses;
+            $this->compacts['isManager'] = $isManager;
         });
     }
 
@@ -59,7 +62,8 @@ class ExpenseController extends ApiController
         });
     }
 
-    public function createBy(ExpenseBuyRequest $request) {
+    public function createBy(ExpenseBuyRequest $request)
+    {
         $data = $request->all();
         $data['expense']['user_id'] = $this->user->id;
         $event = $this->eventRepository->findOrFail($data['expense']['event_id']);
@@ -75,28 +79,31 @@ class ExpenseController extends ApiController
 
     public function update(ExpenseRequest $request, $id)
     {
-        $data['expense'] = $request->only(
-            'user_id',
-            'event_id',
-            'goal_id',
-            'time',
-            'cost',
-            'reason',
-            'type'
-        );
-
-        $data['quality'] = $request->get('quality');
-        $data['name'] = $request->get('name');
-        $data['quantity'] = $request->get('quantity');
-
-        $event = $this->eventRepository->findOrFail($data['expense']['event_id']);
+        $data = $request->all();
+        $event = $this->eventRepository->findOrFail($data['event_id']);
+        $expense = $this->expenseRepository->findOrFail($id);
 
         if ($this->user->cant('manage', $event)) {
             throw new UnknowException('Have error when update expense');
         }
 
-        return $this->doAction(function () use ($data, $event, $id) {
+        return $this->doAction(function () use ($id, $data) {
             $this->compacts['expense'] = $this->expenseRepository->update($id, $data);
+        });
+    }
+
+    public function updateExpenseBuy(ExpenseBuyRequest $request, $id)
+    {
+        $data = $request->all();
+        $event = $this->eventRepository->findOrFail($data['expense']['event_id']);
+        $expense = $this->expenseRepository->findOrFail($id);
+
+        if ($this->user->cant('manage', $event)) {
+            throw new UnknowException('Have error when update expense');
+        }
+
+        return $this->doAction(function () use ($id, $data) {
+            $this->compacts['expense'] = $this->expenseRepository->updateExpenseBuy($id, $data);
         });
     }
 
@@ -109,7 +116,7 @@ class ExpenseController extends ApiController
             throw new UnknowException('Have error when delete expense');
         }
 
-        return $this->doAction(function () use ($event, $id, $expense) {
+        return $this->doAction(function () use ($expense) {
             $this->compacts['expense'] = $this->expenseRepository->delete($expense);
         });
     }

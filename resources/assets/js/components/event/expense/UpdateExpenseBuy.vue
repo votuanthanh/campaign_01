@@ -6,6 +6,7 @@
             <div class="modal-dialog ui-block window-popup create-photo-album modal-create-action">
                 <div class="ui-block-title">
                     <h6 class="title">{{ $t('events.expense.update_expense') }}</h6>
+                    {{ newData }}
                 </div>
                 <div class="ui-block-content create-expense">
                     <form>
@@ -16,7 +17,7 @@
                                     data-vv-name="type"
                                     :placeholder="$i18n.t('form.placeholder.choose_type')"
                                     :options="types"
-                                    :value="getNameOfGoal(newData.goal_id)"
+                                    :value="getNameOfGoal(newData.expense.goal_id)"
                                     @select="selected"
                                     @remove="removed"
                                     :searchable="false"
@@ -34,7 +35,7 @@
                                         class="form-control"
                                         data-vv-name="cost"
                                         type="text"
-                                        v-model="newData.cost"
+                                        v-model="newData.expense.cost"
                                         v-validate="'required|numeric|min_value:0|max_value:' + maxCost">
                                     <span v-show="errors.has('cost')" class="material-input text-danger">
                                         {{ errors.first('cost') }}
@@ -53,12 +54,60 @@
                                     </span>
                                 </div>
                             </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">{{ $t('form.label.quantity') }}</label>
+                                    <input
+                                        class="form-control"
+                                        data-vv-name="quantity"
+                                        type="text"
+                                        v-model="newData.quantity"
+                                        v-validate="'required|numeric|min_value:0'">
+                                    <span v-show="errors.has('quantity')" class="material-input text-danger">
+                                        {{ errors.first('quantity') }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 select-type">
+                                <label class="control-label">{{ $t('events.expenses.product') }}</label>
+                                <multiselect
+                                    data-vv-name="product"
+                                    :placeholder="$i18n.t('form.placeholder.choose_product')"
+                                    :options="products"
+                                    :value="newData.name"
+                                    @select="(value, id) => { newData.name = value }"
+                                    @remove="(value, id) => { newData.name = null }"
+                                    v-validate="'required'"
+                                    :searchable="true"
+                                    @search-change="newProduct">
+                                </multiselect>
+                                <span v-show="errors.has('product')" class="material-input text-danger">
+                                    {{ errors.first('product') }}
+                                </span>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 select-type">
+                                <label class="control-label">{{ $t('events.expenses.quality') }}</label>
+                                <multiselect
+                                    data-vv-name="quality"
+                                    :placeholder="$i18n.t('form.placeholder.choose_product')"
+                                    :searchable="true"
+                                    :options="qualitys"
+                                    :value="newData.quality"
+                                    @select="(value, id) => { newData.quality = value }"
+                                    @remove="(value, id) => { newData.quality = null }"
+                                    @search-change="newQuality"
+                                    v-validate="'required'">
+                                </multiselect>
+                                <span v-show="errors.has('quality')" class="material-input text-danger">
+                                    {{ errors.first('quality') }}
+                                </span>
+                            </div>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <quill-editor
                                     data-vv-name="reason"
                                     id="reason"
                                     :options="editorOption"
-                                    v-model="newData.reason"
+                                    v-model="newData.expense.reason"
                                     v-validate="'required|min:10'">
                                 </quill-editor>
                                 <span v-show="errors.has('reason')" class="material-input text-danger">
@@ -109,22 +158,30 @@
                 }
             },
             types: [],
+            products: [],
             goal: {},
             time: '',
             newData: {
-                time: null,
-                goal_id: null,
-                event_id: null,
-                cost: '',
-                type: 0,
-                reason: ''
+                expense: {
+                    time: null,
+                    goal_id: null,
+                    event_id: null,
+                    cost: '',
+                    type: 1,
+                    reason: ''
+                },
+                name: '',
+                quality: '',
+                quantity: ''
             },
-            dataGoals: []
+            dataGoals: [],
+            quantitys: [],
+            qualitys: [],
         }),
 
         watch: {
             time() {
-                this.newData.time = moment(this.time).format('YYYY-MM-DD')
+                this.newData.expense.time = moment(this.time).format('YYYY-MM-DD')
             }
         },
 
@@ -146,9 +203,12 @@
         methods: {
             selected(value, id) {
                 this.goal = this.dataGoals.filter(dataGoal => dataGoal.donation_type.name == value)[0]
-                this.newData.goal_id = this.goal.id
-                this.newData.cost = this.newData.cost === null ? '' : null
-                this.newData.reason = this.newData.reason || null
+                this.newData.expense.goal_id = this.goal.id
+                this.newData.expense.cost = this.newData.expense.cost === null ? '' : null
+                this.newData.expense.reason = this.newData.expense.reason || null
+                this.newData.quantity = this.newData.quantity || null
+                this.newData.name = this.newData.name || null
+                this.newData.quality = this.newData.quality || null
             },
 
             removed(value, id) {
@@ -159,7 +219,7 @@
             updateExpense() {
                 this.$validator.validateAll().then(result => {
                     this.$Progress.start()
-                    patch(`expense/${this.expense.id}`, this.newData)
+                    patch(`expense-buy/${this.expense.id}`, this.newData)
                         .then(res => {
                             this.$Progress.finish()
                             noty({
@@ -168,9 +228,12 @@
                                 container: false,
                                 type: 'success'
                             })
-                            this.newData.goal_id =  null
-                            this.newData.cost =  ''
-                            this.newData.reason = ''
+                            this.newData.expense.goal_id =  null
+                            this.newData.expense.cost =  ''
+                            this.newData.expense.reason = ''
+                            this.newData.quantity = ''
+                            this.newData.quality = ''
+                            this.newData.name = ''
                             this.$emit('loadAgainApi')
                             this.onClose()
                         })
@@ -209,15 +272,37 @@
             onClose() {
                 this.$emit('update:show', false)
             },
+
+            newProduct(newValue) {
+                if (newValue != '' && this.products.indexOf(newValue) < 0) {
+                    this.products.push(newValue)
+                }
+            },
+
+            newQuality(newValue) {
+                if (newValue != '' && this.qualitys.indexOf(newValue) < 0) {
+                    this.qualitys.push(newValue)
+                }
+            }
         },
 
         created() {
-            this.newData.event_id = this.$route.params.event_id
-            this.newData.goal_id = this.expense.goal.id
-            this.newData.cost = this.expense.cost
-            this.newData.reason = this.expense.reason
+            this.newData.expense.event_id = this.$route.params.event_id
+            this.newData.expense.goal_id = this.expense.goal.id
+            this.newData.expense.cost = this.expense.cost
+            this.newData.expense.reason = this.expense.reason
+            this.newData.name = this.expense.products[0].name
+            this.newData.quantity = this.expense.products[0].pivot.quantity
+            this.newData.quality = this.expense.qualitys[0].name
             this.time = moment(this.expense.time).format('L')
             this.callApi()
+            get('event/donation').then(res => {
+                this.qualitys = res.data.qualitys.map(quality => quality.name)
+            })
+
+            get('product').then(res => {
+                this.products = res.data.products.map(product => product.name)
+            })
         },
 
         components: {

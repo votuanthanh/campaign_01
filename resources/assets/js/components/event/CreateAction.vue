@@ -37,18 +37,23 @@
                             :autoProcessQueue="false"
                             :maxNumberOfFiles="maxFile"
                             :maxFileSizeInMB='maxSizeFile'
+                            :headers = "{
+                                Authorization: accessToken
+                            }"
                             @vdropzone-success="showSuccess"
                             @vdropzone-removed-file="deleteFile"
                             @vdropzone-queue-complete="queueComplete"
                             @vdropzone-files-added="fileAdded">
                         </dropzone>
                     </div>
-                    <a href="javascript:void(0)" class="btn btn-secondary btn-lg btn--half-width" @click="onClose">
-                        {{ $t('actions.cancel') }}
-                    </a>
-                    <a href="javascript:void(0)" class="btn btn-primary btn-lg btn--half-width" @click="createAction">
-                        {{ $t('actions.create_action') }}
-                    </a>
+                    <div class="ui-block-title">
+                        <a href="javascript:void(0)" class="btn btn-secondary btn-lg btn--half-width" @click="onClose">
+                            {{ $t('actions.cancel') }}
+                        </a>
+                        <a href="javascript:void(0)" class="btn btn-primary btn-lg btn--half-width" @click="createAction">
+                            {{ $t('actions.create_action') }}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -89,13 +94,13 @@
                     }
                  },
                 hasError: false,
-
                 newAction : {
                     caption: '',
                     description: '',
                     files: [],
                     event_id: this.$route.params.event_id
-                }
+                },
+                accessToken: `Bearer ${localStorage.getItem('access_token')}`
             }
         },
 

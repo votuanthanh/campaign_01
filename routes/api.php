@@ -113,6 +113,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::resource('donation', 'DonationController', ['only' => ['store', 'update', 'destroy']]);
         });
         Route::post('expense-create-buy', 'ExpenseController@createBy')->name('expense-create-buy');
+        Route::patch('expense-buy/{id}', 'ExpenseController@updateExpenseBuy')->name('expense-update-buy');
         Route::resource('expense', 'ExpenseController', ['only' => ['index', 'store', 'update', 'destroy']]);
         Route::resource('product', 'ProductController', ['only' => ['index']]);
         Route::resource('goal', 'GoalController', ['only' => ['index']]);

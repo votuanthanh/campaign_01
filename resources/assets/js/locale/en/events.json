@@ -42,7 +42,7 @@
         "expense": "Expense",
         "create_expense": "Create Expense",
         "create_expense_buy": "Create Expense Buy",
-        "list_expense": "List Expense",
+        "list_expense": "List Expenses",
         "update_expense": "Update Expense",
         "donate_type": "Donate Type",
         "time": "Time",

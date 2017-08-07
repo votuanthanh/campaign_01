@@ -85,6 +85,9 @@
                             :autoProcessQueue="false"
                             :maxNumberOfFiles="maxFile"
                             :maxFileSizeInMB='maxSizeFile'
+                            :headers = "{
+                                Authorization: accessToken
+                            }"
                             @vdropzone-success="showSuccess"
                             @vdropzone-removed-file="deleteFile"
                             @vdropzone-queue-complete="queueComplete"
@@ -149,7 +152,12 @@
                 files: [],
                 address: ' ',
                 donations: []
-            }
+            },
+            editorOption,
+            hasErrorFiles: false,
+            uploadVisible: false,
+            imageInsert: '',
+            accessToken: `Bearer ${localStorage.getItem('access_token')}`
         }),
         mixins: [uploadedImage],
         methods: {
