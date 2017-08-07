@@ -49,4 +49,10 @@ class Expense extends BaseModel
             ->withPivot('quantity', 'quality_id')
             ->withTimestamps();
     }
+
+    public function qualitys()
+    {
+        return $this->belongsToMany(Quality::class, 'expense_product')
+            ->withTimestamps();
+    }
 }

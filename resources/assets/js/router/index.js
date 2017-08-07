@@ -34,6 +34,11 @@ import DonationList from '../components/event/donation/DonationList.vue'
 import DonationInfo from '../components/event/donation/DonationInfo.vue'
 import DonationReceived from '../components/event/donation/DonationReceived.vue'
 import DonationManage from '../components/event/donation/DonationManage.vue'
+import Expense from '../components/event/expense/Expense.vue'
+import ListExpense from '../components/event/expense/ListExpense.vue'
+import CreateExpense from '../components/event/expense/CreateExpense.vue'
+import UpdateExpense from '../components/event/expense/UpdateExpense.vue'
+import CreateExpenseBuy from '../components/event/expense/CreateExpenseBuy.vue'
 
 const router = [
     ...authGuard([{
@@ -80,7 +85,7 @@ const router = [
                 path: 'event/:event_id',
                 component: HomeEvent,
                 children: [
-                    { path: 'index.html', component: ListAction, name: 'event.index' },
+                    { path: 'detail', component: ListAction, name: 'event.index' },
                     { path: 'donation', component: DonationList, name: 'event.donation' },
                     {
                         path: 'donation/:id',
@@ -88,6 +93,17 @@ const router = [
                         children: [
                             { path: '', component: DonationReceived, name: 'donation.received' },
                             { path: 'manage', component: DonationManage, name: 'donation.manage' }
+                        ]
+                    },
+                    { 
+                        path: 'expense',
+                        component: Expense,
+                        name: 'event.expense',
+                        children: [
+                            { path: 'list', component: ListExpense, name: 'expense.list' },
+                            { path: 'create', component: CreateExpense, name: 'expense.create' },
+                            { path: 'buy/create', component: CreateExpenseBuy, name: 'expense.create.buy' },
+                            { path: 'update/:id', component: UpdateExpense, name: 'expense.update' }
                         ]
                     }
                 ]

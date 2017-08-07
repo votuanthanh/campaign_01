@@ -7,6 +7,7 @@ export default {
         state.event.complete_percent = dataEvent.goals
         state.event.manage = dataEvent.manage
         state.actions = dataEvent.actions
+        state.dataGoals = dataEvent.goals
     },
 
     [types.LOAD_ACTION](state, dataAction) {

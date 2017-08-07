@@ -37,5 +37,22 @@
         "no": "No",
         "manage": "Donation management",
         "list": "Confirmed donation"
+    },
+    "expenses": {
+        "expense": "Expense",
+        "create_expense": "Create Expense",
+        "create_expense_buy": "Create Expense Buy",
+        "list_expense": "List Expense",
+        "update_expense": "Update Expense",
+        "donate_type": "Donate Type",
+        "time": "Time",
+        "cost": "Cost",
+        "product": "Product",
+        "quantity": "Quantity",
+        "quality": "Quality",
+        "reason": "Reason",
+        "manage": "Manage",
+        "save_goto_list": "Save and go to list expense",
+        "save_create_new_other": "Save and create new other"
     }
 }

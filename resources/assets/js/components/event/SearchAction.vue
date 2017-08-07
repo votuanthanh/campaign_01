@@ -5,26 +5,26 @@
                 <div class="ui-block">
                     <div class="ui-block-title search_action">
                         <div class="row">
-                                <input
-                                    v-if="$route.name == 'event.index'"
-                                    v-model="key_search"
-                                    @input="search"
-                                    class="form-control input-search-action"
-                                    :placeholder="$t('events.search_action')"
-                                    type="text">
-                                <router-link
-                                    v-else
-                                    :to="{ name: 'event.index' }"
-                                    class="btn btn-primary btn-md-2"
-                                    data-toggle="modal"
-                                    data-target="#update-header-photo">
-                                    {{ $t('events.donation.actions') }}
-                                </router-link>
+                            <input
+                                v-if="$route.name == 'event.index'"
+                                v-model="key_search"
+                                @input="search"
+                                class="form-control input-search-action"
+                                :placeholder="$t('events.search_action')"
+                                type="text">
+                            <router-link
+                                v-else
+                                :to="{ name: 'event.index' }"
+                                class="btn btn-primary btn-md-2"
+                                data-toggle="modal"
+                                data-target="#update-header-photo">
+                                {{ $t('events.donation.actions') }}
+                            </router-link>
                         </div>
                         <div class="align-right">
                             <button
                                 href="#"
-                                class="btn btn-primary btn-md-2"
+                                class="btn btn-primary btn-md-2 bg-breez"
                                 data-toggle="modal"
                                 data-target="#update-header-photo"
                                 @click="createAction">
@@ -49,6 +49,17 @@
                                     {{ $t('events.donation.donation_details') }}
                                 </router-link
                                     tag="button">
+                            </div>
+                            <div class="btn-group">
+                                <router-link
+                                    tag="button"
+                                    class="btn btn-primary btn-md-2 bg-breez"
+                                    :to="{ name: 'expense.list' }"
+                                    active-class="active"
+                                    data-toggle="modal"
+                                    data-target="#update-header-photo">
+                                    {{ $t('events.expenses.expense') }}
+                                </router-link>
                             </div>
                             <div class="more">
                                 <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>

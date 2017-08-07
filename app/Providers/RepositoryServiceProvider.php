@@ -67,6 +67,10 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\ProductInterface::class,
             \App\Repositories\Eloquent\ProductRepository::class,
         ],
+        'goal' => [
+            \App\Repositories\Contracts\GoalInterface::class,
+            \App\Repositories\Eloquent\GoalRepository::class,
+        ],
     ];
 
     /**
