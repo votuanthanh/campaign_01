@@ -47,6 +47,7 @@
                 <quill-editor
                     data-vv-name="description"
                     id="description"
+                    :class="{ fullscreen: toggleFullscreen }"
                     :options="editorOption"
                     ref="description"
                     v-model="newEvent.description"
@@ -109,7 +110,7 @@
     import Donations from './Donations.vue'
     import SettingDate from '../../libs/SettingDate.vue'
     import axios from 'axios'
-    import { config, editorOption } from '../../../config'
+    import { config } from '../../../config'
     import { post, del } from '../../../helpers/api'
     import noty from '../../../helpers/noty'
     import uploadedImage from '../../../helpers/mixin/uploadedImage'
@@ -148,11 +149,7 @@
                 files: [],
                 address: ' ',
                 donations: []
-            },
-            editorOption,
-            hasErrorFiles: false,
-            uploadVisible: false,
-            imageInsert: ''
+            }
         }),
         mixins: [uploadedImage],
         methods: {

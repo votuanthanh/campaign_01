@@ -13,6 +13,16 @@ export const editorOption = {
           maxStack: 50,
           userOnly: false
         },
+        toolbar: [
+            ['bold', 'italic', 'underline', 'strike', { 'header': 1 }, { 'header': 2 }],
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            ['blockquote', 'code-block'],
+            ['link', 'image'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'align': [] }],
+            ['fullscreen']
+        ],
         imageImport: true,
         imageResize: {
           displaySize: true

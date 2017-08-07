@@ -173,13 +173,12 @@
                         </div>
                         <div class="form-group label-floating"></div>
                         <div class="form-group label-floating">
-                            <label class="control-label">{{ $t('campaigns.description') }}</label>
                             <quill-editor name="description"
                                 data-vv-name="description"
                                 id="description"
                                 ref="description"
-                                class="form-control"
                                 v-model="campaign.description"
+                                :class="{ fullscreen: toggleFullscreen }"
                                 :options="editorOption"
                                 v-validate="'required'">
                             </quill-editor>
@@ -237,11 +236,7 @@ export default {
         showMap: false,
         zoom: config.zoom,
         latLng: { lat: 0, lng: 0 },
-        center: { lat: 0, lng: 0 },
-        editorOption,
-        hasErrorFiles: false,
-        uploadVisible: false,
-        imageInsert: ''
+        center: { lat: 0, lng: 0 }
     }),
     mixins: [uploadedImage],
     created () {
