@@ -107,7 +107,7 @@ const router = [
                             { path: 'manage', component: DonationManage, name: 'donation.manage' }
                         ]
                     },
-                    { 
+                    {
                         path: 'expense',
                         component: Expense,
                         name: 'event.expense',

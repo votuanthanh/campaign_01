@@ -21,4 +21,14 @@ interface UserInterface extends RepositoryInterface
     public function uploadImages(array $files, $path);
 
     public function searchMembers($campaignId, $status, $search, $roleId);
+
+    public function notificationMakeFriend($userRequest, $approvalId);
+
+    public function getNotifications($user, $skip, $type);
+
+    public function countUnreadNotifications($user, $type);
+
+    public function markRead($typeNoty, $user);
+
+    public function deleteNotification($id, $user, $type);
 }

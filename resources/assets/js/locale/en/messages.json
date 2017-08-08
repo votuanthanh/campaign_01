@@ -37,5 +37,13 @@
     "message-success": "Successfully!",
     "message-fail": "Fail!",
     "comfirm-block-member": "Do you want to block this member in this campaign?",
-    "search-list-member": "Search name, email"
+    "search-list-member": "Search name, email",
+    "mark_all_read": "MARK ALL AS READ",
+    "settings": "SETTINGS",
+    "friend_popup": "FRIEND REQUESTS",
+    "action_popup": "NOTIFICATIONS",
+    "find_friend": "FIND FRIENDS",
+    "show_more": "SHOW MORE",
+    "you_and": "You and ",
+    "became_friend": " just became friends."
 }

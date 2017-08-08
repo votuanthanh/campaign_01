@@ -64,6 +64,9 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::post('send-friend-request/{id}', 'UserController@sendFriendRequestTo')->name('send-friend-request');
             Route::post('accept-friend-requset/{id}', 'UserController@acceptFriendRequestFrom')->name('accept-friend-request');
             Route::post('deny-friend-request/{id}', 'UserController@denyFriendRequestFrom')->name('deny-friend-request');
+            Route::get('list-request-friend', 'UserController@getNotificationRequest');
+            Route::post('reject-request', 'UserController@rejectRequest');
+            Route::post('mark-all-read', 'UserController@markRead');
         });
 
         Route::group(['prefix' => '/campaign', 'as' => 'campaign.'], function () {

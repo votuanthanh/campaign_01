@@ -49,4 +49,8 @@ return [
     'expense' => [
         'paginate_list' => 10,
     ],
+    'request' => 0,
+    'approval_request' => 1,
+    'read_notification_friend' => 0,
+    'read_notification_action' => 1,
 ];

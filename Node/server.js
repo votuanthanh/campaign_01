@@ -9,7 +9,7 @@ var userLogin = null
 var listFriend = []
 
 var redisClient = redis.createClient(6379, 'redis')
-redisClient.subscribe('singleChat', 'groupChat', 'activies')
+redisClient.subscribe('singleChat', 'groupChat', 'activies', 'noty')
 redisClient.on('message', function(channel, data) {
 
     if (channel == 'activies') {
@@ -55,6 +55,24 @@ io.on('connection', function (socket) {
         for (var index = 0; index < data.groups.length; index++) {
             socket.join('hashtag:' + data.groups[index].hashtag)
         }
+    })
+
+    socket.on('acceptRequest', data => {
+        let i = listFriend.findIndex(list => list.id == data.userId)
+
+        if (i != -1) {
+            listFriend[i].listFriend.push(data.acceptId)
+        }
+
+        let j = listFriend.findIndex(list => list.id == data.acceptId)
+
+        if (j != -1) {
+            listFriend[j].listFriend.push(data.userId)
+        }
+
+        callOnline(io.sockets, listFriend, userLogin)
+        io.sockets.in(data.userId).emit('acceptRequestSuccess', { status: true, data: data })
+        socket.emit('acceptRequestSuccess', { status: true, data: data })
     })
 
     socket.on('disconnect', function() {

@@ -12,6 +12,8 @@ use App\Jobs\SendEmail;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use App\Exceptions\Api\UnknowException;
 use App\Traits\Common\UploadableTrait;
+use App\Notifications\MakeFriend;
+use Notification;
 
 class UserRepository extends BaseRepository implements UserInterface
 {
@@ -201,5 +203,72 @@ class UserRepository extends BaseRepository implements UserInterface
             })->with(['campaigns' => function ($query) use ($campaignId) {
                 $query->where('campaign_id', $campaignId);
             }])->paginate(config('settings.paginate_default'));
+    }
+
+    public function notificationMakeFriend($userRequest, $approvalId)
+    {
+        $user = $this->findOrFail($approvalId);
+        Notification::send($user, new MakeFriend($this->getIfUser($userRequest)));
+    }
+
+    public function getNotifications($user, $skip, $type)
+    {
+        return $this->getIfUser($user)
+            ->notifications()
+            ->whereIn('type', is_array($type) ? $type : [$type])
+            ->skip($skip)
+            ->take(config('settings.paginate_notification'))
+            ->get();
+    }
+
+    public function countUnreadNotifications($user, $type)
+    {
+        return $this->getIfUser($user)
+            ->unreadNotifications()
+            ->whereIn('type', is_array($type) ? $type : [$type])
+            ->count();
+    }
+
+    public function markRead($typeNoty, $user)
+    {
+        if ($typeNoty != config('settings.read_notification_friend')) {
+            return false;
+        }
+
+        $type[] = MakeFriend::class;
+        $this->getIfUser($user)
+            ->unreadNotifications()
+            ->whereIn('type', $type)
+            ->get()
+            ->markAsRead();
+
+        return true;
+    }
+
+    public function deleteNotification($id, $user, $type)
+    {
+        if ($type) {
+            $this->getIfUser($user)
+                ->notifications()
+                ->where('id', $id)
+                ->delete();
+        } else {
+            $this->findOrFail($id)
+                ->notifications()
+                ->where('notifiable_type', User::class)
+                ->where('data', 'like', '%{"to":' . $id . ',"form":{"id":' . $this->getIfUser($user)->id . '%')
+                ->delete();
+        }
+
+        return true;
+    }
+
+    private function getIfUser($user)
+    {
+        if (!$user instanceof User) {
+            throw new Exception('Object is not user');
+        }
+
+        return $user;
     }
 }

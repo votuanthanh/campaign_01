@@ -205,7 +205,7 @@ class ChatController extends ApiController
             'nameReceive' => is_numeric($toReceive) ? $receive->name : $receive->hashtag,
             'avatarReceive' => is_numeric($toReceive)
                 ? $receive->image_thumbnail
-                : ($receive->media->first()) ? $receive->media->first()->image_thumbnail : null,
+                : (($receive->media->first()) ? $receive->media->first()->image_thumbnail : null),
         ]);
 
         $this->redis->set($keys['idMessage'], $message);

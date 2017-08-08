@@ -236,8 +236,7 @@ export default {
                     .scrollTop($('#' + this.replaceSpace(this.receiveUser))[0].scrollHeight)
             }
         },
-        calendarTime(time)
-        {
+        calendarTime(time) {
             return moment(time).calendar()
         },
         addIcon(number) {
