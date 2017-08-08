@@ -13,6 +13,9 @@ class Campaign extends BaseModel
     const ACTIVE = 1;
     const APPROVING = 0;
     const APPROVED = 1;
+    const REJECT = 0;
+    const FLAG_APPROVE = 'approve';
+    const FLAG_REJECT = 'reject';
 
     public function __construct($attributes = [])
     {
@@ -37,7 +40,7 @@ class Campaign extends BaseModel
         'authJoniedOrNot',
         'likes',
         'checkLike',
-        ];
+    ];
 
     public function users()
     {
@@ -100,7 +103,7 @@ class Campaign extends BaseModel
 
     public function moderators()
     {
-        return $this->getUserByRole('moderator')->get();
+        return $this->getUserByRole('moderator');
     }
 
     public function members()

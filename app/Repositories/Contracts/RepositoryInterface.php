@@ -24,6 +24,8 @@ interface RepositoryInterface
 
     public function whereIn($column, $value);
 
+    public function whereHas($relationships, $function);
+
     public function orWhere($column, $operator = null, $value = null);
 
     public function orWhereIn($column, $values);
