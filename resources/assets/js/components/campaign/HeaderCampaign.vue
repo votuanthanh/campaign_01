@@ -35,14 +35,6 @@
                                                     {{ $t('campaigns.about') }}
                                                 </router-link>
                                             </li>
-                                            <!-- <li>
-                                                <router-link
-                                                    :to="{ name: 'campaign.campaign_related',
-                                                    params: { id: campaign.id }}"
-                                                    :class="checkActiveUrl('campaign.campaign_related')">
-                                                    {{ $t('campaigns.campaign-related') }}
-                                                </router-link>
-                                            </li> -->
                                             <li>
                                                 <router-link
                                                     :to="{ name: 'campaign.photo',
@@ -52,12 +44,24 @@
                                                 </router-link>
                                             </li>
                                             <li>
-                                                <a href="javascript:void(0)">{{ $t('campaigns.statistics') }}</a>
+                                                <router-link
+                                                    :to="{ name: 'campaign.campaign_related',
+                                                    params: { id: campaign.id }}"
+                                                    :class="checkActiveUrl('campaign.campaign_related')">
+                                                    {{ $t('campaigns.campaign-related') }}
+                                                </router-link>
+                                            </li>
+                                            <li v-if="checkPermission || checkAdmin">
+                                                <router-link
+                                                    :to="{ name: 'campaign.member_request',
+                                                    params: { id: campaign.id }}"
+                                                    :class="checkActiveUrl('campaign.member_request')">
+                                                    {{ $t('campaigns.manager-campaign') }}
+                                                </router-link>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
-
                                 <div class="control-block-button">
                                     <a href="javascript:void(0)" class="btn btn-control bg-primary">
                                         <svg class="olymp-star-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use></svg>
@@ -78,14 +82,17 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
     computed: {
-        ...mapState('auth', {
-            authenticated: state => state.authenticated,
-            user: state => state.user
-        }),
+        ...mapGetters('campaign', [
+            'checkPermission',
+        ]),
+        ...mapState('auth', [
+            'user',
+            'checkAdmin'
+        ]),
         ...mapState('campaign', ['campaign'])
     },
     methods : {
