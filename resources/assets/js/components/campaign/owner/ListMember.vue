@@ -4,21 +4,25 @@
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="ui-block">
                     <div class="ui-block-title search_action">
-                        <div class="row">
-                            <input
-                                v-model="search"
-                                @input="searchMembers"
-                                class="form-control input-search-action"
-                                :placeholder="$t('messages.search-list-member')"
-                                type="text">
+                        <div class="search row">
+                            <div class="col-md-6">
 
-                            <select
-                                v-model="roleId"
-                                class="form-control input-search-action"
-                                @click="searchMembers">
-                                <option value="0">{{ $t('form.search_all') }}</option>
-                                <option v-for="role in roles" :value="role.id">{{ role.name }}</option>
-                            </select>
+                                 <input
+                                    v-model="search"
+                                    @input="searchMembers"
+                                    class="form-control input-search-action"
+                                    :placeholder="$t('messages.search-list-member')"
+                                    type="text">
+                            </div>
+                            <div class="select col-md-6">
+                                <select
+                                    v-model="roleId"
+                                    class="form-control input-search-action"
+                                    @click="searchMembers">
+                                    <option value="0">{{ $t('form.search_all') }}</option>
+                                    <option v-for="role in roles" :value="role.id">{{ role.name }}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -51,7 +55,7 @@
                                             <img :src="member.image_thumbnail" :alt="member.name" style="height: 40px; with:40px;">
                                         </router-link>
                                     </div>
-                                    <div class="notification-event">
+                                    <div class="name-member">
                                         <router-link
                                             :to="{ name: 'user.timeline', params: { id: member.id }}"
                                             class="h6 notification-friend">
@@ -60,7 +64,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="radio col-md-3" v-for="role in roles">
+                                    <div class="radio" v-for="role in roles">
                                         <label v-if="member.campaigns[0].pivot.role_id == 3 && role.id == 3">
                                             <input type="radio"
                                                 :name="member.name + member.id"
@@ -228,9 +232,14 @@
 <style lang="scss" scoped>
     .search_action {
         padding: 7px !important;
+        .search {
+            padding-bottom: 18px;
+        }
+        .select {
+            float: left;
+        }
         .input-search-action {
             height: 42px !important;
-            width: 25%;
             display: inline-block !important;
             float: left;
             padding: .8rem 2.1rem !important;
@@ -241,12 +250,25 @@
             display: inline;
         }
     }
-
-    .center {
-        text-align: center;
-    }
-
     .div-table {
         padding: 10px;
+        .radio {
+            display: inherit;
+        }
+        .center {
+            text-align: center;
+            padding-top: 25px;
+        }
+        .name-member {
+            display: inline-block;
+            margin-left: 10px;
+        }
+        td:nth-child(3) {
+            padding-top: 25px;
+            width: 40%;
+        }
+        thead {
+            background: #eceeef;
+        }
     }
 </style>

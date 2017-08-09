@@ -39,7 +39,7 @@ class ActionRepository extends BaseRepository implements ActionInterface
     public function update($action, $inputs)
     {
         if (!empty($inputs['upload'])) {
-            $result = $this->makeDataMedias($inputs['upload']);
+            $result = $this->createDataMedias($inputs['upload']);
             $action->media()->createMany($result);
         }
 
@@ -88,6 +88,20 @@ class ActionRepository extends BaseRepository implements ActionInterface
                 $query->where('type', Media::IMAGE)->orderBy('created_at', 'desc');
             })
             ->orderBy('created_at', 'DESC')
-            ->paginate(8);
+            ->paginate(config('settings.pagination.action'));
+    }
+
+    public function delete($action)
+    {
+        if ($action) {
+            $action->comments()->delete();
+            $action->likes()->delete();
+            $action->media()->delete();
+            $action->activities()->delete();
+
+            return $action->delete();
+        }
+
+        return false;
     }
 }

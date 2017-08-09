@@ -1,5 +1,5 @@
 <template lang="html">
-    <div>
+    <div class="campaign-container">
         <header-campaign></header-campaign>
         <div class="container">
             <router-view></router-view>
@@ -25,5 +25,8 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+    .campaign-container {
+        background: #edf2f6;
+    }
 </style>

@@ -2,8 +2,9 @@
     <div class="col-xl-3 pull-xl-9 col-lg-3 pull-lg-9 col-md-12 col-sm-12 col-xs-12">
         <div class="ui-block">
             <div class="your-profile">
-                <div class="ui-block-title ui-block-title-small">
-                    <h6 class="title">{{ $t('campaigns.manager-campaign') }}</h6>
+                <div class="ui-block-title-small ui-block-title">
+                    <i class="fa fa-list-alt" aria-hidden="true"></i>
+                    <h6 class="">{{ $t('campaigns.manager-campaign') }}</h6>
                 </div>
 
                 <div class="ui-block-title">
@@ -47,5 +48,19 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+    .your-profile {
+        padding-bottom: 20px;
+        .ui-block-title-small {
+            padding-bottom: 10px !important;
+            .fa-list-alt {
+                font-size: 30px;
+                color: #747685;
+                margin-right: -5px;
+            }
+        }
+        .ui-block-title {
+            padding: 17px 10px 0px 25px;
+        }
+    }
 </style>

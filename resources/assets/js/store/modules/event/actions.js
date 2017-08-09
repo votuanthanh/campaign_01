@@ -79,6 +79,11 @@ export const change_donate_status = ({ commit }, data) => {
         })
 }
 
+
+export const removeAction = ({ commit }, actionId) => {
+    commit(types.REMOVE_ACTION, actionId)
+}
+
 export default {
     get_event,
     load_action,
@@ -86,5 +91,6 @@ export default {
     like_event,
     setDetailEvent,
     update_donate,
-    change_donate_status
+    change_donate_status,
+    removeAction
 }

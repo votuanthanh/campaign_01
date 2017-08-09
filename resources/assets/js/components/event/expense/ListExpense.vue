@@ -188,7 +188,7 @@
                             type: 'success'
                         })
                         this.cancelDeleteExpense()
-                        this.callApi()
+                        this.callApiAfterDelete()
                     })
                     .catch(err => {
                         this.$Progress.fail()
@@ -236,6 +236,25 @@
                 axios({
                     method: 'GET',
                     url: this.expenses.next_page_url + `&event_id=${this.$route.params.event_id}`
+                }).then(res => {
+                    this.$Progress.finish()
+                    this.expenses = res.data.expenses
+                    this.isManager = res.data.isManager
+                })
+            },
+
+            callApiAfterDelete() {
+                let url = this.expenses.path + `?event_id=${this.$route.params.event_id}`
+
+                if (this.expenses.data.length - 1 || !this.expenses.prev_page_url){
+                    url = url + `&page=${this.expenses.current_page}`
+                } else {
+                    url = this.expenses.prev_page_url + `&event_id=${this.$route.params.event_id}`
+                }
+
+                axios({
+                    method: 'GET',
+                    url
                 }).then(res => {
                     this.$Progress.finish()
                     this.expenses = res.data.expenses

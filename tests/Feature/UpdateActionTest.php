@@ -50,12 +50,8 @@ class UpdateActionTest extends TestCase
             'description' => $faker->paragraph(),
             'delete' => $mediaIds,
             'upload' => [
-                'image' => [
-                    UploadedFile::fake()->image('avatar.jpg', 600, 600),
-                ],
-                'video' => [
-                    'https://www.youtube.com/watch?v=pUSIzYWm_ew',
-                ],
+                $faker->image($dir = '/tmp', $width = 640, $height = 480),
+                $faker->image($dir = '/tmp', $width = 640, $height = 480),
             ],
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -96,12 +92,8 @@ class UpdateActionTest extends TestCase
             'description' => $faker->paragraph(),
             'delete' => $mediaIds,
             'upload' => [
-                'image' => [
-                    UploadedFile::fake()->image('avatar.jpg', 600, 600),
-                ],
-                'video' => [
-                    'https://www.youtube.com/watch?v=pUSIzYWm_ew',
-                ],
+                $faker->image($dir = '/tmp', $width = 640, $height = 480),
+                $faker->image($dir = '/tmp', $width = 640, $height = 480),
             ],
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -142,12 +134,8 @@ class UpdateActionTest extends TestCase
             'description' => $faker->paragraph(),
             'delete' => $mediaIds,
             'upload' => [
-                'image' => [
-                    UploadedFile::fake()->image('avatar.jpg', 600, 600),
-                ],
-                'video' => [
-                    'https://www.youtube.com/watch?v=pUSIzYWm_ew',
-                ],
+                $faker->image($dir = '/tmp', $width = 640, $height = 480),
+                $faker->image($dir = '/tmp', $width = 640, $height = 480),
             ],
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -182,12 +170,8 @@ class UpdateActionTest extends TestCase
             'description' => $faker->paragraph(),
             'delete' => $mediaIds,
             'upload' => [
-                'image' => [
-                    UploadedFile::fake()->image('avatar.jpg', 600, 600),
-                ],
-                'video' => [
-                    'https://www.youtube.com/watch?v=pUSIzYWm_ew',
-                ],
+                $faker->image($dir = '/tmp', $width = 640, $height = 480),
+                $faker->image($dir = '/tmp', $width = 640, $height = 480),
             ],
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -261,12 +245,8 @@ class UpdateActionTest extends TestCase
             'description' => $faker->paragraph(),
             'delete' => [],
             'upload' => [
-                'image' => [
-                    UploadedFile::fake()->image('avatar.jpg', 600, 600),
-                ],
-                'video' => [
-                    'https://www.youtube.com/watch?v=pUSIzYWm_ew',
-                ],
+                $faker->image($dir = '/tmp', $width = 640, $height = 480),
+                $faker->image($dir = '/tmp', $width = 640, $height = 480),
             ],
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,

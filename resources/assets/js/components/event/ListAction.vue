@@ -28,10 +28,10 @@
                             </svg>
                                 <ul class="more-dropdown">
                                     <li v-if="user.id === action.user_id">
-                                        <a href="javascript:void(0)">{{ $t('actions.edit_action') }}</a>
+                                        <a href="javascript:void(0)" @click="updateAction(action)">{{ $t('actions.edit_action') }}</a>
                                     </li>
                                     <li v-if="user.id === action.user_id">
-                                        <a href="javascript:void(0)">{{ $t('actions.delete_action') }}</a>
+                                        <a href="javascript:void(0)" @click="comfirmDelete(action.id)">{{ $t('actions.delete_action') }}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -69,16 +69,21 @@
                             :modelId="action.id"
                         ></like>
 
-
                         <div class="control-block-button post-control-button">
                             <a href="javascript:void(0)" class="btn btn-control">
-                                <svg class="olymp-like-post-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-like-post-icon"></use></svg>
+                                <svg class="olymp-like-post-icon">
+                                    <use xlink:href="/frontend/icons/icons.svg#olymp-like-post-icon"></use>
+                                </svg>
                             </a>
                             <a href="javascript:void(0)" class="btn btn-control">
-                                <svg class="olymp-comments-post-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-comments-post-icon"></use></svg>
+                                <svg class="olymp-comments-post-icon">
+                                    <use xlink:href="/frontend/icons/icons.svg#olymp-comments-post-icon"></use>
+                                </svg>
                             </a>
                             <a href="javascript:void(0)" class="btn btn-control">
-                                <svg class="olymp-share-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use></svg>
+                                <svg class="olymp-share-icon">
+                                    <use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use>
+                                </svg>
                             </a>
                         </div>
                     </article>
@@ -99,16 +104,16 @@
                                     </time>
                                 </div>
                             </div>
-                            <div class="more">
-                            <svg class="olymp-three-dots-icon">
-                                <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                            </svg>
+                            <div class="more" v-if="user.id === action.user_id">
+                                <svg class="olymp-three-dots-icon">
+                                    <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
+                                </svg>
                                 <ul class="more-dropdown">
-                                    <li v-if="user.id === action.user_id">
-                                        <a href="javascript:void(0)">{{ $t('actions.edit_action') }}</a>
+                                    <li>
+                                        <a href="javascript:void(0)" @click="updateAction(action)">{{ $t('actions.edit_action') }}</a>
                                     </li>
-                                    <li v-if="user.id === action.user_id">
-                                        <a href="javascript:void(0)">{{ $t('actions.delete_action') }}</a>
+                                    <li>
+                                        <a href="javascript:void(0)" @click="comfirmDelete(action.id)">{{ $t('actions.delete_action') }}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -146,7 +151,6 @@
                             :modelId="action.id"
                         ></like>
 
-
                         <div class="control-block-button post-control-button">
                             <a href="javascript:void(0)" class="btn btn-control">
                                 <svg class="olymp-like-post-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-like-post-icon"></use></svg>
@@ -162,7 +166,23 @@
                 </div>
             </div>
         </div>
-        <action-detail :showAction.sync = "showAction" :dataAction = "dataAction"></action-detail>
+        <message :show.sync="isShowDelete">
+            <h5 class="exclamation-header" slot="header">
+                {{ $t('messages.comfirm_delete') }}
+            </h5>
+            <div class="body-modal confirm-delete" slot="main">
+                <a href="javascript:void(0)"
+                    class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12"
+                    @click="deleteAction">
+                    {{ $t('form.button.agree') }}
+                </a>
+                <a href="javascript:void(0)" class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12">
+                    {{ $t('form.button.no') }}
+                </a>
+            </div>
+        </message>
+        <action-detail :showAction.sync="showAction" :dataAction = "dataAction"></action-detail>
+        <update-action :showUpdate.sync="showUpdate" v-if="showUpdate" :dataAction = "dataAction"></update-action>
     </div>
 </template>
 
@@ -170,13 +190,20 @@
     import { mapState, mapActions } from 'vuex'
     import ShowText from '../libs/ShowText.vue'
     import ActionDetail from './ActionDetail.vue'
+    import UpdateAction from './UpdateAction.vue'
     import Like from '../user/timeline/Like.vue'
+    import Message from '../libs/Modal.vue'
+    import { del } from '../../helpers/api'
+    import noty from '../../helpers/noty'
 
     export default {
         data: () => ({
             numberImgShow: 4,
             showAction: false,
-            dataAction: {}
+            showUpdate: false,
+            dataAction: {},
+            isShowDelete: false,
+            actionId: null
         }),
 
         computed: {
@@ -216,24 +243,67 @@
             },
 
             ...mapActions('event', [
-                'load_action'
+                'load_action',
+                'removeAction'
             ]),
 
             detailAction(data) {
                 this.dataAction = data
                 this.showAction = true
+            },
+
+            updateAction(data) {
+                this.dataAction = data
+                this.showUpdate = true
+            },
+
+            comfirmDelete(id) {
+                this.actionId = id
+                this.isShowDelete = true
+            },
+
+            cancelDelete() {
+                this.actionId = null
+                this.isShowDelete = false
+            },
+
+            deleteAction() {
+
+                del(`action/delete/${this.actionId}`)
+                    .then(res => {
+                        this.$Progress.finish()
+                        this.removeAction(this.actionId)
+                        this.isShowDelete = false
+                        noty({
+                            text: this.$i18n.t('messages.delete_success'),
+                            force: false,
+                            container: false,
+                            type: 'success'
+                        })
+                    })
+                    .catch(err => {
+                        this.$Progress.fail()
+                        noty({
+                            text: this.$i18n.t('messages.delete_fail'),
+                            type: 'error',
+                            force: false,
+                            container: false
+                        })
+                    })
             }
         },
 
         components : {
             ShowText,
             ActionDetail,
-            Like
+            UpdateAction,
+            Like,
+            Message
         }
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .list-action {
         .load-search {
             position: absolute;
