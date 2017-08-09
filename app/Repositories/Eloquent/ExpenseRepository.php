@@ -29,23 +29,20 @@ class ExpenseRepository extends BaseRepository implements ExpenseInterface
         return $expense;
     }
 
-    public function update($id, $data)
+    public function updateExpenseBuy($id, $data)
     {
-        $newExpense = parent::update($id, $data['expense']);
+        parent::update($id, $data['expense']);
+        $qualityId = app(QualityRepository::class)->firstOrCreate(['name' => $data['quality']])->id;
+        $productId = app(ProductRepository::class)->firstOrCreate(['name' => $data['name']])->id;
+        \DB::table('expense_product')
+            ->where('expense_id', $id)
+            ->update([
+                'quality_id' => $qualityId,
+                'product_id' => $productId,
+                'quantity' => $data['quantity'],
+            ]);
 
-        if ($data['expense']['type']) {
-            $qualityId = app(QualityRepository::class)->firstOrCreate(['name' => $data['quality']])->id;
-            $productId = app(ProductRepository::class)->firstOrCreate(['name' => $data['name']])->id;
-            \DB::table('expense_product')
-                ->where('expense_id', $id)
-                ->update([
-                    'quality_id' => $qualityId,
-                    'product_id' => $productId,
-                    'quantity' => $data['quantity'],
-                ]);
-        }
-
-        return $newExpense;
+        return true;
     }
 
     public function delete($expense)

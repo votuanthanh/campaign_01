@@ -52,7 +52,8 @@
         "agree": "Agree",
         "cancel": "Cancel",
         "password": "Send Reminder",
-        "reset_password": "Reset Password"
+        "reset_password": "Reset Password",
+        "no": "No"
     },
     "quote": {
         "confirm_account": "Don’t you have an account?",

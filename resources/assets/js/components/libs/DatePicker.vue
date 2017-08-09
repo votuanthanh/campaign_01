@@ -28,6 +28,7 @@ export default {
             const { date } = picker.startDate._d
 
             this.$emit('update:date', picker.startDate.format(format))
+            this.$emit('input', picker.startDate.format(format))
         });
 
         $(this.$el).on('hide.daterangepicker', (ev, picker) => {
