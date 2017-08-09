@@ -59,41 +59,27 @@
         transition: opacity .3s ease;
         .v-modal-container {
             @media screen and (min-width: 992px) {
-                width: 900px;
+                width: 500px;
             }
             @media screen and (min-width: 768px) {
                width: 600px;
             }
-            width: auto;
-            position: absolute;
-            top: 35%;
-            left: 50%;
-            margin-right: -50%;
-            transform: translate(-50%, -50%);
-            padding: 20px 30px;
-            background-color: #fff;
-            border-radius: 2px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-            transition: all .3s ease;
-            font-family: Helvetica, Arial, sans-serif;
-
+            margin: 30px auto;
+            margin-top: 70px;
             .v-modal-header h3 {
-                margin-top: 0;
                 color: #42b983;
             }
 
-            .v-modal-body {
-                margin: 20px 0;
-            }
         }
     }
-
-    .modal-enter, .modal-leave {
+    .modal-enter {
         opacity: 0;
     }
-
+    .modal-leave-active {
+        opacity: 0;
+    }
     .modal-enter .v-modal-container,
-    .modal-leave .v-modal-container {
+    .modal-leave-active .v-modal-container {
         -webkit-transform: scale(1.1);
         transform: scale(1.1);
     }
