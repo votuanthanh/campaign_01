@@ -18,6 +18,10 @@ export const uploadImages = 'settings/upload-files/'
 export const passwordEmail = 'password/email'
 export const passwordReset = 'password/reset'
 export const showNotification = 'show-notifications'
+export const getListRequest = 'list-request-friend'
+export const rejectRequest = 'reject-request'
+export const markRead = 'mark-all-read'
+export const acceptRequest = 'accept-friend-requset'
 
 export default {
     getUser,
@@ -37,5 +41,9 @@ export default {
     uploadImages,
     passwordEmail,
     passwordReset,
-    showNotification
+    showNotification,
+    getListRequest,
+    rejectRequest,
+    markRead,
+    acceptRequest
 }

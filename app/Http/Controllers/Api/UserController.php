@@ -19,6 +19,7 @@ use App\Models\Role;
 use App\Repositories\Contracts\RoleInterface;
 use LRedis;
 use Exception;
+use App\Notifications\MakeFriend;
 
 class UserController extends ApiController
 {
@@ -26,6 +27,8 @@ class UserController extends ApiController
 
     protected $tagRepository;
     protected $roleRepository;
+    private $redis;
+    CONST READ = 0;
 
     public function __construct(
         UserInterface $userRepository,
@@ -35,12 +38,13 @@ class UserController extends ApiController
         parent::__construct($userRepository);
         $this->tagRepository = $tagRepository;
         $this->roleRepository = $roleRepository;
+        $this->redis = LRedis::connection();
     }
 
     public function authUser()
     {
         try {
-            LRedis::publish('activies', json_encode([
+            $this->redis->publish('activies', json_encode([
                 'userId' => $this->user->id,
                 'listFollow' => $this->user
                 ->friends()
@@ -190,14 +194,33 @@ class UserController extends ApiController
         }
 
         return $this->doAction(function () use ($id) {
-            $this->user->friendsIAmSender()->toggle($id);
+            $toggle = $this->user->friendsIAmSender()->toggle($id);
+
+            if ($toggle['attached']) {
+                $this->repository->notificationMakeFriend($this->user, $id);
+                $data['type'] = true;
+            } else {
+                $this->repository->deleteNotification($id, $this->user, false);
+                $data['type'] = false;
+            }
+
+            $data['to'] = $id;
+            $data['noty'] = $this->user;
+            $this->redis->publish('noty', json_encode($data));
         });
     }
 
-    public function acceptFriendRequestFrom($id)
+    public function acceptFriendRequestFrom(Request $request, $id)
     {
-        return $this->doAction(function () use ($id) {
+        return $this->doAction(function () use ($id, $request) {
             $this->user->pendingFriends()->updateExistingPivot($id, ['status' => User::ACCEPTED]);
+
+            if ($request->id) {
+                $this->repository->deleteNotification($request->id, $this->user, true);
+            } else {
+                $user = $this->repository->findOrFail($id);
+                $this->repository->deleteNotification($this->user->id, $user, false);
+            }
         });
     }
 
@@ -205,6 +228,8 @@ class UserController extends ApiController
     {
         return $this->doAction(function () use ($id) {
             $this->user->friendsIAmRecipient()->detach($id);
+            $user = $this->repository->findOrFail($id);
+            $this->repository->deleteNotification($this->user->id, $user, false);
         });
     }
 
@@ -303,10 +328,7 @@ class UserController extends ApiController
                 ->wherePivot('status', Campaign::APPROVED)
                 ->wherePivotIn('role_id', $roleIds)
                 ->where('campaigns.status', Campaign::ACTIVE)
-                ->with(['media', 'users' => function ($query) {
-                    return $query->select(['users.id', 'users.email', 'users.name'])
-                        ->where('users.status', User::ACTIVE);
-                }])
+                ->with('media')
                 ->get([
                     'campaigns.id',
                     'hashtag',
@@ -319,6 +341,39 @@ class UserController extends ApiController
     {
         return $this->getData(function () use ($id) {
             $this->compacts['data'] = $this->repository->getTimeLine($id);
+        });
+    }
+
+    public function markRead(Request $request)
+    {
+        return $this->doAction(function () use ($request) {
+            $this->repository->markRead($request->type, $this->user);
+            $this->compacts['unread'] = self::READ;
+        });
+    }
+
+    public function getNotificationRequest(Request $request)
+    {
+        return $this->getData(function () use ($request) {
+            $skip = json_decode($request->skip);
+            $this->compacts['unread'] = $this->repository->countUnreadNotifications($this->user, MakeFriend::class);
+            $this->compacts['notifications'] = $this->repository->getNotifications($this->user, $skip, MakeFriend::class);
+            $this->compacts['skip'] = $skip += config('settings.paginate_notification');
+            $this->compacts['continue'] = $this->compacts['notifications']->isNotEmpty();
+        });
+    }
+
+    public function rejectRequest(Request $request)
+    {
+        return $this->doAction(function () use ($request) {
+            $this->user->friendsIAmRecipient()->detach($request->userId);
+
+            if ($request->id) {
+                $this->repository->deleteNotification($request->id, $this->user, true);
+            } else {
+                $user = $this->repository->findOrFail($request->userId);
+                $this->repository->deleteNotification($this->user->id, $user, false);
+            }
         });
     }
 }

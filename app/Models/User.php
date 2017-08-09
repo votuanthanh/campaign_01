@@ -145,7 +145,7 @@ class User extends Authenticatable
             ->withPivot('status');
     }
 
-    public function friends($select = ['*'])
+    public function friends($select = ['users.*'])
     {
         $friends = collect();
         $friends->push($this->friendsIAmSender()

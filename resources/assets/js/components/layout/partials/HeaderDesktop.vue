@@ -16,119 +16,42 @@
             </form>
             <a href="#" class="link-find-friend">Find Friends</a>
             <div class="control-block" v-if="authenticated">
-                <div class="control-icon more has-items">
+                <div class="control-icon more has-items" @click="markRead(0)">
                     <svg class="olymp-happy-face-icon">
                         <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
                     </svg>
-                    <div class="label-avatar bg-blue">6</div>
+                    <div class="label-avatar bg-blue">{{ count }}</div>
                     <div class="more-dropdown more-with-triangle triangle-top-center">
                         <div class="ui-block-title ui-block-title-small">
-                            <h6 class="title">FRIEND REQUESTS</h6>
-                            <a href="#">Find Friends</a>
-                            <a href="#">Settings</a>
+                            <h6 class="title">{{ $t('messages.friend_popup') }}</h6>
+                            <a href="javascript:void(0)">{{ $t('messages.find_friend') }}</a>
+                            <a href="javascript:void(0)">{{ $t('messages.settings') }}</a>
                         </div>
-                        <div class="mCustomScrollbar" data-mcs-theme="dark">
+                        <div class="mCustomScrollbar" id="notification_list_request" data-mcs-theme="dark">
                             <ul class="notification-list friend-requests">
-                                <li>
+                                <li v-for="request in listRequest" :class="request.accept ? 'accepted' : ''">
                                     <div class="author-thumb">
-                                        <img src="/images/avatar55-sm.jpg" alt="author">
+                                        <img :src="request.avatar" alt="author">
                                     </div>
-                                    <div class="notification-event">
-                                        <a href="#" class="h6 notification-friend">Tamara Romanoff</a>
-                                        <span class="chat-message-item">Mutual Friend: Sarah Hetfield</span>
+                                    <div class="notification-event" v-if="!request.accept">
+                                        <a href="#" class="h6 notification-friend">{{ request.userName }}</a>
                                     </div>
-                                    <span class="notification-icon">
-                                        <a href="#" class="accept-request">
+                                    <div class="notification-event" v-else>
+                                        {{ $t('messages.you_and') }}<a href="#" class="h6 notification-friend">{{ request.userName }}</a>{{ $t('messages.became_friend') }}<a href="#" class="notification-link"></a>.
+                                    </div>
+                                    <span class="notification-icon" v-if="!request.accept">
+                                        <a href="javascript:void(0)"
+                                            @click="acceptRequest(request.id, request.userId)"
+                                            class="accept-request">
                                             <span class="icon-add without-text">
                                                 <svg class="olymp-happy-face-icon">
                                                     <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
                                                 </svg>
                                             </span>
                                         </a>
-                                        <a href="#" class="accept-request request-del">
-                                            <span class="icon-minus">
-                                                <svg class="olymp-happy-face-icon">
-                                                    <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </span>
-                                    <div class="more">
-                                        <svg class="olymp-three-dots-icon">
-                                            <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                                        </svg>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="author-thumb">
-                                        <img src="/images/avatar56-sm.jpg" alt="author">
-                                    </div>
-                                    <div class="notification-event">
-                                        <a href="#" class="h6 notification-friend">Tony Stevens</a>
-                                        <span class="chat-message-item">4 Friends in Common</span>
-                                    </div>
-                                    <span class="notification-icon">
-                                        <a href="#" class="accept-request">
-                                            <span class="icon-add without-text">
-                                                <svg class="olymp-happy-face-icon">
-                                                    <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                        <a href="#" class="accept-request request-del">
-                                            <span class="icon-minus">
-                                                <svg class="olymp-happy-face-icon">
-                                                    <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </span>
-                                    <div class="more">
-                                        <svg class="olymp-three-dots-icon">
-                                            <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                                        </svg>
-                                    </div>
-                                </li>
-                                <li class="accepted">
-                                    <div class="author-thumb">
-                                        <img src="/images/avatar57-sm.jpg" alt="author">
-                                    </div>
-                                    <div class="notification-event">
-                                        You and
-                                        <a href="#" class="h6 notification-friend">Mary Jane Stark</a> just became friends. Write on
-                                        <a href="#" class="notification-link">her wall</a>.
-                                    </div>
-                                    <span class="notification-icon">
-                                        <svg class="olymp-happy-face-icon">
-                                            <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
-                                        </svg>
-                                    </span>
-                                    <div class="more">
-                                        <svg class="olymp-three-dots-icon">
-                                            <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                                        </svg>
-                                        <svg class="olymp-little-delete">
-                                            <use xlink:href="/frontend/icons/icons.svg#olymp-little-delete"></use>
-                                        </svg>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="author-thumb">
-                                        <img src="/images/avatar58-sm.jpg" alt="author">
-                                    </div>
-                                    <div class="notification-event">
-                                        <a href="#" class="h6 notification-friend">Stagg Clothing</a>
-                                        <span class="chat-message-item">9 Friends in Common</span>
-                                    </div>
-                                    <span class="notification-icon">
-                                        <a href="#" class="accept-request">
-                                            <span class="icon-add without-text">
-                                                <svg class="olymp-happy-face-icon">
-                                                    <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                        <a href="#" class="accept-request request-del">
+                                        <a href="javascript:void(0)"
+                                            @click="rejectRequest(request.id, request.userId)"
+                                            class="accept-request request-del">
                                             <span class="icon-minus">
                                                 <svg class="olymp-happy-face-icon">
                                                     <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
@@ -144,7 +67,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <a href="#" class="view-all bg-blue">Check all your Events</a>
+                        <a href="javascript:void(0)" @click="getListRequest()" class="view-all bg-blue">{{ $t('messages.show_more') }}</a>
                     </div>
                 </div>
                 <div class="control-icon more has-items">
@@ -188,9 +111,7 @@
                         <a href="javascript:void(0)" class="view-all bg-purple" @click="getMessagesNotification">
                             {{ $t('messages.more_messages') }}
                         </a>
-                    </div>
-                </div>
-                <div class="control-icon more has-items">
+                    </div>">
                     <svg class="olymp-thunder-icon">
                         <use xlink:href="/frontend/icons/icons.svg#olymp-thunder-icon"></use>
                     </svg>
@@ -466,7 +387,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { logout, showNotification } from '../../../router/router'
+import {
+    logout,
+    showNotification,
+    getListRequest,
+    rejectRequest,
+    markRead,
+    acceptRequest
+} from '../../../router/router'
 import { post, get } from '../../../helpers/api'
 import noty from '../../../helpers/noty'
 
@@ -474,10 +402,15 @@ export default {
     data: () => ({
         messages: [],
         paginate: 0,
-        continue: true
+        continue: true,
+        listRequest: [],
+        count: 0,
+        skipFriend: 0,
+        continueForGetListRequest: true
     }),
     created () {
         this.getMessagesNotification()
+        this.getListRequest()
     },
     computed: {
         ...mapState('auth', {
@@ -489,6 +422,7 @@ export default {
     methods: {
         ...mapActions('auth', [
             'logout',
+            'getListFollow'
         ]),
         handleLogout() {
             post(logout).then(res => {
@@ -574,10 +508,87 @@ export default {
                 this.paginate++
             }
         },
-        calendarTime(time)
-        {
+        calendarTime(time) {
             return moment(time).calendar()
         },
+        getListRequest() {
+            if (this.continueForGetListRequest) {
+                get(`${getListRequest}?skip=${this.skipFriend}`)
+                    .then(res => {
+                        let data = res.data.notifications
+
+                        for (var index = 0; index < data.length; index++) {
+                            let user = {
+                                id: data[index].id,
+                                userId: data[index].data.form.id,
+                                userName: data[index].data.form.name,
+                                avatar: data[index].data.form.image_small,
+                                accept: false
+                            }
+
+                            this.listRequest.push(user)
+                        }
+
+                        this.count = res.data.unread
+                        this.skipFriend = res.data.skip
+                        this.continueForGetListRequest = res.data.continue
+                    })
+                    .catch(err => {
+                        const message = this.$i18n.t('messages.connection_error')
+                        noty({ text: message, container: false, force: true })
+                    })
+            }
+        },
+        acceptRequest(id, userId) {
+            post(`${acceptRequest}/${userId}`, { id: id })
+                .then(res => {
+                    let index = this.listRequest.findIndex(request => request.userId == userId)
+
+                    if (index != -1) {
+                        this.$socket.emit('acceptRequest', {
+                            userId: userId,
+                            acceptId: this.user.id,
+                            avatar: this.user.image_thumbnail,
+                            name: this.user.name,
+                            receiveAvatar: this.listRequest[index].avatar,
+                            receiveName: this.listRequest[index].userName
+                        })
+
+                        this.listRequest.splice(index, 1)
+                    }
+                })
+        },
+        rejectRequest(id, userId) {
+            post(rejectRequest, { id: id, userId: userId })
+                .then(res => {
+                    if (res.data.http_status.code == 200) {
+                        this.count = (this.count > 0) ? this.count - 1 : this.count
+                        let index = this.listRequest.findIndex(request => request.id == id)
+
+                        if (index != -1) {
+                            this.listRequest.splice(index, 1)
+                        }
+                    }
+                })
+                .catch(err => {
+                    const message = this.$i18n.t('messages.connection_error')
+                    noty({ text: message, container: false, force: true })
+                })
+        },
+        markRead(type) {
+            if (this.count) {
+                post(markRead, { type: type })
+                    .then(res => {
+                        if (res.data.http_status.code == 200) {
+                            this.count = res.data.unread
+                        }
+                    })
+                    .catch(err => {
+                        const message = this.$i18n.t('messages.connection_error')
+                        noty({ text: message, container: false, force: true })
+                    })
+            }
+        }
     },
     mounted() {
         const vm = this
@@ -593,6 +604,46 @@ export default {
         },
         groupChat: function (data) {
             this.receiveMessage(data, false)
+        },
+        noty: function (data) {
+            data = JSON.parse(data)
+
+            if (data.type) {
+                let user = {
+                    id: null,
+                    userId: data.noty.id,
+                    userName: data.noty.name,
+                    avatar: data.noty.image_small
+                }
+
+                this.listRequest.push(user)
+                this.count += 1
+            } else {
+                let index = this.listRequest.findIndex(user => user.userId == data.noty.id)
+
+                if (index != -1) {
+                    this.listRequest.splice(index, 1)
+                    this.count -= 1
+                }
+            }
+        },
+        acceptRequestSuccess: function (data) {
+            if (data.status) {
+                this.getListFollow()
+                let socketData = data.data
+                let mess = {
+                    id: null,
+                    avatar: (socketData.acceptId == this.user.id)
+                        ? socketData.receiveAvatar
+                        : socketData.avatar,
+                    userName: (socketData.acceptId == this.user.id)
+                        ? socketData.receiveName
+                        : socketData.name,
+                    accept: true
+                }
+
+                this.listRequest.unshift(mess)
+            }
         }
     }
 }
@@ -606,7 +657,7 @@ export default {
     }
 }
 
-#notification_messages {
+#notification_messages, #notification_list_request {
     overflow-y: scroll !important;
 }
 </style>
