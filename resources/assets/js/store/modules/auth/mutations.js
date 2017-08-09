@@ -21,6 +21,11 @@ export default {
         const token = data.auth.access_token
         state.authenticated = true
         state.user = data.user
+
+        if (data.user.roles[0].id == 1) {
+            state.checkAdmin = true
+        }
+
         localStorage.setItem('access_token', token)
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     },
@@ -34,6 +39,10 @@ export default {
 
     [SET_USER](state, user) {
         state.user = user
+
+        if (state.user.roles[0].id == 1) {
+            state.checkAdmin = true
+        }
     },
 
     [GET_LIST_FOLLOW](state, list) {
