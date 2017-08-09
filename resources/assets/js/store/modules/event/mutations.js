@@ -54,6 +54,11 @@ export default {
         event.complete_percent[i].donations.splice(index, 1, data)
         state.event = []
         state.event = event
-    }
+    },
 
+    [types.REMOVE_ACTION](state, actionId) {
+        state.actions.data = $.grep(state.actions.data, function (item, index) {
+            return item.id !== actionId
+        });
+    }
 };

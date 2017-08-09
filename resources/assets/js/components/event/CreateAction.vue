@@ -74,6 +74,7 @@
             return {
                 maxFile: config.maxFileUpload,
                 maxSizeFile: config.maxSizeFile,
+                accessToken: `Bearer ${localStorage.getItem('access_token')}`,
                 editorOption: {
                     modules: {
                         toolbar: [

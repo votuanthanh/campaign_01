@@ -107,4 +107,17 @@ class ActionController extends ApiController
             $this->compacts['actions'] = $this->actionRepository->searchAction($eventId, $key);
         });
     }
+
+    public function delete($id)
+    {
+        $action = $this->actionRepository->findOrFail($id);
+
+        if ($this->user->cant('manage', $action)) {
+            throw new UnknowException('Permission error: User can not delete this action.');
+        }
+
+        return $this->doAction(function () use ($action) {
+            $this->compacts['actions'] = $this->actionRepository->delete($action);
+        });
+    }
 }

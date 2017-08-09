@@ -12,14 +12,10 @@
                             </slider-item>
                         </slider>
                     </div>
-
                     <div class="features-video-content">
-
                         <article class="hentry post info-event">
-
                             <div class="post__author author vcard inline-items user-event">
                                 <img :src="event.user.image_thumbnail" alt="author">
-
                                 <div class="author-date">
                                     <router-link :to="{ name: 'user.timeline', params: { id: event.user.id } }">
                                         <a class="h6 post__author-name fn" href="javascript.void(0)">{{ event.user.name }}</a>
@@ -30,7 +26,6 @@
                                         </time>
                                     </div>
                                 </div>
-
                                 <div class="more">
                                     <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                                     <ul class="more-dropdown">
@@ -48,39 +43,22 @@
                                         </li>
                                     </ul>
                                 </div>
-
                             </div>
-
                             <p class="title-event">{{ event.title }}</p>
-
-                            <div class="post-additional-info inline-items like-comment-event">
-
-                                <a href="javascript:void(0)" :class="{ 'post-add-icon': true, 'inline-items': true, 'color-like': isLiked }">
-                                    <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
-                                    <span>{{ numberLike }}</span>
-                                </a>
-
-                                <div class="float-comment-shared comments-shared">
-                                    <a href="javascript:void(0)" class="post-add-icon inline-items">
-                                        <svg class="olymp-speech-balloon-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-speech-balloon-icon"></use></svg>
-                                        <span>{{ event.comments.total }}</span>
-                                    </a>
-                                </div>
-
-                            </div>
-
+                            <like :type="'likeInfo'"
+                                :checkLike="event.checkLike"
+                                :likes="event.likes"
+                                :model="'event'"
+                                :modelId="event.id"
+                            ></like>
                             <div class="control-block-button post-control-button">
-
-                                <a href="javascript:void(0)" @click="likeEvent" :class=" { btn : true, 'btn-control' : true, liked : isLiked }">
+                                <a href="javascript:void(0)" :class=" { btn : true, 'btn-control' : true, liked : isLiked }">
                                     <svg class="olymp-like-post-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-like-post-icon"></use></svg>
                                 </a>
-
                                 <a href="javascript:void(0)" class="btn btn-control">
                                     <svg class="olymp-share-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use></svg>
                                 </a>
-
                             </div>
-
                         </article>
                         <comment
                             :comments="event.comments"
@@ -89,7 +67,6 @@
                             :classListComment="'list-comment-event'"
                             :classFormComment="'input-comment-event'">
                         </comment>
-
                     </div>
                 </div>
             </div>
@@ -117,6 +94,7 @@
     import { mapState, mapActions } from 'vuex'
     import ShowText from '../libs/ShowText.vue'
     import Comment from '../comment/Comment.vue'
+    import Like from '../user/timeline/Like.vue'
 
     export default {
         data :() => ({
@@ -131,19 +109,12 @@
             ...mapState('event', [
                 'event',
             ]),
-
             ...mapState('auth', {
                 user: state => state.user
             }),
-
-            checkLike() {
-                this.isLiked = this.event.likes.some(item => this.user.id == item.user_id)
-            }
         },
 
         mounted() {
-            this.checkLike
-            this.numberLike = this.event.likes.length
             this.setScrollBar()
             this.eventPostComment()
         },
@@ -156,12 +127,6 @@
             ...mapActions('event', [
                 'like_event'
             ]),
-
-            likeEvent() {
-                this.numberLike += this.isLiked ? - 1 : 1
-                this.isLiked = !this.isLiked
-                this.like_event(this.$route.params.event_id)
-            },
 
             setScrollBar() {
                 $(".list-comment-event")[0].scrollTop = $(".list-comment-event")[0].scrollHeight;
@@ -184,7 +149,8 @@
             Slider,
             SliderItem,
             ShowText,
-            Comment
+            Comment,
+            Like
         }
     }
 </script>
@@ -246,9 +212,6 @@
                 display: none;
             }
             .has-children {
-                div {
-                    margin: 0px;
-                }
                 span {
                     padding: 10px 0px;
                 }

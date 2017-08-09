@@ -97,7 +97,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         });
 
         Route::group(['prefix' => '/action', 'as' => 'action.'], function () {
-            Route::patch('/update/{id}', 'ActionController@update')->name('update');
+            Route::patch('update/{id}', 'ActionController@update')->name('update');
+            Route::delete('delete/{id}', 'ActionController@delete')->name('delete');
             Route::post('like/{actionId}', 'ActionController@like')->name('like');
             Route::get('list/{eventId}', 'ActionController@listAction');
             Route::get('search/{eventId}', 'ActionController@searchAction');

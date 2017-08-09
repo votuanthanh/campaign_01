@@ -132,7 +132,6 @@ class EventController extends ApiController
                 ->with([
                     'user',
                     'media',
-                    'likes',
                 ])
                 ->get();
             $this->compacts['goals'] = $event

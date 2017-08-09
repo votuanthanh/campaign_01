@@ -250,7 +250,7 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .search_action {
         padding: 7px !important;
         .input-search-action {

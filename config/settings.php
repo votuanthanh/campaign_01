@@ -40,6 +40,7 @@ return [
         'timeline' => 5,
         'following_campaign' => 3,
         'like' => 20,
+        'action' => 8,
     ],
     'group_chat' => 'groupChat',
     'single_chat' => 'singleChat',
