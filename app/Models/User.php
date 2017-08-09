@@ -12,10 +12,11 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Traits\Eloquent\ConvertEmptyStringToNull;
 use App\Notifications\ResetPassword;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable, SoftDeletes, UrlImage, ConvertEmptyStringToNull;
+    use HasApiTokens, Notifiable, SoftDeletes, UrlImage, ConvertEmptyStringToNull, SearchableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -75,6 +76,13 @@ class User extends Authenticatable
         'is_friend',
         'has_pending_request',
         'has_send_request',
+    ];
+
+    protected $searchable = [
+        'columns' => [
+            'users.name' => 9,
+            'users.email' => 10,
+        ],
     ];
 
     protected $casts = [

@@ -197,6 +197,13 @@ abstract class BaseRepository implements RepositoryInterface
         return $this;
     }
 
+    public function whereHas($relationships, $function)
+    {
+        $this->model = $this->model->whereHas($relationships, $function);
+
+        return $this;
+    }
+
     public function insertGetId($input)
     {
         return $this->model->insertGetId($input);
