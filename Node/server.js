@@ -105,6 +105,10 @@ io.on('connection', function (socket) {
         }
     })
 
+    socket.on('accept_donation', data => {
+        socket.broadcast.emit('accept_donation', data);
+    })
+
     socket.on('disconnect', function() {
         var index = userConnection.findIndex(user => user.socketId === socket.id)
 

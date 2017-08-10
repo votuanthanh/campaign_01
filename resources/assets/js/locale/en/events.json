@@ -54,5 +54,18 @@
         "manage": "Manage",
         "save_goto_list": "Save and go to list expense",
         "save_create_new_other": "Save and create new other"
+    },
+    "expenses_statistic": {
+        "overview": "Overview",
+        "remain": "remain",
+        "spent": "Spent",
+        "total": "total",
+        "all": "All",
+        "most_spent": "Most spent",
+        "most_recent": "Most recent",
+        "line_chart_msg": "Click to hide 'cost' line if you cant see 'times' line",
+        "times": "Times",
+        "statistic": "Statistic",
+        "select_goal": "Select goal"
     }
 }
