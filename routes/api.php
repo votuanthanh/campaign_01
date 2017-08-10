@@ -29,6 +29,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
     Route::group(['prefix' => 'user/{id}', 'as' => 'user.'], function () {
         Route::get('/', 'UserController@getTimeLine')->name('getTimeLine');
         Route::get('friends/{page}', 'UserController@listFriends')->name('friends');
+        Route::get('get-photos-friends', 'UserController@getPhotosAndFriends')->name('get-photos-friend');
         Route::get('search-friends/{keyword}', 'UserController@searchFriends')->name('search_friend');
         Route::get('owned-campaign', 'UserController@listOwnedCampaign')->name('owned-campaign');
         Route::get('joined-campaign', 'UserController@listJoinedCampaign')->name('joined-campaign');

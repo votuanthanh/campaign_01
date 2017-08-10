@@ -301,6 +301,10 @@ class UserController extends ApiController
             'has_send_request',
         ]);
 
+        if ($user->status == User::IN_ACTIVE) {
+            throw new Exception('Error Processing Request');
+        }
+
         return $this->doAction(function () use ($user) {
             $this->compacts['data'] = $this->repository->getTimeline($user);
         });
@@ -334,6 +338,23 @@ class UserController extends ApiController
                     'hashtag',
                     'title',
                 ]);
+        });
+    }
+
+    public function getPhotosAndFriends($userId)
+    {
+        $user = $this->repository->findOrFail($userId);
+
+        if ($user->status == User::IN_ACTIVE) {
+            throw new Exception('Error Processing Request');
+        }
+
+        return $this->getData(function () use ($user) {
+            $this->compacts['listPhoto'] = $user->media()
+                ->orderBy('id', 'DESC')
+                ->take(config('settings.take_friend'))
+                ->get();
+            $this->compacts['listFriend'] = $user->friends()->take(config('settings.pagination.friend'));
         });
     }
 

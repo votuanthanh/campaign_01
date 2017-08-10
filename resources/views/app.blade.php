@@ -27,6 +27,7 @@
             ],
             'pagination' => [
                 'follow' => config('settings.pagination.follow'),
+                'friend' => config('settings.pagination.friend'),
             ],
         ]) !!};
         @if (session('access_token'))

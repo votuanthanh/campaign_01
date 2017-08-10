@@ -8,15 +8,15 @@
                 <ul class="widget w-personal-info item-block">
                     <li>
                         <span class="title">{{ $t('user.sidebar.about_me') }}:</span>
-                        <span class="text">{{ authUser.about }}</span>
+                        <span class="text">{{ currentPageUser.about }}</span>
                     </li>
                     <li>
                         <span class="title">{{ $t('user.sidebar.birthday') }}:</span>
-                        <span class="text">{{ authUser.birthday }}</span>
+                        <span class="text">{{ currentPageUser.birthday }}</span>
                     </li>
                     <li>
                         <span class="title">{{ $t('user.sidebar.address') }}:</span>
-                        <span class="text">{{ authUser.address }}</span>
+                        <span class="text">{{ currentPageUser.address }}</span>
                     </li>
                 </ul>
 
@@ -247,7 +247,7 @@
             </ol>
         </div>
 
-        <div class="ui-block">
+        <div class="ui-block" style="display: none;">
             <div class="ui-block-title">
                 <h6 class="title">Twitter Feed</h6>
             </div>
@@ -301,7 +301,7 @@
             </ul>
         </div>
 
-        <div class="ui-block">
+        <div class="ui-block" style="display: none;">
             <div class="ui-block-title">
                 <h6 class="title">Last Videos</h6>
             </div>
@@ -341,9 +341,7 @@
 
     export default {
         computed: {
-            ...mapState('auth', {
-                authUser: 'user'
-            }),
+            ...mapState('user', ['currentPageUser']),
         },
         components: {
             ShowText
