@@ -6,11 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
 use App\Repositories\Contracts\RepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Auth;
 
 abstract class BaseRepository implements RepositoryInterface
 {
     protected $model;
+
     protected $app;
+
+    protected $guards;
+
+    protected $user;
 
     public function __construct()
     {
@@ -61,6 +67,14 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     abstract public function model();
+
+    public function setGuard($guard = null)
+    {
+        $this->guard = $guard;
+        $this->user = Auth::guard($this->guard)->user();
+
+        return $this;
+    }
 
     public function makeModel()
     {
