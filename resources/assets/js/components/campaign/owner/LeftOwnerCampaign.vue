@@ -9,19 +9,25 @@
 
                 <div class="ui-block-title">
                     <router-link
-                        :to="{ name: 'campaign.member_request',
-                        params: { id: campaign.id }}"
+                        :to="{ name: 'campaign.member_request', params: { id: campaign.id }}"
                         class="h6 title">
-                        {{ $t('campaigns.member-request')}}
+                        {{ $t('campaigns.member-request') }}
                     </router-link>
                 </div>
 
                 <div class="ui-block-title" v-if="checkOwner || checkAdmin">
                     <router-link
-                        :to="{ name: 'campaign.list_member',
-                        params: { id: campaign.id }}"
+                        :to="{ name: 'campaign.list_member', params: { id: campaign.id }}"
                         class="h6 title">
-                        {{ $t('campaigns.list-members')}}
+                        {{ $t('campaigns.list-members') }}
+                    </router-link>
+                </div>
+
+                <div class="ui-block-title" v-if="checkOwner || checkAdmin">
+                    <router-link
+                        :to="{ name: 'campaign.update', params: { id: campaign.id }}"
+                        class="h6 title">
+                        {{ $t('campaigns.update_campaign') }}
                     </router-link>
                 </div>
             </div>

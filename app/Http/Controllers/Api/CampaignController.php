@@ -104,6 +104,19 @@ class CampaignController extends ApiController
         });
     }
 
+    public function edit($id)
+    {
+        $campaign = $this->campaignRepository->findOrFail($id);
+
+        if ($this->user->cannot('manage', $campaign)) {
+            throw new NotFoundException('Access denied', ACCESS_DENIED);
+        }
+
+        return $this->getData(function () use ($campaign) {
+            $this->compacts['campaign'] = $campaign->load('media', 'settings', 'tags');
+        });
+    }
+
     public function update(CampaignRequest $request, $id)
     {
         $data = $request->only(

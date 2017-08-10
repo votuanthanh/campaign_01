@@ -43,6 +43,7 @@ import CreateExpense from '../components/event/expense/CreateExpense.vue'
 import UpdateExpense from '../components/event/expense/UpdateExpense.vue'
 import CreateExpenseBuy from '../components/event/expense/CreateExpenseBuy.vue'
 import ExpenseStatistic from '../components/event/expense/Statistic.vue'
+import UpdateCampaign from '../components/campaign/owner/UpdateCampaign.vue'
 
 const router = [
     ...authGuard([{
@@ -80,6 +81,7 @@ const router = [
                 component: Campaign,
                 children: [
                     { path: 'timeline', component: TimelineCampaign, name: 'campaign.timeline' },
+                    { path: 'edit', component: UpdateCampaign, name: 'campaign.update' },
                     { path: 'photo', component: PhotoCampaign, name: 'campaign.photo' },
                     { path: 'campaign-related', component: CampaignRelated, name: 'campaign.campaign_related' },
                     { path: 'campaign-about', component: CampaignAbout, name: 'campaign.about' },

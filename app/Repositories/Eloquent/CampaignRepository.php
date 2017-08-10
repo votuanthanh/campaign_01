@@ -101,7 +101,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
     {
         $this->deleteOrCreateTags($campaign, $inputs['tags']);
         $this->updateSettings($campaign, $inputs['settings']);
-        $this->updateMedia($inputs['media'], $campaign);
+        $this->updateMedia($campaign, $inputs['media']);
         $campaign = parent::update($campaign->id, array_except($inputs, ['tags', 'settings', 'media']));
 
         return $campaign;
@@ -170,7 +170,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
 
     private function updateMedia($campaign, $media)
     {
-        if (!$campaign || !is_file($media)) {
+        if (!$campaign || str_contains($media, Carbon::now()->format('Y/m') . '/campaigns/')) {
             return false;
         }
 
@@ -180,9 +180,16 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             return false;
         }
 
-        $this->destroyFile($model->url_file);
-        $urlFile = $this->uploadFile($media, 'campaigns');
-        $model->update(['url_file' => $urlFile]);
+        $oldUrl = $model->url_file;
+
+        if (!empty($media)) {
+            $urlFile = is_string($media)
+                ? $this->parseBase64($media, 'campaigns')
+                : $this->uploadFile($media, 'campaigns');
+            $model->update(['url_file' => $urlFile]);
+        }
+
+        $this->destroyFile($oldUrl);
 
         return true;
     }

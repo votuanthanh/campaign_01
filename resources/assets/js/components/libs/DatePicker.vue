@@ -14,9 +14,11 @@ export default {
             type: Object
         }
     },
-    data: () => ({
-        value: ''
-    }),
+    data() {
+        return {
+            value: this.date
+        }
+    },
     mounted() {
         $(this.$el).daterangepicker({
             autoUpdateInput: false,
