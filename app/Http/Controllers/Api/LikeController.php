@@ -5,59 +5,23 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\CommentRequest;
 use App\Exceptions\Api\UnknowException;
 use App\Exceptions\Api\NotFoundException;
-use App\Repositories\Contracts\EventInterface;
-use App\Repositories\Contracts\ActionInterface;
-use App\Repositories\Contracts\CommentInterface;
-use App\Repositories\Contracts\CampaignInterface;
 use App\Repositories\Contracts\LikeInterface;
 use Illuminate\Http\Request;
 
 class LikeController extends ApiController
 {
-    protected $campaignRepository;
-    protected $eventRepository;
-    protected $actionRepository;
-    protected $commentRepository;
+    protected $likeRepository;
 
-    public function __construct(
-        CampaignInterface $campaignRepository,
-        EventInterface $eventRepository,
-        ActionInterface $actionRepository,
-        CommentInterface $commentRepository,
-        LikeInterface $likeRepository
-    ) {
-        parent::__construct();
-        $this->campaignRepository= $campaignRepository;
-        $this->eventRepository = $eventRepository;
-        $this->actionRepository = $actionRepository;
-        $this->commentRepository = $commentRepository;
+    public function __construct(LikeInterface $likeRepository)
+    {
+        parent::__construct($likeRepository);
         $this->likeRepository = $likeRepository;
     }
 
     public function like($modelId, $flag)
     {
-        if (!$modelId) {
-            throw new UnknowException('modelId is null');
-        }
-
-        if ($flag) {
-            switch ($flag) {
-                case 'campaign':
-                    $model = $this->campaignRepository->findOrFail($modelId);
-                    break;
-                case 'event':
-                    $model = $this->eventRepository->findOrFail($modelId);
-                    break;
-                case 'action':
-                    $model = $this->actionRepository->findOrFail($modelId);
-                    break;
-                case 'comment':
-                    $model = $this->commentRepository->findOrFail($modelId);
-                    break;
-                default:
-                    $model = '';
-            }
-        }
+        $likeClass = new \ReflectionClass($this->likeRepository);
+        $model = app($likeClass->getNamespaceName() . '\\' . ucfirst($flag . 'Repository'))->findOrFail($modelId);
 
         if ($this->user->cant('view', $model)) {
             throw new UnknowException('Permission error: User can not like in this post.');
