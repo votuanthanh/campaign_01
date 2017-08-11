@@ -425,4 +425,49 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             'totalCampaign' => $resutCampaign->count(),
         ];
     }
+
+    public function getStatisticData($campaign)
+    {
+        $users['count'] = $campaign->getUserByRole(['owner', 'moderator', 'member'])->count();
+        $users['today_count'] = $campaign->users()->wherePivot('created_at', '>=', Carbon::today())->count();
+        $userStatistic = $campaign->getUserByRole(['owner', 'moderator', 'member'])
+            ->select(\DB::raw('count(*) as user_count, date(campaign_user.created_at) as date'))
+            ->groupBy('date')
+            ->get();
+        $users['chart_label'] = $userStatistic->pluck('date');
+        $users['chart_data'] = $userStatistic->pluck('user_count');
+
+        $events['count'] = $campaign->events()->count();
+        $events['finished'] = $campaign->events()->whereHas('settings', function ($query) {
+            $query->where([
+                ['key', '=', config('settings.events.end_day')],
+                ['value', '<', Carbon::now()],
+            ]);
+        })->count();
+        $events['upcoming'] = $campaign->events()->whereHas('settings', function ($query) {
+            $query->where([
+                ['key', '=', config('settings.events.start_day')],
+                ['value', '>', Carbon::now()],
+            ]);
+        })->count();
+        $events['ongoing'] = $campaign->events()->count() - ($events['finished'] + $events['upcoming']);
+        $eventStatistic = $campaign->events()
+            ->select(\DB::raw('count(*) as event_count, date(events.created_at) as date'))
+            ->groupBy('date')
+            ->get();
+        $events['chart_label'] = $eventStatistic->pluck('date');
+        $events['chart_data'] = $eventStatistic->pluck('event_count');
+
+        $actions['count'] = $campaign->actions->count();
+        $actions['today_count'] = $campaign->actions->where('actions.created_at', '>=', Carbon::today())->count();
+        $actionStatistic = $campaign->actions()
+            ->select(\DB::raw('count(*) as action_count, date(actions.created_at) as date'))
+            ->groupBy('date')
+            ->get();
+        $actions['chart_label'] = $actionStatistic->pluck('date');
+        $actions['chart_data'] = $actionStatistic->pluck('action_count');
+        $data = [ 'users' => $users, 'events' => $events, 'actions' => $actions ];
+
+        return $data;
+    }
 }

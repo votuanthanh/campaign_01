@@ -52,8 +52,8 @@ class Goal extends BaseModel
     public function getCalculateAttribute()
     {
         $calculate = new \stdClass();
-        $calculate->donation_sum = $this->donations()->sum('value');
-        $calculate->donation_count = $this->donations()->count();
+        $calculate->donation_sum = $this->donations()->whereStatus(Donation::ACCEPT)->sum('value');
+        $calculate->donation_count = $this->donations()->whereStatus(Donation::ACCEPT)->count();
         $calculate->expense_sum = $this->expenses()->sum('cost');
         $calculate->expense_count = $this->expenses()->count();
 
