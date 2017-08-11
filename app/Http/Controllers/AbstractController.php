@@ -25,18 +25,21 @@ abstract class AbstractController extends Controller
 
     public function __construct($repository = null)
     {
-        if ($repository) {
-            $this->repositorySetup($repository);
-        }
+        $this->middleware(function ($request, $next) use ($repository) {
+            $this->user = Auth::guard($this->getGuard())->user();
 
-        $this->user = Auth::guard($this->getGuard())->user();
+            if ($repository) {
+                $this->repositorySetup($repository);
+            }
+
+            return $next($request);
+        });
     }
 
     public function repositorySetup($repository = null)
     {
-        $this->repository = $repository;
-
-        $this->repositoryName = strtolower(class_basename($this->repository->getModel()));
+        $this->repository = $repository->setGuard($this->getGuard());
+        $this->repositoryName = strtolower(class_basename($this->repository->model()));
     }
 
     protected function getGuard()
