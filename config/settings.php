@@ -42,6 +42,7 @@ return [
         'like' => 20,
         'action' => 8,
         'expense_statistic' => 5,
+        'friend' => 14,
     ],
     'group_chat' => 'groupChat',
     'single_chat' => 'singleChat',
@@ -55,4 +56,5 @@ return [
     'approval_request' => 1,
     'read_notification_friend' => 0,
     'read_notification_action' => 1,
+    'take_friend' => 9,
 ];

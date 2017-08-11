@@ -21,7 +21,7 @@ export default {
     },
 
     [types.JOIN_CAMPAIGN](state, data) {
-        let campaign  = state.campaign
+        let campaign = state.campaign
         data.pivot = []
         data.pivot.status = 0
         campaign.check_status = data
@@ -38,7 +38,7 @@ export default {
         state.listMembers = list_members
 
         //set status members
-        let campaign  = state.campaign
+        let campaign = state.campaign
         campaign.check_status = null
         state.campaign = []
         state.campaign = campaign
@@ -73,7 +73,7 @@ export default {
         state.listMembers = list_members
 
         //set status members
-        let campaign  = state.campaign
+        let campaign = state.campaign
         campaign.check_status = null
         state.campaign = []
         state.campaign = campaign

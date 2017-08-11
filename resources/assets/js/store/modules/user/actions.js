@@ -11,11 +11,11 @@ export const getUser = ({ commit, rootState }, id) => {
                     currentPageUser: res.data.data.currentPageUser,
                     listActivity: res.data.data.listActivity
                 })
-                commit(types.SET_LOADING, false);
+                commit(types.SET_LOADING, false)
                 resolve(res.data.data.currentPageUser)
             })
             .catch(err => {
-                commit(types.SET_LOADING, false);
+                commit(types.SET_LOADING, false)
                 reject(err)
             })
     })
@@ -28,8 +28,8 @@ export const loadMore = ({ commit, rootState }, data) => {
         return new Promise((resolve, reject) => {
             get(`user/${data.id}?page=${data.infoPaginate.current_page + 1}`)
                 .then(res => {
-                    commit(types.SET_LIST_ACTIVITY, res.data.data.listActivity);
-                    commit(types.SET_LOADING, false);
+                    commit(types.SET_LIST_ACTIVITY, res.data.data.listActivity)
+                    commit(types.SET_LOADING, false)
                     resolve(res.data.data.currentPageUser)
                 })
                 .catch(err => {
@@ -40,7 +40,15 @@ export const loadMore = ({ commit, rootState }, data) => {
     }
 };
 
+export const getListPhotoAndFriend = ({ commit }, userId) => {
+    get(`user/${userId}/get-photos-friends/`)
+        .then(res => {
+            commit(types.SET_LIST_PHOTO_AND_FRIEND, res.data)
+        })
+};
+
 export default {
     getUser,
     loadMore,
+    getListPhotoAndFriend
 };

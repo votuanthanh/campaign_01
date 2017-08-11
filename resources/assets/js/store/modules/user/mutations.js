@@ -16,5 +16,9 @@ export default {
     },
     [types.UPDATE_CURRENT_PAGE_USER](state, data) {
         state.currentPageUser = data
+    },
+    [types.SET_LIST_PHOTO_AND_FRIEND](state, data) {
+        state.listPhoto = data.listPhoto
+        state.listFriend = data.listFriend
     }
 };

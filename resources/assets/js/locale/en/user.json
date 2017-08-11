@@ -76,7 +76,17 @@
     "sidebar": {
         "about_me": "About me",
         "birthday": "Birthday",
-        "Address": "Address",
-        "profile_intro": "Profile Intro"
+        "address": "Address",
+        "profile_intro": "Profile Intro",
+        "friends": "Friends",
+        "list_photo": "List Photo",
+        "done_have_friend": "You don't have any friend",
+        "done_have_photo": "You don't have any photo",
+        "search_friends": "search friends...",
+        "load_more": "Load More",
+        "of": "of",
+        "previous": "Previous (Left arrow key)",
+        "next": "Next (Right arrow key)",
+        "close": "Close (Esc)"
     }
 }
