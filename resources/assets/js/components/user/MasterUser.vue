@@ -289,6 +289,7 @@
     import { mapState, mapActions, mapMutations } from 'vuex'
     import { get, post } from '../../helpers/api'
     import ImageModal from '../libs/SelectImageModal.vue'
+    import { EventBus } from '../../EventBus.js';
     import Noty from 'noty'
 
     export default {
@@ -359,6 +360,7 @@
                                 this.showAllImage = true
                             else
                                 this.showAllAvatar = true
+                            EventBus.$emit('photo', 'updateListPhoto');
                         })
                         .catch(err => {})
                 })

@@ -62,7 +62,9 @@
                 }
             })
         },
-
+        beforeDestroy() {
+            $(window).off()
+        },
         methods: {
             ...mapActions('user', ['loadMore']),
 

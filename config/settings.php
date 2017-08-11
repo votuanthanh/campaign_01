@@ -43,6 +43,7 @@ return [
         'action' => 8,
         'expense_statistic' => 5,
         'friend' => 14,
+        'photo' => 16,
     ],
     'group_chat' => 'groupChat',
     'single_chat' => 'singleChat',

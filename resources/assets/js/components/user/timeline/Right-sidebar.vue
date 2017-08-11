@@ -439,6 +439,7 @@
     import { mapState, mapActions, mapGetters } from 'vuex'
     import { del, get } from '../../../helpers/api'
     import DetailImage from '../DetailImage.vue'
+    import { EventBus } from '../../../EventBus.js';
 
     export default {
         data: () => ({
@@ -451,7 +452,10 @@
             targetNumber: 0
         }),
         created() {
-            this.getListPhotoAndFriend(this.$route.params.id)
+            this.getListPhotoAndFriend(this.$route.params.id),
+            EventBus.$on('photo', data => {
+                this.getListPhotoAndFriend(this.$route.params.id)
+            });
         },
         components: {
             DetailImage

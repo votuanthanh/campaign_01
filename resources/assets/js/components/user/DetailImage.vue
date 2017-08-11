@@ -6,13 +6,13 @@
                     <div class="mfp-figure mfp-with-anim">
                         <button :title="$t('user.sidebar.close')" @click="closePopup" class="mfp-close">×</button>
                         <figure>
-                            <img class="mfp-img" alt="photo"
-                                :src="listPhoto[index].image_large"
-                                style="max-height: 600px;">
+                            <img class="mfp-img" alt="photo" :src="listPhoto[index].image_large">
                             <figcaption>
                                 <div class="mfp-bottom-bar">
                                     <div class="mfp-title"></div>
-                                    <div class="mfp-counter">{{ index + 1 }} {{ $t('user.sidebar.of') }} 9</div>
+                                    <div class="mfp-counter">
+                                        {{ index + 1 + ' ' + $t('user.sidebar.of') + ' ' + this.listPhoto.length }}
+                                    </div>
                                 </div>
                             </figcaption>
                         </figure>
@@ -52,20 +52,35 @@
                 this.showBack = false
             }
 
-            if (this.targetNumber == 8) {
+            if (this.targetNumber == this.listPhoto.length - 1) {
                 this.showNext = false
             }
+        },
+        mounted() {
+            $('body').css('overflow', 'hidden')
+            document.onkeydown = (event) => {
+                if (event.keyCode == 37 || event.keyCode == 38) {
+                    this.move('back')
+                }
+
+                if (event.keyCode == 39 || event.keyCode == 40) {
+                    this.move('next')
+                }
+            }
+        },
+        beforeDestroy() {
+            $('body').css('overflow', 'initial')
         },
         methods: {
             closePopup() {
                 this.$emit('update:showImage', false)
             },
             move(str) {
-                if (str == 'next' && this.index < 8) {
+                if (str == 'next' && this.index < this.listPhoto.length - 1) {
                     this.index++
                     this.showBack = true
 
-                    if (this.index == 8) {
+                    if (this.index == this.listPhoto.length - 1) {
                         this.showNext = false
                     }
                 }
@@ -405,6 +420,7 @@
         width: auto;
         max-width: 100%;
         height: auto;
+        max-height: 600px;
         display: block;
         line-height: 0;
         box-sizing: border-box;
