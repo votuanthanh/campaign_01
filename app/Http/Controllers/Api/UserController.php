@@ -358,6 +358,30 @@ class UserController extends ApiController
         });
     }
 
+    public function getPhotos($userId)
+    {
+        $user = $this->repository->findOrFail($userId);
+
+        if ($user->status == User::IN_ACTIVE) {
+            throw new Exception('Error Processing Request');
+        }
+
+        return $this->getData(function () use ($user) {
+            $this->compacts['photos'] = $user->media()
+                ->orderBy('id', 'DESC')
+                ->paginate(config('settings.pagination.photo'));
+        });
+    }
+
+    public function deletePhoto($mediaId)
+    {
+        $photo = $this->user->media()->findOrFail($mediaId);
+
+        return $this->getData(function () use ($photo) {
+            $this->compacts['photo'] = $photo->delete();
+        });
+    }
+
     public function getUser($id)
     {
         return $this->getData(function () use ($id) {

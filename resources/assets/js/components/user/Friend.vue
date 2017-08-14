@@ -140,6 +140,9 @@
         computed: {
             ...mapState('auth', { authUser: 'user' })
         },
+        beforeDestroy() {
+            $(window).off()
+        },
         methods: {
             slipEmail(email) {
                 if (email.length > 25) {

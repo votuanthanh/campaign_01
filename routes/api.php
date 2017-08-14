@@ -29,7 +29,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
     Route::group(['prefix' => 'user/{id}', 'as' => 'user.'], function () {
         Route::get('/', 'UserController@getTimeLine')->name('getTimeLine');
         Route::get('friends/{page}', 'UserController@listFriends')->name('friends');
-        Route::get('get-photos-friends', 'UserController@getPhotosAndFriends')->name('get-photos-friend');
+        Route::get('get-photos-user', 'UserController@getPhotos')->name('get-photos-friend');
+        Route::get('get-photos-friends', 'UserController@getPhotosAndFriends')->name('get-photos-user');
         Route::get('search-friends/{keyword}', 'UserController@searchFriends')->name('search_friend');
         Route::get('owned-campaign', 'UserController@listOwnedCampaign')->name('owned-campaign');
         Route::get('joined-campaign', 'UserController@listJoinedCampaign')->name('joined-campaign');
@@ -48,6 +49,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::get('show-message/{id}', 'ChatController@showMessages');
         Route::get('show-notifications', 'ChatController@getNotification');
         Route::post('like/{modelId}/{flag}', 'LikeController@like')->name('like');
+        Route::delete('delete-photo/{mediaId}', 'UserController@deletePhoto')->name('delete-photo');
 
         Route::group(['as' => 'user.'], function () {
             Route::group(['prefix' => 'settings'], function () {

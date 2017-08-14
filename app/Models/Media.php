@@ -12,7 +12,7 @@ class Media extends BaseModel
     const IMAGE = 0;
     const VIDEO = 1;
     const EDITOR_QUILL = 2;
-    
+
 
     public function __construct($attributes = [])
     {
@@ -37,7 +37,16 @@ class Media extends BaseModel
         'image_large',
         'image_slider',
         'image_large',
+        'time_ago'
     ];
+
+    public function getTimeAgoAttribute($date)
+    {
+        $locale = \App::getLocale();
+        \Carbon\Carbon::setLocale($locale);
+
+        return \Carbon\Carbon::parse($date)->diffForHumans();
+    }
 
     public function mediable()
     {

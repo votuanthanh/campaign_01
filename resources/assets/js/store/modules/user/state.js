@@ -6,5 +6,6 @@ export default {
     },
     loading: false,
     listPhoto: [],
-    listFriend: []
+    listFriend: [],
+    photosUser: []
 }

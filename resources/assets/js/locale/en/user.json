@@ -88,5 +88,11 @@
         "previous": "Previous (Left arrow key)",
         "next": "Next (Right arrow key)",
         "close": "Close (Esc)"
+    },
+    "photo": {
+        "gallery": "’s Photo Gallery",
+        "header": "Header Photos",
+        "delete": "Delete this photo",
+        "dont_have_images": "Don't have any photo."
     }
 }
