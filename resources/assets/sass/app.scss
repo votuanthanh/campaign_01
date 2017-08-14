@@ -176,3 +176,9 @@ a {
         margin-bottom: 0px;
     }
 }
+
+.has-danger {
+    .input-group-addon {
+        background-color: transparent;
+    }
+}

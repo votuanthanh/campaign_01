@@ -35,8 +35,8 @@ class EventRequest extends AbstractRequest
                 return [
                     'title' => 'required|string',
                     'description' => 'required|string',
-                    'longitude' => 'numeric|min:-180|max:180',
-                    'latitude' => 'numeric|min:-90|max:90',
+                    'longitude' => 'nullable|numeric|min:-180|max:180',
+                    'latitude' => 'nullable|numeric|min:-90|max:90',
                     'settings' => 'required',
                 ];
         }

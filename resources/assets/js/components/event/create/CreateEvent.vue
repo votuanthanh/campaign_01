@@ -5,7 +5,7 @@
                 <h6 class="title">{{ $t('events.create_event') }}</h6>
             </div>
             <div class="ui-block-content">
-                <div class="form-group label-floating" :class="{ 'has-danger': errors.has('name')}">
+                <div class="form-group label-floating is-focused" :class="{ 'has-danger': errors.has('name')}">
                     <label class="control-label">{{ $t('form.label.event_name') }}</label>
                     <input
                         name="name"
@@ -22,12 +22,12 @@
 
                 <div class="form-group label-floating">
                     <label class="control-label">{{ $t('form.label.event_location') }}</label>
-                    <gmap-autocomplete :value="newEvent.address" class="form-control" @place_changed="setPlace"></gmap-autocomplete>
+                    <gmap-autocomplete :value="newEvent.address" class="form-control" @place_changed="setPlace" ref="elSearch"></gmap-autocomplete>
                     <span class="material-input"></span>
                 </div>
 
                 <div class="form-group label-floating">
-                    <gmap-map :center="center" :zoom="zoom" style="width: 100%; height: 500px" v-if="showMap">
+                    <gmap-map :center="center" :zoom="zoom" style="width: 100%; height: 500px" ref="elMap">
                         <gmap-marker
                             :position="center"
                             :clickable="true"
@@ -117,6 +117,7 @@
     import { post, del } from '../../../helpers/api'
     import noty from '../../../helpers/noty'
     import uploadedImage from '../../../helpers/mixin/uploadedImage'
+    import searchMap from '../../../helpers/mixin/searchMap'
 
     Vue.use(Dropzone)
     Vue.use(VueGoogleMaps, {
@@ -128,12 +129,9 @@
 
     export default {
         data: () => ({
-            showMap: false,
             zoom: config.zoom,
             maxFile: config.maxFileUpload,
             maxSizeFile: config.maxSizeFile,
-            latLng: { lat: 0, lng: 0 },
-            center: { lat: 0, lng: 0 },
             visible: true,
             startDate: '',
             endDate: '',
@@ -153,34 +151,25 @@
                 address: ' ',
                 donations: []
             },
-            editorOption,
             hasErrorFiles: false,
-            uploadVisible: false,
-            imageInsert: '',
             accessToken: `Bearer ${localStorage.getItem('access_token')}`
         }),
-        mixins: [uploadedImage],
+        mixins: [uploadedImage, searchMap],
+        mounted() {
+            this.loadedMaps(this.newEvent)
+        },
         methods: {
             addErrors(index, value) {
                 this.errorBags[index] = value
             },
 
             setPlace(place) {
-                this.latLng = {
-                    lat: place.geometry.location.lat(),
-                    lng: place.geometry.location.lng(),
-                };
-                this.newEvent.address = place.formatted_address
-                this.newEvent.latitude = place.geometry.location.lat()
-                this.newEvent.longitude = place.geometry.location.lat()
-                this.center= {
-                    lat: place.geometry.location.lat(),
-                    lng: place.geometry.location.lng()
-                };
+                this.setLocation(this.newEvent, place)
+            },
 
-                if (!this.showMap) {
-                    this.showMap = true;
-                }
+            updatePosition(event) {
+                const latLng = event.latLng.toJSON()
+                this.setGeocoder(this.newEvent, latLng)
             },
 
             addDonation() {
@@ -229,25 +218,6 @@
                 this.donations[index][mix] = newValue[mix]
             },
 
-            updatePosition(event) {
-                this.latLng = {
-                    lat: event.latLng.lat(),
-                    lng: event.latLng.lng(),
-                };
-                this.newEvent.latitude = event.latLng.lat();
-                this.newEvent.longitude = event.latLng.lng();
-
-                $.ajax({
-                    url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=
-                        ${event.latLng.lat()},
-                        ${event.latLng.lng()}
-                        &key=${config.keyMap}`,
-                    success: data => {
-                        this.newEvent.address = data.results[0].formatted_address;
-                    }
-                })
-            },
-
             addSettings() {
                 if (!this.startDate) {
                     this.startDate = moment().format('L');
@@ -266,7 +236,7 @@
             createEvent() {
                 this.hasErrorFiles = this.$refs.myVueDropzone.getRejectedFiles().length
                 this.$validator.validateAll().then((result) => {
-                    if (!this.flag || this.hasErrorDonation()) {
+                    if (!this.flag || (Object.keys(this.errorBags).length > 1 && this.hasErrorDonation())) {
                         return
                     }
 
@@ -278,6 +248,7 @@
                         }
                     }
                 })
+                .catch(() => {})
             },
 
             hasErrorDonation() {

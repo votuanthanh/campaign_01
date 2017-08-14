@@ -59,6 +59,7 @@
                             <gmap-autocomplete
                                 id="address"
                                 name="address"
+                                ref="elSearch"
                                 :value="campaign.address"
                                 class="form-control"
                                 @place_changed="setPlace"
@@ -72,7 +73,7 @@
                         </div>
 
                         <div id="form-group label-floating">
-                            <gmap-map id="map" :center="center" :zoom="zoom" v-if="showMap">
+                            <gmap-map id="map" :center="center" :zoom="zoom" ref="elMap">
                                 <gmap-marker
                                     :position="center"
                                     :clickable="true"
@@ -211,6 +212,7 @@ import SettingDate from '../libs/SettingDate.vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import { config, editorOption } from '../../config'
 import uploadedImage from '../../helpers/mixin/uploadedImage'
+import searchMap from '../../helpers/mixin/searchMap'
 
 export default {
     data: () => ({
@@ -233,17 +235,15 @@ export default {
         flag: '',
         content: null,
         validator: null,
-        showMap: false,
         zoom: config.zoom,
-        latLng: { lat: 0, lng: 0 },
-        center: { lat: 0, lng: 0 }
     }),
-    mixins: [uploadedImage],
+    mixins: [uploadedImage, searchMap],
     created () {
         this.getTags()
     },
     mounted() {
         $(this.$refs.selectpicker).selectpicker()
+        this.loadedMaps(this.campaign)
     },
     beforeDestroy() {
         $(this.$refs.selectpicker).selectpicker('destroy')
@@ -283,6 +283,7 @@ export default {
                         noty({ text: message, container: false, force: true})
                     })
             })
+            .catch(() => {})
         },
         addTags(newTag) {
             let tag = {
@@ -358,42 +359,13 @@ export default {
             this.campaign.media = ''
         },
         setPlace(place) {
-            this.latLng = {
-                lat: place.geometry.location.lat(),
-                lng: place.geometry.location.lng()
-            }
-
-            this.campaign.address = place.formatted_address
-            this.campaign.latitude = place.geometry.location.lat()
-            this.campaign.longitude = place.geometry.location.lat()
-            this.center= {
-                lat: place.geometry.location.lat(),
-                lng: place.geometry.location.lng()
-            }
-
-            if (!this.showMap) {
-                this.showMap = true;
-            }
+            this.setLocation(this.campaign, place)
         },
+
         updatePosition(event) {
-            this.latLng = {
-                lat: event.latLng.lat(),
-                lng: event.latLng.lng()
-            }
-
-            this.campaign.latitude = event.latLng.lat()
-            this.campaign.longitude = event.latLng.lng()
-
-            $.ajax({
-                url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=
-                    ${event.latLng.lat()},
-                    ${event.latLng.lng()}
-                    &key=${config.keyMap}`,
-                success: data => {
-                    this.campaign.address = data.results[0].formatted_address
-                }
-            })
-        }
+            const latLng = event.latLng.toJSON()
+            this.setGeocoder(this.campaign, latLng)
+        },
     },
     components: {
         DatePicker,

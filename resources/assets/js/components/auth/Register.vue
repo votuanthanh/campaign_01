@@ -56,9 +56,17 @@
                         </select>
                     </div>
 
-                    <div class="form-group date-time-picker label-floating">
+                    <div class="form-group date-time-picker label-floating" :class="{ 'has-danger': errors.has('birthday')}">
                         <label class="control-label">{{ $t('form.label.birthday') }}</label>
-                        <date-picker :date.sync="user.birthday"></date-picker>
+                        <date-picker
+                            v-validate="`required|date_format:MM/DD/YYYY|before:${dateNow}`"
+                            data-vv-name="birthday"
+                            data-vv-value-path="value"
+                            :date.sync="user.birthday">
+                        </date-picker>
+                        <span v-show="errors.has('birthday')" class="material-input text-danger">
+                            {{ errors.first('birthday') }}
+                        </span>
                         <span class="input-group-addon">
                             <svg class="olymp-calendar-icon">
                                 <use xlink:href="/frontend/icons/icons.svg#olymp-calendar-icon"></use>
@@ -115,6 +123,11 @@ export default {
         spinner: false
     }),
     props: ['registerTab'],
+    computed: {
+        dateNow() {
+            return moment().format('MM/DD/YYYY')
+        }
+    },
     methods: {
         handleRegister() {
             this.$validator.validateAll().then((result) => {
@@ -142,6 +155,7 @@ export default {
                         this.$Progress.fail()
                     })
             })
+            .catch(() => {})
         }
     },
     mounted() {

@@ -2,7 +2,7 @@
 <div>
     <div class="row donation">
         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-            <div class="form-group label-floating" :class="{ 'has-danger': this.errors.has('goal') }">
+            <div class="form-group label-floating is-focused" :class="{ 'has-danger': this.errors.has('goal') }">
                 <label class="control-label">{{ $t('form.label.goal') }}</label>
                 <input class="form-control"
                     name="goal"
