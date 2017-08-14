@@ -324,7 +324,7 @@
             height: 60px;
         }
         .empty {
-            z-index: 999;
+            z-index: 20;
             position: absolute;
             left: 0;
             top: 0;

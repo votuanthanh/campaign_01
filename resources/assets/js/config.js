@@ -1,5 +1,5 @@
 export const config = {
-    keyMap : 'AIzaSyBOvX0GSM1XmrsnM_-0kInTFu2n2g3OBM8',
+    keyMap : window.Laravel.key_google_map,
     zoom: 15,
     maxFileUpload: 10,
     maxSizeFile: 0.49,

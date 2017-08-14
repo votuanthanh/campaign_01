@@ -1,7 +1,7 @@
 <template lang="html">
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="form-group date-time-picker label-floating">
+            <div class="form-group date-time-picker label-floating is-focused">
                 <label class="control-label">{{ $t('campaigns.startday') }}</label>
                 <date-picker :date.sync="start">
                 </date-picker>
@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div class="form-group date-time-picker label-floating">
+            <div class="form-group date-time-picker label-floating is-focused">
                 <label class="control-label">{{ $t('campaigns.endday') }}</label>
                 <date-picker :date.sync="end">
                 </date-picker>

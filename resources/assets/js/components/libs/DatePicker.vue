@@ -1,5 +1,7 @@
 <template lang="html">
-    <input :value="date"/>
+    <div>
+        <input type="text" class="form-control" name="birthday" :value="value"/>
+    </div>
 </template>
 
 <script>
@@ -12,6 +14,9 @@ export default {
             type: Object
         }
     },
+    data: () => ({
+        value: ''
+    }),
     mounted() {
         $(this.$el).daterangepicker({
             autoUpdateInput: false,
@@ -29,6 +34,7 @@ export default {
 
             this.$emit('update:date', picker.startDate.format(format))
             this.$emit('input', picker.startDate.format(format))
+            this.value = picker.startDate.format(format)
         });
 
         $(this.$el).on('hide.daterangepicker', (ev, picker) => {

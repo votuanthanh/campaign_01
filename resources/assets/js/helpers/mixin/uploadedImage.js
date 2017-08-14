@@ -3,7 +3,6 @@ import { editorOption } from '../../config'
 
 export default {
     data: () => ({
-        hasErrorFiles: false,
         uploadVisible: false,
         imageInsert: '',
         toggleFullscreen: false,
