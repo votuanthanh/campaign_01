@@ -24,6 +24,7 @@ class Action extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
+    
     protected $appends = ['comments', 'likes', 'checkLike'];
 
     public function user()

@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\Activity;
 use App\Exceptions\Api\UnknowException;
 use App\Repositories\Contracts\CommentInterface;
+use Illuminate\Support\Facades\Event;
 
 class CommentRepository extends BaseRepository implements CommentInterface
 {
@@ -21,9 +22,13 @@ class CommentRepository extends BaseRepository implements CommentInterface
         }
 
         $comment = $model->comments()->create($data);
-        $comment->activities()->create([
-            'user_id' => $data['user_id'],
-            'name' => Activity::CREATE,
+
+        Event::fire('add.activity', [
+            [
+                'model' => $comment,
+                'user_id' => $data['user_id'],
+                'action' => Activity::CREATE
+            ]
         ]);
 
         return $comment;

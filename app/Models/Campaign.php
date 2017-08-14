@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Carbon\Carbon;
 
 class Campaign extends BaseModel
 {
@@ -123,10 +124,7 @@ class Campaign extends BaseModel
 
     public function getCreatedAtAttribute($date)
     {
-        $locale = \App::getLocale();
-        \Carbon\Carbon::setLocale($locale);
-
-        return \Carbon\Carbon::parse($date)->diffForHumans();
+        return Carbon::parse($date)->diffForHumans();
     }
 
     public function getUsersJoinedAttribute()

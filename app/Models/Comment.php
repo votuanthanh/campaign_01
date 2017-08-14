@@ -24,6 +24,7 @@ class Comment extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
+    
     protected $appends = [
         'sub_comment',
         'likes',

@@ -289,9 +289,6 @@ class User extends Authenticatable
 
     public function getBirthdayAttribute($date)
     {
-        $locale = \App::getLocale();
-        \Carbon\Carbon::setLocale($locale);
-
-        return \Carbon\Carbon::parse($date)->toDateString();
+        return Carbon::parse($date)->toDateString();
     }
 }
