@@ -47,5 +47,7 @@
     "you_and": "You and ",
     "became_friend": " just became friends.",
     "comfirm_delete": "Are you sure you want to delete this?",
-    "read_at": "Seen at "
+    "read_at": "Seen at ",
+    "error" : "Error",
+    "not_permission": "You are not permission"
 }

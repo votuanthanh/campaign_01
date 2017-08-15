@@ -37,13 +37,15 @@
 import DatePicker from '../libs/DatePicker.vue'
 
 export default {
-    data: () => ({
-        messageEndDay: '',
-        messageStartDay: '',
-        start: '',
-        end: '',
-        status: ''
-    }),
+    data() {
+        return {
+            messageEndDay: '',
+            messageStartDay: '',
+            start: this.startDay,
+            end: this.endDay,
+            status: ''
+        }
+    },
     props: {
         flag: Boolean,
         startDay: String,

@@ -87,7 +87,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::get('search-members/{campaignId}/{status}', 'CampaignController@searchMembers');
         });
 
-        Route::resource('campaign', 'CampaignController', ['only' => ['store', 'update', 'destroy', 'show']]);
+        Route::resource('campaign', 'CampaignController', ['only' => ['store', 'update', 'destroy', 'show', 'edit']]);
 
         Route::group(['prefix' => '/event', 'as' => 'event.'], function () {
             Route::post('create', 'EventController@create')->name('create');

@@ -52,5 +52,7 @@
     "manager-campaign": "Manager Campaign",
     "member-request": "Members Request",
     "accept-request": "Accept Request",
-    "list-events": "List Events"
+    "list-events": "List Events",
+    "close_campaign": "Close Campaign",
+    "update_campaign": "Update Campaign"
 }

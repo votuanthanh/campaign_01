@@ -224,8 +224,7 @@ class EditCamapaignTest extends TestCase
                 trans('validation.required', ['attribute' => 'description']),
                 trans('validation.max.numeric', ['attribute' => 'longitude', 'max' => 180]),
                 trans('validation.min.numeric', ['attribute' => 'latitude', 'min' => -90]),
-                trans('validation.image', ['attribute' => 'media']),
-                trans('validation.mimes', ['attribute' => 'media', 'values' => 'jpg, jpeg, png, gif, svg']),
+                "validation.base64url",
             ],
         ]);
     }

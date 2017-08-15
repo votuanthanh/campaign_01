@@ -8,8 +8,8 @@
                             <div class="top-header-thumb" v-if="campaign.campaign_images != null">
                                 <img :src="campaign.campaign_images.image_small" alt="nature" style=" height: 542px;">
                                 <div class="top-header-author">
-                                    <div class="author-thumb" v-if="campaign.owner != null" style="top: 163px;">
-                                        <img :src="campaign.owner.image_thumbnail" alt="author">
+                                    <div class="author-thumb" v-if="campaign.owner" style="top: 163px;">
+                                        <img :src="campaign.owner[0].image_thumbnail" alt="author">
                                     </div>
                                         <a href="javascript:void(0)" class="h3 author-name">{{ campaign.title }}</a>
                                         <div class="country">#{{ campaign.hashtag }}</div>
