@@ -6,10 +6,10 @@
                     <div class="ui-block">
                         <div class="top-header top-header-favorit">
                             <div class="top-header-thumb" v-if="campaign.campaign_images != null">
-                                <img :src="campaign.campaign_images.image_small" alt="nature" style=" height: 542px;">
+                                <img :src="campaign.campaign_images.image_small" :alt="campaign.name" class="images-campaign">
                                 <div class="top-header-author">
-                                    <div class="author-thumb" v-if="campaign.owner" style="top: 163px;">
-                                        <img :src="campaign.owner[0].image_thumbnail" alt="author">
+                                    <div class="author-thumb images-campaign-thumb" v-if="campaign.owner != null">
+                                        <img :src="campaign.owner[0].image_thumbnail" :alt="campaign.name">
                                     </div>
                                         <a href="javascript:void(0)" class="h3 author-name">{{ campaign.title }}</a>
                                         <div class="country">#{{ campaign.hashtag }}</div>
@@ -107,5 +107,12 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+    .images-campaign {
+        height: 542px !important;
+    }
+
+    .images-campaign-thumb {
+        top: 163px !important;
+    }
 </style>

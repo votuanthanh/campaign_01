@@ -90,7 +90,7 @@
                         this.members = res
                     })
                     .catch(err => {
-                        //
+                        this.$router.push({ name: 'campaign.timeline', params: { id: this.$route.params.id }})
                     })
             },
             searchMembers: _.debounce(function (e) {

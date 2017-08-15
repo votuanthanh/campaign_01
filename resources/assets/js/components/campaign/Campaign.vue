@@ -13,6 +13,12 @@
     export default {
         created: function () {
             this.campaignDetail(this.$route.params.id)
+                .then(status => {
+                    //
+                })
+                .catch( err => {
+                    this.$router.push('/')
+                })
         },
         methods: {
             ...mapActions('campaign', [

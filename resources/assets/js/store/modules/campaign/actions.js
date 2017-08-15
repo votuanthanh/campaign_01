@@ -10,10 +10,15 @@ import * as types from './mutation-types';
 import { post, get, patch } from '../../../helpers/api'
 
 export const campaignDetail = ({ commit }, campaignId) => {
-    get(`campaign/${campaignId}`)
-        .then(res => {
-            commit(types.CAMPAIGN_DETAIL, res.data)
-        })
+    return new Promise((resolve, reject) => {
+        get(`campaign/${campaignId}`)
+            .then(res => {
+                commit(types.CAMPAIGN_DETAIL, res.data)
+            })
+            .catch(err => {
+                reject(err)
+            })
+    })
 };
 
 export const getlistPhotos = ({ commit }, campaignId) => {
