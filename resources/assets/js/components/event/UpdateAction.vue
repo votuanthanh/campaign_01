@@ -172,7 +172,7 @@
                             this.onClose()
                         })
                         .catch(err => {
-                            this.$Progress.finish()
+                            this.$Progress.fail()
                             noty({
                                 text: this.$i18n.t('messages.create_fail'),
                                 type: 'error',
