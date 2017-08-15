@@ -28,16 +28,10 @@ class GoalRepository extends BaseRepository implements GoalInterface
     {
         return $event
             ->goals()
-            ->join('donation_types', 'goals.donation_type_id', '=', 'donation_types.id')
             ->with([
-                'donations' => function ($query) {
-                    return $query->with('user')->latest();
-                },
+                'donations',
                 'donationType.quality',
                 'expenses.products',
-            ])
-            ->select('goals.id as goals_id', 'goals.*', 'donation_types.*')
-            ->orderBy('donation_types.name')
-            ->get();
+            ])->get();
     }
 }

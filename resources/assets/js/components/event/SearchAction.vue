@@ -48,8 +48,6 @@
                                     data-target="#update-header-photo">
                                     {{ $t('events.donation.donation_details') }}
                                 </router-link>
-                            </div>
-                            <div class="btn-group">
                                 <router-link
                                     tag="button"
                                     class="btn btn-primary btn-md-2 bg-breez"
@@ -59,23 +57,6 @@
                                     data-target="#update-header-photo">
                                     {{ $t('events.expenses.expense') }}
                                 </router-link>
-                            </div>
-                            <div class="more">
-                                <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
-                                <ul class="more-dropdown">
-                                    <li>
-                                        <a href="#">Edit Post</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Delete Post</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Turn Off Notifications</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Select as Featured</a>
-                                    </li>
-                                </ul>
                             </div>
                         </div>
                     </div>

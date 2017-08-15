@@ -1,5 +1,5 @@
 <template lang="html">
-    <div class="fade show" id="update-event" style="display: block">
+    <div class="fade show update-event" style="display: block">
         <div class="modal-dialog ui-block window-popup create-event">
             <div class="ui-block-title">
                 <h6 class="title">{{ $t('events.update_event') }}</h6>
@@ -59,34 +59,48 @@
                 </span>
 
                 <div class="wrap-donation">
-                    <p v-if='goals.length'>{{ $t('events.donation.old_donation') }}</p>
+                    <p v-if='goals.length'>{{ $t('events.donation.donate') }}</p>
                     <table class="table list-goal-update" v-if="goals.length">
                         <thead>
-                            <tr>
-                                <th>{{ $t('form.label.type') }}</th>
-                                <th>{{ $t('form.label.goal') }}</th>
-                                <th>{{ $t('form.label.quality') }}</th>
+                            <tr class="row">
+                                <th class="col-lg-5 col-md-5 col-sm-5 col-xs-5">{{ $t('form.label.type') }}</th>
+                                <th class="col-lg-3 col-md-3 col-sm-3 col-xs-3">{{ $t('form.label.goal') }}</th>
+                                <th class="col-lg-3 col-md-3 col-sm-3 col-xs-3">{{ $t('form.label.quality') }}</th>
+                                <th class="col-lg-1 col-md-1 col-sm-1 col-xs-1">{{ $t('form.delete') }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(goal, index) in goals">
-                                <td>{{ goal.donation_type.name }}</td>
-                                <td class="update-goal" v-if="dataUpdate.goalUpdates[index]">
-                                    <input
-                                        :name="'goal-' + index"
-                                        type="text"
-                                        v-model="dataUpdate.goalUpdates[index].goal"
-                                        v-validate="'required|numeric|min_value:0'">
+                            <tr v-for="(goal, index) in goals" class="row">
+                                <td class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                    <div class="multiselect__tags">
+                                        {{ goal.donation_type.name }}
+                                    </div>
+                                </td>
+
+                                <td
+                                    class="update-goal col-lg-3 col-md-3 col-sm-3 col-xs-3"
+                                    v-if="dataUpdate.goalUpdates[index]">
+                                        <input
+                                            :name="'goal-' + index"
+                                            type="text"
+                                            v-model="dataUpdate.goalUpdates[index].goal"
+                                            v-validate="'required|numeric|min_value:0'">
                                         <span v-show="errors.has('goal-' + index)" class="material-input text-danger">
                                             {{ errors.first('goal-' + index) }}
                                         </span>
                                 </td>
-                                <td>
-                                    {{ goal.donation_type.quality.name }}
+
+                                <td class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                    <div class="multiselect__tags">
+                                        {{ goal.donation_type.quality.name }}
+                                    </div>
+                                </td>
+
+                                <td class="col-lg-1 col-md-1 col-sm-1 col-xs-1 store-icon-delete">
                                     <a
                                         href="javascript:void(0)"
                                         class="remove-icon delete-old-goal"
-                                        @click="comfirmDelete(goal.goals_id)"
+                                        @click="comfirmDelete(goal.id)"
                                         v-if="!goal.donations.length">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                     </a>
@@ -94,21 +108,20 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p>
-                        {{ $t('form.title.add_donation') }}
-                        <i class="fa fa-plus-square icon-donation" aria-hidden="true" id="add-donation" @click="addDonation">
-                        </i>
-                    </p>
                     <donations
                         v-for="(donation, index) in donations"
                         :donation="donation"
                         :index="index"
                         :key="index"
-                        :visible="visible"
+                        :visible="false"
                         @add-instance-validate="addErrors"
                         @update-row-donation="updateGoal"
                         @delete-donation="deleteDonation(index)">
                     </donations>
+                    <p>
+                        <i class="fa fa-plus-square icon-donation" aria-hidden="true" id="add-donation" @click="addDonation">
+                        </i>
+                    </p>
                 </div>
 
                 <div class="form-group label-floating">
@@ -201,13 +214,10 @@
             zoom: config.zoom,
             maxFile: config.maxFileUpload,
             maxSizeFile: config.maxSizeFile,
-            visible: true,
             startDate: '',
             endDate: '',
             flag: true,
-            donations: [
-                { type : '', goal: '', quality: ''}
-            ],
+            donations: [],
             errorBags: {},
             dataUpdate : {
                 title: '',
@@ -245,7 +255,6 @@
             addDonation() {
                 let donation = { type : '', goal: '', quality: ''}
                 this.donations.push(donation)
-                this.visible = false
             },
 
             // filter danation before request to sever
@@ -267,13 +276,9 @@
             },
 
             deleteDonation(index) {
-                this.donations.length > 1 && this.donations.splice(index, 1)
+                this.donations.length && this.donations.splice(index, 1)
 
-                this.errorBags.length > 1 && this.errorBags.splice(index, 1)
-
-                if (this.donations.length === 1) {
-                    this.visible = true
-                }
+                this.errorBags.length && this.errorBags.splice(index, 1)
             },
 
             updateGoal(newValue) {
@@ -423,7 +428,7 @@
                         this.goals = res.data.goals
                         this.goals.forEach(goal => {
                             let donation = {
-                                id: goal.goals_id,
+                                id: goal.id,
                                 goal: goal.goal
                             }
                             this.dataUpdate.goalUpdates.push(donation)
@@ -496,7 +501,6 @@
 
 <style lang="scss">
     .update-event {
-        width: 80% !important;
         .wrap-donation{
             #add-donation {
                 &:hover {
@@ -504,13 +508,13 @@
                     cursor: pointer;
                 }
             }
-            .store-icon {
-                padding-left: 5px;
-                margin-bottom: 25px;
-            }
-            .icon-donation {
-                font-size: 1.5em !important;
-                padding-left: 5px;
+            .store-icon-delete {
+                padding-left: 10px;
+                margin-top: 13px;
+                .delete-old-goal {
+                    font-size: 1.5em !important;
+                    padding-left: 5px;
+                }
             }
             #delete-donation {
                 margin-top: 1em;
@@ -548,20 +552,28 @@
         }
     }
     .list-goal-update {
-        border-left: 1px solid #eceeef;
-        border-right: 1px solid #eceeef;
+        margin-bottom: 0;
+        thead {
+            tr {
+                padding: 0 13px;
+            }
+        }
         tr {
-            border-bottom: 1px solid #eceeef;
-            border-top: 0px;
+            margin-bottom: 1rem;
+            border: 0px;
+            td {
+                padding: 0px 0.75rem;
+                border: 0px;
+            }
             .update-goal {
                 width: 33.33%;
-                padding: 0px 12px;
+                padding: 0px 15px;
                 input {
-                    padding: 12px;
+                    padding: 0.3rem 1.1rem .4rem;
+                    height: 53px;
                 }
             }
             .delete-old-goal {
-                float: right;
                 font-size: 18px;
             }
         }
@@ -600,6 +612,12 @@
                     color: #0085ff;
                 }
             }
+        }
+    }
+    .confirm-delete {
+        text-align: center;
+        a {
+            margin: 0 20px;
         }
     }
 </style>

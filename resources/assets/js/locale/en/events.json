@@ -37,8 +37,7 @@
         "yes": "Yes",
         "no": "No",
         "manage": "Donation management",
-        "list": "Confirmed donation",
-        "old_donation": "Old donation"
+        "list": "Confirmed donation"
     },
     "expenses": {
         "expense": "Expense",

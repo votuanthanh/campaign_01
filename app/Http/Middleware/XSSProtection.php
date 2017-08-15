@@ -13,9 +13,9 @@ class XSSProtection
         }
 
         $input = $request->all();
-        array_walk_recursive($input, function($item, $key) {
-            if (!strtolower($key) == 'description') {
-                $input[$key] = htmlspecialchars($item);
+        array_walk_recursive($input, function(&$value, $key) {
+            if (strtolower($key) != 'description' && strtolower($key) != 'reason') {
+                $value = htmlspecialchars($value);
             }
         });
         $request->merge($input);
