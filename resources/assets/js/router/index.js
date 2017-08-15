@@ -44,6 +44,7 @@ import UpdateExpense from '../components/event/expense/UpdateExpense.vue'
 import CreateExpenseBuy from '../components/event/expense/CreateExpenseBuy.vue'
 import ExpenseStatistic from '../components/event/expense/Statistic.vue'
 import UpdateCampaign from '../components/campaign/owner/UpdateCampaign.vue'
+import UpdateEvent from '../components/event/create/UpdateEvent.vue'
 
 const router = [
     ...authGuard([{
@@ -53,6 +54,7 @@ const router = [
             { path: '/campaign', component: Campaign, name: 'campaign.index' },
             { path: '/campaign/create', component: AddCampaign, name: 'campaign.create' },
             { path: '/event/create/:campaign_id', component: CreateEvent, name: 'event.create' },
+            { path: '/event/:id/update', component: UpdateEvent, name: 'event.update' },
             {
                 path: '/settings',
                 component: User,

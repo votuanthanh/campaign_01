@@ -5,8 +5,7 @@
         <div class="modal fade show wrap-create-action" id="create-photo-album" style="display: block;">
             <div class="modal-dialog ui-block window-popup create-photo-album modal-create-action">
                 <div class="ui-block-title">
-                    <h6 class="title">{{ $t('events.expense.update_expense') }}</h6>
-                    {{ newData }}
+                    <h6 class="title">{{ $t('events.expenses.update_expense') }}</h6>
                 </div>
                 <div class="ui-block-content create-expense">
                     <form>

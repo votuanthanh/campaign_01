@@ -18,7 +18,7 @@
                                 <img :src="event.user.image_thumbnail" alt="author">
                                 <div class="author-date">
                                     <router-link :to="{ name: 'user.timeline', params: { id: event.user.id } }">
-                                        <a class="h6 post__author-name fn" href="javascript.void(0)">{{ event.user.name }}</a>
+                                        <a class="h6 post__author-name fn" href="javascript:void(0)">{{ event.user.name }}</a>
                                     </router-link>
                                     <div class="post__date">
                                         <time class="published" datetime="2017-03-24T18:18">
@@ -26,20 +26,13 @@
                                         </time>
                                     </div>
                                 </div>
-                                <div class="more">
+                                <div class="more" v-if="isManager">
                                     <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                                     <ul class="more-dropdown">
                                         <li>
-                                            <a href="#">{{ $t('events.edit-event') }}</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" @click="show()">{{ $t('events.manage_expense') }}</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Turn Off Notifications</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Select as Featured</a>
+                                            <router-link :to="{ name: 'event.update', params: { id: event.id } }">
+                                                {{ $t('events.edit-event') }}
+                                            </router-link>
                                         </li>
                                     </ul>
                                 </div>
@@ -95,6 +88,7 @@
     import ShowText from '../libs/ShowText.vue'
     import Comment from '../comment/Comment.vue'
     import Like from '../user/timeline/Like.vue'
+    import { get } from '../../helpers/api'
 
     export default {
         data :() => ({
@@ -102,7 +96,8 @@
             isLiked: null,
             numberLike: 0,
             model: 'event',
-            showExpense: false
+            showExpense: false,
+            isManager: false
         }),
 
         computed : {
@@ -143,6 +138,13 @@
             show() {
                 this.showExpense = true
             }
+        },
+
+        created() {
+            get(`event/check-permission/${this.$route.params.event_id}`)
+                .then(res => {
+                    this.isManager = res.data
+                })
         },
 
         components: {
