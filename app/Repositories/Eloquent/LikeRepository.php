@@ -6,6 +6,7 @@ use App\Models\Like;
 use App\Models\Activity;
 use App\Exceptions\Api\UnknowException;
 use App\Repositories\Contracts\LikeInterface;
+use Illuminate\Support\Facades\Event;
 
 class LikeRepository extends BaseRepository implements LikeInterface
 {
@@ -24,9 +25,13 @@ class LikeRepository extends BaseRepository implements LikeInterface
             $like = $model->likes()->create([
                 'user_id' => $this->user->id
             ]);
-            $like->activities()->create([
-                'user_id' => $this->user->id,
-                'name' => Activity::CREATE,
+
+            Event::fire('add.activity', [
+                [
+                    'model' => $like,
+                    'user_id' => $this->user->id,
+                    'action' => Activity::CREATE
+                ]
             ]);
 
             return $like->setAttribute('user', $this->user);

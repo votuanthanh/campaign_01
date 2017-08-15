@@ -7,6 +7,8 @@ use League\Glide\ServerFactory;
 use League\Glide\Responses\LaravelResponseFactory;
 use Storage;
 use League\Glide\Urls\UrlBuilderFactory;
+use App;
+use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,7 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Localization Carbon
+        Carbon::setLocale(App::getLocale());
     }
 
     /**

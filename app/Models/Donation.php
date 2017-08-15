@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class Donation extends BaseModel
 {
     use SoftDeletes;
 
-     // Donation's status
+    // Donation's status
     const ACCEPT = 1;
     const NOT_ACCEPT = 0;
 
@@ -28,6 +29,7 @@ class Donation extends BaseModel
     ];
 
     protected $dates = ['deleted_at'];
+
     protected $appends = ['donated_at'];
 
     public function user()
@@ -52,9 +54,6 @@ class Donation extends BaseModel
 
     public function getDonatedAtAttribute()
     {
-        $locale = \App::getLocale();
-        \Carbon\Carbon::setlocale($locale);
-
-        return \Carbon\Carbon::parse($this->created_at)->diffForHumans();
+        return Carbon::parse($this->created_at)->diffForHumans();
     }
 }
