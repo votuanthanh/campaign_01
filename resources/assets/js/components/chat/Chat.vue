@@ -3,7 +3,6 @@
         <div class="ui-block popup-chat col-md-4 col-md-offset-4"
             :style="'right:' + marginRight + 'px !important'">
             <div class="ui-block-title">
-                <span class="icon-status online"></span>
                 <h6 class="title">{{ receiveName }}</h6>
                 <div class="more">
                     <svg class="olymp-three-dots-icon">
@@ -258,7 +257,7 @@ export default {
             this.content += "<img src='/images/icon-chat" + number + ".png' alt='icon'>"
         },
         markRead() {
-            if (this.messages[this.messages.length - 1].userId != this.user.id) {
+            if (this.messages.length && this.messages[this.messages.length - 1].userId != this.user.id) {
                 this.$socket.emit('markRead', {
                     receive: this.receiveUser,
                     send: this.user.id
