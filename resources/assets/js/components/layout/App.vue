@@ -47,13 +47,28 @@ export default {
         PopupChat
     },
     mounted() {
+        this.$Progress.finish()
         $.material.init()
     },
+    created() {
+        this.$Progress.start()
+        this.$router.beforeEach((to, from, next) => {
+            if (to.meta.progress !== undefined) {
+                let meta = to.meta.progress
+                this.$Progress.parseMeta(meta)
+            }
+            this.$Progress.start()
+            next()
+        })
+        this.$router.afterEach((to, from) => {
+            this.$Progress.finish()
+        })
+    }
 }
 </script>
 
 <style lang="scss">
-    .middle-container {
-        min-height: 1150px;
-    }
+.middle-container {
+    min-height: 1150px;
+}
 </style>
