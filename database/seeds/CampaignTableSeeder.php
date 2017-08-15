@@ -30,7 +30,7 @@ class CampaignTableSeeder extends Seeder
         \DB::table('campaign_user')->truncate();
         \DB::table('events')->truncate();
 
-        factory(Campaign::class, 10)->create()->each(function ($campaign) {
+        factory(Campaign::class, 5)->create()->each(function ($campaign) {
             $range = rand(2, 5);
 
             // set role when join in campaign
@@ -140,7 +140,7 @@ class CampaignTableSeeder extends Seeder
 
     public function createActionOfEvent($event, $ownerId)
     {
-        $actions = factory(Action::class, rand(1, 5))->make(['user_id' =>  $ownerId]);
+        $actions = factory(Action::class, rand(1, 5))->make(['user_id' => $ownerId]);
 
         return $event->actions()->saveMany($actions);
     }
@@ -179,7 +179,7 @@ class CampaignTableSeeder extends Seeder
             ->map(function ($userId) {
                 return new Activity([
                     'user_id' => $userId,
-                    'name' => Activity::JOIN
+                    'name' => Activity::JOIN,
                 ]);
             });
     }

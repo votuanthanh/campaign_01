@@ -26,7 +26,8 @@
         "reason": "Reason",
         "name_product": "Name product",
         "quantity": "Quantity",
-        "quality": "Quality"
+        "quality": "Quality",
+        "type": "Type"
     },
     "title": {
         "login": "Login to your Account",
@@ -36,7 +37,9 @@
         "change_password": "Change your password",
         "upload_images": "Upload images",
         "reset_password": "Reset password to your account",
-        "insert_images": "Insert Images"
+        "insert_images": "Insert Images",
+        "old_image_event": "Old image event",
+        "add_new_images": "Add new image"
     },
     "button": {
         "login": "Login",

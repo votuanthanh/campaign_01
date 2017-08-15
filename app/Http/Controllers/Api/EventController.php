@@ -14,6 +14,7 @@ use App\Repositories\Contracts\EventInterface;
 use App\Repositories\Contracts\QualityInterface;
 use App\Repositories\Contracts\CampaignInterface;
 use App\Repositories\Contracts\ActionInterface;
+use App\Repositories\Contracts\GoalInterface;
 
 class EventController extends ApiController
 {
@@ -22,13 +23,15 @@ class EventController extends ApiController
     protected $campaignRepository;
     protected $donationTypeRepository;
     protected $actionRepository;
+    protected $goalRepository;
 
     public function __construct(
         EventInterface $eventRepository,
         QualityInterface $qualityRepository,
         CampaignInterface $campaignRepository,
         DonationTypeInterface $donationTypeRepository,
-        ActionInterface $actionRepository
+        ActionInterface $actionRepository,
+        GoalInterface $goalRepository
     ) {
         parent::__construct();
         $this->qualityRepository = $qualityRepository;
@@ -36,6 +39,7 @@ class EventController extends ApiController
         $this->eventRepository = $eventRepository;
         $this->donationTypeRepository = $donationTypeRepository;
         $this->actionRepository = $actionRepository;
+        $this->goalRepository = $goalRepository;
     }
 
     public function create(EventRequest $request)
@@ -62,28 +66,30 @@ class EventController extends ApiController
             'description',
             'longitude',
             'latitude',
-            'mediaAdds',
+            'settings',
+            'address',
+            'files',
             'mediaDels',
             'goalDels',
             'goalUpdates',
             'goalAdds'
         );
-        $event = $this->eventRepository->getEventExist($id);
+        $event = $this->eventRepository->findOrFail($id);
 
         if ($this->user->cannot('manage', $event)) {
             throw new UnknowException('Permission error: User can not edit this event.');
         }
 
         return $this->doAction(function () use ($event, $data) {
-            if (!empty($data['goalAdds'])) {
-                $data['goalAdd'] = $this->qualityRepository->getOrCreate($data['goalAdds']);
+            if (count($data['goalAdds'])) {
+                $data['goalAdds'] = $this->qualityRepository->getOrCreate($data['goalAdds']);
             }
 
-            if (!empty($data['goalUpdates'])) {
-                $data['goalUpdate'] = $this->qualityRepository->getOrCreate($data['goalUpdates']);
+            if (count($data['goalUpdates'])) {
+                $this->goalRepository->updateManyRow($data['goalUpdates']);
             }
 
-            $data = array_except($data, ['goalAdds']);
+            $data = array_except($data, ['goalUpdates']);
             $this->compacts['event'] = $this->eventRepository->update($event, $data);
         });
     }
@@ -132,6 +138,7 @@ class EventController extends ApiController
                 ->with([
                     'user',
                     'media',
+                    'settings',
                 ])
                 ->get();
             $this->compacts['goals'] = $event

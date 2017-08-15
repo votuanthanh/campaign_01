@@ -121,8 +121,6 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::resource('donation', 'DonationController', ['only' => ['store', 'update', 'destroy']]);
         });
 
-        Route::resource('expense', 'ExpenseController', ['only' => ['store', 'update', 'destroy']]);
-
         Route::post('expense-create-buy', 'ExpenseController@createBy')->name('expense-create-buy');
         Route::patch('expense-buy/{id}', 'ExpenseController@updateExpenseBuy')->name('expense-update-buy');
         Route::get('event/{id}/statistic', 'ExpenseController@statistic')->name('expense-statistic');
@@ -130,7 +128,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::get('get-statistic-data', 'ExpenseController@getStatisticData')->name('get-statistic-data');
         Route::resource('expense', 'ExpenseController', ['only' => ['index', 'store', 'update', 'destroy']]);
         Route::resource('product', 'ProductController', ['only' => ['index']]);
-        Route::resource('goal', 'GoalController', ['only' => ['index']]);
+        Route::resource('goal', 'GoalController', ['only' => ['index', 'destroy']]);
 
         Route::group(['prefix' => 'file', 'as' => 'file'], function () {
             Route::post('upload', 'UploadController@upload')->name('upload');

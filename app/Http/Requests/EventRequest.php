@@ -27,7 +27,7 @@ class EventRequest extends AbstractRequest
                 return [
                     'title' => 'required|string',
                     'description' => 'required|string',
-                    'mediaAdds.*' => 'image|max:500',
+                    'files.*' => 'string',
                     'longitude' => 'numeric|min:-180|max:180',
                     'latitude' => 'numeric|min:-90|max:90',
                 ];

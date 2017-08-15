@@ -87,51 +87,39 @@ class EventRepository extends BaseRepository implements EventInterface
     {
         $goals = $event->goals;
 
-        if (isset($inputs['goalAdd'])) {
-            $event->goals()->createMany($inputs['goalAdd']);
+        if (count($inputs['goalAdds'])) {
+            $event->goals()->createMany($inputs['goalAdds']);
         }
 
-        if (isset($inputs['goalUpdate']) && $goals) {
-            foreach ($inputs['goalUpdate'] as $key => $value) {
-                $goal = $goals->find($key);
-
-                if (!$goal) {
-                    throw new UnknowException('Error: Goal is not found.');
-                }
-
-                $goal->update($value);
-            }
+        if (count($inputs['mediaDels'])) {
+            $media = $event->media()->whereIn('media.id', $inputs['mediaDels']);
+            $fileDelete = $media->pluck('url_file');
+            $media->forceDelete();
         }
 
-        if (!empty($inputs['mediaDels'])) {
-            foreach ($inputs['mediaDels'] as $mediaId) {
-                $media = $event->media->find($mediaId);
-
-                if (!$media) {
-                    throw new UnknowException('Error: Image is not found');
-                }
-
-                $this->destroyFile($media->url_file, 'image');
-                $media->forceDelete();
-            }
+        if (count($inputs['files'])) {
+            $dataMedias = $this->createDataMedias($inputs['files']);
+            $event->media()->createMany($dataMedias);
         }
 
-        if (!empty($inputs['mediaAdds'])) {
-            foreach ($inputs['mediaAdds'] as $mediaId) {
-                $urlFile = $this->uploadFile($mediaId, 'event');
-                $event->media()->create([
-                    'url_file' => $urlFile,
-                    'type' => Media::IMAGE,
-                ]);
-            }
+        if (count($inputs['settings'])) {
+            $event->settings()->forceDelete();
+            $event->settings()->createMany($inputs['settings']);
         }
 
-        if (!empty($inputs['goalDels'])) {
-            $event->goals()->delete($inputs['goalDels']);
-        }
-
-        $inputs = array_except($inputs, ['mediaAdds', 'mediaDels']);
+        $inputs = array_except($inputs, [
+            'files',
+            'mediaDels',
+            'goalAdds',
+            'settings',
+        ]);
         parent::update($event->id, $inputs);
+
+        if (!empty($fileDelete)) {
+            foreach ($fileDelete as $value) {
+                $this->destroyFile($value, 'image');
+            }
+        }
 
         return true;
     }

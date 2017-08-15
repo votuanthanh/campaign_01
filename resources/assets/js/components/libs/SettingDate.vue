@@ -49,7 +49,11 @@ export default {
     props: {
         flag: Boolean,
         startDay: String,
-        endDay: String
+        endDay: String,
+        isUpdate: {
+            type : Boolean,
+            default: false
+        }
     },
     watch: {
         start() {
@@ -75,7 +79,7 @@ export default {
                 this.messageEndDay = ''
             }
 
-            if (window.moment(start).isBefore(now)) {
+            if (window.moment(start).isBefore(now) && !this.isUpdate) {
                 this.messageStartDay = this.$i18n.t('messages.start_day')
                 flag = false
             } else {
