@@ -44,7 +44,8 @@
                 'campaign'
             ]),
             ...mapState('auth', [
-                'checkAdmin'
+                'checkAdmin',
+                'user'
             ]),
             ...mapGetters('campaign', [
                 'checkPermission',

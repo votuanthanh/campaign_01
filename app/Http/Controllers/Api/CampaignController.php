@@ -277,8 +277,8 @@ class CampaignController extends ApiController
         $campaign = $this->campaignRepository->findOrFail($campaignId);
         $roleIdBlocked = $this->roleRepository->findRoleOrFail(Role::ROLE_BLOCKED, Role::TYPE_CAMPAIGN)->id;
 
-        if ($this->user->cannot('view', $campaign)) {
-            throw new UnknowException('You do not have authorize to see this campaign', UNAUTHORIZED);
+        if ($this->user->cannot('permission', $campaign)) {
+            throw new UnknowException('You do not have authorize to manage this campaign', UNAUTHORIZED);
         }
 
         return $this->getData(function () use ($campaign, $status, $roleIdBlocked) {

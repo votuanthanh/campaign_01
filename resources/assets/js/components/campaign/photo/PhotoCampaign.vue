@@ -11,13 +11,13 @@
                             <div class="photo-album-item" data-mh="album-item">
                                 <div class="photo-item" v-if="photo.media.length > 0">
 
-                                    <a href="javascript:void(0)">
+                                    <a href="javascript:void(0)" @click="detailAction(photo)">
                                         <img :src="photo.media[0].image_small" alt="photo">
                                     </a>
 
                                     <div class="overlay overlay-dark"></div>
-                                    <a href="javascript:void(0)" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
-                                    <a href="javascript:void(0)" class="post-add-icon">
+                                    <a href="javascript:void(0)" @click="detailAction(photo)" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
+                                    <a href="javascript:void(0)" class="post-add-icon" @click="detailAction(photo)">
                                         <svg class="olymp-heart-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use></svg>
                                         <span >{{ photo.likes.length }}</span>
                                     </a>
@@ -25,7 +25,7 @@
                                         data-toggle="modal"
                                         data-target="#open-photo-popup-v2"
                                         class="full-block"
-                                        @click="detailAction(photo)">
+                                        @click="detailAction(photo, user)">
                                     </a>
                                 </div>
 
@@ -192,7 +192,6 @@ export default {
                     parallax: true,
                     onSlideChangeStart: function (swiper) {
                         var sliderThumbs = $t.siblings('.slider-slides');
-
                         if (sliderThumbs.length) {
                             sliderThumbs.find('.slide-active').removeClass('slide-active');
                             var realIndex = swiper.slides.eq(swiper.activeIndex).attr('data-swiper-slide-index');
@@ -200,7 +199,6 @@ export default {
                         }
                     }
                 });
-
                 initIterator++;
             });
         },
@@ -213,8 +211,9 @@ export default {
 
             this.loadMorePhotos(data)
         },
-        detailAction(data) {
+        detailAction(data, user) {
             this.showAction = true
+            data.user = user
             this.dataAction = data
         }
     },

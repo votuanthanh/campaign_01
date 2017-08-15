@@ -135,4 +135,21 @@ class CampaignPolicy extends BasePolicy
 
         return $campaign->users->pluck('id')->contains($user->id);
     }
+
+    /**
+     * Determine whether the user can manage the campaign. (update/delete)
+     *
+     * @param  \App\User  $user
+     * @param  \App\Campaign  $campaign
+     * @return mixed
+     */
+    public function permission(User $user, Campaign $campaign)
+    {
+        if ($user->id == $campaign->owner()->first()->id ||
+            $campaign->moderators()->pluck('id')->contains($user->id)) {
+            return true;
+        }
+
+        return false;
+    }
 }
