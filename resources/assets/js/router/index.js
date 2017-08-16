@@ -5,6 +5,8 @@ import store from '../store'
 import { get } from '../helpers/api'
 import { getUser } from './router'
 // Register Components to router
+import Index from '../components/Index.vue'
+import NotFound from '../components/errors/404.vue'
 import Campaign from '../components/campaign/Campaign.vue'
 import TimelineCampaign from '../components/campaign/TimelineCampaign.vue'
 import PhotoCampaign from '../components/campaign/photo/PhotoCampaign.vue'
@@ -47,11 +49,10 @@ import UpdateCampaign from '../components/campaign/owner/UpdateCampaign.vue'
 import UpdateEvent from '../components/event/create/UpdateEvent.vue'
 
 const router = [
-    ...authGuard([{
-        path: '/',
-        component: App,
-        children: [
-            { path: '/campaign', component: Campaign, name: 'campaign.index' },
+    // anyone can visit here
+    { path: '/', component: Index, name: 'index' },
+    // only user can visit here
+    ...authGuard([
             { path: '/campaign/create', component: AddCampaign, name: 'campaign.create' },
             { path: '/event/create/:campaign_id', component: CreateEvent, name: 'event.create' },
             { path: '/event/:id/update', component: UpdateEvent, name: 'event.update' },
@@ -66,7 +67,7 @@ const router = [
                 ]
             },
             {
-                path: 'user/:id',
+                path: '/user/:id',
                 component: MasterUser,
                 name: 'user',
                 children: [
@@ -79,7 +80,7 @@ const router = [
                 ]
             },
             {
-                path: 'campaign/:id',
+                path: '/campaign/:id',
                 component: Campaign,
                 children: [
                     { path: 'timeline', component: TimelineCampaign, name: 'campaign.timeline' },
@@ -99,7 +100,7 @@ const router = [
                 ]
             },
             {
-                path: 'event/:event_id',
+                path: '/event/:event_id',
                 component: HomeEvent,
                 children: [
                     { path: 'detail', component: ListAction, name: 'event.index' },
@@ -126,9 +127,8 @@ const router = [
                     },
                 ]
             }
-        ]
-    }]),
-
+        ]),
+    // only guest can visit here
     ...guestGuard([
         { path: '/register', component: Auth, name: 'register' },
         { path: '/login', component: Auth, name: 'login' },
@@ -140,7 +140,8 @@ const router = [
                 { path: 'reset/:token', component: PasswordVerify }
             ]
         },
-    ])
+    ]),
+    { path: '*', component: NotFound },
 ]
 
 Vue.use(VueRouter)

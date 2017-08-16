@@ -92,12 +92,13 @@ import Register from './Register.vue'
 import { mapState } from 'vuex'
 
 export default {
+    layout: 'default',
     data: () => ({
         user: {
             email: '',
             password: ''
         },
-        loginTab: false,
+        loginTab: true,
         registerTab: false,
     }),
     computed: {
@@ -125,8 +126,10 @@ export default {
             const tab = to.path == '/register' ? 'home' : 'profile'
             if (tab == 'profile') {
                 vm.loginTab = true
+                vm.registerTab = false
             } else {
                 vm.registerTab = true
+                vm.loginTab = false
             }
         })
     }

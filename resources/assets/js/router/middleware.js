@@ -20,7 +20,14 @@ export default function router(routes) {
     })
 
     router.beforeEach((to, from, next) => {
+        const components = router.getMatchedComponents(to)
         const access_token = localStorage.getItem('access_token')
+
+        if (components.length) {
+            setTimeout(() => {
+                router.app.setLayout(components[components.length - 1].layout || '')
+            }, 0);
+        }
 
         //check access token exists within Api local storage
         if (!store.state.auth.user.id && access_token) {

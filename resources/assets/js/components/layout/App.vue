@@ -16,8 +16,6 @@
         </div>
 
         <popup-chat></popup-chat>
-
-        <vue-progress-bar></vue-progress-bar>
     </div>
 </template>
 
@@ -47,23 +45,8 @@ export default {
         PopupChat
     },
     mounted() {
-        this.$Progress.finish()
         $.material.init()
     },
-    created() {
-        this.$Progress.start()
-        this.$router.beforeEach((to, from, next) => {
-            if (to.meta.progress !== undefined) {
-                let meta = to.meta.progress
-                this.$Progress.parseMeta(meta)
-            }
-            this.$Progress.start()
-            next()
-        })
-        this.$router.afterEach((to, from) => {
-            this.$Progress.finish()
-        })
-    }
 }
 </script>
 

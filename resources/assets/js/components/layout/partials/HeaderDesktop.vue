@@ -417,8 +417,10 @@ export default {
         countReadMessage: 0
     }),
     created () {
-        this.getMessagesNotification()
-        this.getListRequest()
+        if (this.authenticated) {
+            this.getMessagesNotification()
+            this.getListRequest()
+        }
     },
     computed: {
         ...mapState('auth', {
