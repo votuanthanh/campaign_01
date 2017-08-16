@@ -49,5 +49,6 @@
     "comfirm_delete": "Are you sure you want to delete this?",
     "read_at": "Seen at ",
     "error" : "Error",
-    "not_permission": "You are not permission"
+    "not_permission": "You are not permission",
+    "delete_photo": "Are you sure you want to cancel this photo?"
 }
