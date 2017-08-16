@@ -119,39 +119,21 @@
                         @delete-donation="deleteDonation(index)">
                     </donations>
                     <p>
+                        {{ $t('form.title.add_donation') }}
                         <i class="fa fa-plus-square icon-donation" aria-hidden="true" id="add-donation" @click="addDonation">
                         </i>
                     </p>
                 </div>
 
                 <div class="form-group label-floating">
-                    <p>{{ $t('form.title.old_image_event') }}</p>
-                    <div class="old_images">
-                        <div class="list-image">
-                            <div v-for="(image, index) in this.event.media">
-                                <img :src="image.image_medium">
-                                <a href="javascript:void(0)" @click="appendIdsMedia($event, image.id)" class="remove-img close icon-close">
-                                    <svg class="olymp-close-icon">
-                                        <use xlink:href="/frontend/icons/icons.svg#olymp-close-icon"></use>
-                                    </svg>
-                                </a>
-                                <i class="recovery-img fa fa-reply-all" aria-hidden="true" @click="recoverIdsMedia($event, image.id)"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <p>{{ $t('form.title.add_new_images') }}</p>
                     <div :class="{ 'upload-file': true, 'has-error-upload': hasErrorFiles }">
+                        <p>{{ $t('form.title.upload_images') }}</p>
                         <dropzone
                             id="myVueDropzoneId"
                             ref="myVueDropzone"
                             url="/api/file/upload"
-                            acceptedFileTypes='image/*'
-                            :autoProcessQueue="false"
-                            :maxNumberOfFiles="maxFile"
-                            :maxFileSizeInMB='maxSizeFile'
-                            :headers = "{
-                                Authorization: accessToken
-                            }"
+                            :dropzone-options="dropzoneOptions"
+                            :use-custom-dropzone-options="true"
                             @vdropzone-success="showSuccess"
                             @vdropzone-removed-file="deleteFile"
                             @vdropzone-queue-complete="queueComplete"
@@ -209,39 +191,53 @@
     })
 
     export default {
-        data: () => ({
-            showMap: false,
-            zoom: config.zoom,
-            maxFile: config.maxFileUpload,
-            maxSizeFile: config.maxSizeFile,
-            startDate: '',
-            endDate: '',
-            flag: true,
-            donations: [],
-            errorBags: {},
-            dataUpdate : {
-                title: '',
-                description: '',
-                latitude: null,
-                longitude: null,
-                address: ' ',
-                settings: [],
-                files: [],
-                mediaDels: [],
-                goalUpdates: [],
-                goalAdds: [],
-            },
-            hasErrorFiles: false,
-            uploadVisible: false,
-            imageInsert: '',
-            accessToken: `Bearer ${localStorage.getItem('access_token')}`,
-            //add when update event
-            event: {},
-            goals: [],
-            showSettings: false,
-            goalDelete: null,
-            showDeleteGoal: false
-        }),
+        data() {
+            return {
+                showMap: false,
+                zoom: config.zoom,
+                startDate: '',
+                endDate: '',
+                flag: true,
+                donations: [],
+                errorBags: {},
+                dataUpdate : {
+                    title: '',
+                    description: '',
+                    latitude: null,
+                    longitude: null,
+                    address: ' ',
+                    settings: [],
+                    files: [],
+                    mediaDels: [],
+                    goalUpdates: [],
+                    goalAdds: [],
+                },
+                hasErrorFiles: false,
+                uploadVisible: false,
+                imageInsert: '',
+                accessToken: `Bearer ${localStorage.getItem('access_token')}`,
+                //add when update event
+                event: {},
+                goals: [],
+                showSettings: false,
+                goalDelete: null,
+                showDeleteGoal: false,
+                mockingFile: true,
+                dropzoneOptions: {
+                    autoProcessQueue: false,
+                    maxNumberOfFiles: config.maxFileUpload,
+                    maxFileSizeInMB: config.maxSizeFile,
+                    acceptedFileTypes: 'image/*',
+                    showRemoveLink: true,
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`
+                    },
+                    language: {
+                        dictRemoveFileConfirmation: this.$i18n.t('messages.delete_photo')
+                    }
+                },
+            }
+        },
         mixins: [uploadedImage, searchMap],
         methods: {
             addErrors(index, value) {
@@ -312,13 +308,14 @@
             },
 
             createEvent() {
-                this.hasErrorFiles = this.$refs.myVueDropzone.getRejectedFiles().length
+                this.checkRejectedFiles()
                 this.$validator.validateAll().then((result) => {
                     if (!this.flag || (Object.keys(this.errorBags).length > 1 && this.hasErrorDonation())) {
                         return
                     }
 
                     if (!this.hasErrorFiles) {
+                        this.mockingFile = false
                         this.$refs.myVueDropzone.processQueue()
 
                         if (!this.$refs.myVueDropzone.getUploadingFiles().length) {
@@ -341,40 +338,42 @@
             },
 
             deleteFile(file, error, xhr) {
-                this.hasErrorFiles = this.$refs.myVueDropzone.getRejectedFiles().length
-            },
+                this.checkRejectedFiles();
 
-            queueComplete(file, xhr, formData) {
-                this.hasErrorFiles = this.$refs.myVueDropzone.getRejectedFiles().length
-
-                if (!this.hasErrorFiles) {
-                    this.getDonation()
-                    this.addSettings()
-                    patch(`event/update/${this.$route.params.id}`, this.dataUpdate)
-                        .then(res => {
-                            noty({
-                                text: this.$i18n.t('messages.update_success'),
-                                force: false,
-                                container: false,
-                                type: 'success'
-                            })
-                            this.$router.push({ name: 'event.index', params: { event_id: this.$route.params.id }})
-                        })
-                        .catch(err => {
-                            noty({
-                                text: this.$i18n.t('messages.update_fail'),
-                                type: 'error',
-                                force: false,
-                                container: false
-                            })
-                        })
+                if (typeof file.id === 'number') {
+                    this.dataUpdate.mediaDels.push(file.id)
+                    this.$refs.myVueDropzone.dropzone.options.maxFiles++
                 }
             },
 
-            fileAdded() {
-                this.hasErrorFiles = this.$refs.myVueDropzone.getRejectedFiles().length
+            queueComplete(status) {
+                if (!this.mockingFile && !this.hasErrorFiles) {
+                    this.getDonation()
+                    this.addSettings()
+                    patch(`event/update/${this.$route.params.id}`, this.dataUpdate)
+                    .then(res => {
+                        noty({
+                            text: this.$i18n.t('messages.update_success'),
+                            force: false,
+                            container: false,
+                            type: 'success'
+                        })
+                        this.$router.push({ name: 'event.index', params: { event_id: this.$route.params.id }})
+                    })
+                    .catch(err => {
+                        noty({
+                            text: this.$i18n.t('messages.update_fail'),
+                            type: 'error',
+                            force: false,
+                            container: false
+                        })
+                    })
+                }
             },
 
+            fileAdded(file) {
+                this.checkRejectedFiles()
+            },
 
             //add when update
             getStartDateOfSetting(date) {
@@ -387,20 +386,6 @@
                 return this.endDate = date.settings.filter(setting => {
                     return setting.key == window.Laravel.settings.events.end_day
                 })[0].value
-            },
-
-            appendIdsMedia(event, id) {
-                this.dataUpdate.mediaDels.push(id)
-                $(event.currentTarget).css('display', 'none')
-                $(event.currentTarget).siblings('.recovery-img').css('display', 'block')
-            },
-
-            recoverIdsMedia(event, id) {
-                this.dataUpdate.mediaDels = this.dataUpdate.mediaDels.filter(function(item) {
-                    return item !== id
-                })
-                $(event.currentTarget).css('display', 'none')
-                $(event.currentTarget).siblings('.remove-img').css('display', 'block')
             },
 
             setDataUpdate() {
@@ -469,6 +454,44 @@
             cancelDeleteGoal() {
                 this.goalDelete = null
                 this.showDeleteGoal = false
+            },
+
+            // show images that have already from server
+            initImageDropzone() {
+                const dropzone = this.$refs.myVueDropzone.dropzone
+                const { thumbnailHeight, thumbnailWidth, thumbnailMethod } = dropzone.options
+
+                for (let media of this.event.media) {
+                    // mocking file images to emit events so that add file dropzone area
+                    let mockFile = { id: media.id, name: media.image_default.substring(media.image_default.lastIndexOf('/') + 1) };
+                    // image url that request to server
+                    let imageUrl = `${media.image_default}?h=${thumbnailHeight}&w=${thumbnailWidth}&fit=max`
+
+                    // Request to get size image
+                    const obj = new XMLHttpRequest();
+                    obj.open('HEAD', media.image_default);
+
+                    obj.onreadystatechange = function() {
+                        // ReadyState is 4 that means processing finished and response ready
+                        if ( obj.readyState == 4 ) {
+                            if ( obj.status == 200 ) {
+                                mockFile['size'] = obj.getResponseHeader('Content-Length')
+                                dropzone.emit("addedfile", mockFile)
+                                dropzone.emit("thumbnail", mockFile, imageUrl)
+                                dropzone.files.push(mockFile)
+                                dropzone.emit("complete", mockFile)
+                                const existingFileCount = 1; // The number of files already uploaded
+                                dropzone.options.maxFiles = dropzone.options.maxFiles - existingFileCount;
+                            }
+                        }
+                    };
+
+                    obj.send(null);
+                }
+            },
+
+            checkRejectedFiles() {
+                this.hasErrorFiles = this.$refs.myVueDropzone.getRejectedFiles().filter(file => !file.id).length
             }
         },
 
@@ -486,6 +509,7 @@
                     this.setDataUpdate()
                     this.showSettings = true
                     this.showMap = true
+                    this.initImageDropzone()
                 })
             this.callApiGetDataGoal()
 
