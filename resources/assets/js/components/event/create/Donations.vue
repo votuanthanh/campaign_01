@@ -2,21 +2,6 @@
 <div>
     <div class="row donation">
         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-            <div class="form-group label-floating is-focused" :class="{ 'has-danger': this.errors.has('goal') }">
-                <label class="control-label">{{ $t('form.label.goal') }}</label>
-                <input class="form-control"
-                    name="goal"
-                    type="text"
-                    :value="donation.goal"
-                    @input="goal = $event.target.value"
-                    v-validate="'required|numeric'">
-                <span v-show="errors.has('goal')" class="material-input text-danger">
-                    {{ errors.first('goal') }}
-                </span>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
             <multiselect
                 @input="(value, id) => { type = value }"
                 :value="donation.type"
@@ -31,6 +16,21 @@
             <span v-show="errors.has('type')" class="material-input text-danger">
                 {{ errors.first('type') }}
             </span>
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+            <div class="form-group label-floating is-focused" :class="{ 'has-danger': this.errors.has('goal') }">
+                <label class="control-label">{{ $t('form.label.goal') }}</label>
+                <input class="form-control"
+                    name="goal"
+                    type="text"
+                    :value="donation.goal"
+                    @input="goal = $event.target.value"
+                    v-validate="'required|numeric'">
+                <span v-show="errors.has('goal')" class="material-input text-danger">
+                    {{ errors.first('goal') }}
+                </span>
+            </div>
         </div>
 
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
