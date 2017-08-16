@@ -31,8 +31,8 @@
                     <a href="#" class="title">{{ $t('chat.close_friends') }}s</a>
                     <a href="#">{{ $t('chat.settings') }}</a>
                 </div>
-                <ul class="chat-users" v-for="friend in listUsers">
-                    <li class="inline-items">
+                <ul class="chat-users">
+                    <li class="inline-items" v-for="friend in users">
                         <div class="author-thumb">
                             <img alt="author" :src="friend.image_thumbnail"
                                 class="avatar"
@@ -79,7 +79,7 @@
                     <a href="#">{{ $t('chat.settings') }}</a>
                 </div>
                 <ul class="chat-users">
-                    <li class="inline-items" v-for="group in groups">
+                    <li class="inline-items" v-for="group in groupsCampaign">
                         <div class="author-thumb">
                             <img alt="author"
                                 :src="group.media[0].image_thumbnail"
@@ -121,9 +121,12 @@
                 </ul>
             </div>
             <div class="search-friend inline-items">
-                <form class="form-group">
-                    <input class="form-control" :placeholder="$t('chat.search_friends')" value="" type="text">
-                </form>
+                <div class="form-group">
+                    <input class="form-control"
+                        :placeholder="$t('chat.search_friends')"
+                        type="text"
+                        v-model="searchText">
+                </div>
                 <a href="javascript:void(0)" class="settings">
                     <svg class="olymp-settings-icon">
                         <use xlink:href='/frontend/icons/icons.svg#olymp-settings-icon'></use>
@@ -175,7 +178,8 @@ export default {
         marginDefault: 70,
         marginWhenOpen: 280,
         maxList: 3,
-        listOnline: []
+        listOnline: [],
+        searchText: ''
     }),
     computed: {
         ...mapState('auth', {
@@ -192,12 +196,25 @@ export default {
                 listUsers.push({
                     id: this.friends[index].id,
                     name: this.friends[index].name,
+                    email: this.friends[index].email,
                     online: (check != -1) ? this.listOnline[check].status : false,
                     image_thumbnail: this.friends[index].image_thumbnail
                 })
             }
 
             return listUsers
+        },
+        users() {
+            return this.listUsers.filter(user => {
+                return user.name.toLowerCase().includes(this.searchText.toLowerCase())
+                    || user.email.toLowerCase().includes(this.searchText.toLowerCase())
+            })
+        },
+        groupsCampaign() {
+            return this.groups.filter(group => {
+                return group.title.toLowerCase().includes(this.searchText.toLowerCase())
+                    || group.hashtag.toLowerCase().includes(this.searchText.toLowerCase())
+            })
         }
     },
     watch: {
@@ -264,8 +281,7 @@ export default {
                     id: id,
                     name: name,
                     marginRight: this.marginRight,
-                    type: singleChat,
-                    visiable: true
+                    type: singleChat
                 }
 
                 this.chats.push(chat)
