@@ -42,8 +42,8 @@ export const timeago = {
 
 // Config VueTimeago
 export const topProgressBar = {
-    color: '#ff5e3a',
-    failedColor: '#f92552',
+    color: '#08ddc1',
+    failedColor: '#ff5e3a',
     thickness: '4px',
     transition: {
         speed: '0.2s',

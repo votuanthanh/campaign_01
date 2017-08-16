@@ -179,6 +179,7 @@ export default {
     }),
     computed: {
         ...mapState('auth', {
+            authenticated: state => state.authenticated,
             user: state => state.user,
             friends: state => state.listContact,
             groups: state => state.groups
@@ -220,17 +221,19 @@ export default {
         }
     },
     created () {
-        this.$socket.emit('register', { id: this.user.id, type: true })
-        this.getListFollow()
-            .then(res => {
-                if (res) {
-                    this.emitListCampaign()
-                }
-            })
-            .catch(err => {
-                const message = this.$i18n.t('messages.connection_error')
-                noty({ text: message, container: false, force: true })
-            })
+        if (this.authenticated) {
+            this.$socket.emit('register', { id: this.user.id, type: true })
+            this.getListFollow()
+                .then(res => {
+                    if (res) {
+                        this.emitListCampaign()
+                    }
+                })
+                .catch(err => {
+                    const message = this.$i18n.t('messages.connection_error')
+                    noty({ text: message, container: false, force: true })
+                })
+        }
     },
     methods: {
         ...mapActions('auth', [

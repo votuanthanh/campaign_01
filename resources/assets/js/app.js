@@ -11,6 +11,7 @@ import VueProgressBar from 'vue-progressbar'
 import * as configPlugin from './config'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VueTimeago from 'vue-timeago'
+import Master from './components/Master.vue'
 
 // import editor quill
 import VueQuillEditor from 'vue-quill-editor'
@@ -49,7 +50,8 @@ const app = new Vue({
     el: '#app',
     store,
     router,
-    i18n
+    i18n,
+    ...Master
 })
 
 Vue.directive('tooltip', function (el, binding) {
