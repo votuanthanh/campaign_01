@@ -97,6 +97,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::get('show/{id}', 'EventController@show');
             Route::get('donation', 'EventController@getTypeQuality')->name('getTypeQuality');
             Route::get('check-permission/{id}', 'EventController@checkIfUserCanManageEvent')->name('check-permission');
+            Route::delete('delete/{id}', 'EventController@destroy');
         });
 
         Route::group(['prefix' => '/action', 'as' => 'action.'], function () {

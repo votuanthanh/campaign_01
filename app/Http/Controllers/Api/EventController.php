@@ -15,6 +15,7 @@ use App\Repositories\Contracts\QualityInterface;
 use App\Repositories\Contracts\CampaignInterface;
 use App\Repositories\Contracts\ActionInterface;
 use App\Repositories\Contracts\GoalInterface;
+use App\Repositories\Contracts\ExpenseInterface;
 
 class EventController extends ApiController
 {
@@ -24,6 +25,7 @@ class EventController extends ApiController
     protected $donationTypeRepository;
     protected $actionRepository;
     protected $goalRepository;
+    protected $expenseRepository;
 
     public function __construct(
         EventInterface $eventRepository,
@@ -31,7 +33,8 @@ class EventController extends ApiController
         CampaignInterface $campaignRepository,
         DonationTypeInterface $donationTypeRepository,
         ActionInterface $actionRepository,
-        GoalInterface $goalRepository
+        GoalInterface $goalRepository,
+        ExpenseInterface $expenseRepository
     ) {
         parent::__construct();
         $this->qualityRepository = $qualityRepository;
@@ -40,6 +43,7 @@ class EventController extends ApiController
         $this->donationTypeRepository = $donationTypeRepository;
         $this->actionRepository = $actionRepository;
         $this->goalRepository = $goalRepository;
+        $this->expenseRepository = $expenseRepository;
     }
 
     public function create(EventRequest $request)
@@ -175,5 +179,23 @@ class EventController extends ApiController
         $event = $this->eventRepository->findOrFail($id);
 
         return response()->json($this->user->can('manage', $event));
+    }
+
+    public function destroy($id)
+    {
+        $event = $this->eventRepository->findOrFail($id);
+
+        if ($this->user->cant('manage', $event)) {
+            throw new UnknowException('Permission error: User can not delete this event.');
+        }
+
+        $actions = $event->actions();
+        $expenses = $event->expenses();
+
+        return $this->doAction(function() use ($event, $actions, $expenses) {
+            $this->actionRepository->deleteFromEvent($actions);
+            $this->expenseRepository->deleteFromEvent($expenses);
+            $this->compacts['deleteEvent'] = $this->eventRepository->deleteFromEvent($event);
+        });
     }
 }

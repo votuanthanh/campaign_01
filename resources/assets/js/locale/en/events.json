@@ -13,6 +13,7 @@
     "search" : "Search",
     "not_found_action": "Not Found Action",
     "events": "Events",
+    "close-event": "Close Event",
     "donation": {
         "donate": "Donate",
         "donation_details": "Donation details",

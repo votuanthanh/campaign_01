@@ -3,12 +3,13 @@
 namespace App\Repositories\Eloquent;
 
 use Exception;
-use App\Models\Action;
+use Carbon\Carbon;
 use App\Models\Media;
+use App\Models\Action;
 use App\Models\Activity;
 use App\Traits\Common\UploadableTrait;
-use App\Repositories\Contracts\ActionInterface;
 use App\Exceptions\Api\UnknowException;
+use App\Repositories\Contracts\ActionInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ActionRepository extends BaseRepository implements ActionInterface
@@ -103,5 +104,29 @@ class ActionRepository extends BaseRepository implements ActionInterface
         }
 
         return false;
+    }
+
+    public function deleteFromEvent($actions)
+    {
+        $actionIds = $actions->pluck('id');
+        $actions = $this->model->whereIn('id', $actionIds);
+        \DB::table('media')
+            ->whereIn('mediable_id', $actionIds)
+            ->where('mediable_type', Action::class)
+            ->update(['deleted_at' => Carbon::Now()]);
+        \DB::table('comments')
+            ->whereIn('commentable_id', $actionIds)
+            ->where('commentable_type', \App\Models\Action::class)
+            ->update(['deleted_at' => Carbon::Now()]);
+        \DB::table('likes')
+            ->whereIn('likeable_id', $actionIds)
+            ->where('likeable_type', \App\Models\Action::class)
+            ->update(['deleted_at' => Carbon::Now()]);
+        \DB::table('activities')
+            ->whereIn('activitiable_id', $actionIds)
+            ->where('activitiable_type', \App\Models\Action::class)
+            ->update(['deleted_at' => Carbon::Now()]);
+
+        return $actions->delete();
     }
 }
