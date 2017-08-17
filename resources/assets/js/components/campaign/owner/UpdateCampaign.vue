@@ -263,7 +263,7 @@ export default {
     mixins: [uploadedImage, searchMap],
     created () {
         this.getTags()
-        this.getCampaign(window.location.pathname.split('/')[2])
+        this.getCampaign(this.pageId)
     },
     watch: {
         feature(value) {

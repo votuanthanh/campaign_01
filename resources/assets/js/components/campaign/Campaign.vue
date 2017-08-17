@@ -10,9 +10,16 @@
 <script>
     import HeaderCampaign from './HeaderCampaign.vue'
     import { mapActions } from 'vuex'
+    import slug from '../../helpers/mixin/getFullSlug'
     export default {
+        mixins: [slug],
+        data() {
+            return {
+                pageType: 'campaign'
+            }
+        },
         created: function () {
-            this.campaignDetail(this.$route.params.id)
+            this.campaignDetail(this.pageId)
                 .then(status => {
                     //
                 })

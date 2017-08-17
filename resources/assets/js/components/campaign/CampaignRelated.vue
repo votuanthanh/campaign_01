@@ -131,16 +131,10 @@ export default {
         campaignIdCurrent: 0
     }),
     created() {
-        this.getCampaignRelated(this.$route.params.id)
+        this.getCampaignRelated(this.pageId)
     },
     updated() {
         this.swiper()
-    },
-    computed: {
-        //
-    },
-    mounted() {
-        //
     },
     methods: {
         ...mapActions('campaign', ['attendCampaign']),

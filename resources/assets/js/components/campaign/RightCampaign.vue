@@ -155,7 +155,7 @@
 
     export default {
         created() {
-            this.getlistPhotos(this.$route.params.id)
+            this.getlistPhotos(this.pageId)
         },
         data: () => ({
             flag_confirm_join: false,

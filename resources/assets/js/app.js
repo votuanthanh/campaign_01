@@ -61,3 +61,14 @@ Vue.directive('tooltip', function (el, binding) {
         trigger: 'hover'
     })
 })
+
+Vue.mixin({
+    computed: {
+        pageId() {
+            const slug = this.$route.params.slug || ''
+            if (Number.isInteger(slug))
+                return slug
+            return slug.substr(slug.lastIndexOf('-') + 1)
+        }
+    },
+})

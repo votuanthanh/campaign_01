@@ -74,4 +74,13 @@ class CommonController extends ApiController
 
         return $this->uploadFile($file, $path);
     }
+
+    public function getPageSlug($type, $id)
+    {
+        $repository = 'App\\Repositories\\Contracts\\' . studly_case($type) . 'Interface';
+
+        return $this->getData(function () use ($repository, $id) {
+            $this->compacts['slug'] = app($repository)->findOrFail($id)->slug;
+        });
+    }
 }

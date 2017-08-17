@@ -41,7 +41,7 @@ export default {
     },
     created() {
         this.searchMember({
-            campaignId: this.$route.params.id,
+            campaignId: this.pageId,
             status: 1,
             search: '',
             roleId: 0,
@@ -69,7 +69,7 @@ export default {
         searchMembers: _.debounce(function (e) {
             e.preventDefault()
             this.searchMember({
-                campaignId: this.$route.params.id,
+                campaignId: this.pageId,
                 status: 1,
                 search: this.search,
                 roleId: 0,
@@ -90,7 +90,7 @@ export default {
         $('.scroll-member').scroll(() => {
             if ($('.scroll-member').scrollTop() + $('.scroll-member').innerHeight() >= $('.scroll-member')[0].scrollHeight) {
                 this.searchMember({
-                    campaignId: this.$route.params.id,
+                    campaignId: this.pageId,
                     status: 1,
                     search: this.search,
                     pageNumberEvent: this.members.last_page,

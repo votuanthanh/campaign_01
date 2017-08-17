@@ -72,7 +72,7 @@
             search: ''
         }),
         created: function () {
-            this.listMembers(this.$route.params.id)
+            this.listMembers(this.pageId)
         },
         methods: {
             ...mapActions('campaign', [
@@ -90,13 +90,13 @@
                         this.members = res
                     })
                     .catch(err => {
-                        this.$router.push({ name: 'campaign.timeline', params: { id: this.$route.params.id }})
+                        this.$router.push({ name: 'campaign.timeline', params: { id: this.pageId }})
                     })
             },
             searchMembers: _.debounce(function (e) {
                 e.preventDefault()
                 this.searchMember({
-                    campaignId: this.$route.params.id,
+                    campaignId: this.pageId,
                     status: 0,
                     search: this.search,
                     pageNumberEvent: 1,
@@ -111,7 +111,7 @@
                 })
             }, 100),
             approveMembers(userId) {
-                let campaignId = this.$route.params.id
+                let campaignId = this.pageId
 
                 var n = new Noty({
                     type: 'alert',
@@ -147,7 +147,7 @@
 
             },
             rejectMembers(userId) {
-                let campaignId = this.$route.params.id
+                let campaignId = this.pageId
 
                 var n = new Noty({
                     type: 'alert',
@@ -192,7 +192,7 @@
             $(window).scroll(() => {
                 if ($(document).height() <= $(window).scrollTop() + $(window).height()) {
                     this.searchMember({
-                        campaignId: this.$route.params.id,
+                        campaignId: this.pageId,
                         status: 0,
                         search: this.search,
                         pageNumberEvent: this.members.last_page,

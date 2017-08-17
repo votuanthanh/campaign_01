@@ -80,10 +80,10 @@ const router = [
                 ]
             },
             {
-                path: '/campaign/:id',
+                path: '/campaign/:slug',
                 component: Campaign,
                 children: [
-                    { path: 'timeline', component: TimelineCampaign, name: 'campaign.timeline' },
+                    { path: '', component: TimelineCampaign, name: 'campaign.timeline' },
                     { path: 'edit', component: UpdateCampaign, name: 'campaign.update' },
                     { path: 'photo', component: PhotoCampaign, name: 'campaign.photo' },
                     { path: 'campaign-related', component: CampaignRelated, name: 'campaign.campaign_related' },
