@@ -396,7 +396,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         $tagIds = $campaign->tags()->pluck('tag_id')->all();
         $enday = Carbon::today()->format('Y-m-d');
 
-        $listCampaigns =  $this->whereHas('tags', function ($query) use ($tagIds) {
+        $listCampaigns = $this->whereHas('tags', function ($query) use ($tagIds) {
             $query->whereIn('tag_id', $tagIds);
         })
         ->whereHas('settings', function ($query) use ($enday) {
@@ -411,5 +411,18 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
 
         return $listCampaigns->whereNotIn('id', $campaignIds)->with('users', 'media', 'tags')
         ->paginate(config('settings.paginate_default'));
+    }
+
+    public function searchCampaign($page, $quantity, $keyword)
+    {
+        $resutCampaign = $this->search($keyword, null, true)
+            ->with('media', 'owner', 'tags', 'events', 'members', 'isMember', 'isOwner')
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        return [
+            'campaigns' => $resutCampaign->forPage($page, $quantity),
+            'totalCampaign' => $resutCampaign->count(),
+        ];
     }
 }

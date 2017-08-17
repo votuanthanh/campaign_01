@@ -28,6 +28,7 @@ class DeleteCampaignTest extends TestCase
         $campaign->users()->attach([
             $userId => [
                 'role_id' => $roleOwnerId,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
 
@@ -54,9 +55,11 @@ class DeleteCampaignTest extends TestCase
         $campaign->users()->attach([
             $userId => [
                 'role_id' => $roleCampaignIds[Role::ROLE_MEMBER],
+                'status' => CAMPAIGN::APPROVED,
             ],
             '1' => [
                 'role_id' => $roleCampaignIds[Role::ROLE_OWNER],
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
 
@@ -83,9 +86,11 @@ class DeleteCampaignTest extends TestCase
         $campaign->users()->attach([
             $userId => [
                 'role_id' => $roleCampaignIds[Role::ROLE_MEMBER],
+                'status' => CAMPAIGN::APPROVED,
             ],
             '1' => [
                 'role_id' => $roleCampaignIds[Role::ROLE_OWNER],
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
 

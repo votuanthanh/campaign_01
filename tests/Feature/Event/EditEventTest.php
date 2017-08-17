@@ -33,6 +33,7 @@ class EditEventTest extends TestCase
         $campain->users()->attach([
             $user->id => [
                 'role_id' => $roleCampaign->id,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $this->actingAs($user, 'api');
@@ -91,6 +92,7 @@ class EditEventTest extends TestCase
         $campain->users()->attach([
             $user->id => [
                 'role_id' => $roleCampaign->id,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $otherUser = factory(User::class)->create();

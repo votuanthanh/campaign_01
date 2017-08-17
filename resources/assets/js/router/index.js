@@ -47,87 +47,93 @@ import CreateExpenseBuy from '../components/event/expense/CreateExpenseBuy.vue'
 import ExpenseStatistic from '../components/event/expense/Statistic.vue'
 import UpdateCampaign from '../components/campaign/owner/UpdateCampaign.vue'
 import UpdateEvent from '../components/event/create/UpdateEvent.vue'
+import Search from '../components/user/Search.vue'
 
 const router = [
     // anyone can visit here
     { path: '/', component: Index, name: 'index' },
     // only user can visit here
     ...authGuard([
-            { path: '/campaign/create', component: AddCampaign, name: 'campaign.create' },
-            { path: '/campaign/:slug/create-event', component: CreateEvent, name: 'event.create' },
-            { path: '/event/:slug/update', component: UpdateEvent, name: 'event.update' },
-            {
-                path: '/settings',
-                component: User,
-                children: [
-                    { path: '', redirect: '/settings/settings', name: 'setting' },
-                    { path: 'password', component: Password, name: 'setting.password' },
-                    { path: 'profile', component: Profile, name: 'setting.profile' },
-                    { path: 'settings', component: Setting, name: 'setting.setting' },
-                ]
-            },
-            {
-                path: '/user/:id',
-                component: MasterUser,
-                name: 'user',
-                children: [
-                    { path: '', component: Timeline, name: 'user.timeline' },
-                    { path: 'friends', component: Friend, name: 'user.friends' },
-                    { path: 'photo', component: Photo, name: 'user.photo' },
-                    { path: 'about', component: About, name: 'user.about' },
-                    { path: 'video', component: Video, name: 'user.video' },
-                    { path: ':path', component: CampaignUser, name: 'user.campaign' },
-                ]
-            },
-            {
-                path: '/campaign/:slug',
-                component: Campaign,
-                children: [
-                    { path: '', component: TimelineCampaign, name: 'campaign.timeline' },
-                    { path: 'edit', component: UpdateCampaign, name: 'campaign.update' },
-                    { path: 'photo', component: PhotoCampaign, name: 'campaign.photo' },
-                    { path: 'campaign-related', component: CampaignRelated, name: 'campaign.campaign_related' },
-                    { path: 'campaign-about', component: CampaignAbout, name: 'campaign.about' },
-                    {
-                        path: 'owner-campaign',
-                        component: OwnerCampaign,
-                        name: 'campaign.owner',
-                        children: [
-                            { path: 'member-request', component: MemberRequest, name: 'campaign.member_request' },
-                            { path: 'list-member', component: ListMember, name: 'campaign.list_member' }
-                        ]
-                    }
-                ]
-            },
-            {
-                path: '/event/:slug',
-                component: HomeEvent,
-                children: [
-                    { path: '', component: ListAction, name: 'event.index' },
-                    { path: 'donation', component: DonationList, name: 'event.donation' },
-                    {
-                        path: 'donation/:id',
-                        component: DonationInfo,
-                        children: [
-                            { path: '', component: DonationReceived, name: 'donation.received' },
-                            { path: 'manage', component: DonationManage, name: 'donation.manage' }
-                        ]
-                    },
-                    {
-                        path: 'expense',
-                        component: Expense,
-                        name: 'event.expenses',
-                        children: [
-                            { path: 'list', component: ListExpense, name: 'expense.list' },
-                            { path: 'create', component: CreateExpense, name: 'expense.create' },
-                            { path: 'buy/create', component: CreateExpenseBuy, name: 'expense.create.buy' },
-                            { path: 'update/:id', component: UpdateExpense, name: 'expense.update' },
-                            { path: 'statictis', component: ExpenseStatistic, name: 'expense.statictis' }
-                        ]
-                    },
-                ]
-            }
-        ]),
+        { path: '/campaign/create', component: AddCampaign, name: 'campaign.create' },
+        { path: '/campaign/:slug/create-event', component: CreateEvent, name: 'event.create' },
+        { path: '/event/:slug/update', component: UpdateEvent, name: 'event.update' },
+        {
+            path: '/settings',
+            component: User,
+            children: [
+                { path: '', redirect: '/settings/settings', name: 'setting' },
+                { path: 'password', component: Password, name: 'setting.password' },
+                { path: 'profile', component: Profile, name: 'setting.profile' },
+                { path: 'settings', component: Setting, name: 'setting.setting' },
+            ]
+        },
+        {
+            path: '/user/:id',
+            component: MasterUser,
+            name: 'user',
+            children: [
+                { path: '', component: Timeline, name: 'user.timeline' },
+                { path: 'friends', component: Friend, name: 'user.friends' },
+                { path: 'photo', component: Photo, name: 'user.photo' },
+                { path: 'about', component: About, name: 'user.about' },
+                { path: 'video', component: Video, name: 'user.video' },
+                { path: ':path', component: CampaignUser, name: 'user.campaign' },
+            ]
+        },
+        {
+            path: '/campaign/:slug',
+            component: Campaign,
+            children: [
+                { path: '', component: TimelineCampaign, name: 'campaign.timeline' },
+                { path: 'edit', component: UpdateCampaign, name: 'campaign.update' },
+                { path: 'photo', component: PhotoCampaign, name: 'campaign.photo' },
+                { path: 'campaign-related', component: CampaignRelated, name: 'campaign.campaign_related' },
+                { path: 'campaign-about', component: CampaignAbout, name: 'campaign.about' },
+                {
+                    path: 'owner-campaign',
+                    component: OwnerCampaign,
+                    name: 'campaign.owner',
+                    children: [
+                        { path: 'member-request', component: MemberRequest, name: 'campaign.member_request' },
+                        { path: 'list-member', component: ListMember, name: 'campaign.list_member' }
+                    ]
+                }
+            ]
+        },
+        {
+            path: '/result/:keyword',
+            component: Search,
+            name: 'search'
+        },
+        {
+            path: '/event/:slug',
+            component: HomeEvent,
+            children: [
+                { path: '', component: ListAction, name: 'event.index' },
+                { path: 'donation', component: DonationList, name: 'event.donation' },
+                {
+                    path: 'donation/:id',
+                    component: DonationInfo,
+                    children: [
+                        { path: '', component: DonationReceived, name: 'donation.received' },
+                        { path: 'manage', component: DonationManage, name: 'donation.manage' }
+                    ]
+                },
+                {
+                    path: 'expense',
+                    component: Expense,
+                    name: 'event.expenses',
+                    children: [
+                        { path: 'list', component: ListExpense, name: 'expense.list' },
+                        { path: 'create', component: CreateExpense, name: 'expense.create' },
+                        { path: 'buy/create', component: CreateExpenseBuy, name: 'expense.create.buy' },
+                        { path: 'update/:id', component: UpdateExpense, name: 'expense.update' },
+                        { path: 'statictis', component: ExpenseStatistic, name: 'expense.statictis' }
+                    ]
+                },
+            ]
+        }
+    ]),
     // only guest can visit here
     ...guestGuard([
         { path: '/register', component: Auth, name: 'register' },
@@ -136,7 +142,7 @@ const router = [
             path: '/password',
             component: PasswordReset,
             children: [
-                { path: 'reset', component: PasswordForm, name: 'password.reset'},
+                { path: 'reset', component: PasswordForm, name: 'password.reset' },
                 { path: 'reset/:token', component: PasswordVerify }
             ]
         },

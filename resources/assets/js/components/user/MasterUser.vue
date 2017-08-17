@@ -302,9 +302,6 @@
                 url_file: ''
             }
         }),
-        created() {
-            this.getUser()
-        },
         mounted() {
             $.material.init()
         },
@@ -335,6 +332,7 @@
             // call again the method if the route changes
             $route () {
                 this.getUser(this.userId)
+                EventBus.$emit('redirect-page')
             }
         },
         methods: {

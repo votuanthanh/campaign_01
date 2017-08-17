@@ -4,16 +4,66 @@
             <h6>favourite page</h6>
         </div>
         <div class="header-content-wrapper">
-            <form class="search-bar w-search notification-list friend-requests">
+            <div class="search-bar w-search notification-list friend-requests">
                 <div class="form-group with-button">
-                    <input class="form-control js-user-search" placeholder="Search here people or pages..." type="text">
+                    <input class="form-control js-user-search"
+                        v-model="keyword"
+                        @keyup.enter="searchRedirect"
+                        @input="search"
+                        :placeholder="$t('user.header.search')"
+                        type="text">
                     <button>
                         <svg class="olymp-magnifying-glass-icon">
                             <use xlink:href="/frontend/icons/icons.svg#olymp-magnifying-glass-icon"></use>
                         </svg>
                     </button>
+                    <div class="selectize-dropdown multi form-control js-user-search" style="display: block; width: 500px; top: 70px; left: 0px; visibility: visible;">
+                        <div class="selectize-dropdown-content">
+                            <div class="inline-items" v-for="(result, index) in usersFinded" v-if="index < 3">
+                                <div class="author-thumb">
+                                    <img :src="result.image_small" alt="avatar">
+                                </div>
+                                <div class="notification-event">
+                                    <router-link class="h6 notification-friend" :to="{ name: 'user.timeline', params: { id: result.id }}">
+                                        {{ result.name }}
+                                    </router-link>
+                                    <span class="chat-message-item">
+                                        {{ result.email }}
+                                    </span>
+                                </div>
+                                <span class="notification-icon">
+                                    <svg class="olymp-happy-face-icon">
+                                        <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="result-campaign inline-items" v-for="(result, index) in campaignsFinded" v-if="index < 3">
+                                <div class="author-thumb">
+                                    <img class="img-campaign" v-if="result.media.length" :src="result.media[0].image_small" alt="avatar">
+                                </div>
+                                <div class="notification-event">
+                                    <router-link class="h6 notification-friend" :to="{ name: 'campaign.timeline', params: { slug: result.slug }}">
+                                        <span v-if="result.title.length < 45">{{ result.title }}</span>
+                                        <span v-else>{{ result.title.substr(0, 45) }} ...</span>
+                                    </router-link>
+                                    <p class="hashtag">@{{ result.hashtag }}</p>
+                                    {{ $t('user.header.tag') }}:
+                                    <span class="chat-message-item">
+                                        <span v-for="tag in result.tags">
+                                            <span class="tag-info">{{ tag.name }}</span>
+                                        </span>
+                                    </span>
+                                </div>
+                                <span class="notification-icon">
+                                    <svg class="olymp-star-icon">
+                                        <use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </form>
+            </div>
             <a href="#" class="link-find-friend">Find Friends</a>
             <div class="control-block" v-if="authenticated">
                 <div class="control-icon more has-items" @click="markRead(0)">
@@ -415,9 +465,17 @@ export default {
         count: 0,
         skipFriend: 0,
         continueForGetListRequest: true,
-        countReadMessage: 0
+        countReadMessage: 0,
+        keyword: '',
+        usersFinded: [],
+        campaignsFinded: []
     }),
     created () {
+        EventBus.$on('redirect-page', () => {
+            this.keyword = ''
+            this.search()
+        })
+
         if (this.authenticated) {
             this.getMessagesNotification()
             this.getListRequest()
@@ -626,7 +684,35 @@ export default {
                         noty({ text: message, container: false, force: true })
                     })
             }
-        }
+        },
+
+        searchRedirect() {
+            this.$router.push({ name: 'search', params: { keyword: this.keyword }})
+            this.keyword = ''
+            this.search()
+        },
+
+        search: _.debounce(function () {
+            if (this.keyword.trim()) {
+                // 1 is page
+                // 3 is the amount of data retrieved
+                // all is type which gets all data
+                get(`search/1/3/all/${this.keyword}`)
+                    .then(res => {
+                        this.usersFinded = res.data.users
+                        this.campaignsFinded = res.data.campaigns
+                    })
+                    .catch(err => {
+                        noty({
+                            text: this.$i18n.t('messages.connection_error'),
+                            container: false,
+                            force: true
+                        })
+                    })
+            } else {
+                 this.usersFinded = this.campaignsFinded = []
+            }
+        }, 500)
     },
     mounted() {
         const vm = this
@@ -695,7 +781,36 @@ export default {
     }
 }
 
+.hashtag {
+    margin: 1px 0px;
+}
+
+.result-campaign {
+    padding: 13px 25px !important;
+}
+
+.tag-info {
+    padding: 2px 7px;
+    color: white;
+    margin: auto 1px;
+    border-radius: 4px;
+    background: #57b6ff;
+    font-weight: bold;
+}
+
 #notification_messages, #notification_list_request {
     overflow-y: scroll !important;
+}
+
+.search-bar {
+    .form-group.with-button {
+        input {
+            padding: 0px 15px;
+        }
+    }
+    .img-campaign {
+        width: 100%;
+        height: 100%;
+    }
 }
 </style>

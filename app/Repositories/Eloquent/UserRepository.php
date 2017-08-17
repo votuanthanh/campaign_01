@@ -271,4 +271,25 @@ class UserRepository extends BaseRepository implements UserInterface
 
         return $user;
     }
+
+    public function searchUser($page, $quantity, $keyword)
+    {
+        $this->setGuard('api');
+        $resutUser = $this->search($keyword, null, true)
+            ->where('status', USER::ACTIVE)
+            ->where('id', '<>', $this->user->id)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        return [
+            'users' => $resutUser->forPage($page, $quantity)->each(function ($query) {
+                $query->makeVisible([
+                    'is_friend',
+                    'has_pending_request',
+                    'has_send_request',
+                ]);
+            }),
+            'totalUser' => $resutUser->count(),
+        ];
+    }
 }

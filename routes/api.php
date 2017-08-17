@@ -52,6 +52,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::get('show-notifications', 'ChatController@getNotification');
         Route::post('like/{modelId}/{flag}', 'LikeController@like')->name('like');
         Route::delete('delete-photo/{mediaId}', 'UserController@deletePhoto')->name('delete-photo');
+        Route::get('search/{page}/{quantity}/{type}/{keyword}', 'CampaignController@search')->name('search');
 
         Route::group(['as' => 'user.'], function () {
             Route::group(['prefix' => 'settings'], function () {

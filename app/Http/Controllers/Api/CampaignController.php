@@ -14,6 +14,7 @@ use App\Exceptions\Api\UnknowException;
 use Illuminate\Http\Request;
 use App\Http\Requests\CampaignRequest;
 use App\Models\Role;
+use App\Models\User;
 use App\Models\Campaign;
 use Exception;
 
@@ -300,6 +301,23 @@ class CampaignController extends ApiController
         return $this->getData(function () use ($campaignId, $status, $data) {
             $this->compacts['roles'] = $this->roleRepository->getRoles(Role::TYPE_CAMPAIGN);
             $this->compacts['members'] = $this->userRepository->searchMembers($campaignId, $status, $data['search'], $data['roleId']);
+        });
+    }
+
+    public function search($page, $quantity, $type, $keyword)
+    {
+        return $this->getData(function () use ($keyword, $page, $quantity, $type) {
+            if (in_array($type, ['user', 'all'])) {
+                $resutUser = $this->userRepository->searchUser($page, $quantity, $keyword);
+                $this->compacts['users'] = $resutUser['users'];
+                $this->compacts['totalUser'] = $resutUser['totalUser'];
+            }
+
+            if (in_array($type, ['campaign', 'all'])) {
+                $resutCampaign = $this->campaignRepository->searchCampaign($page, $quantity, $keyword);
+                $this->compacts['campaigns'] = $resutCampaign['campaigns'];
+                $this->compacts['totalCampaign'] = $resutCampaign['totalCampaign'];
+            }
         });
     }
 

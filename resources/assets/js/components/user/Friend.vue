@@ -18,7 +18,7 @@
                             </form>
                             <div class="more">
                                 <svg class="olymp-three-dots-icon">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
+                                    <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
                                 </svg>
                                 <ul class="more-dropdown">
                                     <li><a>{{ $t('user.friend.block') }}</a></li>

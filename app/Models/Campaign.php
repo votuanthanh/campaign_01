@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Nicolaslopezj\Searchable\SearchableTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Carbon\Carbon;
 
 class Campaign extends BaseModel
 {
-    use SoftDeletes;
+    use SoftDeletes, SearchableTrait;
 
     const BLOCK = 0;
     const ACTIVE = 1;
@@ -37,11 +38,22 @@ class Campaign extends BaseModel
     protected $dates = ['deleted_at'];
 
     protected $appends = [
-        'usersJoined',
-        'authJoniedOrNot',
         'likes',
         'checkLike',
         'slug',
+    ];
+
+    protected $searchable = [
+        'columns' => [
+            'campaigns.hashtag' => 9,
+            'tags.name' => 10,
+            'campaigns.title' => 11,
+        ],
+
+        'joins' => [
+            'campaign_tag' => ['campaign_tag.campaign_id', 'campaigns.id'],
+            'tags' => ['campaign_tag.tag_id', 'tags.id'],
+        ],
     ];
 
     public function users()
@@ -95,7 +107,9 @@ class Campaign extends BaseModel
 
         $roleIds = Role::whereIn('name', $roles)->pluck('id');
 
-        return $this->users()->wherePivotIn('role_id', $roleIds);
+        return $this->users()
+            ->wherePivotIn('role_id', $roleIds)
+            ->wherePivot('status', static::APPROVED);
     }
 
     public function owner()
@@ -110,7 +124,7 @@ class Campaign extends BaseModel
 
     public function members()
     {
-        return $this->getUserByRole('member')->get();
+        return $this->getUserByRole('member');
     }
 
     public function blockeds()
@@ -128,25 +142,24 @@ class Campaign extends BaseModel
         return Carbon::parse($date)->diffForHumans();
     }
 
-    public function getUsersJoinedAttribute()
+    public function isMember()
     {
         $roleId = Role::where('name', Role::ROLE_MEMBER)->first()->id;
 
         return $this->users()
             ->wherePivot('role_id', $roleId)
-            ->wherePivot('status', config('settings.campaigns.approve'))
-            ->get();
+            ->wherePivot('status', static::APPROVED)
+            ->wherePivot('user_id', \Auth::guard('api')->user()->id);
     }
 
-    public function getAuthJoniedOrNotAttribute()
+    public function isOwner()
     {
-        $roleIds = Role::whereIn('name', [Role::ROLE_MEMBER, Role::ROLE_OWNER])->pluck('id')->all();
+        $roleId = Role::where('name', Role::ROLE_OWNER)->first()->id;
 
-        return !is_null($this->users()
-            ->wherePivotIn('role_id', $roleIds)
-            ->wherePivot('status', config('settings.campaigns.approve'))
-            ->wherePivot('user_id', \Auth::guard('api')->user()->id)
-            ->first());
+        return $this->users()
+            ->wherePivot('role_id', $roleId)
+            ->wherePivot('status', static::APPROVED)
+            ->wherePivot('user_id', \Auth::guard('api')->user()->id);
     }
 
     public function getLikesAttribute()
