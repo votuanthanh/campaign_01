@@ -31,7 +31,8 @@
                                         datetime="2004-07-24T18:18"
                                         v-if="index == (organizedMessage.length - 1)
                                             && read
-                                            && messages[messages.length - 1].userId == user.id ">
+                                            && messages[messages.length - 1].userId == user.id
+                                            && readBy == receiveUser">
                                         {{ $t('messages.read_at') + calendarTime(readAt) }}
                                     </time>
                                     <time class="entry-date updated" datetime="2004-07-24T18:18"v-else>
@@ -92,6 +93,7 @@ import { post, get } from '../../helpers/api'
 import { sendMessage, sendMessageToGroup, showMessage } from '../../router/router'
 import { mapState } from 'vuex'
 import noty from '../../helpers/noty'
+import { EventBus } from '../../EventBus.js'
 
 export default {
     props: {
@@ -117,7 +119,8 @@ export default {
             isLoad: false,
             continue: true,
             read: false,
-            readAt: ''
+            readAt: '',
+            readBy: this.receive
         }
     },
     watch: {
@@ -251,7 +254,7 @@ export default {
             }
         },
         calendarTime(time) {
-            return moment(time).calendar()
+            return moment(time, this.$i18n.t('chat.moment_format')).calendar()
         },
         addIcon(number) {
             this.content += "<img src='/images/icon-chat" + number + ".png' alt='icon'>"
@@ -262,6 +265,8 @@ export default {
                     receive: this.receiveUser,
                     send: this.user.id
                 })
+
+                EventBus.$emit('markRead', { receiveId: this.user.id, senderId: this.receiveUser })
             }
         }
     },
@@ -307,6 +312,7 @@ export default {
         read: function (data) {
             this.read = data.status
             this.readAt = data.time
+            this.readBy = data.readBy
         }
     }
 }

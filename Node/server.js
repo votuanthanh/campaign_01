@@ -101,7 +101,7 @@ io.on('connection', function (socket) {
                 client.set('read' + key, JSON.stringify(message))
             })
 
-            socket.to(data.receive).emit('read', { id: data.receive, status : true, time: now })
+            socket.to(data.receive).emit('read', { id: data.receive, status : true, time: now, readBy: data.send })
         }
     })
 

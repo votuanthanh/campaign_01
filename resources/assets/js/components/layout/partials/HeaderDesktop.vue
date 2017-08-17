@@ -404,6 +404,7 @@ import {
 } from '../../../router/router'
 import { post, get } from '../../../helpers/api'
 import noty from '../../../helpers/noty'
+import { EventBus } from '../../../EventBus.js'
 
 export default {
     data: () => ({
@@ -420,6 +421,20 @@ export default {
         if (this.authenticated) {
             this.getMessagesNotification()
             this.getListRequest()
+            EventBus.$on('markRead', data => {
+                let index = this.messages.findIndex(mess => parseInt(mess.to) == parseInt(data.receiveId)
+                    && parseInt(mess.from) == parseInt(data.senderId))
+
+                if (index == -1) {
+                    return
+                }
+
+                this.countReadMessage = this.messages[index].read
+                        ? this.countReadMessage
+                        : this.countReadMessage - 1
+                    this.messages[index].read = true
+                    this.messages[index].class = ''
+            })
         }
     },
     computed: {
@@ -465,12 +480,14 @@ export default {
                                     showAvatar: (noty[index].content.userId == this.user.id || !isSendToUser)
                                         ? noty[index].content.avatarReceive
                                         : noty[index].content.avatar,
-                                    class: isSendToUser ? (noty[index].isRead ? "" : "message-unread") : "group-chat",
+                                    class: isSendToUser
+                                        ? (noty[index].isRead || this.user.id == noty[index].content.userId ? "" : "message-unread")
+                                        : "group-chat",
                                     time: noty[index].isRead ? noty[index].time : noty[index].content.time,
-                                    read: noty[index].isRead
+                                    read: noty[index].content.userId == this.user.id ? true : noty[index].isRead
                                 }
 
-                                this.countReadMessage = !mess.read
+                                this.countReadMessage = !mess.read && mess.read != null
                                     ? (this.countReadMessage + 1)
                                     : this.countReadMessage
 
@@ -509,7 +526,8 @@ export default {
                     showAvatar: (socketData.from == this.user.id || !option)
                         ? message.avatarReceive
                         : message.avatar,
-                    class: Number.isInteger(socketData.to) ? "" : "group-chat",
+                    class: socketData.from != this.user.id
+                        ? "message-unread" : "group-chat",
                     time: message.time,
                     read: false
                 }
@@ -518,6 +536,9 @@ export default {
                     this.messages.unshift(mess)
                     this.countReadMessage += 1
                 } else {
+                    this.countReadMessage = !this.messages[index].read || socketData.from == this.user.id
+                        ? this.countReadMessage
+                        : this.countReadMessage + 1
                     this.messages.splice(index, 1)
                     this.messages.unshift(mess)
                 }

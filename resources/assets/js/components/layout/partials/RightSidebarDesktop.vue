@@ -239,10 +239,10 @@ export default {
     },
     created () {
         if (this.authenticated) {
-            this.$socket.emit('register', { id: this.user.id, type: true })
             this.getListFollow()
                 .then(res => {
                     if (res) {
+                        this.$socket.emit('register', { id: this.user.id, type: true })
                         this.emitListCampaign()
                     }
                 })
