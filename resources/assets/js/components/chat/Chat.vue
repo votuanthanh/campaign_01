@@ -5,9 +5,6 @@
             <div class="ui-block-title">
                 <h6 class="title">{{ receiveName }}</h6>
                 <div class="more">
-                    <svg class="olymp-three-dots-icon">
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                    </svg>
                     <svg class="olymp-little-delete" @click="closeComponent">
                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/frontend/icons/icons.svg#olymp-little-delete"></use>
                     </svg>
@@ -18,6 +15,9 @@
                 data-ps-id="08dcf30a-ed2f-f4fc-dd34-a543d06407f1"
                 :id="replaceSpace(receiveUser)">
                 <ul class="notification-list chat-message chat-message-field">
+                    <div v-show="topLoadMore" class="top-load-more-chat">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </div>
                     <li v-for="(subMessage, index) in organizedMessage"
                         :class="subMessage[0].userId == user.id ? 'popup-chat-myself' : 'popup-chat-friend'">
                         <div class="author-thumb">
@@ -50,40 +50,11 @@
                     <div class="ps__scrollbar-y" tabindex="0"></div>
                 </div>
             </div>
-            <form>
-                <div class="div-input-chat form-group label-floating">
-                    <textarea class="form-control"
-                        name="message"
-                        v-model="content"
-                        @keyup.enter="handleChat"
-                        @keyup.prevent="markRead"
-                        @click.prevent="markRead"
-                        :placeholder="$t('chat.send_message')">
-                    </textarea>
-                    <div class="add-options-message">
-                        <a href="#" class="options-message">
-                            <svg class="olymp-computer-icon">
-                                <use xlink:href="/frontend/icons/icons.svg#olymp-computer-icon"></use>
-                            </svg>
-                        </a>
-                        <div class="options-message smile-block">
-                            <svg class="olymp-happy-sticker-icon">
-                                <use xlink:href="/frontend/icons/icons.svg#olymp-happy-sticker-icon"></use>
-                            </svg>
-                            <ul class="more-dropdown more-with-triangle triangle-bottom-right">
-                                <li v-for="number in 27">
-                                    <a href="#">
-                                        <img :src="'/images/icon-chat' + number + '.png'"
-                                            alt="icon"
-                                            @click="addIcon(number)">
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <span class="material-input"></span>
-                </div>
-            </form>
+            <form-chat
+                v-model="content"
+                @mark-read="markRead"
+                @text-change="handleChat">
+            </form-chat>
         </div>
     </div>
 </template>
@@ -92,6 +63,7 @@
 import { post, get } from '../../helpers/api'
 import { sendMessage, sendMessageToGroup, showMessage } from '../../router/router'
 import { mapState } from 'vuex'
+import FormChat from '../libs/FormChat.vue'
 import noty from '../../helpers/noty'
 import { EventBus } from '../../EventBus.js'
 
@@ -109,7 +81,7 @@ export default {
     data: function () {
         return {
             messages: [],
-            content: '',
+            content: ``,
             receiveUser: this.receive,
             receiveName: this.name,
             groupChat: '',
@@ -120,7 +92,8 @@ export default {
             continue: true,
             read: false,
             readAt: '',
-            readBy: this.receive
+            readBy: this.receive,
+            topLoadMore: false
         }
     },
     watch: {
@@ -155,7 +128,7 @@ export default {
         }
     },
     methods: {
-        handleChat: _.debounce(function () {
+        handleChat() {
             if (this.content.trim() == '') {
                 this.content = this.content.trim()
 
@@ -188,15 +161,16 @@ export default {
                 .catch(err => {
                     this.messages.push(this.$i18n.t('chat.send_message_error'))
                 })
-        }, 300),
+        },
         getMessage() {
             if (this.continue) {
+                this.topLoadMore = true
                 get(`${showMessage}/${this.receiveUser}?type=${this.type}&paginate=${this.paginate}`)
                     .then(res => {
                         if (res.data.status == 200) {
                             this.read = res.data.read
                             this.readAt = res.data.time
-
+                            const heightBoxChatBefore = this.getScrollHeight()
                             for (var index = 0; index < res.data.messages.length; index++ ) {
                                 let data = res.data.messages[index]
 
@@ -211,11 +185,22 @@ export default {
                                     this.messages.unshift(mess)
                                 }
                             }
+                            if (this.paginate == 0) {
+                                this.scrollTopBoxChat()
+                            } else {
+                                setTimeout(() => {
+                                    const heightBoxChatAfter = this.getScrollHeight()
+                                    this.scrollTopBoxChat(heightBoxChatAfter - heightBoxChatBefore)
+                                }, 0)
+                            }
 
                             this.paginate = res.data.paginate
                         }
 
                         this.continue = res.data.continue
+                        setTimeout(() => {
+                            this.topLoadMore = false
+                        }, 0)
                     })
                     .catch(err => {
                         this.messages.push(this.$i18n.t('chat.get_message_error'))
@@ -249,8 +234,7 @@ export default {
                 this.messages.push(mess)
                 this.paginate++
                 this.read = false
-                $('#' + this.replaceSpace(this.receiveUser))
-                    .scrollTop($('#' + this.replaceSpace(this.receiveUser))[0].scrollHeight)
+                this.scrollTopBoxChat()
             }
         },
         calendarTime(time) {
@@ -268,6 +252,17 @@ export default {
 
                 EventBus.$emit('markRead', { receiveId: this.user.id, senderId: this.receiveUser })
             }
+        },
+        scrollTopBoxChat(scrollHeight) {
+            // Stack service API
+            setTimeout(() => {
+                const elBox = $('#' + this.replaceSpace(this.receiveUser))
+                const scroll = scrollHeight || elBox.prop('scrollHeight')
+                elBox.scrollTop(scroll)
+            }, 0)
+        },
+        getScrollHeight() {
+            return $('#' + this.replaceSpace(this.receiveUser) + ' .chat-message-field').height()
         }
     },
     mounted() {
@@ -314,135 +309,10 @@ export default {
             this.readAt = data.time
             this.readBy = data.readBy
         }
+    },
+    components: {
+        FormChat
     }
 }
 </script>
-<style lang="scss" scoped>
-.ps__scrollbar-x-rail {
-    left: 0px;
-    bottom: 0px;
-}
-
-.ps__scrollbar-x {
-    left: 0px; width: 0px;
-}
-
-.ps__scrollbar-y-rail {
-    top: 0px; height: 10px; right: 0px;
-}
-
-.ps__scrollbar-y {
-    top: 0px; height: 10px;
-}
-
-.mCustomScrollbar.ps.ps--theme_default.ps--active-y {
-    overflow-y: scroll !important;
-}
-
-.notification-list {
-    min-height: 360px;
-}
-
-.popup-chat {
-    .chat-message-field {
-        li {
-            &:nth-child(2n) {
-                .notification-event {
-                    float: none;
-                    padding: 0;
-                }
-            }
-        }
-        .box-notification-event {
-            width: 75%;
-        }
-        .popup-chat-friend {
-            display: flex;
-            flex-direction: row;
-            .box-notification-event {
-                padding-left: 10px;
-            }
-            .notification-event {
-                display: flex;
-                flex-flow: column wrap;
-                align-items: flex-start;
-            }
-            .chat-message-item {
-                background-color: #f0f4f9;
-                color: #888da8;
-            }
-        }
-        .popup-chat-myself {
-            display: flex;
-            flex-direction: row-reverse;
-            .box-notification-event {
-                padding-right: 10px;
-            }
-            .notification-event {
-                display: flex;
-                flex-flow: column wrap;
-                align-items: flex-end;
-            }
-            .chat-message-item {
-                background-color: #7c5ac2;
-                color: #fff;
-            }
-        }
-        .notification-event {
-            width: 100%;
-            max-width: 100%;
-            padding-left: 0px;
-        }
-        .chat-message-item {
-            padding: 5px 12px;
-            word-break: break-all;
-        }
-        .author-thumb {
-            img {
-                width: 26px;
-                height: 26px;
-            }
-        }
-    }
-
-    .mCustomScrollbar {
-        max-height: 350px !important;
-    }
-
-    textarea {
-        &:focus {
-            min-height: 60px;
-        }
-    }
-
-    position: fixed !important;
-    z-index: 999 !important;
-    right: 69px !important;
-    bottom: -17px !important;
-    padding: 0px;
-}
-
-.message-auth {
-    float: right !important;
-    color: white !important;
-    background-color: #7c5ac2 !important;
-    margin-right: 12px;
-}
-
-.img-auth {
-    float: right !important;
-}
-
-.chat-friend {
-    margin-left: -20px;
-    margin-right: 45px;
-
-    .chat-message-item {
-        color: #767082;
-    }
-}
-
-.mrg-top {
-    margin-top: 10px;
-}
-</style>
+<style src="./chat.scss" lang="scss" scoped></style>

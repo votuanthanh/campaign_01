@@ -85,6 +85,25 @@
     max-height: 30em;
 }
 
+// Custom quill for chat
+.chat-quill-editor {
+    &.ql-container {
+        .ql-editor {
+            min-height: 60px;
+            max-height: 100px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding-bottom: 0;
+            padding-top: 20px;
+            &.ql-blank {
+                &::before {
+                    color: #dddfe2;
+                }
+            }
+        }
+    }
+}
+
 .multiselect__tags {
     border: 1px solid #e6ecf5;
 }
@@ -180,5 +199,30 @@ a {
 .has-danger {
     .input-group-addon {
         background-color: transparent;
+    }
+}
+
+.ps__scrollbar-y-rail {
+    height: 0 !important;
+}
+
+.chat-message-item {
+    p {
+        margin-bottom: 0;
+    }
+}
+
+.olymp-little-delete {
+    width: 25px;
+    height: 11px;
+}
+
+#notification_messages {
+    .notification-list {
+        .chat-message-item {
+            p {
+                display: inline;
+            }
+        }
     }
 }

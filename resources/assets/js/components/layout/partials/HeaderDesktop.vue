@@ -429,7 +429,7 @@ export default {
                     return
                 }
 
-                this.countReadMessage = this.messages[index].read
+                this.countReadMessage = this.messages[index].read || this.countReadMessage == 0
                         ? this.countReadMessage
                         : this.countReadMessage - 1
                     this.messages[index].read = true
