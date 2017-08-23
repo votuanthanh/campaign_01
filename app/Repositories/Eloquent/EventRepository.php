@@ -182,4 +182,21 @@ class EventRepository extends BaseRepository implements EventInterface
 
         return $event->likes()->where('user_id', $userId)->first()->forceDelete();
     }
+
+    public function openFromEvent($event)
+    {
+        if (!empty($event)) {
+            $event->goals()->restore();
+            $event->donations()->restore();
+            $event->settings()->restore();
+            $event->media()->restore();
+            $event->likes()->restore();
+            $event->activities()->restore();
+            $event->comments()->restore();
+
+            return $event->restore();
+        }
+
+        return false;
+    }
 }

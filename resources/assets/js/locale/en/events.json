@@ -74,5 +74,6 @@
     "quantity_actions": "Quantity Actions",
     "address": "Address",
     "start_day": "Start Day",
-    "end_day": "End Day"
+    "end_day": "End Day",
+    "back_campaign_of_event": "Back campaign"
 }

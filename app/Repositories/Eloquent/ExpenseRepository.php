@@ -45,22 +45,25 @@ class ExpenseRepository extends BaseRepository implements ExpenseInterface
         return true;
     }
 
-    public function delete($expense)
+    public function forceDelete($expense)
     {
-        \DB::table('expense_product')
-            ->where('expense_id', $expense->id)
-            ->update(['deleted_at' => Carbon::Now()]);
+        $expense->products()->detach();
 
-        return $expense->delete();
+        return $expense->forceDelete();
     }
 
     public function deleteFromEvent($expenses)
     {
-        $expenseIds = $expenses->pluck('id');
+        return $expenses->delete();
+    }
+
+    public function openFromEvent($event)
+    {
+        $expenseIds = $event->expenses()->onlyTrashed()->pluck('id');
         \DB::table('expense_product')
             ->whereIn('expense_id', $expenseIds)
-            ->update(['deleted_at' => Carbon::Now()]);
+            ->update(['deleted_at' => null]);
 
-        return $expenses->delete();
+        return $event->expenses()->restore();
     }
 }

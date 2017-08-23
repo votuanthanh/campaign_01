@@ -90,6 +90,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::get('campaign-related/{id}', 'CampaignController@getCampaignRelated');
             Route::get('search-members/{campaignId}/{status}', 'CampaignController@searchMembers');
             Route::get('{id}/statistic', 'CampaignController@statistic')->name('campaign-statistic');
+            Route::get('events-closed/{campaignId}', 'CampaignController@getEventsClosed');
         });
 
         Route::resource('campaign', 'CampaignController', ['only' => ['store', 'update', 'destroy', 'show', 'edit']]);
@@ -104,6 +105,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::get('check-permission/{id}', 'EventController@checkIfUserCanManageEvent')->name('check-permission');
             Route::delete('delete/{id}', 'EventController@destroy');
             Route::get('/get-info-event/{id}', 'EventController@getInfoEvent')->name('getInfoEvent');
+            Route::patch('open/{id}', 'EventController@openEvent');
         });
 
         Route::group(['prefix' => '/action', 'as' => 'action.'], function () {

@@ -59,7 +59,8 @@
                 <span v-if="like[flag][modelId].numberOfLikes >= 2 && index < 1"> , </span>
             </a>
             <a href="javascript:void(0)" >
-                <span v-if="like[flag][modelId].numberOfLikes <= 2">
+                <span v-if="like[flag][modelId].numberOfLikes <= 2 &&
+                    like[flag][modelId].numberOfLikes > 0">
                     {{ $t('post.like.liked_this') }}
                 </span>
                 <span v-if="like[flag][modelId].numberOfLikes >= 3"
@@ -75,12 +76,12 @@
                 </svg>
                 <span>{{ commentTotal[flag][modelId] }}</span>
             </a>
-            <a href="javascript:void(0)" class="post-add-icon inline-items">
+            <!-- <a href="javascript:void(0)" class="post-add-icon inline-items">
                 <svg class="olymp-share-icon">
                     <use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use>
                 </svg>
                 <span>0</span>
-            </a>
+            </a> -->
 
         </div>
 
@@ -121,11 +122,18 @@ export default {
     },
     methods: {
         ...mapActions('like', [
-            'likeActivity'
+            'likeActivity',
+            'getListMemberLiked'
         ]),
 
         showMembersLiked() {
             this.flagShowListMember = true
+            this.getListMemberLiked({
+                modelId: this.modelId,
+                model: this.flag,
+                lastPage: 1,
+                pageCurrent: 0
+            })
         }
     },
     components: {

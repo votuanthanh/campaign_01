@@ -437,9 +437,10 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
 
     public function getStatisticData($campaign)
     {
-        $users['count'] = $campaign->getUserByRole(['owner', 'moderator', 'member'])->count();
-        $users['today_count'] = $campaign->users()->wherePivot('created_at', '>=', Carbon::today())->count();
-        $userStatistic = $campaign->getUserByRole(['owner', 'moderator', 'member'])
+        $campaignUsers = $campaign->getUserByRole(['owner', 'moderator', 'member']);
+        $users['count'] = $campaignUsers->count();
+        $users['today_count'] = $campaignUsers->wherePivot('created_at', '>=', Carbon::today())->count();
+        $userStatistic = $campaignUsers
             ->select(\DB::raw('count(*) as user_count, date(campaign_user.created_at) as date'))
             ->groupBy('date')
             ->get();
@@ -478,5 +479,20 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         $data = [ 'users' => $users, 'events' => $events, 'actions' => $actions ];
 
         return $data;
+    }
+
+    public function getEventsClosed($campaignId)
+    {
+        return $this->find($campaignId)
+            ->events()
+            ->onlyTrashed()
+            ->with(['media' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->withCount(['actions' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->orderBy('deleted_at', 'DESC')
+            ->paginate(config('settings.paginate_default'));
     }
 }

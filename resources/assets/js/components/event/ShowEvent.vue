@@ -24,9 +24,16 @@
                                         <time class="published" datetime="2017-03-24T18:18">
                                             {{ timeAgo(event.created_at) }}
                                         </time>
+                                        <router-link
+                                            :to="{
+                                                name: 'campaign.timeline',
+                                                params: { slug: event.campaign_id }
+                                            }">
+                                            {{ $t('events.back_campaign_of_event') }}
+                                        </router-link>
                                     </div>
                                 </div>
-                                <div class="more" v-if="isManager">
+                                <div class="more" v-if="isManager && !event.deleted_at">
                                     <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                                     <ul class="more-dropdown">
                                         <li>
@@ -40,7 +47,19 @@
                                     </ul>
                                 </div>
                             </div>
-                            <p class="title-event">{{ event.title }}</p>
+                            <p class="title-event">
+                                {{ event.title }}
+                            </p>
+                            <master-like
+                                :likes="event.likes"
+                                :checkLiked="checkLiked"
+                                :flag="'event'"
+                                :type="'like'"
+                                :modelId="event.id"
+                                :numberOfComments="event.number_of_comments"
+                                :numberOfLikes="event.number_of_likes"
+                                :showMore="true">
+                            </master-like>
                             <div class="control-block-button post-control-button">
                                 <master-like
                                     :likes="event.likes"
@@ -51,9 +70,6 @@
                                     :numberOfComments="event.number_of_comments"
                                     :numberOfLikes="event.number_of_likes">
                                 </master-like>
-                                <a href="javascript:void(0)" class="btn btn-control">
-                                    <svg class="olymp-share-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use></svg>
-                                </a>
                             </div>
                         </article>
 
@@ -158,7 +174,7 @@
                             container: false,
                             type: 'success'
                         })
-                        this.$router.push({ name: 'campaign.timeline', params: { id: this.event.campaign_id }})
+                        this.$router.push({ name: 'campaign.events_closed', params: { slug: this.event.campaign_id }})
                     })
                     .catch(res => {
                         noty({
@@ -185,7 +201,7 @@
             eventPostComment() {
                 $(".input-comment-event textarea").on('keyup', function(e) {
                     if(e.keyCode == 13) {
-                        $(".list-comment-event")[0].scrollTop = $(".list-comment-event")[0].scrollHeight;
+                        $(".list-comment-event")[0].scrollTop = $(".list-comment-event")[0].scrollHeight
                     }
                 })
             },
@@ -247,6 +263,12 @@
                 .more {
                     margin-right: 5px;
                 }
+                .post__date {
+                    a {
+                        margin-left: 10px;
+                        font-weight: 400;
+                    }
+                }
             }
             .title-event {
                 padding: 0px !important;
@@ -267,7 +289,7 @@
             }
         }
         .list-comment-event {
-            height: 231px;
+            height: 272px;
             overflow-y: scroll;
             &::-webkit-scrollbar {
                 display: none;

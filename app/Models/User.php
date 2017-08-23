@@ -96,7 +96,7 @@ class User extends Authenticatable
 
     public function campaigns()
     {
-        return $this->belongsToMany(Campaign::class)->withPivot('role_id', 'status');
+        return $this->belongsToMany(Campaign::class)->withPivot('role_id', 'status')->withTimestamps();
     }
 
     public function events()

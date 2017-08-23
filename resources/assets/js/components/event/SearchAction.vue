@@ -23,6 +23,7 @@
                         </div>
                         <div class="align-right">
                             <button
+                                v-if="!event.deleted_at"
                                 href="#"
                                 class="btn btn-primary btn-md-2 bg-breez"
                                 data-toggle="modal"
@@ -43,6 +44,7 @@
 
                             <div class="btn-group" v-show="event.complete_percent.length">
                                 <button
+                                    v-if="!event.deleted_at"
                                     href="#"
                                     class="btn btn-primary btn-md-2 bg-breez"
                                     data-toggle="modal"
@@ -51,6 +53,7 @@
                                     {{ $t('events.donation.donate') }}
                                 </button>
                                 <router-link
+                                    v-if="!event.deleted_at"
                                     tag="button"
                                     class="btn btn-primary btn-md-2 bg-breez"
                                     :to="{ name: 'event.donation' }"

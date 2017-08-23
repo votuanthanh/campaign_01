@@ -61,6 +61,13 @@
                                                     {{ $t('campaigns.campaign-management') }}
                                                 </router-link>
                                             </li>
+                                            <li>
+                                                <router-link
+                                                    :to="{ name: 'campaign.events_closed' }"
+                                                    :class="checkActiveUrl('campaign.events_closed')">
+                                                    {{ $t('campaigns.events_closed') }}
+                                                </router-link>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -129,5 +136,8 @@ export default {
 
     .images-campaign-thumb {
         top: 163px !important;
+    }
+    .profile-section {
+        padding: 61px 0 20px;
     }
 </style>

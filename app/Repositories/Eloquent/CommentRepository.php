@@ -51,33 +51,35 @@ class CommentRepository extends BaseRepository implements CommentInterface
 
     public function getComment($modelId)
     {
-        return $this->with('user')
-            ->with(['subComment' => function ($subQuery) {
-                $subQuery->getLikes()
-                    ->paginate(config('settings.paginate_comment'), ['*'], 1);
+        return $this->withTrashed()
+            ->with(['user', 'likes.user',
+                'subComment' => function ($subQuery) {
+                    $subQuery->with('user', 'likes.user')
+                        ->orderBy('created_at', 'desc')
+                        ->paginate(config('settings.paginate_comment'), ['*'], 1);
             }])
-            ->getLikes()
             ->where('parent_id', config('settings.comment_parent'))
             ->where('commentable_id', $modelId)
+            ->orderBy('created_at', 'desc')
             ->paginate(config('settings.paginate_comment'));
     }
 
     public function getSubComment($id)
     {
-        $comment = $this->findOrFail($id);
+        $comment = $this->withTrashed()->findOrFail($id);
 
         return $comment->subComment()
-           ->getLikes()
            ->with('user')
+           ->orderBy('created_at', 'desc')
            ->paginate(config('settings.paginate_comment'));
     }
 
     public function deleteComment($comment, $user)
     {
-        $comment->activities()->delete();
-        $comment->likes()->delete();
-        $comment->subComment()->delete();
-        $comment->delete();
+        $comment->activities()->forceDelete();
+        $comment->likes()->forceDelete();
+        $comment->subComment()->forceDelete();
+        $comment->forceDelete();
 
         Event::fire('add.activity', [
             [

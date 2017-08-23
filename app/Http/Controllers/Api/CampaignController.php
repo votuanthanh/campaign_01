@@ -395,4 +395,20 @@ class CampaignController extends ApiController
             $this->compacts['data'] = $this->campaignRepository->getStatisticData($campaign);
         });
     }
+
+    public function getEventsClosed($campaignId)
+    {
+        $campaign = $this->campaignRepository->findOrFail($campaignId);
+
+        if ($this->user->cannot('view', $campaign)) {
+            throw new UnknowException('You do not have authorize to see this campaign', UNAUTHORIZED);
+        }
+
+        $isManager = $this->user->can('manage', $campaign);
+
+        return $this->getData(function() use ($campaignId, $isManager) {
+            $this->compacts['eventsClosed'] = $this->campaignRepository->getEventsClosed($campaignId);
+            $this->compacts['isManager'] = $isManager;
+        });
+    }
 }

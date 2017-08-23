@@ -24,7 +24,7 @@ class ExpenseController extends ApiController
 
     public function index(Request $request)
     {
-        $event = $this->eventRepository->findOrFail($request->event_id);
+        $event = $this->eventRepository->withTrashed()->findOrFail($request->event_id);
 
         if ($this->user->cant('view', $event)) {
             throw new UnknowException('You can not see expenses in this event');
@@ -33,10 +33,25 @@ class ExpenseController extends ApiController
         $isManager = $this->user->can('manage', $event);
         $expenses = $event
             ->expenses()
+            ->withTrashed()
             ->with([
-                'goal.donationType.quality',
-                'products',
-                'qualitys',
+                'goal' => function ($query1) {
+                    $query1->withTrashed()->with([
+                        'donationType' => function ($query2) {
+                            $query2->withTrashed()->with([
+                                'quality' => function ($query3) {
+                                    $query3->withTrashed();
+                                },
+                            ]);
+                        },
+                    ]);
+                },
+                'products' => function ($query) {
+                    $query->withTrashed();
+                },
+                'qualitys' => function ($query) {
+                    $query->withTrashed();
+                },
             ])
             ->orderBy('time', 'desc')
             ->paginate(config('settings.expense.paginate_list'));
@@ -117,33 +132,50 @@ class ExpenseController extends ApiController
         }
 
         return $this->doAction(function () use ($expense) {
-            $this->compacts['expense'] = $this->expenseRepository->delete($expense);
+            $this->compacts['expense'] = $this->expenseRepository->forceDelete($expense);
         });
     }
 
     public function statistic($eventId)
     {
-        $event = $this->eventRepository->findOrFail($eventId);
+        $event = $this->eventRepository->withTrashed()->findOrFail($eventId);
 
         return $this->getData(function () use ($event) {
-            $this->compacts['goal'] = $event->goals->each(function($goal) {
-                $goal->makeVisible(['calculate'])->load('donationType.quality');
+            $this->compacts['goal'] = $event->goals()->withTrashed()->get()->each(function($goal) {
+                $goal->makeVisible(['calculate'])->load([
+                    'donationType' => function ($query1) {
+                        $query1->withTrashed()->with([
+                            'quality' => function ($query2) {
+                                $query2->withTrashed();
+                            },
+                        ]);
+                    },
+                ]);
             });
         });
     }
 
     public function getList(Request $request)
     {
-        $event = $this->eventRepository->findOrFail($request->get('event_id'));
+        $event = $this->eventRepository->withTrashed()->findOrFail($request->get('event_id'));
 
         return $this->getData(function () use ($request, $event) {
             $expenses = $event
                 ->expenses()
-                ->with('goal.donationType')
+                ->withTrashed()
+                ->with([
+                    'goal' => function($query1) {
+                        $query1->withTrashed()->with([
+                            'donationType' => function ($query2) {
+                                $query2->withTrashed();
+                            },
+                        ]);
+                    },
+                ])
                 ->orderBy($request->get('order_by'), 'desc');
 
             if ($request->has('goal_id')) {
-                $expenses->where('goal_id', $request->goal_id);
+                $expenses->withTrashed()->where('goal_id', $request->goal_id);
             }
 
             $this->compacts['expenses'] = $expenses->take(config('settings.pagination.expense_statistic'))->get();
@@ -152,14 +184,15 @@ class ExpenseController extends ApiController
 
     public function getStatisticData(Request $request)
     {
-        $event = $this->eventRepository->findOrFail($request->get('event_id'));
+        $event = $this->eventRepository->withTrashed()->findOrFail($request->get('event_id'));
         $query = $event
             ->expenses()
+            ->withTrashed()
             ->select(\DB::raw('count(*) as count, time, sum(cost) as cost'))
             ->groupBy('time');
 
         if ($request->has('goal_id')) {
-            $query->where('goal_id', $request->goal_id);
+            $query->withTrashed()->where('goal_id', $request->goal_id);
         }
 
         $statistic = new \stdClass();

@@ -1,6 +1,8 @@
 <template lang="html">
     <div class="row">
-        <div class="col-xl-6 push-xl-3 col-lg-12 push-lg-0 col-sm-12 col-xs-12">{{ campaign.description }}</div>
+        <div class="col-xl-6 push-xl-3 col-lg-12 push-lg-0 col-sm-12 col-xs-12">
+            <div id="newsfeed-items-grid" v-html="campaign.description"></div>
+        </div>
 
         <left-campaign ></left-campaign>
         <right-campaign></right-campaign>

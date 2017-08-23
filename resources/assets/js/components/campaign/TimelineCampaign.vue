@@ -5,7 +5,7 @@
                 <list-events></list-events>
             </div>
 
-            <a ref="loadmore" href="javascript:void(0)" class="btn btn-control btn-more" data-container="newsfeed-items-grid" v-if="events.total > 0">
+            <a ref="loadmore" href="javascript:void(0)" class="btn btn-control btn-more" data-container="newsfeed-items-grid" v-if="events.total > 4">
                 <i  v-show="loading" class="fa fa-spinner fa-spin"></i>
                 <div class="ripple-container"></div>
             </a>
