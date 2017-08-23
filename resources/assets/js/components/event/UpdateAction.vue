@@ -117,7 +117,7 @@
                     caption: '',
                     description: '',
                     files: [],
-                    event_id: this.$route.params.event_id,
+                    event_id: this.pageId,
                     upload: []
                 }
             }
@@ -168,7 +168,7 @@
                                 container: false,
                                 type: 'success'
                             })
-                            this.get_event(this.$route.params.event_id)
+                            this.get_event(this.pageId)
                             this.onClose()
                         })
                         .catch(err => {

@@ -37,7 +37,7 @@
             <img :src="campaignDetail.media[0].image_medium" alt="photo">
         </div>
         <router-link data-toggle="modal" data-target="#blog-post-popup" class="h2 post-title"
-            :to="{ name: 'campaign.timeline', params: { id:campaignDetail.id }}">{{ campaignDetail.title }}</router-link>
+            :to="{ name: 'campaign.timeline', params: { slug: campaignDetail.slug }}">{{ campaignDetail.title }}</router-link>
         <p v-html="campaignDetail.description"></p>
         <a href="#" style="display: none;"
             data-toggle="modal"

@@ -11,7 +11,14 @@
     import SearchAction from './SearchAction.vue'
     import ListAction from './ListAction.vue'
     import { mapState, mapActions, mapMutations } from 'vuex'
+    import slug from '../../helpers/mixin/getFullSlug'
     export default {
+        mixins: [slug],
+        data() {
+            return  {
+                pageType: 'event'
+            }
+        },
         computed: {
             ...mapState([
                 'loading'
@@ -21,7 +28,7 @@
 
         created() {
             this.$Progress.start()
-            this.get_event(this.$route.params.event_id)
+            this.get_event(this.pageId)
             .then(sucess => {
                 this.$Progress.finish()
             })

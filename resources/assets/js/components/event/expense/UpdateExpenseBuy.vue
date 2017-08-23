@@ -259,7 +259,7 @@
             },
 
             callApi() {
-                get(`goal?event_id=${this.$route.params.event_id}`).then(res => {
+                get(`goal?event_id=${this.pageId}`).then(res => {
                     this.dataGoals = res.data.goals
                     this.types = this.dataGoals.map(goal => goal.donation_type.name)
                     this.goal = this.dataGoals.filter(dataGoal => {
@@ -286,7 +286,7 @@
         },
 
         created() {
-            this.newData.expense.event_id = this.$route.params.event_id
+            this.newData.expense.event_id = this.pageId
             this.newData.expense.goal_id = this.expense.goal.id
             this.newData.expense.cost = this.expense.cost
             this.newData.expense.reason = this.expense.reason

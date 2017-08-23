@@ -274,13 +274,13 @@ export default {
             return moment(time).format('YYYY-MM-DD')
         },
         fetchExpense() {
-            get(`get-list-expense?event_id=${this.$route.params.event_id}&goal_id=${this.selectedList}&order_by=${this.orderBy}`)
+            get(`get-list-expense?event_id=${this.pageId}&goal_id=${this.selectedList}&order_by=${this.orderBy}`)
                 .then(res => {
                     this.expenses = res.data.expenses
                 })
         },
         fetchExpenseByTime() {
-            get(`get-statistic-data?event_id=${this.$route.params.event_id}&goal_id=${this.goalWithTime}`)
+            get(`get-statistic-data?event_id=${this.pageId}&goal_id=${this.goalWithTime}`)
                 .then(res => {
                     this.lineGraphicChart = Object.assign({})
                     this.$set(this.lineGraphicChart, 'labels', res.data.statistic.time)
@@ -313,7 +313,7 @@ export default {
         }
     },
     created() {
-        get(`event/${this.$route.params.event_id}/statistic`)
+        get(`event/${this.pageId}/statistic`)
             .then(res => {
                 this.goals = res.data.goal
                 this.selectedGoal = res.data.goal[0]

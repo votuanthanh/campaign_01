@@ -182,9 +182,9 @@
 
             search: _.debounce(function () {
                 if (this.key_search) {
-                    this.search_action({ event_id: this.$route.params.event_id, key_search: this.key_search.replace(/ +/g, ' ') })
+                    this.search_action({ event_id: this.pageId, key_search: this.key_search.replace(/ +/g, ' ') })
                 } else {
-                    this.search_action({ event_id: this.$route.params.event_id, key_search: this.key_search })
+                    this.search_action({ event_id: this.pageId, key_search: this.key_search })
                 }
             }, 1000),
 
@@ -195,7 +195,7 @@
             handleDonate() {
                 this.$validator.validateAll().then((result) => {
                     this.update_donate({
-                        event_id: this.$route.params.event_id,
+                        event_id: this.pageId,
                         goal_id: this.goal_id,
                         value: this.donate
                     })

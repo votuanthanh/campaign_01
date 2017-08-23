@@ -228,7 +228,7 @@
             $(window).scroll(() => {
                 if ($(document).height() - $(window).height() < $(window).scrollTop() + 1) {
                     this.load_action({
-                        event_id: this.$route.params.event_id,
+                        event_id: this.pageId,
                         actions: this.actions,
                         flag_search: this.flag_search,
                         key: this.key_search
