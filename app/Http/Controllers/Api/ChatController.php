@@ -213,7 +213,7 @@ class ChatController extends ApiController
             'userId' => $this->user->id,
             'avatar' => $this->user->image_thumbnail,
             'name' => $this->user->name,
-            'time' => \Carbon\Carbon::now()->format('m/d/Y H:i:s'),
+            'time' => \Carbon\Carbon::now()->format('m-d-Y H:i:s'),
             'message' => $content,
             'receive' => $toReceive,
             'nameReceive' => is_numeric($toReceive) ? $receive->name : $receive->hashtag,
