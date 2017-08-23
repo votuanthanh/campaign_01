@@ -34,6 +34,9 @@
                                                 {{ $t('events.edit-event') }}
                                             </router-link>
                                         </li>
+                                        <li>
+                                            <a href="javascript:void(0)" @click="confirmCloseEvent()">{{ $t('events.close-event') }}</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -79,6 +82,23 @@
                 </div>
             </div>
         </div>
+        <message :show.sync="showComfirm">
+            <h5 class="exclamation-header" slot="header">
+                {{ $t('messages.comfirm_delete') }}
+            </h5>
+            <div class="body-modal confirm-delete" slot="main">
+                <a href="javascript:void(0)"
+                    class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12"
+                    @click="closeEvent(event.id)">
+                    {{ $t('form.button.agree') }}
+                </a>
+                <a href="javascript:void(0)"
+                    class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12"
+                    @click="cancelCloseEvent">
+                    {{ $t('form.button.no') }}
+                </a>
+            </div>
+        </message>
     </div>
 </template>
 
@@ -88,7 +108,9 @@
     import ShowText from '../libs/ShowText.vue'
     import Comment from '../comment/Comment.vue'
     import Like from '../user/timeline/Like.vue'
-    import { get } from '../../helpers/api'
+    import { get, del } from '../../helpers/api'
+    import noty from '../../helpers/noty'
+    import Message from '../libs/Modal.vue'
 
     export default {
         data :() => ({
@@ -97,7 +119,8 @@
             numberLike: 0,
             model: 'event',
             showExpense: false,
-            isManager: false
+            isManager: false,
+            showComfirm: false
         }),
 
         computed : {
@@ -123,6 +146,35 @@
                 'like_event'
             ]),
 
+            closeEvent(id) {
+                del(`event/delete/${id}`)
+                    .then(res => {
+                        noty({
+                            text: this.$i18n.t('messages.delete_success'),
+                            force: false,
+                            container: false,
+                            type: 'success'
+                        })
+                        this.$router.push({ name: 'campaign.timeline', params: { id: this.event.campaign_id }})
+                    })
+                    .catch(res => {
+                        noty({
+                            text: this.$i18n.t('messages.delete_fail'),
+                            force: false,
+                            container: false,
+                            type: 'error'
+                        })
+                    })
+            },
+
+            confirmCloseEvent() {
+                this.showComfirm = true
+            },
+
+            cancelCloseEvent() {
+                this.showComfirm = false
+            },
+
             setScrollBar() {
                 $(".list-comment-event")[0].scrollTop = $(".list-comment-event")[0].scrollHeight;
             },
@@ -145,6 +197,9 @@
                 .then(res => {
                     this.isManager = res.data
                 })
+                .catch(res => {
+
+                })
         },
 
         components: {
@@ -152,7 +207,8 @@
             SliderItem,
             ShowText,
             Comment,
-            Like
+            Like,
+            Message
         }
     }
 </script>

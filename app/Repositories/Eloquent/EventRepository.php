@@ -33,6 +33,23 @@ class EventRepository extends BaseRepository implements EventInterface
         }
     }
 
+    public function deleteFromEvent($event)
+    {
+        if (!empty($event)) {
+            $event->goals()->delete();
+            $event->donations()->delete();
+            $event->settings()->delete();
+            $event->media()->delete();
+            $event->likes()->delete();
+            $event->activities()->delete();
+            $event->comments()->delete();
+
+            return $event->delete();
+        }
+
+        return false;
+    }
+
     public function create($data)
     {
         $donation = $data['donations'];
