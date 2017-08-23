@@ -271,7 +271,7 @@
                 this.hasErrorFiles = this.$refs.myVueDropzone.getRejectedFiles().length
 
                 if (!this.hasErrorFiles) {
-                    this.newEvent.campaign_id = this.$route.params.campaign_id
+                    this.newEvent.campaign_id = this.pageId
                     this.getDonation()
                     this.addSettings()
                     post('event/create', this.newEvent)
@@ -282,7 +282,7 @@
                                 container: false,
                                 type: 'success'
                             })
-                            this.$router.push({ name: 'event.index', params: { event_id: res.data.event.id }})
+                            this.$router.push({ name: 'event.index', params: { slug: res.data.event.slug }})
                         })
                         .catch(err => {
                             noty({

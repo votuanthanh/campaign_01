@@ -59,11 +59,11 @@
                             <img :src="campaign.media[0].image_default" alt="photo">
                         </div>
 
-                        <router-link :to="{ name: 'campaign.timeline', params: { id: campaign.id }}"  class="h2 post-title">{{ shorten(campaign.title, 40) }}</router-link>
+                        <router-link :to="{ name: 'campaign.timeline', params: { slug: campaign.slug }}"  class="h2 post-title">{{ shorten(campaign.title, 40) }}</router-link>
 
                         <p>{{ shorten(strip(campaign.description), 200) }}</p>
 
-                        <router-link :to="{ name: 'campaign.timeline', params: { id: campaign.id }}" class="btn btn-md-2 btn-border-think c-grey btn-transparent custom-color">{{ $t('user.button.read_more') }}</router-link>
+                        <router-link :to="{ name: 'campaign.timeline', params: { slug: campaign.slug }}" class="btn btn-md-2 btn-border-think c-grey btn-transparent custom-color">{{ $t('user.button.read_more') }}</router-link>
 
 
                         <like :type="'likeInfo'"

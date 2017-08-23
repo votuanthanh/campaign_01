@@ -170,7 +170,7 @@
                             this.newExpense.cost =  ''
                             this.newExpense.reason = ''
                             this.callApi()
-                            this.$router.push({ name: nameRouter, params: { event_id: this.$route.params.event_id }})
+                            this.$router.push({ name: nameRouter, params: { event_id: this.pageId }})
                         })
                         .catch(err => {
                             this.$Progress.fail()
@@ -195,7 +195,7 @@
             },
 
             callApi() {
-                get(`goal?event_id=${this.$route.params.event_id}`).then(res => {
+                get(`goal?event_id=${this.pageId}`).then(res => {
                     this.dataGoals = res.data.goals
                     this.types = this.dataGoals.map(goal => goal.donation_type.name)
                 })
@@ -204,7 +204,7 @@
 
         created() {
             this.callApi()
-            this.newExpense.event_id = this.$route.params.event_id
+            this.newExpense.event_id = this.pageId
             this.time = moment().format('L');
         },
 

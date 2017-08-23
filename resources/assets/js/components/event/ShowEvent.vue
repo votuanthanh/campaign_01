@@ -193,7 +193,7 @@
         },
 
         created() {
-            get(`event/check-permission/${this.$route.params.event_id}`)
+            get(`event/check-permission/${this.pageId}`)
                 .then(res => {
                     this.isManager = res.data
                 })

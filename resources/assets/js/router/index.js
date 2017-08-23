@@ -54,8 +54,8 @@ const router = [
     // only user can visit here
     ...authGuard([
             { path: '/campaign/create', component: AddCampaign, name: 'campaign.create' },
-            { path: '/event/create/:campaign_id', component: CreateEvent, name: 'event.create' },
-            { path: '/event/:id/update', component: UpdateEvent, name: 'event.update' },
+            { path: '/campaign/:slug/create-event', component: CreateEvent, name: 'event.create' },
+            { path: '/event/:slug/update', component: UpdateEvent, name: 'event.update' },
             {
                 path: '/settings',
                 component: User,
@@ -100,10 +100,10 @@ const router = [
                 ]
             },
             {
-                path: '/event/:event_id',
+                path: '/event/:slug',
                 component: HomeEvent,
                 children: [
-                    { path: 'detail', component: ListAction, name: 'event.index' },
+                    { path: '', component: ListAction, name: 'event.index' },
                     { path: 'donation', component: DonationList, name: 'event.donation' },
                     {
                         path: 'donation/:id',

@@ -350,7 +350,7 @@
                 if (!this.mockingFile && !this.hasErrorFiles) {
                     this.getDonation()
                     this.addSettings()
-                    patch(`event/update/${this.$route.params.id}`, this.dataUpdate)
+                    patch(`event/update/${this.pageId}`, this.dataUpdate)
                     .then(res => {
                         noty({
                             text: this.$i18n.t('messages.update_success'),
@@ -358,7 +358,7 @@
                             container: false,
                             type: 'success'
                         })
-                        this.$router.push({ name: 'event.index', params: { event_id: this.$route.params.id }})
+                        this.$router.push({ name: 'event.index', params: { slug: this.pageId }})
                     })
                     .catch(err => {
                         noty({
@@ -408,7 +408,7 @@
 
             callApiGetDataGoal() {
                 this.dataUpdate.goalUpdates = []
-                get(`goal?event_id=${this.$route.params.id}`)
+                get(`goal?event_id=${this.pageId}`)
                     .then(res => {
                         this.goals = res.data.goals
                         this.goals.forEach(goal => {
@@ -427,7 +427,7 @@
             },
 
             deleteGoalOld() {
-                del(`goal/${this.goalDelete}?event_id=${this.$route.params.id}`)
+                del(`goal/${this.goalDelete}?event_id=${this.pageId}`)
                     .then(res => {
                         this.$Progress.finish()
                         noty({
@@ -503,7 +503,7 @@
         },
 
         created() {
-            get(`event/show/${this.$route.params.id}`)
+            get(`event/show/${this.pageId}`)
                 .then(res => {
                     this.event = res.data.event[0]
                     this.setDataUpdate()
@@ -513,10 +513,10 @@
                 })
             this.callApiGetDataGoal()
 
-            get(`event/check-permission/${this.$route.params.id}`)
+            get(`event/check-permission/${this.pageId}`)
                 .then(res => {
                     if (!res.data) {
-                        this.$router.push({ name: 'event.index', params: { event_id: this.$route.params.id }})
+                        this.$router.push({ name: 'event.index', params: { slug: this.pageId }})
                     }
                 })
         }

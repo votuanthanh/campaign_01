@@ -99,12 +99,14 @@
                     caption: '',
                     description: '',
                     files: [],
-                    event_id: this.$route.params.event_id
+                    event_id: ''
                 },
                 accessToken: `Bearer ${localStorage.getItem('access_token')}`
             }
         },
-
+        created() {
+            this.newAction.event_id = this.pageId
+        },
         methods: {
             ...mapActions('event', [
                 'get_event'
@@ -145,7 +147,7 @@
                                 container: false,
                                 type: 'success'
                             })
-                            this.get_event(this.$route.params.event_id)
+                            this.get_event(this.pageId)
                             this.onClose()
                         })
                         .catch(err => {

@@ -30,6 +30,7 @@ class Event extends BaseModel
         'comments',
         'likes',
         'checkLike',
+        'slug',
     ];
 
     public function actions()
@@ -103,5 +104,10 @@ class Event extends BaseModel
     public function expenses()
     {
         return $this->hasMany(Expense::class);
+    }
+
+    public function getSlugAttribute()
+    {
+        return str_slug(str_limit($this->title, 100) . ' ' . $this->id);
     }
 }

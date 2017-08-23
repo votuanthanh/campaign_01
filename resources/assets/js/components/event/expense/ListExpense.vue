@@ -203,7 +203,7 @@
             },
 
             callApi() {
-                get(`expense?event_id=${this.$route.params.event_id}`).then(res => {
+                get(`expense?event_id=${this.pageId}`).then(res => {
                     this.expenses = res.data.expenses
                     this.isManager = res.data.isManager
                 })
@@ -223,7 +223,7 @@
                 this.$Progress.start()
                 axios({
                     method: 'GET',
-                    url: this.expenses.prev_page_url + `&event_id=${this.$route.params.event_id}`
+                    url: this.expenses.prev_page_url + `&event_id=${this.pageId}`
                 }).then(res => {
                     this.$Progress.finish()
                     this.expenses = res.data.expenses
@@ -235,7 +235,7 @@
                 this.$Progress.start()
                 axios({
                     method: 'GET',
-                    url: this.expenses.next_page_url + `&event_id=${this.$route.params.event_id}`
+                    url: this.expenses.next_page_url + `&event_id=${this.pageId}`
                 }).then(res => {
                     this.$Progress.finish()
                     this.expenses = res.data.expenses
@@ -244,12 +244,12 @@
             },
 
             callApiAfterDelete() {
-                let url = this.expenses.path + `?event_id=${this.$route.params.event_id}`
+                let url = this.expenses.path + `?event_id=${this.pageId}`
 
                 if (this.expenses.data.length - 1 || !this.expenses.prev_page_url){
                     url = url + `&page=${this.expenses.current_page}`
                 } else {
-                    url = this.expenses.prev_page_url + `&event_id=${this.$route.params.event_id}`
+                    url = this.expenses.prev_page_url + `&event_id=${this.pageId}`
                 }
 
                 axios({
