@@ -41,6 +41,7 @@ class Campaign extends BaseModel
         'authJoniedOrNot',
         'likes',
         'checkLike',
+        'slug',
     ];
 
     public function users()
@@ -156,5 +157,10 @@ class Campaign extends BaseModel
     public function getCheckLikeAttribute()
     {
         return !is_null($this->likes()->where('user_id', \Auth::guard('api')->user()->id)->first());
+    }
+
+    public function getSlugAttribute()
+    {
+        return str_slug(str_limit($this->title, 100) . ' ' . $this->id);
     }
 }

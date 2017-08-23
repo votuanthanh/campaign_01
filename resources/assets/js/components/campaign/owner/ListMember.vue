@@ -114,7 +114,7 @@
 
         }),
         created: function () {
-            this.listMembers(this.$route.params.id)
+            this.listMembers(this.pageId)
         },
         updated() {
             $.material.init()
@@ -136,7 +136,7 @@
             },
             listMembers(campaignId) {
                 this.searchMember({
-                    campaignId: this.$route.params.id,
+                    campaignId: this.pageId,
                     status: 1,
                     search: this.search,
                     roleId: this.roleId,
@@ -148,13 +148,13 @@
                     this.roles = data.roles
                 })
                 .catch(err => {
-                    this.$router.push({ name: 'campaign.timeline', params: { id: this.$route.params.id }})
+                    this.$router.push({ name: 'campaign.timeline', params: { id: this.pageId }})
                 })
             },
             searchMembers: _.debounce(function (e) {
                 e.preventDefault()
                 this.searchMember({
-                    campaignId: this.$route.params.id,
+                    campaignId: this.pageId,
                     status: 1,
                     search: this.search,
                     roleId: this.roleId,
@@ -171,7 +171,7 @@
             }, 100),
 
             blockMembers(member) {
-                let campaignId = this.$route.params.id
+                let campaignId = this.pageId
                 var n = new Noty({
                     type: 'alert',
                     text: this.$i18n.t('messages.comfirm-block-member'),
@@ -207,7 +207,7 @@
             $(window).scroll(() => {
                 if ($(document).height() <= $(window).scrollTop() + $(window).height()) {
                     this.searchMember({
-                        campaignId: this.$route.params.id,
+                        campaignId: this.pageId,
                         status: 1,
                         search: this.search,
                         roleId: this.roleId,

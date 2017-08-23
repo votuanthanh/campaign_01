@@ -98,7 +98,7 @@ import ActionDetail from '../../event/ActionDetail.vue'
 
 export default {
     created() {
-        this.getlistPhotos(this.$route.params.id)
+        this.getlistPhotos(this.pageId)
     },
     updated() {
         this.swiper()
@@ -204,7 +204,7 @@ export default {
         },
         loadMore() {
             var data = {
-                campaignId: this.$route.params.id,
+                campaignId: this.pageId,
                 currentPage: this.listPhotos.current_page,
                 lastPage: this.listPhotos.last_page
             }

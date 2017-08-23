@@ -16,6 +16,7 @@ Route::middleware('auth:api')->get('/user', 'Api\UserController@authUser');
 Route::get('/show-campaign', function (Request $request) {
     return $request->user();
 });
+
 Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function () {
     Route::group(['namespace' => 'Auth'], function () {
         Route::post('login', 'AuthController@login')->name('login');
@@ -24,6 +25,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::post('password/reset', 'ResetPasswordController@reset');
     });
 
+    Route::get('get-slug/{type}/{id}', 'CommonController@getPageSlug');
     Route::post('check-exist', 'CommonController@checkExist');
 
     Route::group(['prefix' => 'user/{id}', 'as' => 'user.'], function () {
