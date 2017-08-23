@@ -8,7 +8,7 @@
     "campaign_chat": "CAMPAIGN CHAT",
     "send_message_error": "Can't send your message!!!",
     "get_message_error": "Can't load your message!!!",
-    "send_message": "Enter your message",
     "chat_popup": "CHAT/MESSAGES",
-    "moment_format": "MM-DD-YYYY H:m:s"
+    "moment_format": "MM-DD-YYYY H:m:s",
+    "send_message": "Type a message..."
 }

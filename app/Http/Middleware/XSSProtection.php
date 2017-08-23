@@ -14,7 +14,7 @@ class XSSProtection
 
         $input = $request->all();
         array_walk_recursive($input, function(&$value, $key) {
-            if (strtolower($key) != 'description' && strtolower($key) != 'reason') {
+            if (strtolower($key) != 'description' && strtolower($key) != 'reason' && strtolower($key) != 'message') {
                 $value = htmlspecialchars($value);
             }
         });
