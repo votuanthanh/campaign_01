@@ -94,5 +94,26 @@
         "header": "Header Photos",
         "delete": "Delete this photo",
         "dont_have_images": "Don't have any photo."
+    },
+    "header": {
+        "search": "Search here people or pages...",
+        "tag": "tag"
+    },
+    "search": {
+        "unfriend": "Unfriend",
+        "cancel_request": "Cancel request",
+        "confirm": "Confirm",
+        "friends": "Friends",
+        "owner": "Owner",
+        "add_friend": "Add friend",
+        "delete_request": "Delete request",
+        "friend_request_send": "Request sent",
+        "view_more": "View more",
+        "campaign": "Campaign",
+        "number_of_participants": "Number of participants",
+        "number_of_events": "Number of events",
+        "result_finded": "There is no user with key word | There is a user with key word | There are {value} users with key word",
+        "result_campaign_finded": "There is no campaign with key word | There is a campaign with key word | There are {value} campaigns with key word",
+        "check_joined": "You have not joined this campaign yet. | You joined this campaign. | You are owner in this campaign."
     }
 }

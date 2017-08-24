@@ -40,7 +40,6 @@
     import Event from './timeline/Event.vue'
     import Action from './timeline/Action.vue'
 
-
     export default {
         components: {
             LeftSidebar,

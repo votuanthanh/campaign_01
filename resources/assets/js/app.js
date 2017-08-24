@@ -46,6 +46,17 @@ const i18n = new VueI18n({
 
 const router = makeRouter(routes)
 
+Vue.mixin({
+    computed: {
+        pageId() {
+            const slug = this.$route.params.slug || ''
+            if (Number.isInteger(slug))
+                return slug
+            return slug.substr(slug.lastIndexOf('-') + 1)
+        }
+    },
+})
+
 const app = new Vue({
     el: '#app',
     store,
@@ -60,15 +71,4 @@ Vue.directive('tooltip', function (el, binding) {
         placement: binding.arg,
         trigger: 'hover'
     })
-})
-
-Vue.mixin({
-    computed: {
-        pageId() {
-            const slug = this.$route.params.slug || ''
-            if (Number.isInteger(slug))
-                return slug
-            return slug.substr(slug.lastIndexOf('-') + 1)
-        }
-    },
 })

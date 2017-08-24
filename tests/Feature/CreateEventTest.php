@@ -26,6 +26,7 @@ class CreateEventTest extends TestCase
         $campaign->users()->attach([
             $user->id => [
                 'role_id' => $roleCampaign->id,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $this->actingAs($user, 'api');
@@ -170,6 +171,7 @@ class CreateEventTest extends TestCase
         $campaign->users()->attach([
             $user->id => [
                 'role_id' => 3,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $this->actingAs($user, 'api');
@@ -221,6 +223,7 @@ class CreateEventTest extends TestCase
         $campaign->users()->attach([
             $user->id => [
                 'role_id' => 3,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $this->actingAs($user, 'api');

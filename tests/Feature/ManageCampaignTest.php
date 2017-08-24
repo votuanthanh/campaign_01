@@ -25,7 +25,10 @@ class ManageCampaignTest extends TestCase
             ->findRoleOrFail(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)
             ->id;
         $campaign->users()->attach([
-            $owner->id => ['role_id' => $ownerId],
+            $owner->id => [
+                'role_id' => $ownerId,
+                'status' => CAMPAIGN::APPROVED,
+            ],
         ]);
         $this->actingAs($user, 'api');
         $response = $this->json('PATCH', route('campaign.change-role'), [
@@ -52,7 +55,10 @@ class ManageCampaignTest extends TestCase
             ->findRoleOrFail(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)
             ->id;
         $campaign->users()->attach([
-            $user->id => ['role_id' => $ownerId],
+            $user->id => [
+                'role_id' => $ownerId,
+                'status' => CAMPAIGN::APPROVED,
+            ],
         ]);
         $this->actingAs($user, 'api');
         $response = $this->json('PATCH', route('campaign.change-role'), [
@@ -84,8 +90,14 @@ class ManageCampaignTest extends TestCase
             ->findRoleOrFail(Role::ROLE_MEMBER, Role::TYPE_CAMPAIGN)
             ->id;
         $campaign->users()->attach([
-            $owner->id => ['role_id' => $ownerId],
-            $member->id => ['role_id' => $memberId],
+            $owner->id => [
+                'role_id' => $ownerId,
+                'status' => CAMPAIGN::APPROVED,
+            ],
+            $member->id => [
+                'role_id' => $memberId,
+                'status' => CAMPAIGN::APPROVED,
+            ],
         ]);
         $this->actingAs($owner, 'api');
         $response = $this->json('PATCH', route('campaign.change-role'), [
@@ -107,7 +119,10 @@ class ManageCampaignTest extends TestCase
             ->findRoleOrFail(Role::ROLE_OWNER, Role::TYPE_CAMPAIGN)
             ->id;
         $campaign->users()->attach([
-            $owner->id => ['role_id' => $ownerId],
+            $owner->id => [
+                'role_id' => $ownerId,
+                'status' => CAMPAIGN::APPROVED,
+            ],
         ]);
         $this->actingAs($user, 'api');
         $response = $this->json('PATCH', route('campaign.remove-user'), [
@@ -137,8 +152,14 @@ class ManageCampaignTest extends TestCase
             ->findRoleOrFail(Role::ROLE_MEMBER, Role::TYPE_CAMPAIGN)
             ->id;
         $campaign->users()->attach([
-            $owner->id => ['role_id' => $ownerId],
-            $member->id => ['role_id' => $memberId],
+            $owner->id => [
+                'role_id' => $ownerId,
+                'status' => CAMPAIGN::APPROVED,
+            ],
+            $member->id => [
+                'role_id' => $memberId,
+                'status' => CAMPAIGN::APPROVED,
+            ],
         ]);
         $this->actingAs($owner, 'api');
         $response = $this->json('PATCH', route('campaign.remove-user'), [
@@ -162,8 +183,14 @@ class ManageCampaignTest extends TestCase
             ->findRoleOrFail(Role::ROLE_MEMBER, Role::TYPE_CAMPAIGN)
             ->id;
         $campaign->users()->attach([
-            $owner->id => ['role_id' => $ownerId],
-            $member->id => ['role_id' => $memberId],
+            $owner->id => [
+                'role_id' => $ownerId,
+                'status' => CAMPAIGN::APPROVED,
+            ],
+            $member->id => [
+                'role_id' => $memberId,
+                'status' => CAMPAIGN::APPROVED,
+            ],
         ]);
         $this->actingAs($owner, 'api');
         $response = $this->json('PATCH', route('campaign.change-owner'), [

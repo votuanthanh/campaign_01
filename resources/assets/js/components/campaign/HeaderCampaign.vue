@@ -83,6 +83,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { EventBus } from '../../EventBus.js'
 
 export default {
     computed: {
@@ -94,6 +95,11 @@ export default {
             'checkAdmin'
         ]),
         ...mapState('campaign', ['campaign'])
+    },
+    watch: {
+        $route () {
+            EventBus.$emit('redirect-page')
+        }
     },
     methods : {
         checkActiveUrl(name) {

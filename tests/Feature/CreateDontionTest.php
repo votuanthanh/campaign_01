@@ -28,6 +28,7 @@ class CreateDonationTest extends TestCase
         $campaign->users()->attach([
             $user->id => [
                 'role_id' => $roleCampaign->id,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $event = factory(Event::class)->create([
@@ -67,7 +68,9 @@ class CreateDonationTest extends TestCase
 
     public function testCreateDonationbutNotOwnerThenFail()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->create([
+            'status' => CAMPAIGN::APPROVED,
+        ]);
         $campaign = factory(Campaign::class)->create([
             'status' => Campaign::ACTIVE,
         ]);
@@ -131,7 +134,9 @@ class CreateDonationTest extends TestCase
     public function testAcceptDonationButNotOwnerThenFail()
     {
         $faker = \Faker\Factory::create();
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->create([
+            'status' => CAMPAIGN::APPROVED,
+        ]);
         $campaign = factory(Campaign::class)->create([
             'status' => Campaign::ACTIVE,
             'hashtag' => $faker->unique()->name,
@@ -141,11 +146,13 @@ class CreateDonationTest extends TestCase
         $campaign->users()->attach([
             $user->id => [
                 'role_id' => $roleMemberCampaign->id,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $campaign->users()->attach([
             3 => [
                 'role_id' => $roleCampaign->id,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $event = factory(Event::class)->create([
@@ -162,7 +169,7 @@ class CreateDonationTest extends TestCase
         ]);
         $this->actingAs($user, 'api');
         $response = $this->json('PATCH', route('update-status', ['id' => $donation->id]), [
-            'status' => 1,
+            'status' => CAMPAIGN::APPROVED,
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
@@ -207,11 +214,13 @@ class CreateDonationTest extends TestCase
         $campaign->users()->attach([
             $user->id => [
                 'role_id' => $roleMemberCampaign->id,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $campaign->users()->attach([
             3 => [
                 'role_id' => $roleCampaign->id,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $event = factory(Event::class)->create([
@@ -253,11 +262,13 @@ class CreateDonationTest extends TestCase
         $campaign->users()->attach([
             $user->id => [
                 'role_id' => $roleMemberCampaign->id,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $campaign->users()->attach([
             $user->id => [
                 'role_id' => $roleCampaign->id,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $event = factory(Event::class)->create([
@@ -297,11 +308,13 @@ class CreateDonationTest extends TestCase
         $campaign->users()->attach([
             $user->id => [
                 'role_id' => $roleMemberCampaign->id,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $campaign->users()->attach([
             $user->id => [
                 'role_id' => $roleCampaign->id,
+                'status' => CAMPAIGN::APPROVED,
             ],
         ]);
         $event = factory(Event::class)->create([
@@ -314,7 +327,7 @@ class CreateDonationTest extends TestCase
             'campaign_id' => $event->campaign_id,
             'goal_id' => 5,
             'value' => 1001,
-            'status' => 1,
+            'status' => CAMPAIGN::APPROVED,
         ]);
         $this->actingAs($user, 'api');
         $response = $this->json('PATCH', route('donation.update', ['id' => $donation->id]), [
