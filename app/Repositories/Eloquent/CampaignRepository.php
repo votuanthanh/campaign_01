@@ -425,6 +425,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
     {
         $resutCampaign = $this->search($keyword, null, true)
             ->with('media', 'owner', 'tags', 'events', 'members', 'isMember', 'isOwner')
+            ->groupBy('created_at')
             ->orderBy('created_at', 'DESC')
             ->get();
 

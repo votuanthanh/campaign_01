@@ -63,6 +63,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
                 Route::post('header-photo', 'UserController@updateHeaderPhoto')->name('header');
                 Route::post('upload-files/{path}', 'UserController@uploadImages')->name('upload');
             });
+            Route::get('homepage', 'ActivityController@getHomePage')->name('homepage');
             Route::patch('follow/{id}', 'UserController@follow')->name('follow');
             Route::patch('follow-tag/{id}', 'UserController@followTag')->name('follow-tag');
             Route::patch('join-campaign/{id}', 'UserController@joinCampaign')->name('join-campaign');

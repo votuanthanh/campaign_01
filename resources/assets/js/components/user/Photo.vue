@@ -123,14 +123,29 @@
                         this.listPhoto = res.data.photos.data
                         this.loading = false
                     })
+                    .catch(err => {
+                        noty({
+                            text: this.$i18n.t('messages.connection_error'),
+                            container: false,
+                            force: true
+                        })
+                    })
             },
             loadMoreFriend() {
-                if (this.page <= this.totalPage) {
+                if (this.page < this.totalPage) {
                     this.loading = true
                     get(`user/${this.pageId}/get-photos-user?page=${++this.page}`)
                         .then(res => {
                             this.listPhoto = this.listPhoto.concat(res.data.photos.data)
                             this.loading = false
+                        })
+                        .catch(err => {
+                            this.loading = false
+                            noty({
+                                text: this.$i18n.t('messages.connection_error'),
+                                container: false,
+                                force: true
+                            })
                         })
                 }
             },

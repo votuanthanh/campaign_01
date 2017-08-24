@@ -43,6 +43,7 @@
     {!! Html::style(asset('frontend/css/bootstrap-select.css')) !!}
     {!! Html::style(mix('frontend/css/app.css')) !!}
     {!! Html::style(asset('frontend/css/swiper.min.css')) !!}
+    {!! Html::style(asset('frontend/css/post-new.css')) !!}
 </head>
 </head>
 

@@ -102,6 +102,9 @@ export default {
         ]),
         ...mapState('campaign', ['campaign'])
     },
+    created() {
+        EventBus.$emit('redirect-page')
+    },
     watch: {
         $route () {
             EventBus.$emit('redirect-page')

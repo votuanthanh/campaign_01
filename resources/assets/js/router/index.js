@@ -2,7 +2,6 @@ import { authGuard, guestGuard } from './middleware'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store'
-import { get } from '../helpers/api'
 import { getUser } from './router'
 // Register Components to router
 import Index from '../components/Index.vue'
@@ -50,10 +49,11 @@ import UpdateCampaign from '../components/campaign/owner/UpdateCampaign.vue'
 import UpdateEvent from '../components/event/create/UpdateEvent.vue'
 import Search from '../components/user/Search.vue'
 import InfoEvent from '../components/event/InfoEvent.vue'
+import HomePage from '../components/home/HomePage.vue'
 
 const router = [
     // anyone can visit here
-    { path: '/', component: Index, name: 'index' },
+    { path: '/', component: HomePage, name: 'homepage' },
     // only user can visit here
     ...authGuard([
         { path: '/campaign/create', component: AddCampaign, name: 'campaign.create' },
@@ -114,7 +114,7 @@ const router = [
             children: [
                 { path: '', component: ListAction, name: 'event.index' },
                 { path: 'donation', component: DonationList, name: 'event.donation' },
-                { path: 'info', component: InfoEvent , name: 'event.info' },
+                { path: 'info', component: InfoEvent, name: 'event.info' },
                 {
                     path: 'donation/:id',
                     component: DonationInfo,
