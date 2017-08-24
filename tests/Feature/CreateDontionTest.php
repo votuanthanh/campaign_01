@@ -126,7 +126,7 @@ class CreateDonationTest extends TestCase
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
-        $data = $response->getdata()->donation;
+        // $data = $response->getdata()->donation;
 
         $response->assertStatus(CODE_OK);
     }
