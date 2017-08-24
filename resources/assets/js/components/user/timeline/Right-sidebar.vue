@@ -452,9 +452,9 @@
             targetNumber: 0
         }),
         created() {
-            this.getListPhotoAndFriend(this.$route.params.id),
+            this.getListPhotoAndFriend(this.pageId),
             EventBus.$on('photo', data => {
-                this.getListPhotoAndFriend(this.$route.params.id)
+                this.getListPhotoAndFriend(this.pageId)
             });
         },
         components: {
@@ -472,7 +472,7 @@
         },
         watch: {
             $route () {
-                this.getListPhotoAndFriend(this.$route.params.id)
+                this.getListPhotoAndFriend(this.pageId)
             }
         },
         methods: {

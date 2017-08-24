@@ -24,7 +24,7 @@
                                     <img :src="result.image_small" alt="avatar">
                                 </div>
                                 <div class="notification-event">
-                                    <router-link class="h6 notification-friend" :to="{ name: 'user.timeline', params: { id: result.id }}">
+                                    <router-link class="h6 notification-friend" :to="{ name: 'user.timeline', params: { slug: result.slug }}">
                                         {{ result.name }}
                                     </router-link>
                                     <span class="chat-message-item">
@@ -338,7 +338,7 @@
                                     </router-link>
                                 </li>
                                 <li>
-                                    <router-link :to="{ name: 'user.timeline', params: { id: user.id }}">
+                                    <router-link :to="{ name: 'user.timeline', params: { slug: user.slug }}">
                                         <svg class="olymp-star-icon left-menu-icon">
                                             <use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use>
                                         </svg>
@@ -421,7 +421,7 @@
                             </ul>
                         </div>
                     </div>
-                    <router-link :to="{ name: 'user.timeline', params: { id: user.id } }" class="author-name fn">
+                    <router-link :to="{ name: 'user.timeline', params: { slug: user.slug } }" class="author-name fn">
                         <div class="author-title">
                             {{ user.name }}
                             <svg class="olymp-dropdown-arrow-icon">
