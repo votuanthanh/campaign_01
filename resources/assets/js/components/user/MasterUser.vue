@@ -291,8 +291,10 @@
     import ImageModal from '../libs/SelectImageModal.vue'
     import { EventBus } from '../../EventBus.js'
     import Noty from 'noty'
+    import slug from '../../helpers/mixin/getFullSlug'
 
     export default {
+        mixins: [slug],
         data: () => ({
             showAvatar: false,
             showAllAvatar: false,
@@ -300,7 +302,8 @@
             showAllImage: false,
             selectImage: {
                 url_file: ''
-            }
+            },
+            pageType: 'user'
         }),
         mounted() {
             $.material.init()
@@ -316,7 +319,7 @@
                 authUser: 'user'
             }),
             userId: function () {
-                return this.$route.params.id
+                return this.pageId
             },
             imageSelect() {
                 let img = this.selectImage.url_file.substring(8)

@@ -18,12 +18,6 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable, SoftDeletes, UrlImage, ConvertEmptyStringToNull, SearchableTrait;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-
     // User's status
     const IN_ACTIVE = 0;
     const ACTIVE = 1;
@@ -34,6 +28,11 @@ class User extends Authenticatable
     const PENDING = 0;
     const ACCEPTED = 1;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'name',
         'email',
@@ -76,6 +75,7 @@ class User extends Authenticatable
         'is_friend',
         'has_pending_request',
         'has_send_request',
+        'slug',
     ];
 
     protected $searchable = [
@@ -290,5 +290,10 @@ class User extends Authenticatable
     public function getBirthdayAttribute($date)
     {
         return Carbon::parse($date)->toDateString();
+    }
+
+    public function getSlugAttribute()
+    {
+        return str_slug(str_limit($this->name, 100) . ' ' . $this->id);
     }
 }

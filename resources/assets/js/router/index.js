@@ -68,7 +68,7 @@ const router = [
             ]
         },
         {
-            path: '/user/:id',
+            path: '/user/:slug',
             component: MasterUser,
             name: 'user',
             children: [

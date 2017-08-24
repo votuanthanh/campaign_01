@@ -154,7 +154,7 @@
             listUser() {
                 this.page++
                 this.loading = true
-                get(`user/${this.$route.params.id}/friends/${this.page}`)
+                get(`user/${this.pageId}/friends/${this.page}`)
                     .then(res => {
                         this.loading = false
                         if(!res.data.data.length)
@@ -169,7 +169,7 @@
                     this.listUser()
                 } else {
                     this.loading = true
-                    get(`user/${this.$route.params.id}/search-friends/${this.searchKey}`)
+                    get(`user/${this.pageId}/search-friends/${this.searchKey}`)
                         .then(response => {
                             this.friends = response.data.data
                             this.loading = false

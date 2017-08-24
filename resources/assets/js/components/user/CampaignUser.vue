@@ -6,14 +6,26 @@
                 <div class="clients-grid">
 
                     <ul class="cat-list-bg-style align-center sorting-menu">
-                        <router-link class="cat-list__item" :to="`/user/${$route.params.id}/following-campaign`" active-class="active" tag="li">
+                        <router-link
+                            class="cat-list__item"
+                            :to="{ name: 'user.campaign', params: { slug: $route.params.slug, path: 'following-campaign' }}"
+                            active-class="active"
+                            tag="li">
                             <a href="">{{ $t('user.label.following_campaign') }}</a>
                         </router-link>
 
-                        <router-link class="cat-list__item" :to="`/user/${$route.params.id}/joined-campaign`" active-class="active" tag="li">
+                        <router-link
+                            class="cat-list__item"
+                            :to="{ name: 'user.campaign', params: { slug: $route.params.slug, path: 'joined-campaign' }}"
+                            active-class="active"
+                            tag="li">
                             <a href="">{{ $t('user.label.joined_campaign') }}</a>
                         </router-link>
-                        <router-link class="cat-list__item" :to="`/user/${$route.params.id}/owned-campaign`" active-class="active" tag="li">
+                        <router-link
+                            class="cat-list__item"
+                            :to="{ name: 'user.campaign', params: { slug: $route.params.slug, path: 'owned-campaign' }}"
+                            active-class="active"
+                            tag="li">
                             <a href="">{{ $t('user.label.owned_campaign') }}</a>
                         </router-link>
                     </ul>
@@ -134,7 +146,7 @@ export default {
         fetchData() {
             this.page++
             this.loading = true
-            axios.get(`/api/user/${this.$route.params.id}/${this.$route.params.path}/?page=${this.page}`)
+            axios.get(`/api/user/${this.pageId}/${this.$route.params.path}/?page=${this.page}`)
                 .then(res => {
                     if (!res.data.data.data.length) {
                         this.hasData = false

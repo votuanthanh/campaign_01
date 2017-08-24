@@ -89,7 +89,7 @@
                 'user',
             ]),
             userId: function () {
-                return this.$route.params.id
+                return this.pageId
             },
         },
         created() {
@@ -118,7 +118,7 @@
             },
             getPhotosUser() {
                 this.loading = true
-                get(`user/${this.$route.params.id}/get-photos-user`)
+                get(`user/${this.pageId}/get-photos-user`)
                     .then(res => {
                         this.totalPage = res.data.photos.last_page
                         this.listPhoto = res.data.photos.data
@@ -128,7 +128,7 @@
             loadMoreFriend() {
                 if (this.page <= this.totalPage) {
                     this.loading = true
-                    get(`user/${this.$route.params.id}/get-photos-user?page=${++this.page}`)
+                    get(`user/${this.pageId}/get-photos-user?page=${++this.page}`)
                         .then(res => {
                             this.listPhoto = this.listPhoto.concat(res.data.photos.data)
                             this.loading = false

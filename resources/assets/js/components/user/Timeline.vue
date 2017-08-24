@@ -57,7 +57,7 @@
         mounted() {
             $(window).scroll(() => {
                 if ($(document).height() - $(window).height() < $(window).scrollTop() + 1) {
-                    this.loadMore({ id: this.$route.params.id, infoPaginate: this.listActivity })
+                    this.loadMore({ id: this.pageId, infoPaginate: this.listActivity })
                 }
             })
         },
