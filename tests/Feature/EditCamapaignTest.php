@@ -29,6 +29,7 @@ class EditCamapaignTest extends TestCase
             $campaign->users()->attach([
                 $user->id => [
                     'role_id' => Role::where(['name' => Role::ROLE_OWNER, 'type' => Role::TYPE_CAMPAIGN])->first(['id'])->id,
+                    'status' => Campaign::APPROVED,
                 ],
             ]);
         }
@@ -134,6 +135,7 @@ class EditCamapaignTest extends TestCase
             $campaign->users()->attach([
                 $user->id => [
                     'role_id' => Role::where(['name' => Role::ROLE_OWNER, 'type' => Role::TYPE_CAMPAIGN])->first(['id'])->id,
+                    'status' => Campaign::APPROVED,
                 ],
             ]);
         }
@@ -195,6 +197,7 @@ class EditCamapaignTest extends TestCase
             $campaign->users()->attach([
                 $user->id => [
                     'role_id' => Role::where(['name' => Role::ROLE_OWNER, 'type' => Role::TYPE_CAMPAIGN])->first(['id'])->id,
+                    'status' => Campaign::APPROVED,
                 ],
             ]);
         }

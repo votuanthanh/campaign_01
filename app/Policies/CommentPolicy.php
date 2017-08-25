@@ -17,4 +17,10 @@ class CommentPolicy extends BasePolicy
         return $user->id === $comment->user_id
             || $user->can('manager', $comment->commentable);
     }
+
+    public function like(User $user, Comment $comment)
+    {
+        return $user->id === $comment->user_id
+            || $user->can('view', $comment->commentable);
+    }
 }
