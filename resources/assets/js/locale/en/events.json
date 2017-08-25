@@ -69,5 +69,10 @@
         "times": "Times",
         "statistic": "Statistic",
         "select_goal": "Select goal"
-    }
+    },
+    "show_info": "View Info",
+    "quantity_actions": "Quantity Actions",
+    "address": "Address",
+    "start_day": "Start Day",
+    "end_day": "End Day"
 }

@@ -183,4 +183,18 @@ class EventController extends ApiController
             $this->compacts['deleteEvent'] = $this->eventRepository->deleteFromEvent($event);
         });
     }
+
+    public function getInfoEvent($id)
+    {
+        $event = $this->eventRepository->findOrFail($id);
+
+        if ($this->user->cannot('view', $event)) {
+            throw new UnknowException('Permission denied');
+        }
+
+        return $this->getData(function () use ($event) {
+            $this->compacts['event'] = $event->load('settings');
+            $this->compacts['countActions'] = $event->actions()->count();
+        });
+    }
 }

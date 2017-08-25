@@ -48,6 +48,7 @@ import ExpenseStatistic from '../components/event/expense/Statistic.vue'
 import UpdateCampaign from '../components/campaign/owner/UpdateCampaign.vue'
 import UpdateEvent from '../components/event/create/UpdateEvent.vue'
 import Search from '../components/user/Search.vue'
+import InfoEvent from '../components/event/InfoEvent.vue'
 
 const router = [
     // anyone can visit here
@@ -111,6 +112,7 @@ const router = [
             children: [
                 { path: '', component: ListAction, name: 'event.index' },
                 { path: 'donation', component: DonationList, name: 'event.donation' },
+                { path: 'info', component: InfoEvent , name: 'event.info' },
                 {
                     path: 'donation/:id',
                     component: DonationInfo,

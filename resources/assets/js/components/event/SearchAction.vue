@@ -30,6 +30,17 @@
                                 @click="createAction">
                                 {{ $t('events.create_action') }}
                             </button>
+
+                            <router-link
+                                tag="button"
+                                class="btn btn-primary btn-md-2 bg-breez"
+                                :to="{ name: 'event.info' }"
+                                active-class="active"
+                                data-toggle="modal"
+                                data-target="#update-header-photo">
+                                {{ $t('events.show_info') }}
+                            </router-link>
+
                             <div class="btn-group" v-show="event.complete_percent.length">
                                 <button
                                     href="#"
