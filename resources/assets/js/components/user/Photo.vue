@@ -94,7 +94,7 @@
         },
         created() {
             this.getPhotosUser(this.userId)
-            EventBus.$on('photo', data => {
+            EventBus.$on('photo', () => {
                 this.getPhotosUser(this.userId)
                 this.page = 1
             })
@@ -111,7 +111,6 @@
             $(window).off()
         },
         methods: {
-            ...mapActions('user', ['getPhotosUser']),
             showImageDetail(index) {
                 this.targetNumber = index
                 this.showImage = true

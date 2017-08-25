@@ -6,7 +6,7 @@
  * account module.
  */
 
-import * as types from './mutation-types';
+import * as types from './mutation-types'
 import * as routes from '../../../router/router'
 import { post, get } from '../../../helpers/api'
 
@@ -72,7 +72,6 @@ export const uploadImage = ({ commit }, data) => {
     return new Promise((resolve, reject) => {
         post(routes.uploadImages + data.path, data.formData)
             .then(res => {
-                commit(types.UPLOAD_IMAGES, res.data.images)
                 resolve(res.data.http_status.status)
             })
             .catch(err => {

@@ -61,8 +61,4 @@ export default {
         state.user.image_small = '/images/' + image.url_file + '?p=small'
         state.user.image_thumbnail = '/images/' + image.url_file + '?p=thumbnail'
     },
-
-    [UPLOAD_IMAGES](state, imageArr) {
-        state.user.media = imageArr.concat(state.user.media)
-    }
 };
