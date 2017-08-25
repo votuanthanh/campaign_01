@@ -29,7 +29,6 @@
     "phone": "Phone",
     "other-social": "Other Social Networks",
     "operation-time": "Operation Time",
-    "location": "Location",
     "typical-images": "Typical Images",
     "tags": "Tags",
     "related-campaigns": "Related Campaigns",
@@ -54,5 +53,17 @@
     "accept-request": "Accept Request",
     "list-events": "List Events",
     "close_campaign": "Close Campaign",
-    "update_campaign": "Update Campaign"
+    "update_campaign": "Update Campaign",
+    "statistic": {
+        "statistic": "Statistics",
+        "members": "members",
+        "today": "today",
+        "events": "events",
+        "upcomming": "upcomming",
+        "going_on": "going on",
+        "and": "and",
+        "finished": "finished",
+        "actions": "actions",
+        "not_enought_data": "Not enough data for statistics"
+    }
 }

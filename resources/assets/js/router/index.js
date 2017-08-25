@@ -45,6 +45,7 @@ import CreateExpense from '../components/event/expense/CreateExpense.vue'
 import UpdateExpense from '../components/event/expense/UpdateExpense.vue'
 import CreateExpenseBuy from '../components/event/expense/CreateExpenseBuy.vue'
 import ExpenseStatistic from '../components/event/expense/Statistic.vue'
+import CampaignStatistic from '../components/campaign/Statistic.vue'
 import UpdateCampaign from '../components/campaign/owner/UpdateCampaign.vue'
 import UpdateEvent from '../components/event/create/UpdateEvent.vue'
 import Search from '../components/user/Search.vue'
@@ -90,6 +91,7 @@ const router = [
                 { path: 'photo', component: PhotoCampaign, name: 'campaign.photo' },
                 { path: 'campaign-related', component: CampaignRelated, name: 'campaign.campaign_related' },
                 { path: 'campaign-about', component: CampaignAbout, name: 'campaign.about' },
+                { path: 'statistic', component: CampaignStatistic, name: 'campaign.statistic' },
                 {
                     path: 'owner-campaign',
                     component: OwnerCampaign,

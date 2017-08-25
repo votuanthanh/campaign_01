@@ -47,6 +47,13 @@
                                                     {{ $t('campaigns.campaign-related') }}
                                                 </router-link>
                                             </li>
+                                            <li>
+                                                <router-link
+                                                    :to="{ name: 'campaign.statistic', params: { id: campaign.id }}"
+                                                    :class="checkActiveUrl('campaign.statistic')">
+                                                    {{ $t('campaigns.statistic.statistic') }}
+                                                </router-link>
+                                            </li>
                                             <li v-if="checkPermission || checkAdmin">
                                                 <router-link
                                                     :to="{ name: 'campaign.member_request' }"

@@ -88,6 +88,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::get('list-photos/{id}', 'CampaignController@listPhotos');
             Route::get('campaign-related/{id}', 'CampaignController@getCampaignRelated');
             Route::get('search-members/{campaignId}/{status}', 'CampaignController@searchMembers');
+            Route::get('{id}/statistic', 'CampaignController@statistic')->name('campaign-statistic');
         });
 
         Route::resource('campaign', 'CampaignController', ['only' => ['store', 'update', 'destroy', 'show', 'edit']]);

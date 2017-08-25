@@ -385,4 +385,14 @@ class CampaignController extends ApiController
             $this->compacts['campaign_related'] = $this->campaignRepository->getCampaignRelated($campaign, $this->user->id);
         });
     }
+
+    public function statistic($id)
+    {
+        $campaign = $this->campaignRepository->findOrFail($id);
+
+        return $this->getData(function () use ($campaign) {
+            $this->authorize('view', $campaign);
+            $this->compacts['data'] = $this->campaignRepository->getStatisticData($campaign);
+        });
+    }
 }
