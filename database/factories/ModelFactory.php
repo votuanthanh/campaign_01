@@ -60,8 +60,8 @@ $factory->define(App\Models\Campaign::class, function (Faker\Generator $faker) {
         'status' => $faker->randomElement([0, 1]),
         'title' => $faker->paragraph(),
         'address' => $faker->address,
-        'number_of_comments' => 10,
-        'number_of_likes' => 10,
+        'number_of_comments' => 0,
+        'number_of_likes' => 0,
         'created_at' => $faker->dateTime(),
         'updated_at' => $faker->dateTime(),
     ];
@@ -85,8 +85,8 @@ $factory->define(App\Models\Event::class, function (Faker\Generator $faker) {
         'longitude' => $faker->longitude,
         'latitude' => $faker->latitude,
         'address' => $faker->address,
-        'number_of_comments' => 10,
-        'number_of_likes' => 10,
+        'number_of_comments' => 0,
+        'number_of_likes' => 0,
         'created_at' => $faker->dateTime(),
         'updated_at' => $faker->dateTime(),
     ];
@@ -112,8 +112,8 @@ $factory->define(App\Models\Action::class, function (Faker\Generator $faker) {
     return [
         'caption' => $faker->sentence(10),
         'description' => $faker->paragraph(),
-        'number_of_comments' => 10,
-        'number_of_likes' => 10,
+        'number_of_comments' => 0,
+        'number_of_likes' => 0,
     ];
 });
 
