@@ -140,7 +140,7 @@
             $(window).scroll(() => {
                 if ($(document).height() - $(window).height() < $(window).scrollTop() + 1) {
                     this.loadMore({
-                        id: this.$route.params.id,
+                        id: this.pageId,
                         infoPaginate: this.listActivity
                     })
                 }
