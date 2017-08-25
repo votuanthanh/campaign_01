@@ -6,7 +6,6 @@ export const GET_LIST_FOLLOW = 'GET_LIST_FOLLOW'
 export const GET_GROUPS = 'GET_GROUPS'
 export const CHANGE_HEADER_PHOTO = 'CHANGE_HEADER_PHOTO'
 export const CHANGE_AVATAR = 'CHANGE_AVATAR'
-export const UPLOAD_IMAGES = 'UPLOAD_IMAGES'
 
 export default {
     CHECK,
@@ -17,5 +16,4 @@ export default {
     GET_GROUPS,
     CHANGE_HEADER_PHOTO,
     CHANGE_AVATAR,
-    UPLOAD_IMAGES,
 }

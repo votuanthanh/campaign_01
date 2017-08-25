@@ -58,11 +58,11 @@ class UserController extends ApiController
             return $this->responseFail();
         }
 
-        return $this->user->load(['media' => function ($query) {
-            $query->latest();
-        }, 'roles' => function ($query) {
-            $query->where('type', Role::TYPE_SYSTEM);
-        }]);
+        return $this->user->load([
+            'roles' => function ($query) {
+                $query->where('type', Role::TYPE_SYSTEM);
+            }
+        ]);
     }
 
     /**

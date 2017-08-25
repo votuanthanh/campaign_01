@@ -168,7 +168,7 @@
                 </span>
             </a>
 
-            <a href="#" class="upload-photo-item" @click.prevent="showAllAvatar = true">
+            <a href="#" class="upload-photo-item" @click.prevent="openPhotoModal('avatar')">
 
                 <svg class="olymp-photos-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-photos-icon"></use></svg>
 
@@ -180,8 +180,8 @@
         <image-modal :show.sync="showAllAvatar">
             <template slot="header">{{ $t('user.upload.select_photo') }}</template>
             <div class="ui-block-content">
-                <div class="tab-pane active" id="home" role="tabpanel" aria-expanded="true" v-if="authUser.media.length">
-                    <div class="choose-photo-item" data-mh="choose-item" v-for="image in authUser.media">
+                <div class="tab-pane active" id="home" role="tabpanel" aria-expanded="true" v-if="listPhoto.length">
+                    <div class="choose-photo-item" data-mh="choose-item" v-for="image in listPhoto">
                         <div class="radio">
                             <label class="custom-radio">
                                 <img :src="image.image_default" alt="photo">
@@ -203,7 +203,7 @@
                 <a href="#"
                     class="btn btn-primary btn-lg btn--half-width"
                     @click.prevent="handleUpdate('avatar ')"
-                    v-if="authUser.media.length && selectImage.url_file">
+                    v-if="listPhoto.length && selectImage.url_file">
                     {{ $t('user.upload.confirm') }}
                 </a>
             </div>
@@ -221,7 +221,7 @@
                 </span>
             </a>
 
-            <a href="#" class="upload-photo-item" @click.prevent="showAllImage = true">
+            <a href="#" class="upload-photo-item" @click.prevent="openPhotoModal('header')">
 
                 <svg class="olymp-photos-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-photos-icon"></use></svg>
 
@@ -232,8 +232,8 @@
         <image-modal :show.sync="showAllImage">
             <template slot="header">{{ $t('user.upload.select_photo') }}</template>
             <div class="ui-block-content">
-                <div class="tab-pane active" id="home" role="tabpanel" aria-expanded="true" v-if="authUser.media.length">
-                    <div class="choose-photo-item" data-mh="choose-item" v-for="image in authUser.media">
+                <div class="tab-pane active" id="home" role="tabpanel" aria-expanded="true" v-if="listPhoto.length">
+                    <div class="choose-photo-item" data-mh="choose-item" v-for="image in listPhoto">
                         <div class="radio">
                             <label class="custom-radio">
                                 <img :src="image.image_default" alt="photo">
@@ -255,7 +255,7 @@
                 <a href="#"
                     class="btn btn-primary btn-lg btn--half-width"
                     @click.prevent="handleUpdate('header')"
-                    v-if="authUser.media.length && selectImage.url_file">
+                    v-if="listPhoto.length && selectImage.url_file">
                     {{ $t('user.upload.confirm') }}
                 </a>
             </div>
@@ -282,9 +282,20 @@
             selectImage: {
                 url_file: ''
             },
-            pageType: 'user'
+            pageType: 'user',
+            listPhoto: [],
+            photoPage: 0,
+            isLastPhotoPage: false
         }),
         mounted() {
+            $('.tab-content').scroll((e) => {
+                const el = $(e.currentTarget)
+
+                if (el.scrollTop() + el.innerHeight() + 1 >= el[0].scrollHeight && !this.isLastPhotoPage)
+                    this.getUserPhotos()
+            })
+        },
+        updated() {
             $.material.init()
         },
         computed: {
@@ -333,6 +344,7 @@
             },
             filesChange(event, path) {
                 this.$validator.validateAll().then(() => {
+                    this.$Progress.start()
                     let formData = new FormData()
                     $.each(event.currentTarget.files, (i, file) => {
                         formData.append('uploads[]', file)
@@ -340,13 +352,22 @@
                     this.uploadImage({ path, formData })
                         .then(res => {
                             $.material.init()
+
                             if (path == 'header')
                                 this.showAllImage = true
                             else
                                 this.showAllAvatar = true
-                            EventBus.$emit('photo', 'updateListPhoto')
+
+                            EventBus.$emit('photo')
+                            this.photoPage = 0
+                            this.isLastPhotoPage = false
+                            this.listPhoto = []
+                            this.getUserPhotos()
+                            this.$Progress.finish()
                         })
-                        .catch(err => {})
+                        .catch(err => {
+                            this.$Progress.fail()
+                        })
                 })
             },
             handleUpdate(type) {
@@ -354,6 +375,7 @@
                     this.updateHeaderPhoto(this.imageSelect)
                 else
                     this.changeAvatar(this.imageSelect)
+
                 this.showAvatar = false
                 this.showAllAvatar = false
                 this.showHeader = false
@@ -413,6 +435,28 @@
                             this.updateCurrentPageUser(data)
                         })
                 })
+            },
+            openPhotoModal(type) {
+                if (type == 'avatar')
+                    this.showAllAvatar = true
+                else
+                    this.showAllImage = true
+
+                if (!this.listPhoto.length) {
+                    this.photoPage = 0
+                    this.getUserPhotos()
+                }
+            },
+            getUserPhotos() {
+                this.photoPage++
+                get(`user/${this.pageId}/get-photos-user?page=${this.photoPage}`)
+                    .then(res => {
+                        this.totalPage = res.data.photos.last_page
+                        this.listPhoto = this.listPhoto.concat(res.data.photos.data)
+
+                        if (this.photoPage == res.data.photos.last_page)
+                            this.isLastPhotoPage = true
+                    })
             },
         },
         components: {
