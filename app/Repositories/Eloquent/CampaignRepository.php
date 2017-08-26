@@ -495,4 +495,51 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             ->orderBy('deleted_at', 'DESC')
             ->paginate(config('settings.paginate_default'));
     }
+
+     public function getFriendIds($roleIds) {
+        $this->setGuard('api');
+        $friendIds = $this->user->friends()->pluck('id')->all();
+        $campaignsUserJoined = $this->user
+            ->campaigns()
+            ->whereIn('role_id', $roleIds)
+            ->where('campaign_user.status', Campaign::APPROVED)
+            ->get()
+            ->pluck('id');
+
+        return [
+            'friendIds' => $friendIds,
+            'campaignIds' => $campaignsUserJoined,
+        ];
+    }
+
+    public function getCampaignInvolve($roleIds)
+    {
+        $friendIds = $this->getFriendIds($roleIds)['friendIds'];
+        $campaignsUserJoined = $this->getFriendIds($roleIds)['campaignIds'];
+        $campaignsInvolve = $this->whereHas('users', function ($query) use (
+            $roleIds,
+            $friendIds,
+            $campaignsUserJoined
+        ) {
+            $query->where('campaign_user.status', Campaign::APPROVED)
+                ->whereIn('role_id', $roleIds)
+                ->whereIn('user_id', $friendIds)
+                ->whereNotIn('campaign_id', $campaignsUserJoined);
+            })
+            ->whereHas('settings', function ($query) {
+                $query->where('key', config('settings.campaigns.status'))
+                    ->where('value', config('settings.value_of_settings.status.public'));
+            })
+            ->whereHas('settings', function ($query) {
+                $query->where('key', config('settings.campaigns.end_day'))
+                    ->where('value', '>', Carbon::now()->format('m/d/Y'));
+            })
+            ->model
+            ->with('media', 'tags')
+            ->inRandomOrder()
+            ->take(config('settings.campaigns_involve'))
+            ->get();
+
+        return $campaignsInvolve;
+    }
 }

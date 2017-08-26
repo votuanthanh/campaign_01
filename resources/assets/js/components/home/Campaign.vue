@@ -30,16 +30,18 @@
             </div>
             <article class="hentry blog-post blog-post-v3">
                 <div class="post-thumb">
-                    <img :src="campaign.media[0].image_large" alt="photo">
-                    <a href="#" class="post-category bg-blue-light">{{ $t('homepage.campaign') }}</a>
+                    <img :src="campaign.media[0].image_medium" alt="photo">
+                    <p class="post-category">
+                        <span class="span-tags" v-for="tag in campaign.tags" v-if="campaign.tags">{{ tag.name }}</span>
+                    </p>
                 </div>
                 <div class="post-content">
                     <router-link class="h3 post-title" :to="{ name: 'campaign.timeline', params: { slug: campaign.slug }}">
                         <span v-if="campaign.title.length < 51">{{ campaign.title }}</span>
                         <span v-else>{{ campaign.title.substr(0, 50) }}...</span>
                     </router-link>
-                    <p v-if="campaign.title.length < 141" v-html="campaign.description"></p>
-                    <p v-else v-html="campaign.description">{{ campaign.description.substr(0, 140) }} ...</p>
+                    <p v-if="campaign.description.length < 141" v-html="campaign.description"></p>
+                    <p v-else v-html="campaign.description.substr(0, 140) + '...'"></p>
                 </div>
             </article>
             <div class="post-additional-info inline-items" style="display: none;">
@@ -130,6 +132,19 @@
         .post-content {
             width: 50%;
             padding: 0px 10px 0px 30px;
+        }
+        .post-category {
+            padding: 0px;
+        }
+        .span-tags {
+            display: inline-block;
+            background: #00b7ff;
+            padding: 5px;
+            border-radius: 3px;
+            margin: 0px 1px 3px 1px;
+            &:first-child {
+                border-radius: 0px 3px 3px 0px;
+            }
         }
     }
 </style>

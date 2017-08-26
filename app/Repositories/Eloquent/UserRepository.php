@@ -126,7 +126,7 @@ class UserRepository extends BaseRepository implements UserInterface
             ])->orderBy('id', 'DESC')
             ->paginate(config('setting.pagination.timeline'));
 
-        $checkLiked = $this->checkLike($user->activities(), $user->id);
+        $checkLiked = $this->checkLike($user->activities(), $userId);
         $activities = $activities;
 
         return [

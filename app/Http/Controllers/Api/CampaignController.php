@@ -305,8 +305,10 @@ class CampaignController extends ApiController
         });
     }
 
-    public function search($page, $quantity, $type, $keyword)
+    public function search($page, $quantity, $type, Request $request)
     {
+        $keyword = $request->keyword;
+
         return $this->getData(function () use ($keyword, $page, $quantity, $type) {
             if (in_array($type, ['user', 'all'])) {
                 $resutUser = $this->userRepository->searchUser($page, $quantity, $keyword);
@@ -409,6 +411,19 @@ class CampaignController extends ApiController
         return $this->getData(function() use ($campaignId, $isManager) {
             $this->compacts['eventsClosed'] = $this->campaignRepository->getEventsClosed($campaignId);
             $this->compacts['isManager'] = $isManager;
+        });
+    }
+
+    public function getCampaignInvolve()
+    {
+        $roleIds = $this->roleRepository->whereIn('name', [
+            Role::ROLE_MEMBER,
+            Role::ROLE_OWNER,
+            Role::ROLE_MODERATOR,
+        ])->pluck('id')->all();
+
+        return $this->getData(function () use ($roleIds) {
+            $this->compacts['campaignInvolve'] = $this->campaignRepository->getCampaignInvolve($roleIds);
         });
     }
 }

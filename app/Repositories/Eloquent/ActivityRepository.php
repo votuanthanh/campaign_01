@@ -22,16 +22,27 @@ class ActivityRepository extends BaseRepository implements ActivityInterface
         $this->setGuard('api');
         $friendIds = $this->user->friends()->pluck('id')->all();
         $friendIds[] = $this->user->id;
-        $listActivity = $this->whereIn('activitiable_type', [
+        $infoPaginate = $this->whereIn('activitiable_type', [
                 Campaign::class,
                 Event::class,
             ])
             ->where('name', Activity::CREATE)
             ->whereIn('user_id', $friendIds)
-            ->with('activitiable.media', 'user')
+            ->with('user')
             ->orderBy('created_at', 'DESC')
-            ->paginate(config('setting.pagination.homepage'));
+            ->paginate(config('settings.pagination.homepage'));
 
-        return $listActivity;
+        $listActivity = $infoPaginate->each(function ($item) {
+            if ($item->activitiable_type == Campaign::class) {
+                $item->load('activitiable.tags', 'activitiable.media' );
+            } else {
+                $item->load('activitiable.campaign', 'activitiable.media');
+            }
+        });
+
+        return [
+            'infoPaginate' => $infoPaginate,
+            'data' => $listActivity,
+        ];
     }
 }

@@ -68,7 +68,7 @@
             getDataHomePage() {
                 get('homepage')
                     .then(res => {
-                        this.totalPage = res.data.listActivity.last_page
+                        this.totalPage = res.data.listActivity.infoPaginate.last_page
                         this.listActivity = res.data.listActivity.data
                     })
                     .catch(err => {

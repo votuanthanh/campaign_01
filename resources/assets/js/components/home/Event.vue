@@ -8,12 +8,13 @@
                         {{ owner.name }}
                     </router-link>
                     {{ $t('homepage.create_a') }}
-
-                    <router-link :to="{ name: 'event.index', params: { slug: event.slug }}">
-                        {{ $t('homepage.event') }}
-                        <b class="title-event">"{{ event.title }}"</b>
+                    <router-link class="link-event" :to="{ name: 'event.index', params: { slug: event.slug }}">
+                        <span class="span-event">{{ $t('homepage.event') }}</span>
                     </router-link>
-
+                    <b>{{ $t('homepage.in_campaign') }}</b>
+                    <router-link class="link-event" :to="{ name: 'campaign.timeline', params: { slug: event.campaign.slug }}">
+                        "<b class="title-event">{{ event.campaign.title }}</b>"
+                    </router-link>
                     <div class="post__date">
                         <time class="published">
                             {{ event.timeAgo }}
@@ -105,7 +106,6 @@
 </template>
 <script>
    import { mapState, mapActions } from 'vuex'
-
    export default {
         props: {
             event: {},
@@ -121,10 +121,16 @@
     .post-thumb {
         margin-top: 10px;
     }
-    .title-event {
-        color: #616373;
-        &:hover {
+    .link-event {
+        color: rgb(97, 99, 115);
+        .span-event{
             color: #fe5d39;
+        }
+        .title-event {
+            color: #616373;
+            &:hover {
+                color: #fe5d39;
+            }
         }
     }
 </style>

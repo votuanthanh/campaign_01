@@ -1,9 +1,9 @@
 <template lang="html">
     <div class="fixed-sidebar" :class="{open: isOpen}">
         <div class="fixed-sidebar-left sidebar--small" id="sidebar-left">
-            <a class="logo">
+            <router-link class="logo" :to="{ name: 'homepage' }">
                 <img src="/images/logo.png" alt="Olympus">
-            </a>
+            </router-link>
             <div class="mCustomScrollbar" data-mcs-theme="dark">
                 <ul class="left-menu">
                     <li>

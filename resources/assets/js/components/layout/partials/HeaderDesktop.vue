@@ -632,7 +632,7 @@ export default {
                 // 1 is page
                 // 3 is the amount of data retrieved
                 // all is type which gets all data
-                get(`search/1/3/all/${this.keyword}`)
+                get(`search/1/3/all?keyword=${this.keyword}`)
                     .then(res => {
                         this.usersFinded = res.data.users
                         this.campaignsFinded = res.data.campaigns
