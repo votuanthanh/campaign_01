@@ -7,6 +7,7 @@ import user from './user.json'
 import chat from './chat.json'
 import actions from './actions.json'
 import post from './post.json'
+import homepage from './homepage.json'
 
 export default {
     campaigns,
@@ -17,5 +18,6 @@ export default {
     user,
     chat,
     actions,
-    post
+    post,
+    homepage
 }

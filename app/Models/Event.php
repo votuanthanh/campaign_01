@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\Eloquent\CommentLike;
@@ -32,6 +33,7 @@ class Event extends BaseModel
 
     protected $appends = [
         'slug',
+        'timeAgo',
     ];
 
     public function actions()
@@ -92,5 +94,10 @@ class Event extends BaseModel
     public function getSlugAttribute()
     {
         return str_slug(str_limit($this->title, 100) . ' ' . $this->id);
+    }
+
+    public function getTimeAgoAttribute()
+    {
+        return Carbon::parse($this->created_at)->diffForHumans();
     }
 }

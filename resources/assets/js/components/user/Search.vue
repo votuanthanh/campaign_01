@@ -25,7 +25,7 @@
                                     <img :src="result.image_small" alt="author">
                                 </div>
                                 <div class="birthday-author-name">
-                                    <router-link class="h6 author-name" :to="{ name: 'user.timeline', params: { id: result.id }}">
+                                    <router-link class="h6 author-name" :to="{ name: 'user.timeline', params: { slug: result.slug }}">
                                         {{ result.name }}
                                     </router-link>
                                     <div class="birthday-date">{{ result.email }}</div>
@@ -188,7 +188,6 @@
         },
         methods: {
             getResult() {
-                this.loading = true
                 // 1 is page
                 // 6 is the amount of data retrieved
                 // all is type which gets all data
@@ -210,8 +209,6 @@
                         if (this.totalPageCampaign > this.pageCampaign) {
                             this.showLoadCampaign = true
                         }
-
-                        this.loading = false
                     })
                     .catch(err => {
                         noty({
@@ -289,6 +286,12 @@
         margin-left: 1px;
     }
 }
+
+.author-thumb {
+    img {
+        width: 40px;
+    }
+ }
 
 .fa-spinner {
     font-size: 20px;
@@ -382,189 +385,10 @@
     background: #38a9ff;
 }
 
-.forums-table {
-    width: 100%;
-    border-radius: 5px;
-    overflow: hidden;
-}
-
-.forums-table thead {
-    background-color: #38a9ff;
-}
-
-.forums-table thead th {
-    font-size: 12px;
-    font-weight: 700;
-    padding: 15px 25px;
-    color: #fff;
-    text-align: center;
-}
-
-.forums-table thead th.forum {
-    text-align: left;
-}
-
-.forums-table td {
-    padding: 25px 25px;
-    text-align: center;
-}
-
-.forums-table td.forum {
-    text-align: left;
-}
-
-.forums-table tr {
-    border-bottom: 1px solid #e6ecf5;
-    border-top: 1px solid #e6ecf5;
-}
-
-.forums-table tr:last-child {
-    border-bottom: none;
-}
-
-.forums-table .count {
-    font-size: 12px;
-}
-
-.forums-table .count:hover {
-    color: #ff5e3a;
-}
-
 .forum-item img {
     float: left;
     margin-right: 15px;
     width: 90px;
     height: 90px;
 }
-
-.forum-item .content {
-    overflow: hidden;
-}
-
-.forum-item .title {
-    color: ff5e3a;
-}
-
-.forum-item .title:hover {
-    color: #3f4257;
-}
-
-.forum-item .text {
-    margin-bottom: 0;
-    font-size: 13px;
-}
-
-.forum-item .icon {
-    font-size: 15px;
-    color: #ffdc1b;
-    margin-right: 10px;
-    float: left;
-}
-
-.author-freshness .author-thumb {
-    display: block;
-    margin-bottom: 10px;
-}
-
-.author-freshness .author-thumb img {
-    width: 40px;
-    height: 40px;
-}
-
-.author-freshness .title {
-    display: block;
-    font-size: 12px;
-    margin-bottom: 0;
-}
-
-.author-freshness .title:hover {
-    color: #ff5e3a;
-}
-
-.author-freshness time {
-    font-size: 11px;
-}
-
-.sub-forums {
-    margin-bottom: 0;
-    padding: 5px 0;
-    margin-top: 15px;
-    display: inline-block;
-    border-left: 1px solid #e6ecf5;
-}
-
-.sub-forums a {
-    font-size: 12px;
-    padding: 5px 13px;
-    display: block;
-    margin-bottom: 0;
-}
-
-.sub-forums a:hover {
-    color: #ff5e3a;
-}
-
-.author-started {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.author-started>*+* {
-    margin-left: 8px;
-}
-
-.author-started span {
-    font-size: 12px;
-}
-
-.author-started .title {
-    margin-bottom: 0;
-    font-size: 12px;
-}
-
-.author-started .author-thumb img {
-    width: 18px;
-    height: 18px;
-    margin-right: 0;
-}
-
-/*------------- #W-FEATURED-TOPICS --------------*/
-
-.w-featured-topics li+li {
-    margin-top: 20px;
-}
-
-.w-featured-topics .icon {
-    float: left;
-    margin-right: 10px;
-    font-size: 15px;
-    color: #ffdc1b;
-}
-
-.w-featured-topics .content {
-    overflow: hidden;
-}
-
-.w-featured-topics .title {
-    font-size: 13px;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.w-featured-topics .title:hover {
-    color: #ff5e3a;
-}
-
-.w-featured-topics time {
-    font-size: 11px;
-    margin-bottom: 5px;
-    display: block;
-}
-
-.w-featured-topics .forums {
-    font-size: 11px;
-    color: #ff5e3a;
-}
-
 </style>

@@ -319,6 +319,7 @@
             }
         },
         created() {
+            EventBus.$emit('redirect-page')
             this.getUser(this.userId)
         },
         watch: {

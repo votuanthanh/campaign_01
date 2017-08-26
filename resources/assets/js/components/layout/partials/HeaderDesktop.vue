@@ -21,7 +21,7 @@
                         <div class="selectize-dropdown-content">
                             <div class="inline-items" v-for="(result, index) in usersFinded" v-if="index < 3">
                                 <div class="author-thumb">
-                                    <img :src="result.image_small" alt="avatar">
+                                    <img class="avatar" :src="result.image_small" alt="avatar">
                                 </div>
                                 <div class="notification-event">
                                     <router-link class="h6 notification-friend" :to="{ name: 'user.timeline', params: { slug: result.slug }}">
@@ -711,8 +711,8 @@ export default {
 <style lang="scss">
 .author-thumb {
     .avatar {
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
     }
 }
 

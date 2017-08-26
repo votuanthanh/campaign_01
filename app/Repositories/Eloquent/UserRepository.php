@@ -307,6 +307,7 @@ class UserRepository extends BaseRepository implements UserInterface
         $resutUser = $this->search($keyword, null, true)
             ->where('status', USER::ACTIVE)
             ->where('id', '<>', $this->user->id)
+            ->groupBy('created_at')
             ->orderBy('created_at', 'DESC')
             ->get();
 
