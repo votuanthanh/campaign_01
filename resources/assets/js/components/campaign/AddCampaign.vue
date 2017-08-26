@@ -275,7 +275,7 @@ export default {
                         const message = this.$i18n.t('messages.create_success')
                         this.$Progress.finish()
                         noty({ text: message, container: false, force: true, type: 'success'})
-                        this.$router.push({ name: 'campaign.timeline', params: { id: res.data.campaign.id }})
+                        this.$router.push({ name: 'campaign.timeline', params: { slug: res.data.campaign.slug }})
                     })
                     .catch(err => {
                         const message = this.$i18n.t('messages.create_fail')
