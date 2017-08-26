@@ -4,7 +4,8 @@ namespace App\Repositories\Eloquent;
 
 use Exception;
 use App\Models\Activity;
-use App\Models\Action;
+use App\Models\Campaign;
+use App\Models\Event;
 use App\Exceptions\Api\UnknowException;
 use App\Repositories\Contracts\ActivityInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -19,11 +20,16 @@ class ActivityRepository extends BaseRepository implements ActivityInterface
     public function getHomePage()
     {
         $this->setGuard('api');
-        $friendIds = $this->user->friends()->pluck('id');
-        $listActivity = $this->where('activitiable_type', '<>', Action::class)
+        $friendIds = $this->user->friends()->pluck('id')->all();
+        $friendIds[] = $this->user->id;
+        $listActivity = $this->whereIn('activitiable_type', [
+                Campaign::class,
+                Event::class,
+            ])
             ->where('name', Activity::CREATE)
             ->whereIn('user_id', $friendIds)
             ->with('activitiable.media', 'user')
+            ->orderBy('created_at', 'DESC')
             ->paginate(config('setting.pagination.homepage'));
 
         return $listActivity;
