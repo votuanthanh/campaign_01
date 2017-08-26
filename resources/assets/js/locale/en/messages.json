@@ -50,5 +50,6 @@
     "read_at": "Seen at ",
     "error": "Error",
     "not_permission": "You are not permission",
-    "delete_photo": "Are you sure you want to cancel this photo?"
+    "delete_photo": "Are you sure you want to cancel this photo?",
+    "comfirm_open_event": "Are you sure you want to open this event?"
 }

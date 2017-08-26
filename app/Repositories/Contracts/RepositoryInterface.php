@@ -50,6 +50,8 @@ interface RepositoryInterface
 
     public function delete($ids);
 
+    public function forceDelete($ids);
+
     public function join($tableName, $tableColumn, $modelColumn, $option = '');
 
     public function groupBy($colunms);

@@ -7,7 +7,7 @@ trait CommentLike
     public function scopeGetComments($query)
     {
         return $query->with(['comments' => function ($query) {
-            $query->with(['subComment' => function ($subQuery) {
+            $query->withTrashed()->with(['subComment' => function ($subQuery) {
                 $subQuery->getLikes()
                     ->paginate(config('settings.paginate_comment'), ['*'], 1);
             }])
@@ -20,7 +20,7 @@ trait CommentLike
     public function scopeGetLikes($query)
     {
         return $query->with(['likes' => function ($query) {
-            $query->with('user')
+            $query->withTrashed()->with('user')
                 ->paginate(config('settings.paginate_default'), ['*'], 1);
         }]);
     }

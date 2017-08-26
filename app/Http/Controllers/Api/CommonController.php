@@ -79,8 +79,12 @@ class CommonController extends ApiController
     {
         $repository = 'App\\Repositories\\Contracts\\' . studly_case($type) . 'Interface';
 
-        return $this->getData(function () use ($repository, $id) {
-            $this->compacts['slug'] = app($repository)->findOrFail($id)->slug;
+        return $this->getData(function () use ($repository, $id, $type) {
+            if ($type == 'user') {
+                $this->compacts['slug'] = app($repository)->findOrFail($id)->slug;
+            } else {
+                $this->compacts['slug'] = app($repository)->withTrashed()->findOrFail($id)->slug;
+            }
         });
     }
 }

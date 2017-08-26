@@ -84,7 +84,12 @@ class ActionRepository extends BaseRepository implements ActionInterface
         $data['list_action'] = $action
             ->getLikes()
             ->getComments()
-            ->with('user', 'media')
+            ->with([
+                'user',
+                'media' => function($query) {
+                    $query->withTrashed();
+                },
+            ])
             ->orderBy('created_at', 'DESC')
             ->paginate(config('settings.actions.paginate_in_event'));
 
@@ -96,8 +101,14 @@ class ActionRepository extends BaseRepository implements ActionInterface
     public function searchAction($eventId, $key)
     {
         return $this->model
-            ->with('user', 'media')
+            ->with([
+                'user',
+                'media' => function($query) {
+                    $query->withTrashed();
+                },
+            ])
             ->where('event_id', $eventId)
+            ->withTrashed()
             ->search($key, null, true)
             ->orderBy('created_at', 'DESC')
             ->paginate(config('settings.actions.paginate_in_event'));
@@ -126,12 +137,12 @@ class ActionRepository extends BaseRepository implements ActionInterface
     public function delete($action)
     {
         if ($action) {
-            $action->comments()->delete();
-            $action->likes()->delete();
-            $action->media()->delete();
-            $action->activities()->delete();
+            $action->comments()->forceDelete();
+            $action->likes()->forceDelete();
+            $action->media()->forceDelete();
+            $action->activities()->forceDelete();
 
-            return $action->delete();
+            return $action->forceDelete();
         }
 
         return false;
@@ -159,5 +170,28 @@ class ActionRepository extends BaseRepository implements ActionInterface
             ->update(['deleted_at' => Carbon::Now()]);
 
         return $actions->delete();
+    }
+
+    public function openFromEvent($event)
+    {
+        $actionIds = $event->actions()->onlyTrashed()->pluck('id');
+        \DB::table('media')
+            ->whereIn('mediable_id', $actionIds)
+            ->where('mediable_type', Action::class)
+            ->update(['deleted_at' => null]);
+        \DB::table('comments')
+            ->whereIn('commentable_id', $actionIds)
+            ->where('commentable_type', \App\Models\Action::class)
+            ->update(['deleted_at' => null]);
+        \DB::table('likes')
+            ->whereIn('likeable_id', $actionIds)
+            ->where('likeable_type', \App\Models\Action::class)
+            ->update(['deleted_at' => null]);
+        \DB::table('activities')
+            ->whereIn('activitiable_id', $actionIds)
+            ->where('activitiable_type', \App\Models\Action::class)
+            ->update(['deleted_at' => null]);
+
+        return $event->actions()->restore();
     }
 }

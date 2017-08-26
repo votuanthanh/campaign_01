@@ -13,6 +13,7 @@ import CampaignRelated from '../components/campaign/CampaignRelated.vue'
 import CampaignAbout from '../components/campaign/CampaignAbout.vue'
 import OwnerCampaign from '../components/campaign/owner/OwnerCampaign.vue'
 import MemberRequest from '../components/campaign/owner/MemberRequest.vue'
+import EventsClosed from '../components/campaign/EventsClosed.vue'
 import ListMember from '../components/campaign/owner/ListMember.vue'
 import App from '../components/layout/App.vue'
 import Friend from '../components/user/Friend.vue'
@@ -100,7 +101,8 @@ const router = [
                         { path: 'member-request', component: MemberRequest, name: 'campaign.member_request' },
                         { path: 'list-member', component: ListMember, name: 'campaign.list_member' }
                     ]
-                }
+                },
+                { path: 'events-closed', component: EventsClosed, name: 'campaign.events_closed' }
             ]
         },
         {
@@ -151,7 +153,7 @@ const router = [
             ]
         },
     ]),
-    { path: '*', component: NotFound },
+    { path: '*', component: NotFound, name: 'not_found' },
 ]
 
 Vue.use(VueRouter)

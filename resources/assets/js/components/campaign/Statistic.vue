@@ -10,7 +10,7 @@
                             </a>
                             <div class="monthly-count">
                                 {{ users.count + ' ' + $t('campaigns.statistic.members') }}
-                                <span class="indicator positive"> + {{ users.today_count + ' ' + $t('campaigns.statistic.members') }}</span>
+                                <span class="indicator positive"> + {{ users.today_count + ' ' + $t('campaigns.statistic.today') }}</span>
                                 <span class="period text-capitalize">{{ $t('campaigns.statistic.members') }}</span>
                             </div>
                         </div>

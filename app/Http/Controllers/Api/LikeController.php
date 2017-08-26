@@ -41,7 +41,7 @@ class LikeController extends ApiController
             }
 
             $model->update([
-                'number_of_likes' => $numberLike
+                'number_of_likes' => $numberLike,
             ]);
 
             $this->compacts['numberOfLikes'] = $numberLike;

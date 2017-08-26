@@ -122,7 +122,7 @@ class EventController extends ApiController
 
     public function show($id)
     {
-        $event = $this->eventRepository->findOrFail($id);
+        $event = $this->eventRepository->withTrashed()->findOrFail($id);
 
         if ($this->user->cannot('view', $event)) {
             throw new UnknowException('Permission error: User can not edit this event.');
@@ -134,23 +134,34 @@ class EventController extends ApiController
                 ->getLikes()
                 ->getComments()
                 ->where('id', $event->id)
+                ->withTrashed()
                 ->with([
                     'user',
-                    'media',
-                    'settings',
+                    'media' => function($query) {
+                        $query->withTrashed();
+                    },
+                    'settings' => function($query) {
+                        $query->withTrashed();
+                    },
                 ])
                 ->get();
 
-            $this->compacts['actions'] = $this->actionRepository->getActionPaginate($event->actions(), $this->user->id);
+            $this->compacts['actions'] = $this->actionRepository
+                ->getActionPaginate($event
+                ->actions()
+                ->withTrashed(), $this->user->id);
 
             $this->compacts['goals'] = $event
                 ->goals()
+                ->withTrashed()
                 ->select('id', 'donation_type_id', 'goal')
                 ->with([
                     'donations' => function ($query) {
                         return $query->with('user')->latest();
                     },
-                    'donationType.quality',
+                    'donationType.quality' => function($query) {
+                        $query->withTrashed();
+                    },
                 ])
                 ->get();
 
@@ -161,7 +172,7 @@ class EventController extends ApiController
 
     public function checkIfUserCanManageEvent($id)
     {
-        $event = $this->eventRepository->findOrFail($id);
+        $event = $this->eventRepository->withTrashed()->findOrFail($id);
 
         return response()->json($this->user->can('manage', $event));
     }
@@ -186,15 +197,49 @@ class EventController extends ApiController
 
     public function getInfoEvent($id)
     {
-        $event = $this->eventRepository->findOrFail($id);
+        $event = $this->eventRepository->withTrashed()->findOrFail($id);
 
         if ($this->user->cannot('view', $event)) {
             throw new UnknowException('Permission denied');
         }
 
         return $this->getData(function () use ($event) {
-            $this->compacts['event'] = $event->load('settings');
-            $this->compacts['countActions'] = $event->actions()->count();
+            $this->compacts['event'] = $event->load([
+                'settings' => function ($query) {
+                    $query->withTrashed();
+                },
+            ]);
+            $this->compacts['countActions'] = $event->actions()->withTrashed()->count();
         });
     }
+
+    public function openEvent($id)
+    {
+        $event = $this->eventRepository->onlyTrashed()->findOrFail($id);
+
+        if ($this->user->cant('manage', $event)) {
+            throw new UnknowException('Permission error: User can not delete this event.');
+        }
+
+        return $this->doAction(function() use ($id, $event) {
+            $this->actionRepository->openFromEvent($event);
+            $this->expenseRepository->openFromEvent($event);
+            $this->compacts['openEvent'] = $this->eventRepository->openFromEvent($event);
+        });
+    }
+
+    // public function openEvent($id)
+    // {
+    //     $event = $this->eventRepository->onlyTrashed()->findOrFail($id);
+
+    //     if ($this->user->cant('manage', $event)) {
+    //         throw new UnknowException('Permission error: User can not delete this event.');
+    //     }
+
+    //     return $this->doAction(function() use ($id, $event) {
+    //         $this->actionRepository->openFromEvent($event);
+    //         $this->expenseRepository->openFromEvent($event);
+    //         $this->compacts['openEvent'] = $this->eventRepository->openFromEvent($event);
+    //     });
+    // }
 }

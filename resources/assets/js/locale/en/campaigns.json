@@ -65,5 +65,11 @@
         "finished": "finished",
         "actions": "actions",
         "not_enought_data": "Not enough data for statistics"
-    }
+    },
+    "events_closed": "Events Closed",
+    "delete_at": "Delete At",
+    "actions": "Actions",
+    "manage_events": "Manage Events",
+    "prev_page": "Previous Page",
+    "next_page": "Next Page"
 }

@@ -49,14 +49,6 @@
     import { mapState, mapActions } from 'vuex'
 
     export default {
-        created() {
-            this.getListMemberLiked({
-                modelId: this.modelId,
-                model: this.flag,
-                lastPage: 1,
-                pageCurrent: 0
-            })
-        },
         computed: {
             ...mapState('like', [
                 'listMember'

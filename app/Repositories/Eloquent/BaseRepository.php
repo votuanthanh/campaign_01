@@ -104,7 +104,9 @@ abstract class BaseRepository implements RepositoryInterface
     */
     public function withTrashed()
     {
-        return $this->model->withTrashed();
+        $this->model = $this->model->withTrashed();
+
+        return $this;
     }
 
     /**
@@ -114,7 +116,9 @@ abstract class BaseRepository implements RepositoryInterface
     */
     public function onlyTrashed()
     {
-        return $this->model->onlyTrashed();
+        $this->model = $this->model->onlyTrashed();
+
+        return $this;
     }
 
     /**
@@ -259,6 +263,13 @@ abstract class BaseRepository implements RepositoryInterface
         $ids = is_array($ids) ? $ids : [$ids];
 
         return $this->model->whereIn('id', $ids)->delete();
+    }
+
+    public function forceDelete($ids)
+    {
+        $ids = is_array($ids) ? $ids : [$ids];
+
+        return $this->model->whereIn('id', $ids)->forceDelete();
     }
 
     public function orderBy($column, $option = 'asc')

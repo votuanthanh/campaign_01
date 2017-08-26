@@ -14,14 +14,16 @@
                 <table cellpadding="0" cellspacing="0" border="0">
                   <thead>
                     <tr>
-                      <th>{{ $t('events.expenses.donate_type') }}</th>
-                      <th>{{ $t('events.expenses.cost') }}</th>
-                      <th>{{ $t('events.expenses.time') }}</th>
-                      <th>{{ $t('events.expenses.product') }}</th>
-                      <th>{{ $t('events.expenses.quantity') }}</th>
-                      <th>{{ $t('events.expenses.quality') }}</th>
-                      <th >{{ $t('events.expenses.reason') }}</th>
-                      <th v-if="isManager">{{ $t('events.expenses.manage') }}</th>
+                        <th>{{ $t('events.expenses.donate_type') }}</th>
+                        <th>{{ $t('events.expenses.cost') }}</th>
+                        <th>{{ $t('events.expenses.time') }}</th>
+                        <th>{{ $t('events.expenses.product') }}</th>
+                        <th>{{ $t('events.expenses.quantity') }}</th>
+                        <th>{{ $t('events.expenses.quality') }}</th>
+                        <th >{{ $t('events.expenses.reason') }}</th>
+                        <th v-if="isManager && !event.deleted_at">
+                            {{ $t('events.expenses.manage') }}
+                        </th>
                     </tr>
                   </thead>
                 </table>
@@ -55,7 +57,7 @@
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                             </a>
                         </td>
-                        <td v-if="isManager">
+                        <td v-if="isManager && !event.deleted_at">
                             <a
                                 href="javascript:void(0)"
                                 class="remove-icon"
@@ -126,7 +128,9 @@
     import Message from '../../libs/Modal.vue'
     import UpdateExpense from './UpdateExpense.vue'
     import UpdateExpenseBuy from './UpdateExpenseBuy.vue'
+    import { mapState } from 'vuex'
     import axios from 'axios'
+
     export default {
         data: () => ({
             expenses: [],
@@ -143,6 +147,12 @@
 
         created() {
             this.callApi()
+        },
+
+        computed : {
+            ...mapState('event', [
+                'event',
+            ])
         },
 
         methods: {
