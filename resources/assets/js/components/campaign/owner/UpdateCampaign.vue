@@ -302,12 +302,12 @@ export default {
                     this.campaign.title = c.title
                     this.campaign.hashtag = c.hashtag
                     this.campaign.description = c.description
-                    this.campaign.latitude = parseInt(c.latitude)
-                    this.campaign.longitude = parseInt(c.longitude)
+                    this.campaign.latitude = parseFloat(c.latitude)
+                    this.campaign.longitude = parseFloat(c.longitude)
                     this.campaign.tags = c.tags
                     this.campaign.media = c.media[0].image_thumbnail
-                    this.center.lng = parseInt(c.longitude)
-                    this.center.lat = parseInt(c.latitude)
+                    this.center.lng = parseFloat(c.longitude)
+                    this.center.lat = parseFloat(c.latitude)
 
                     for (var index = 0; index < c.settings.length; index++) {
                         this.addSettings(c.settings[index].key, c.settings[index].value)

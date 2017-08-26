@@ -78,8 +78,8 @@ export default {
                 if (res.data.http_status.code == 200) {
                     let data = res.data.event
                     this.event.address = data.address
-                    this.center.lng = parseInt(data.longitude)
-                    this.center.lat = parseInt(data.latitude)
+                    this.center.lng = parseFloat(data.longitude)
+                    this.center.lat = parseFloat(data.latitude)
                     let startDayIndex = data.settings
                         .findIndex(setting => parseInt(setting.key) == parseInt(window.Laravel.settings.events.start_day))
                     let endDayIndex = data.settings
