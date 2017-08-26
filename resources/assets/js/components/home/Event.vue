@@ -31,8 +31,8 @@
                     </ul>
                 </div>
             </div>
-            <p v-if="event.title.length < 851">{{ event.description }}</p>
-            <p v-else>{{ event.description.substr(0, 850) }} ...</p>
+            <p v-if="event.title.length < 851" v-html="event.description"></p>
+            <p v-else v-html="event.description.substr(0, 850) + '...'"></p>
             <div class="post-thumb">
                 <img v-if="event.media.length" :src="event.media[0].image_medium" alt="photo">
             </div>

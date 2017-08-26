@@ -38,8 +38,8 @@
                         <span v-if="campaign.title.length < 51">{{ campaign.title }}</span>
                         <span v-else>{{ campaign.title.substr(0, 50) }}...</span>
                     </router-link>
-                    <p v-if="campaign.title.length < 141">{{ campaign.description }}</p>
-                    <p v-else>{{ campaign.description.substr(0, 140) }} ...</p>
+                    <p v-if="campaign.title.length < 141" v-html="campaign.description"></p>
+                    <p v-else v-html="campaign.description">{{ campaign.description.substr(0, 140) }} ...</p>
                 </div>
             </article>
             <div class="post-additional-info inline-items" style="display: none;">
