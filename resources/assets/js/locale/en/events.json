@@ -38,7 +38,10 @@
         "yes": "Yes",
         "no": "No",
         "manage": "Donation management",
-        "list": "Confirmed donation"
+        "list": "Confirmed donation",
+        "list_of_donations_not_accepted": "List of donations not accepted",
+        "waiting_accept": "Waiting accept",
+        "waiting": "Waiting"
     },
     "expenses": {
         "expense": "Expense",
