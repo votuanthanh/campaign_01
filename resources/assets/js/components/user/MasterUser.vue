@@ -403,37 +403,53 @@
                 this.modal(`<h4 class="text-center">${this.$t('user.quote.unfriend_msg')}</h4>`, () => {
                     post(`unfriend/${id}`)
                         .then(() => {
-                            let data = _.cloneDeep(this.currentPageUser)
-                            data.is_friend = false
-                            this.updateCurrentPageUser(data)
+                            this.$socket.emit('unfriend', {
+                                userId: this.authUser.id,
+                                unfriendId: id
+                            })
                         })
                 })
             },
             // send request or cancel request
             sendRequest(id) {
                 post(`send-friend-request/${id}`)
-                    .then(() => {
-                        let data = _.cloneDeep(this.currentPageUser)
-                        data.has_pending_request = !data.has_pending_request
-                        this.updateCurrentPageUser(data)
+                    .then(res => {
+                        if (res.data.type) {
+                            this.$socket.emit('sendRequest', {
+                                userId: this.authUser.id,
+                                acceptId: id
+                            })
+                        } else {
+                            this.$socket.emit('rejectRequest', {
+                                userId: this.authUser.id,
+                                rejectId: id,
+                                index: -1
+                            })
+                        }
                     })
             },
             acceptRequest(id) {
-                post(`accept-friend-requset/${id}`)
+                post(`accept-friend-requset/${id}`, { id: null })
                     .then(() => {
-                        let data = _.cloneDeep(this.currentPageUser)
-                        data.has_send_request = false
-                        data.is_friend = true
-                        this.updateCurrentPageUser(data)
+                        this.$socket.emit('acceptRequest', {
+                            userId: this.currentPageUser.id,
+                            acceptId: this.authUser.id,
+                            avatar: this.authUser.image_thumbnail,
+                            name: this.authUser.name,
+                            receiveAvatar: this.currentPageUser.image_thumbnail,
+                            receiveName: this.currentPageUser.name
+                        })
                     })
             },
             denyRequest(id) {
                 this.modal(`<h4 class="text-center">${this.$t('user.quote.deny_request_msg')}</h4>`, () => {
                     post(`deny-friend-request/${id}`)
                         .then(() => {
-                            let data = _.cloneDeep(this.currentPageUser)
-                            data.has_send_request = false
-                            this.updateCurrentPageUser(data)
+                            this.$socket.emit('rejectRequest', {
+                                userId: this.authUser.id,
+                                rejectId: id,
+                                index: -1
+                            })
                         })
                 })
             },
@@ -459,9 +475,34 @@
                             this.isLastPhotoPage = true
                     })
             },
+            changeState(hasPendingRequest, hasSendRequest, isFriend) {
+                let user = _.cloneDeep(this.currentPageUser)
+                user.has_pending_request = hasPendingRequest
+                user.is_friend = isFriend
+                user.has_send_request = hasSendRequest
+                this.updateCurrentPageUser(user)
+            }
         },
         components: {
             ImageModal
+        },
+        sockets: {
+            acceptRequestSuccess: function (data) {
+                this.changeState(false, false, 1)
+            },
+            rejectRequestSuccess: function (data) {
+                this.changeState(false, false, 0)
+            },
+            sendRequestSuccess: function (data) {
+                if (this.authUser.id == data.data.userId) {
+                    this.changeState(true, false, 0)
+                } else {
+                    this.changeState(false, true, 0)
+                }
+            },
+            unfriendSuccess: function (data) {
+                this.changeState(false, false, false)
+            }
         }
     }
 </script>
