@@ -11,9 +11,19 @@
                         <img :src="donation.user.image_thumbnail" alt="author" style="max-height: 100%">
                     </div>
                     <div class="notification-event">
-                        <router-link :to="{ name: 'user.timeline', params: { id: donation.user.id }}" class="h6 notification-friend">{{ donation.user.name }}</router-link>
-                        {{ $t('events.donation.donate') }} {{ donation.value }} {{ type.quantity }} {{ type.donate }}.
-                        <span class="notification-date"><time class="entry-date updated" :datetime="donation.created_at">{{ donation.donated_at }}</time></span>
+                        <router-link
+                            :to="{ name: 'user.timeline', params: { slug: donation.user.slug }}"
+                            class="h6 notification-friend">{{ donation.user.name }}
+                        </router-link>
+                        {{ $t('events.donation.donate')
+                            + " " + donation.value + " "
+                            + type.quantity
+                            + " " + type.donate
+                        }}.
+                        <span class="notification-date">
+                            <time class="entry-date updated" :datetime="donation.created_at">{{ donation.donated_at }}
+                            </time>
+                        </span>
                     </div>
                     <span class="notification-icon">
                         <div class="togglebutton">
@@ -43,8 +53,19 @@
                         <img :src="donation.user.image_thumbnail" alt="author" style="max-height: 100%">
                     </div>
                     <div class="notification-event">
-                        <a href="#" class="h6 notification-friend" >{{ donation.user.name }}</a> {{ $t('events.donation.donate') }} {{ donation.value }} {{ type.quantity }} {{ type.donate }}.
-                        <span class="notification-date"><time class="entry-date updated" :datetime="donation.created_at">{{ donation.donated_at }}</time></span>
+                        <router-link
+                            :to="{ name: 'user.timeline', params: { slug: donation.user.slug }}"
+                            class="h6 notification-friend">{{ donation.user.name }}
+                        </router-link>
+                        {{ $t('events.donation.donate')
+                            + " " + donation.value
+                            + " " + type.quantity
+                            + " " + type.donate
+                        }}.
+                        <span class="notification-date">
+                            <time class="entry-date updated" :datetime="donation.created_at">{{ donation.donated_at }}
+                            </time>
+                        </span>
                     </div>
                     <span class="notification-icon">
                         <div class="togglebutton">
