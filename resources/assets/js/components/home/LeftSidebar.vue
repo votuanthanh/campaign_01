@@ -6,14 +6,7 @@
                     <svg class="olymp-star-icon left-menu-icon">
                         <use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use>
                     </svg>
-
-                    <a href="#" class="more">
-                        <svg class="olymp-three-dots-icon">
-                            <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                        </svg>
-                    </a>
                 </div>
-
                 <div class="content">
                     <span>{{ $t('homepage.be_like') }}</span>
                     <h3 class="title">{{ $t('homepage.create_campaign') }}!</h3>
@@ -103,9 +96,9 @@
                 </div>
             </div>
         </div>
-        <div class="ui-block" style="display: none;">
+        <div class="ui-block">
             <div class="ui-block-title">
-                <h6 class="title">Pages You May Like</h6>
+                <h6 class="title">{{ $t('homepage.campaigns_may_join') }}</h6>
                 <a href="#" class="more">
                     <svg class="olymp-three-dots-icon">
                         <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
@@ -113,90 +106,25 @@
                 </a>
             </div>
             <ul class="widget w-friend-pages-added notification-list friend-requests">
-                <li class="inline-items">
+                <li class="inline-items" v-for="campaign in listCampaign">
                     <div class="author-thumb">
-                        <img src="/images/avatar41-sm.jpg" alt="author">
+                        <img :src="campaign.media[0].image_medium" alt="author">
                     </div>
                     <div class="notification-event">
-                        <a href="#" class="h6 notification-friend">The Marina Bar</a>
-                        <span class="chat-message-item">Restaurant / Bar</span>
+                        <router-link class="h6 notification-friend" :to="{ name: 'campaign.timeline', params: { slug: campaign.slug }}">
+                            <span v-if="campaign.title.length < 51">{{ campaign.title }}</span>
+                            <span v-else>{{ campaign.title.substr(0, 50) }}...</span>
+                        </router-link>
+                        <span class="chat-message-item">
+                            <span class="tag-info" v-for="tag in campaign.tags">{{ tag.name }}</span>
+                        </span>
                     </div>
-                    <span class="notification-icon" data-toggle="tooltip" data-placement="top" title="" data-original-title="ADD TO YOUR FAVS">
-                        <a href="#">
-                            <svg class="olymp-star-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use></svg>
-                        </a>
-                    </span>
-                </li>
-                <li class="inline-items">
-                    <div class="author-thumb">
-                        <img src="/images/avatar42-sm.jpg" alt="author">
-                    </div>
-                    <div class="notification-event">
-                        <a href="#" class="h6 notification-friend">Tapronus Rock</a>
-                        <span class="chat-message-item">Rock Band</span>
-                    </div>
-                    <span class="notification-icon" data-toggle="tooltip" data-placement="top" title="" data-original-title="ADD TO YOUR FAVS">
-                        <a href="#">
-                            <svg class="olymp-star-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use></svg>
-                        </a>
-                    </span>
-                </li>
-                <li class="inline-items">
-                    <div class="author-thumb">
-                        <img src="/images/avatar43-sm.jpg" alt="author">
-                    </div>
-                    <div class="notification-event">
-                        <a href="#" class="h6 notification-friend">Pixel Digital Design</a>
-                        <span class="chat-message-item">Company</span>
-                    </div>
-                    <span class="notification-icon" data-toggle="tooltip" data-placement="top" title="" data-original-title="ADD TO YOUR FAVS">
-                        <a href="#">
-                            <svg class="olymp-star-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use></svg>
-                        </a>
-                    </span>
-                </li>
-                <li class="inline-items">
-                    <div class="author-thumb">
-                        <img src="/images/avatar44-sm.jpg" alt="author">
-                    </div>
-                    <div class="notification-event">
-                        <a href="#" class="h6 notification-friend">Thompson’s Custom Clothing Boutique</a>
-                        <span class="chat-message-item">Clothing Store</span>
-                    </div>
-                    <span class="notification-icon" data-toggle="tooltip" data-placement="top" title="" data-original-title="ADD TO YOUR FAVS">
-                        <a href="#">
-                            <svg class="olymp-star-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use></svg>
-                        </a>
-                    </span>
-                </li>
-
-                <li class="inline-items">
-                    <div class="author-thumb">
-                        <img src="/images/avatar45-sm.jpg" alt="author">
-                    </div>
-                    <div class="notification-event">
-                        <a href="#" class="h6 notification-friend">Crimson Agency</a>
-                        <span class="chat-message-item">Company</span>
-                    </div>
-                    <span class="notification-icon" data-toggle="tooltip" data-placement="top" title="" data-original-title="ADD TO YOUR FAVS">
-                        <a href="#">
-                            <svg class="olymp-star-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use></svg>
-                        </a>
-                    </span>
-                </li>
-
-                <li class="inline-items">
-                    <div class="author-thumb">
-                        <img src="/images/avatar46-sm.jpg" alt="author">
-                    </div>
-                    <div class="notification-event">
-                        <a href="#" class="h6 notification-friend">Mannequin Angel</a>
-                        <span class="chat-message-item">Clothing Store</span>
-                    </div>
-                    <span class="notification-icon" data-toggle="tooltip" data-placement="top" title="" data-original-title="ADD TO YOUR FAVS">
-                        <a href="#">
-                            <svg class="olymp-star-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use></svg>
-                        </a>
+                    <span class="notification-icon">
+                        <router-link :to="{ name: 'campaign.timeline', params: { slug: campaign.slug }}">
+                            <svg class="olymp-star-icon">
+                                <use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use>
+                            </svg>
+                        </router-link>
                     </span>
                 </li>
             </ul>
@@ -204,14 +132,68 @@
     </aside>
 </template>
 
+
+<script>
+    import noty from '../../helpers/noty'
+    import { get, post } from '../../helpers/api'
+    import Campaign from './Campaign.vue'
+    import Event from './Event.vue'
+    import LeftSidebar from './LeftSidebar.vue'
+    import RightSidebar from './RightSidebar.vue'
+
+    export default {
+        data: () => ({
+            listCampaign: []
+        }),
+        created() {
+            this.getCampaignInvolve()
+        },
+        methods: {
+            getCampaignInvolve() {
+                get('campaign/involve')
+                    .then(res => {
+                        this.listCampaign = res.data.campaignInvolve
+                    })
+                    .catch(err => {
+                        noty({
+                            text: this.$i18n.t('messages.connection_error'),
+                            container: false,
+                            force: true
+                        })
+                    })
+            },
+        }
+    }
+</script>
+
 <style lang="scss" scoped>
     .w-create-fav-page {
         padding: 35px 25px 50px 25px;
         background-color: #ff5e3a;
-
         .olymp-star-icon {
             width: 35px;
             height: 35px;
+        }
+    }
+
+    .author-thumb img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .tag-info {
+        padding: 2px 7px;
+        color: white;
+        display: inline-block;
+        margin: auto 1px 3px 1px;
+        border-radius: 4px;
+        background: #57b6ff;
+        font-weight: bold;
+    }
+
+    .notification-list {
+        li {
+            padding: 15px 15px;
         }
     }
 </style>

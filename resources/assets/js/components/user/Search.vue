@@ -191,7 +191,7 @@
                 // 1 is page
                 // 6 is the amount of data retrieved
                 // all is type which gets all data
-                get(`search/1/6/all/${this.$route.params.keyword}`)
+                get(`search/1/6/all?keyword=${this.$route.params.keyword}`)
                     .then(res => {
                         this.showLoadUser = false
                         this.showLoadCampaign = false
@@ -221,7 +221,7 @@
             loadUser() {
                 if (this.pageUser < this.totalPageUser) {
                     this.loadingUser = true
-                    get(`search/${++this.pageUser}/6/user/${this.$route.params.keyword}`)
+                    get(`search/${++this.pageUser}/6/user?keyword=${this.$route.params.keyword}`)
                         .then(res => {
                             this.usersFinded = this.usersFinded.concat(Object.keys(res.data.users).map(
                                 function (key) {
@@ -247,7 +247,7 @@
             loadCampaign() {
                 if (this.pageCampaign < this.totalPageCampaign) {
                     this.loadingCampaign = true
-                    get(`search/${++this.pageCampaign}/6/campaign/${this.$route.params.keyword}`)
+                    get(`search/${++this.pageCampaign}/6/campaign?keyword=${this.$route.params.keyword}`)
                         .then(res => {
                             this.campaignsFinded = this.campaignsFinded.concat(Object.keys(res.data.campaigns).map(
                                 function (key) {

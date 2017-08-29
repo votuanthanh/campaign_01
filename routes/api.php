@@ -52,7 +52,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::get('show-notifications', 'ChatController@getNotification');
         Route::post('like/{modelId}/{flag}', 'LikeController@like')->name('like');
         Route::delete('delete-photo/{mediaId}', 'UserController@deletePhoto')->name('delete-photo');
-        Route::get('search/{page}/{quantity}/{type}/{keyword}', 'CampaignController@search')->name('search');
+        Route::get('search/{page}/{quantity}/{type}', 'CampaignController@search')->name('search');
         Route::get('list-members/{modelId}/{flag}', 'LikeController@getListMemberLiked');
 
         Route::group(['as' => 'user.'], function () {
@@ -83,6 +83,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::patch('change-owner', 'CampaignController@changeOwner')->name('change-owner');
             Route::post('change-status-user/{campaignId}/{userId}/{flag}', 'CampaignController@changeStatusMember')->name('approve');
             Route::get('get/tags', 'CampaignController@getTags')->name('tags');
+            Route::get('involve', 'CampaignController@getCampaignInvolve')->name('campaign-involve');
             Route::get('/{id}/timeline/event', 'CampaignController@getListEvent');
             Route::get('members/{campaignId}/{status}', 'CampaignController@members')->name('members');
             Route::post('attend-campaign/{id}/{flag}', 'CampaignController@attendCampaign')->name('attendCampaign');
