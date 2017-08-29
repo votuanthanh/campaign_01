@@ -147,8 +147,7 @@
     import Noty from 'noty'
     import noty from '../../helpers/noty'
     import ShowText from '../libs/ShowText.vue'
-    import { get, post } from '../../helpers/api'
-    import { mapState, mapActions, mapMutations } from 'vuex'
+    import { get } from '../../helpers/api'
     import RequestFriend from './RequestFriend.vue'
 
     export default {
@@ -167,12 +166,6 @@
             totalCampaign: 0
         }),
         computed: {
-            ...mapState('user',[
-                'currentPageUser',
-            ]),
-            ...mapState('auth',[
-                'user',
-            ]),
             keyword() {
                 return this.$route.params.keyword
             }

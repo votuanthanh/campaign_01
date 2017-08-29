@@ -23,8 +23,9 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
         Route::post('register', 'RegisterController@register')->name('register');
         Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail');
         Route::post('password/reset', 'ResetPasswordController@reset');
-    });
 
+    });
+    Route::get('homepage', 'CampaignController@getHomepage')->name('homepage');
     Route::get('get-slug/{type}/{id}', 'CommonController@getPageSlug');
     Route::post('check-exist', 'CommonController@checkExist');
 
@@ -46,7 +47,6 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('logout', 'Auth\AuthController@logout')->name('logout');
-
         Route::post('send-message', 'ChatController@sendMessage');
         Route::post('send-message-to-group', 'ChatController@sendMessageToGroup');
         Route::get('show-message/{id}', 'ChatController@showMessages');
@@ -65,7 +65,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
                 Route::post('upload-files/{path}', 'UserController@uploadImages')->name('upload');
             });
 
-            Route::get('homepage', 'ActivityController@getHomePage')->name('homepage');
+            Route::get('news-feed', 'ActivityController@getNewsFeed')->name('newsfeed');
+            Route::get('friends-suggest', 'UserController@friendsSuggest')->name('friends-suggest');
             Route::patch('follow/{id}', 'UserController@follow')->name('follow');
             Route::patch('follow-tag/{id}', 'UserController@followTag')->name('follow-tag');
             Route::patch('join-campaign/{id}', 'UserController@joinCampaign')->name('join-campaign');

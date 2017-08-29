@@ -17,20 +17,30 @@ class ActivityRepository extends BaseRepository implements ActivityInterface
         return Activity::class;
     }
 
-    public function getHomePage()
+    public function getNewsFeed($campaignIds, $eventIds)
     {
         $this->setGuard('api');
         $friendIds = $this->user->friends()->pluck('id')->all();
         $friendIds[] = $this->user->id;
         $infoPaginate = $this->whereIn('activitiable_type', [
-                Campaign::class,
-                Event::class,
-            ])
-            ->where('name', Activity::CREATE)
-            ->whereIn('user_id', $friendIds)
-            ->with('user')
-            ->orderBy('created_at', 'DESC')
-            ->paginate(config('settings.pagination.homepage'));
+            Campaign::class,
+            Event::class,
+        ])
+        ->where('name', Activity::CREATE)
+        ->where(function ($query) use ($campaignIds, $eventIds) {
+            return $query->where(function ($query) use ($eventIds) {
+                    return $query->whereIn('activitiable_id', $eventIds)
+                        ->where('activitiable_type', Event::class);
+                })
+                ->orWhere(function ($sub) use ($campaignIds) {
+                    return $sub->where('activitiable_type', Campaign::class)
+                        ->whereIn('activitiable_id', $campaignIds);
+                });
+        })
+        ->whereIn('user_id', $friendIds)
+        ->with('user')
+        ->orderBy('created_at', 'DESC')
+        ->paginate(config('settings.pagination.homepage'));
 
         $listActivity = $infoPaginate->each(function ($item) {
             if ($item->activitiable_type == Campaign::class) {

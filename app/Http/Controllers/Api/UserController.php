@@ -431,12 +431,19 @@ class UserController extends ApiController
                 Role::ROLE_MODERATOR,
             ])
             ->where('type', Role::TYPE_CAMPAIGN)
-            ->pluck('id')->all();
-
+            ->pluck('id')
+            ->all();
         $user = $this->repository->findOrFail($id);
-        //policy
+
         return $this->getData(function () use ($user, $roleIds) {
             $this->compacts['closed_campaign'] = $this->repository->closedCampaign($user, $roleIds);
+       });
+    }
+
+    public function friendsSuggest()
+    {
+        return $this->getData(function () {
+            $this->compacts['data'] = $this->repository->getFriendsSuggest();
         });
     }
 }

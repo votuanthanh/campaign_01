@@ -48,7 +48,7 @@
     import Noty from 'noty'
     import noty from '../../helpers/noty'
     import { get, post } from '../../helpers/api'
-    import { mapState, mapActions, mapMutations } from 'vuex'
+    import { mapState } from 'vuex'
 
     export default {
         data: () => ({
@@ -197,6 +197,13 @@
         &:hover {
             background: #ff5e3a;
              box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 -1px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    .notification-list {
+        li {
+            padding: 0px;
+            border-bottom: 0px
         }
     }
 </style>

@@ -47,6 +47,7 @@ return [
         'homepage' => 6,
     ],
     'campaigns_involve' => 6,
+    'friend_suggest' => 5,
     'group_chat' => 'groupChat',
     'single_chat' => 'singleChat',
     'head_room_name' => 'hashtag:',

@@ -135,11 +135,7 @@
 
 <script>
     import noty from '../../helpers/noty'
-    import { get, post } from '../../helpers/api'
-    import Campaign from './Campaign.vue'
-    import Event from './Event.vue'
-    import LeftSidebar from './LeftSidebar.vue'
-    import RightSidebar from './RightSidebar.vue'
+    import { get } from '../../helpers/api'
 
     export default {
         data: () => ({
