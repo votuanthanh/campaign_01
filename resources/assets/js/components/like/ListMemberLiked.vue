@@ -17,7 +17,7 @@
                                 <div class="btn-group bootstrap-select show-tick form-control style-2">
                                     <ul class="dropdown-menu scroll-list-member inner">
                                         <li class="member" v-for="member in listMember[flag][modelId].data">
-                                            <router-link :to="{ name: 'user.timeline', params: { id: member.user.id }}">
+                                            <router-link :to="{ name: 'user.timeline', params: { slug: member.user.slug }}">
                                                 <span class="text">
                                                     <div class="inline-items">
                                                         <div class="author-thumb">

@@ -3,13 +3,15 @@
         <list-comment
             :model-id="modelId"
             :flag="flag"
-            :classListComment="classListComment">
+            :classListComment="classListComment"
+            :deleteDate="deleteDate">
         </list-comment>
         <form-comment
             :model-id="modelId"
             :comment-parent-id="0"
             :flag="flag"
-            :classFormComment="classFormComment">
+            :classFormComment="classFormComment"
+            v-if="deleteDate == null">
         </form-comment>
     </div>
 </template>
@@ -28,16 +30,14 @@ export default {
             numberOfComments: this.numberOfComments,
         })
     },
-    props: [
-        'comments',
-        'modelId',
-        'flag',
-        'numberOfComments',
-        'classListComment',
-        'classFormComment'
-    ],
-    computed: {
-        //
+    props: {
+        comments: {},
+        modelId: 0,
+        flag: '',
+        classListComment: '',
+        classFormComment: '',
+        numberOfComments: 0,
+        deleteDate: null,
     },
     methods: {
         ...mapActions('comment', [

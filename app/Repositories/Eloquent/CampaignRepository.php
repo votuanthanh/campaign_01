@@ -513,7 +513,8 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             ->paginate(config('settings.paginate_default'));
     }
 
-     public function getFriendIds($roleIds) {
+    public function getFriendIds($roleIds)
+    {
         $this->setGuard('api');
         $friendIds = $this->user->friends()->pluck('id')->all();
         $campaignsUserJoined = $this->user

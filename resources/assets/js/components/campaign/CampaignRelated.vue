@@ -8,29 +8,33 @@
 
                         <div class="photo-album-item-wrap col-4-width" v-for="campaign in campaignRelated.data">
                             <div class="photo-album-item" data-mh="album-item">
-                                <div class="photo-item" v-if="campaign.media.length > 0">
-                                    <router-link :to="{ name: 'campaign.timeline' }"
+                                <div class="photo-item" v-if="campaign.media != null">
+                                    <router-link :to="{ name: 'campaign.timeline', params: { slug: campaign.slug }}"
                                         class="h6 author-name">
                                         <img :src="campaign.media[0].image_small" alt="photo">
                                     </router-link>
                                     <div class="overlay overlay-dark"></div>
 
                                     <router-link
-                                        :to="{ name: 'campaign.timeline' }"
+                                        :to="{ name: 'campaign.timeline', params: { slug: campaign.slug }}"
                                         class="more">
                                         <svg class="olymp-three-dots-icon">
                                             <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
                                         </svg>
                                     </router-link>
 
-                                    <router-link
-                                        :to="{ name: 'campaign.timeline' }"
-                                        class="post-add-icon">
-                                        <svg class="olymp-heart-icon">
-                                            <use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"></use>
-                                        </svg>
-                                        <span >{{ campaign.likes.total }}</span>
-                                    </router-link>
+                                    <master-like
+                                        :likes="campaign.likes"
+                                        :checkLiked="checkLiked"
+                                        :flag="'campaign'"
+                                        :type="'like'"
+                                        :modelId="campaign.id"
+                                        :numberOfComments="campaign.number_of_comments"
+                                        :numberOfLikes="campaign.number_of_likes"
+                                        :class="'post-add-icon'"
+                                        :showMore="false"
+                                        :deleteDate="campaign.deleted_at">
+                                    </master-like>
                                     <a href="javascript:void(0)" data-toggle="modal" data-target="#open-photo-popup-v2" class="full-block"></a>
                                 </div>
 
@@ -43,15 +47,15 @@
                                         <div class="swiper-wrapper">
                                             <div class="swiper-slide">
                                                 <ul class="friends-harmonic" >
-                                                    <li v-for="(like, index) in campaign.likes.data" v-if="index <= 6">
+                                                    <li v-for="(like, index) in campaign.likes" v-if="index <= 6">
                                                         <router-link
-                                                            :to="{ name: 'user.timeline', params: { id: like.user.id }}"
+                                                            :to="{ name: 'user.timeline', params: { slug: like.user.slug }}"
                                                             class="h6 post__author-name fn">
                                                             <img :src="like.user.image_thumbnail" :alt="like.user.name">
                                                         </router-link>
                                                     </li>
-                                                    <li v-if="memberLength(campaign.likes) > 0">
-                                                        <a href="javascript:void(0)" class="all-users">+{{ memberLength(campaign.likes) }}</a>
+                                                    <li v-if="campaign.number_of_likes > 0">
+                                                        <a href="javascript:void(0)" class="all-users">+{{ memberLength(campaign.number_of_likes) }}</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -59,7 +63,7 @@
                                             <div class="swiper-slide">
                                                 <div class="friend-count" data-swiper-parallax="-500">
                                                     <a href="javascript:void(0)" class="friend-count-item"   >
-                                                        <div class="h6">{{ campaign.likes.total }}</div>
+                                                        <div class="h6">{{ campaign.number_of_likes }}</div>
                                                         <div class="title">Likes</div>
                                                     </a>
                                                     <a href="javascript:void(0)" class="friend-count-item" v-if="campaign.users != null">
@@ -73,7 +77,8 @@
                                                     <a href="javascript:void(0)"
                                                         @click="joinCampaign(campaign.id)"
                                                         id="dssd"
-                                                        class="btn btn-md-2 btn-border-think custom-color c-grey">
+                                                        class="btn btn-md-2 btn-border-think custom-color c-grey"
+                                                        v-if="!campaign.deleted_at">
                                                         {{ $t('campaigns.join-now') }}</a>
                                                 </div>
                                             </div>
@@ -122,11 +127,13 @@ import { get, post } from '../../helpers/api'
 import ShowText from '../libs/ShowText.vue'
 import noty from '../../helpers/noty'
 import Modal from '../libs/Modal.vue'
+import MasterLike from '../like/MasterLike.vue'
 
 export default {
     data() {
         return {
             campaignRelated: [],
+            checkLiked: [],
             flagComfirm: false,
             campaignIdCurrent: 0
         }
@@ -144,7 +151,8 @@ export default {
         getCampaignRelated(campaignId) {
             get(`campaign/campaign-related/${campaignId}`)
                 .then(res => {
-                    this.campaignRelated = res.data.campaign_related
+                    this.campaignRelated = res.data.campaign_related.campaign
+                    this.checkLiked = res.data.campaign_related.checkLiked
                 })
                 .catch(err => {
                     //
@@ -164,23 +172,26 @@ export default {
             return moment(time, "YYYY-MM-DD h:mm:ss").fromNow()
         },
         memberLength(members) {
-            if (members.length > 6) {
-                return members.length -6
+            if (members > 6) {
+                return members - 6
             }
 
             return 0
         },
         joinCampaigns() {
-            let data = { campaignId: this.campaignIdCurrent, flag: 'join' }
+            let data = {
+                campaignId: this.campaignIdCurrent,
+                flag: 'join'
+            }
             this.attendCampaign(data)
                 .then(status => {
                     this.flagComfirm = false
-                    let campaign = this.capaignRelated.data
+                    let campaign = this.campaignRelated.data
                     campaign = $.grep(campaign, function(item){
                         return item.id != data.campaignId;
                     });
 
-                    this.capaignRelated.data = campaign
+                    this.campaignRelated.data = campaign
 
                     const message = this.$i18n.t('messages.join_campaign_success')
                     noty({ text: message, force: true, type: 'success', container: false })
@@ -264,7 +275,8 @@ export default {
     },
     components: {
         ShowText,
-        Modal
+        Modal,
+        MasterLike
     }
 }
 </script>
