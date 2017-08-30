@@ -222,7 +222,7 @@
 
             },
             checkDeleted() {
-                if (this.!campaign.deleted_at) {
+                if (!this.campaign.deleted_at) {
                     return false;
                 }
 

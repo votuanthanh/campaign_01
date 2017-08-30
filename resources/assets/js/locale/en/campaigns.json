@@ -72,5 +72,8 @@
     "manage_events": "Manage Events",
     "prev_page": "Previous Page",
     "next_page": "Next Page",
-    "no_events_are_closed": "No events are closed"
+    "no_events_are_closed": "No events are closed",
+    "close_campaign": "Close campaign",
+    "manage_campaigns": "Manage Campaign",
+    "open_campaign": "Open Campaign"
 }

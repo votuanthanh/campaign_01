@@ -72,8 +72,8 @@ export default {
         //change comment total at model
         let commentTotal = data.rootStateLike.like.commentTotal
         commentTotal[data.flag][data.modelId] = data.numberComment
-        data.rootStateLike.like.commentTotal[data.flag] = []
-        data.rootStateLike.like.commentTotal[data.flag] = commentTotal
+        data.rootStateLike.like.commentTotal = []
+        data.rootStateLike.like.commentTotal = commentTotal
     },
 
     [types.SUB_COMMENT](state, data) {

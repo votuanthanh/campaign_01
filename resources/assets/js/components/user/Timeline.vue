@@ -16,7 +16,7 @@
                                     </router-link>
                                     <div class="post__date">
                                         <time class="published">
-                                            {{ activity.created_at }}
+                                            {{ timeAgo(activity.created_at) }}
                                         </time>
                                     </div>
                                 </div>

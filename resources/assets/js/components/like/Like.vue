@@ -8,7 +8,8 @@
                     modelId: modelId,
                     user: user,
                     flag: flag,
-                    numberOfLikes: like[flag][modelId].numberOfLikes
+                    numberOfLikes: like[flag][modelId].numberOfLikes,
+                    deleteDate: like[flag][modelId].deleteDate
                 })">
                 <svg class="olymp-heart-icon">
                      <use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"
@@ -49,21 +50,16 @@
 
         <div class="names-people-likes" v-else-if="showMore">
             <a href="javascript:void(0)"
-                v-for="(item, index) in like[flag][modelId]"
-                v-if="index < 2">
+                v-for="(item, index) in like[flag][modelId]">
                 {{ item.user.name }}
-                <span v-if="(like[flag][modelId].numberOfLikes <= 2
-                    && like[flag][modelId].numberOfLikes > 1) || index == 1">
-                    {{ $t('post.like.and') }}
-                </span>
-                <span v-if="like[flag][modelId].numberOfLikes >= 2 && index < 1"> , </span>
+                {{ showLike(index, like[flag][modelId].numberOfLikes) }}
             </a>
             <a href="javascript:void(0)" >
-                <span v-if="like[flag][modelId].numberOfLikes <= 2 &&
+                <span v-if="like[flag][modelId].numberOfLikes <= 3 &&
                     like[flag][modelId].numberOfLikes > 0">
                     {{ $t('post.like.liked_this') }}
                 </span>
-                <span v-if="like[flag][modelId].numberOfLikes >= 3"
+                <span v-if="like[flag][modelId].numberOfLikes >= 4"
                     @click="showMembersLiked()" class="more-like">
                     {{ $t('post.like.more_like') }}
                 </span>
@@ -108,13 +104,13 @@ export default {
         flag: '',
         numberOfLikes: 0,
         numberOfComments: 0,
-        showMore: true
+        showMore: true,
     },
     computed: {
         ...mapState('like', [
             'like',
             'commentTotal',
-            'checkLike'
+            'checkLike',
         ]),
         ...mapState('auth', {
             user: state => state.user
@@ -134,6 +130,34 @@ export default {
                 lastPage: 1,
                 pageCurrent: 0
             })
+        },
+        showLike(index, numberLike) {
+            switch (numberLike) {
+                case 1 :
+                    return '';
+                case 2 :
+                    if (index == 0) {
+                        return this.$i18n.t('post.like.and')
+                    }
+
+                    return '';
+                case 3 :
+                    if (index == 0) {
+                        return ','
+                    }
+
+                    if (index == 1) {
+                        return this.$i18n.t('post.like.and')
+                    }
+
+                    return '';
+                default:
+                    if (index <= 1) {
+                        return ','
+                    } else {
+                        return this.$i18n.t('post.like.and')
+                    }
+            }
         }
     },
     components: {
