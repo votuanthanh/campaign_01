@@ -137,10 +137,10 @@ class EventController extends ApiController
                 ->withTrashed()
                 ->with([
                     'user',
-                    'media' => function($query) {
+                    'media' => function ($query) {
                         $query->withTrashed();
                     },
-                    'settings' => function($query) {
+                    'settings' => function ($query) {
                         $query->withTrashed();
                     },
                 ])

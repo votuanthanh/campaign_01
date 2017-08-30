@@ -46,6 +46,7 @@ class User extends Authenticatable
         'head_photo',
         'gender',
         'about',
+        'deleted_at',
     ];
 
     /**
@@ -96,7 +97,9 @@ class User extends Authenticatable
 
     public function campaigns()
     {
-        return $this->belongsToMany(Campaign::class)->withPivot('role_id', 'status')->withTimestamps();
+        return $this->belongsToMany(Campaign::class)
+            ->withPivot('role_id', 'status', 'deleted_at')
+            ->withTimestamps();
     }
 
     public function events()
