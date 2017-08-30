@@ -1,7 +1,7 @@
 <template lang="html">
     <form class="comment-form inline-items" @submit.stop.prevent="addComment" :class="classFormComment">
         <div class="post__author author vcard inline-items">
-            <router-link :to="{ name: 'user.timeline', params: { id: user.id }}">
+            <router-link :to="{ name: 'user.timeline', params: { slug: user.slug }}">
                 <img :src="user.image_thumbnail" :alt="user.name">
             </router-link>
         </div>
@@ -30,12 +30,12 @@ export default {
        comment: { content: '' },
        flagAction: 'create'
     }),
-    props: [
-        'modelId',
-        'commentParentId',
-        'flag',
-        'classFormComment'
-    ],
+    props: {
+        modelId: 0,
+        commentParentId: 0,
+        flag: '',
+        classFormComment: 0
+    },
     computed: {
         ...mapState('auth', {
             authenticated: state => state.authenticated,

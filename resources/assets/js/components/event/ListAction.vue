@@ -92,7 +92,7 @@
                         <div class="post__author author vcard inline-items">
                             <img :src="action.user.image_thumbnail" alt="author">
                             <div class="author-date">
-                                <router-link :to="{ name: 'user.timeline', params: { id: action.user.id } }">
+                                <router-link :to="{ name: 'user.timeline', params: { slug: action.user.slug } }">
                                     <a class="h6 post__author-name fn" href="javascript:void(0)">{{ action.user.name }}</a>
                                 </router-link>
                                 <div class="post__date">
@@ -179,13 +179,13 @@
         </message>
         <action-detail
             :showAction.sync="showAction"
-            :dataAction = "dataAction"
-            :checkLikeActions ="actions.checkLikeAction" >
+            :dataAction="dataAction"
+            :checkLikeActions="actions.checkLikeAction" >
         </action-detail>
         <update-action
             :showUpdate.sync="showUpdate"
             v-if="showUpdate"
-            :dataAction = "dataAction">
+            :dataAction="dataAction">
         </update-action>
     </div>
 </template>
@@ -206,7 +206,6 @@
             showAction: false,
             showUpdate: false,
             dataAction: {},
-            checkLikeActions: [],
             isShowDelete: false,
             actionId: null
         }),

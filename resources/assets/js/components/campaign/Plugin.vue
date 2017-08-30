@@ -12,13 +12,21 @@
             </div>
             <ul class="dropdown-menu scroll-member inner" role="listbox" aria-expanded="false">
                 <li class="member" v-for="member in members.data">
-                    <router-link :to="{ name: 'user.timeline', params: { id: member.id }}">
+                    <router-link :to="{ name: 'user.timeline', params: { slug: member.slug }}">
                         <span class="text">
                             <div class="inline-items">
                                 <div class="author-thumb">
                                     <img :src="member.image_thumbnail" :alt="member.name">
                                 </div>
-                                <div class="h6 author-title">{{ member.name }}</div>
+                                <div class="author-title">
+                                    <span class="h6">
+                                        <router-link :to="{ name: 'user.timeline', params: { slug: member.slug }}">
+                                            {{ member.name }}
+                                        </router-link>
+                                    </span>
+                                    <br />
+                                    <span>{{ member.email }}</span>
+                                </div>
                             </div>
                         </span>
                         <span class="glyphicon glyphicon-ok check-mark"></span>
@@ -96,11 +104,11 @@ export default {
                     pageNumberEvent: this.members.last_page,
                     pageCurrent: this.members.current_page
                 })
-                .then(member => {
+                .then(data => {
                     let list_members = this.members
-                    member.data = [...list_members.data, ...member.data]
+                    data.members.data = [...list_members.data, ...data.members.data]
                     this.members = []
-                    this.members = member
+                    this.members = data.members
                 })
                 .catch(err => {
                     //
@@ -111,7 +119,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .bootstrap-select {
     &.btn-group {
         .dropdown-menu {
@@ -125,6 +133,20 @@ export default {
                             height: 34px;
                         }
                     }
+                }
+            }
+
+            li {
+                padding-left: 10px !important;
+                margin-bottom: 5% !important;
+                a {
+                    padding-left: 0px !important;
+                }
+            }
+
+            .searchbox {
+                input {
+                    padding: 1.3rem 1.1rem 1.0rem !important;
                 }
             }
         }

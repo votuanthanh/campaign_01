@@ -32,7 +32,7 @@
         <ul class="friends-harmonic" v-if="like[flag][modelId].numberOfLikes && showMore">
             <li v-for="(item, index) in like[flag][modelId]" v-if="index < 4">
                 <router-link
-                    :to="{ name: 'user.timeline', params: { id: item.user.id }}"
+                    :to="{ name: 'user.timeline', params: { slug: item.user.slug }}"
                     class="h6 post__author-name fn">
                     <img :src="item.user.image_thumbnail" :alt="item.user.name">
                 </router-link>
