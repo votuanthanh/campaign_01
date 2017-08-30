@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <div class="ui-block">
             <div class="ui-block-content">
                 <form>
@@ -69,7 +69,8 @@ export default {
             actions: 0,
             center: { lat: 0, lng: 0 },
             zoom: config.zoom,
-            time: ''
+            time: '',
+            pageType: 'event'
         }
     },
     created() {

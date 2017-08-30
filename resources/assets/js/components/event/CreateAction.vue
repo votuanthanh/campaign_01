@@ -101,7 +101,8 @@
                     files: [],
                     event_id: ''
                 },
-                accessToken: `Bearer ${localStorage.getItem('access_token')}`
+                accessToken: `Bearer ${localStorage.getItem('access_token')}`,
+                pageType: 'event'
             }
         },
         created() {

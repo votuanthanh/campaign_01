@@ -238,6 +238,7 @@ export default {
 
             goalWithTime: '',
             lineGraphicChart: {},
+            pageType: 'event'
         }
     },
     computed: {

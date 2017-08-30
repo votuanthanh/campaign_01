@@ -37,7 +37,13 @@
                                             <div class="content">
                                                 <router-link
                                                     class="h6 notification-friend"
-                                                    :to="{ name: 'event.index', params: { slug: event.slug }}">
+                                                    :to="{
+                                                        name: 'event.index',
+                                                        params: {
+                                                            slug: event.campaign_id,
+                                                            slugEvent: event.slug
+                                                        }
+                                                    }">
                                                     {{ event.title }}
                                                 </router-link>
                                             </div>
@@ -65,6 +71,9 @@
                                             </div>
                                         </span>
                                     </td>
+                                </tr>
+                                <tr v-if="!(eventsClosed.data.length)" class="no-events-closed">
+                                    {{ $t('campaigns.no_events_are_closed') }}
                                 </tr>
                             </tbody>
                         </table>
@@ -120,7 +129,9 @@
     export default {
         data: () => ({
             key: null,
-            eventsClosed: [],
+            eventsClosed: {
+                data : []
+            },
             showConfirmOpen: false,
             idEvent: null,
             show: true,
@@ -225,13 +236,17 @@
             .paginate {
                 height: 20px;
                 padding: 0 5px;
-               .prev-page {
+                .prev-page {
                     float: left;
                 }
 
                 .next-page {
                     float: right;
                 }
+            }
+            .no-events-closed {
+                font-size: 2em;
+                text-align: right;
             }
         }
     }

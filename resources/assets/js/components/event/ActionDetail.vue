@@ -47,7 +47,7 @@
                             <img :src="dataAction.user.image_thumbnail" alt="author">
 
                             <div class="author-date">
-                                <router-link :to="{ name: 'user.timeline', params: { id: dataAction.user_id } }">
+                                <router-link :to="{ name: 'user.timeline', params: { slug: dataAction.user_id } }">
                                     <a class="h6 post__author-name fn" href="javascript:void(0)">
                                         {{ dataAction.user.name }}
                                     </a>
@@ -249,14 +249,12 @@
 
                 $('.btn-prev-without').on('click', function () {
                     var sliderID = $(this).closest('.swiper-container').attr('id');
-                    console.log(sliderID)
                     swipers['swiper-' + sliderID].slidePrev();
                 });
 
                 $('.btn-next-without').on('click', function () {
                     var sliderID = $(this).closest('.swiper-container').attr('id');
                     swipers['swiper-' + sliderID].slideNext();
-                    console.log(sliderID)
                 });
             },
 

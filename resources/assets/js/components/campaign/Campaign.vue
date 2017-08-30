@@ -18,8 +18,18 @@
                 pageType: 'campaign'
             }
         },
+        watch: {
+            '$route' : 'intialize',
+        },
         created: function () {
-            this.campaignDetail(this.pageId)
+            this.intialize()
+        },
+        methods: {
+            ...mapActions('campaign', [
+                'campaignDetail',
+            ]),
+            intialize() {
+                this.campaignDetail(this.pageId)
                 .then(status => {
                     //
                 })
@@ -29,11 +39,7 @@
                         this.$router.push({ name: 'not_found' })
                     }
                 })
-        },
-        methods: {
-            ...mapActions('campaign', [
-                'campaignDetail',
-            ])
+            }
         },
         components: {
            HeaderCampaign

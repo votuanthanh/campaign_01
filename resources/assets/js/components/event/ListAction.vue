@@ -1,5 +1,5 @@
 <template>
-    <div class="container list-action">
+    <div class="list-action">
         <div class="load-search" v-if="load_search"></div>
         <div class="empty center-block" v-if="isEmpty">
             <h2>
@@ -13,7 +13,7 @@
                         <div class="post__author author vcard inline-items">
                             <img :src="action.user.image_thumbnail" alt="author">
                             <div class="author-date">
-                                <router-link :to="{ name: 'user.timeline', params: { id: action.user.id } }">
+                                <router-link :to="{ name: 'user.timeline', params: { slug: action.user.id } }">
                                     <a class="h6 post__author-name fn" href="javascript:void(0)">{{ action.user.name }}</a>
                                 </router-link>
                                 <div class="post__date">
@@ -92,7 +92,7 @@
                         <div class="post__author author vcard inline-items">
                             <img :src="action.user.image_thumbnail" alt="author">
                             <div class="author-date">
-                                <router-link :to="{ name: 'user.timeline', params: { slug: action.user.slug } }">
+                                <router-link :to="{ name: 'user.timeline', params: { slug: action.user.slug } }">l
                                     <a class="h6 post__author-name fn" href="javascript:void(0)">{{ action.user.name }}</a>
                                 </router-link>
                                 <div class="post__date">
@@ -207,7 +207,8 @@
             showUpdate: false,
             dataAction: {},
             isShowDelete: false,
-            actionId: null
+            actionId: null,
+            pageType: 'event'
         }),
 
         computed: {
