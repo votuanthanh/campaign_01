@@ -13,7 +13,6 @@ var redisClient = redis.createClient(6379, 'redis')
 var client = redis.createClient(6379, 'redis')
 redisClient.subscribe('singleChat', 'groupChat', 'activies', 'noty')
 redisClient.on('message', function(channel, data) {
-
     if (channel == 'activies') {
         data = JSON.parse(data)
 
@@ -67,6 +66,10 @@ io.on('connection', function (socket) {
         }
     })
 
+    socket.on('sendRequest', data => {
+        io.sockets.in(data.userId).in(data.acceptId).emit('sendRequestSuccess', { data: data })
+    })
+
     socket.on('acceptRequest', data => {
         let i = listFriend.findIndex(list => list.id == data.userId)
 
@@ -81,8 +84,37 @@ io.on('connection', function (socket) {
         }
 
         callOnline(io.sockets, listFriend, userLogin)
-        io.sockets.in(data.userId).emit('acceptRequestSuccess', { status: true, data: data })
-        socket.emit('acceptRequestSuccess', { status: true, data: data })
+        io.sockets.in(data.userId).in(data.acceptId).emit('acceptRequestSuccess', {
+            status: true,
+            data: data
+        })
+    })
+
+    socket.on('rejectRequest', data => {
+        let toReject = {
+            userId: data.userId,
+            rejectId: data.rejectId,
+            index: -1
+        }
+
+        let toUser = {
+            userId: data.userId,
+            rejectId: data.rejectId,
+            index: data.index
+        }
+
+        io.sockets.in(data.rejectId).emit('rejectRequestSuccess', { data: toReject })
+        io.sockets.in(data.userId).emit('rejectRequestSuccess', { data: toUser })
+    })
+
+    socket.on('cancelRequest', data => {
+        socket.emit('cancelRequestSuccess', { data: data })
+        io.sockets.in(data.cancelId).emit('cancelRequestSuccess', { data: data })
+        io.sockets.in(data.cancelId).in(data.userId).emit('rejectRequestSuccess', { data: data })
+    })
+
+    socket.on('unfriend', data => {
+        io.sockets.in(data.userId).in(data.unfriendId).emit('unfriendSuccess', { data: data })
     })
 
     socket.on('markRead', data => {
@@ -106,7 +138,7 @@ io.on('connection', function (socket) {
     })
 
     socket.on('accept_donation', data => {
-        socket.broadcast.emit('accept_donation', data);
+        socket.broadcast.emit('accept_donation', data)
     })
 
     socket.on('disconnect', function() {

@@ -595,10 +595,11 @@ export default {
                     if (res.data.http_status.code == 200) {
                         this.count = (this.count > 0) ? this.count - 1 : this.count
                         let index = this.listRequest.findIndex(request => request.id == id)
-
-                        if (index != -1) {
-                            this.listRequest.splice(index, 1)
-                        }
+                        this.$socket.emit('rejectRequest', {
+                            userId: this.user.id,
+                            rejectId: userId,
+                            index: index
+                        })
                     }
                 })
                 .catch(err => {
@@ -620,13 +621,11 @@ export default {
                     })
             }
         },
-
         searchRedirect() {
             this.$router.push({ name: 'search', params: { keyword: this.keyword }})
             this.keyword = ''
             this.search()
         },
-
         search: _.debounce(function () {
             if (this.keyword.trim()) {
                 // 1 is page
@@ -701,8 +700,32 @@ export default {
                     accept: true
                 }
 
+                let index = this.listRequest.findIndex(request => request.userId == data.data.userId)
+
+                if (index != -1) {
+                    this.listRequest.splice(index, 1)
+                    this.count = this.count > 0 ? this.count - 1 : this.count
+                }
+
                 this.listRequest.unshift(mess)
             }
+        },
+        rejectRequestSuccess: function (data) {
+            if (data.data.index != -1) {
+                this.listRequest.splice(data.data.index, 1)
+            } else {
+                if (this.user.id == data.data.userId) {
+                    let index = this.listRequest.findIndex(re => re.userId === data.data.rejectId)
+
+                    if (index == -1) {
+                        return
+                    }
+
+                    this.listRequest.splice(index, 1)
+                }
+            }
+
+            this.count = (this.count > 0) ? this.count - 1 : this.count
         }
     }
 }

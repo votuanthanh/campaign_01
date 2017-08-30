@@ -195,10 +195,10 @@ class UserController extends ApiController
 
         return $this->doAction(function () use ($id) {
             $toggle = $this->user->friendsIAmSender()->toggle($id);
+            $data['type'] = true;
 
             if ($toggle['attached']) {
                 $this->repository->notificationMakeFriend($this->user, $id);
-                $data['type'] = true;
             } else {
                 $this->repository->deleteNotification($id, $this->user, false);
                 $data['type'] = false;
@@ -206,6 +206,7 @@ class UserController extends ApiController
 
             $data['to'] = $id;
             $data['noty'] = $this->user;
+            $this->compacts['type'] = $data['type'];
             $this->redis->publish('noty', json_encode($data));
         });
     }
