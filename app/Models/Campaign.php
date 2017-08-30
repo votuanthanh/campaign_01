@@ -56,7 +56,9 @@ class Campaign extends BaseModel
 
     public function users()
     {
-        return $this->belongsToMany(User::class)->withPivot('role_id', 'status')->withTimestamps();
+        return $this->belongsToMany(User::class)
+            ->withPivot('role_id', 'status', 'deleted_at')
+            ->withTimestamps();
     }
 
     public function events()
@@ -86,7 +88,7 @@ class Campaign extends BaseModel
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class)->withTimestamps();
+        return $this->belongsToMany(Tag::class)->withPivot('deleted_at')->withTimestamps();
     }
 
     public function actions()

@@ -80,8 +80,11 @@ class CampaignController extends ApiController
 
         return $this->doAction(function () use ($campaign) {
             $eventIds = $campaign->events()->pluck('id');
-            $this->compacts['event'] = $this->eventRepository->delete($eventIds);
+            $this->compacts['event'] = $this->eventRepository->delete($campaign->events());
+            $this->compacts['campaign_tag'] = $this->tagRepository->deleteFromCampaign($campaign);
+            $this->compacts['campaign_user'] = $this->userRepository->deleteFromCampaign($campaign);
             $this->compacts['campaign'] = $this->campaignRepository->delete($campaign);
+            $this->compacts['actions'] = $this->actionRepository->deleteAction($eventIds);
         });
     }
 
@@ -91,8 +94,8 @@ class CampaignController extends ApiController
 
         $data = [
             'campaign' => $campaign,
-            'user_id' => $userId,
             'flag' => $flag,
+            'user_id' => $userId,
         ];
 
         if ($this->user->cannot('changeStatusUser', $campaign)) {
@@ -150,7 +153,7 @@ class CampaignController extends ApiController
     */
     public function show($id)
     {
-        $campaign = $this->campaignRepository->findOrFail($id);
+        $campaign = $this->campaignRepository->withTrashed()->findOrFail($id);
 
         if ($this->user->cant('view', $campaign)) {
             throw new UnknowException('You do not have authorize to see this campaign', UNAUTHORIZED);
@@ -174,7 +177,7 @@ class CampaignController extends ApiController
     */
     public function getListUser($id)
     {
-        $campaign = $this->campaignRepository->findOrFail($id);
+        $campaign = $this->campaignRepository->withTrashed()->findOrFail($id);
 
         if ($this->user->cannot('view', $campaign)) {
             throw new UnknowException('You do not have authorize to see this campaign', UNAUTHORIZED);
@@ -193,7 +196,7 @@ class CampaignController extends ApiController
     */
     public function getListEvent($id)
     {
-        $campaign = $this->campaignRepository->findOrFail($id);
+        $campaign = $this->campaignRepository->withTrashed()->findOrFail($id);
 
         if ($this->user->cannot('view', $campaign)) {
             throw new NotFoundException('You do not have authorize to see this campaign', UNAUTHORIZED);
@@ -207,7 +210,7 @@ class CampaignController extends ApiController
 
     public function like($id)
     {
-        $campaign = $this->campaignRepository->findOrFail($id);
+        $campaign = $this->campaignRepository->withTrashed()->findOrFail($id);
 
         if ($this->user->cannot('view', $campaign)) {
             throw new Exception('Policy fail');
@@ -276,7 +279,7 @@ class CampaignController extends ApiController
 
     public function members($campaignId, $status)
     {
-        $campaign = $this->campaignRepository->findOrFail($campaignId);
+        $campaign = $this->campaignRepository->withTrashed()->findOrFail($campaignId);
         $roleIdBlocked = $this->roleRepository->findRoleOrFail(Role::ROLE_BLOCKED, Role::TYPE_CAMPAIGN)->id;
 
         if ($this->user->cannot('permission', $campaign)) {
@@ -291,7 +294,7 @@ class CampaignController extends ApiController
 
     public function searchMembers($campaignId, $status, Request $request)
     {
-        $campaign = $this->campaignRepository->findOrFail($campaignId);
+        $campaign = $this->campaignRepository->withTrashed()->findOrFail($campaignId);
         $data = $request->only('search', 'roleId');
         $roleIdBlocked = $this->roleRepository->findRoleOrFail(Role::ROLE_BLOCKED, Role::TYPE_CAMPAIGN)->id;
 
@@ -358,14 +361,14 @@ class CampaignController extends ApiController
     */
     public function listPhotos($id)
     {
-        $campaign = $this->campaignRepository->findOrFail($id);
+        $campaign = $this->campaignRepository->withTrashed()->findOrFail($id);
 
         if ($this->user->cannot('view', $campaign)) {
             throw new NotFoundException('You do not have authorize to see this campaign', UNAUTHORIZED);
         }
 
         return $this->getData(function () use ($campaign) {
-            $eventIds = $campaign->events()->pluck('id')->all();
+            $eventIds = $campaign->events()->withTrashed()->pluck('id')->all();
             $this->compacts['list_photos'] = $this->actionRepository->getActionPhotos($eventIds, $this->user->id);
         });
     }
@@ -377,7 +380,7 @@ class CampaignController extends ApiController
      */
     public function getCampaignRelated($id)
     {
-        $campaign = $this->campaignRepository->findOrFail($id);
+        $campaign = $this->campaignRepository->withTrashed()->findOrFail($id);
 
         if ($this->user->cannot('view', $campaign)) {
             throw new UnknowException('You do not have authorize to see this campaign', UNAUTHORIZED);
@@ -390,7 +393,7 @@ class CampaignController extends ApiController
 
     public function statistic($id)
     {
-        $campaign = $this->campaignRepository->findOrFail($id);
+        $campaign = $this->campaignRepository->withTrashed()->findOrFail($id);
 
         return $this->getData(function () use ($campaign) {
             $this->authorize('view', $campaign);
@@ -408,7 +411,7 @@ class CampaignController extends ApiController
 
         $isManager = $this->user->can('manage', $campaign);
 
-        return $this->getData(function() use ($campaignId, $isManager) {
+        return $this->getData(function () use ($campaignId, $isManager) {
             $this->compacts['eventsClosed'] = $this->campaignRepository->getEventsClosed($campaignId);
             $this->compacts['isManager'] = $isManager;
         });
@@ -424,6 +427,24 @@ class CampaignController extends ApiController
 
         return $this->getData(function () use ($roleIds) {
             $this->compacts['campaignInvolve'] = $this->campaignRepository->getCampaignInvolve($roleIds);
+        });
+    }
+
+    public function openCampaign($id)
+    {
+        $campaign = $this->campaignRepository->withTrashed()->findOrFail($id);
+
+        if ($this->user->cannot('manage', $campaign)) {
+            throw new UnknowException('You do not have authorize to open this campaign', UNAUTHORIZED);
+        }
+
+        return $this->doAction(function () use ($campaign) {
+            $eventIds = $campaign->events()->pluck('id');
+            $this->compacts['event'] = $this->eventRepository->openFromCampaign($campaign->events());
+            $this->compacts['campaign_tag'] = $this->tagRepository->openFromCampaign($campaign);
+            $this->compacts['campaign_user'] = $this->userRepository->openFromCampaign($campaign);
+            $this->compacts['campaign'] = $this->campaignRepository->openCampaign($campaign);
+            $this->compacts['actions'] = $this->actionRepository->openAction($eventIds);
         });
     }
 }
