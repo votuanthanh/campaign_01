@@ -34,4 +34,9 @@ class GoalRepository extends BaseRepository implements GoalInterface
                 'expenses.products',
             ])->get();
     }
+
+    public function getInfoGoal($goalId)
+    {
+        return $this->findOrFail($goalId)->load('donationType.quality');
+    }
 }

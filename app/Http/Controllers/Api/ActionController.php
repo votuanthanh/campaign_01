@@ -99,7 +99,8 @@ class ActionController extends ApiController
         }
 
         return $this->doAction(function () use ($action) {
-            $this->compacts['actions'] = $this->actionRepository->delete($action);
+            $this->compacts['actions'] = $this->actionRepository->forceDelete($action);
+            $this->mediaRepository->deleteMedia($action->$media);
         });
     }
 

@@ -24,6 +24,7 @@ class Action extends BaseModel
         'event_id',
         'number_of_comments',
         'number_of_likes',
+        'expense_id',
     ];
 
     protected $dates = ['deleted_at'];

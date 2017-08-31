@@ -15,4 +15,10 @@ interface ActionInterface extends RepositoryInterface
     public function openFromEvent($event);
 
     public function deleteAction($eventIds);
+
+    public function createFromExpense($data, $goal);
+
+    public function updateFromExpense($data, $goal);
+
+    public function deleteFromExpense($expenseId);
 }

@@ -6,5 +6,8 @@
     "create_action": "Create action",
     "description_action": "Description action",
     "edit_action": "Edit action",
-    "delete_action": "Delete action"
+    "delete_action": "Delete action",
+    "is_used": "is used",
+    "with_reason": "with reason:",
+    "at": "at"
 }

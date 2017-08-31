@@ -22,10 +22,10 @@
                                     </time>
                                 </div>
                             </div>
-                            <div class="more">
-                            <svg class="olymp-three-dots-icon">
-                                <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                            </svg>
+                            <div class="more" v-if="user.id === action.user_id && !action.expense_id">
+                                <svg class="olymp-three-dots-icon">
+                                    <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
+                                </svg>
                                 <ul class="more-dropdown">
                                     <li v-if="user.id === action.user_id">
                                         <a href="javascript:void(0)" @click="updateAction(action)">{{ $t('actions.edit_action') }}</a>
@@ -47,13 +47,20 @@
                                 </div>
                             </div>
                         </div>
-                        <a
+                        <a v-if="!action.expense_id"
                             href="javascript:void(0)"
                             data-toggle="modal"
                             data-target="#blog-post-popup"
                             class="h2 post-title"
                             @click="detailAction(action)">
-                                {{ action.caption }}
+                            {{ action.caption }}
+                        </a>
+                        <a v-else
+                            href="javascript:void(0)"
+                            data-toggle="modal"
+                            data-target="#blog-post-popup"
+                            class="h2 post-title">
+                            {{ showTextExpense(action.caption) }}
                         </a>
                         <show-text
                             :text="action.description"
@@ -72,16 +79,6 @@
                                 :numberOfComments="action.number_of_comments"
                                 :numberOfLikes="action.number_of_likes">
                             </master-like>
-                            <a href="javascript:void(0)" class="btn btn-control">
-                                <svg class="olymp-comments-post-icon">
-                                    <use xlink:href="/frontend/icons/icons.svg#olymp-comments-post-icon"></use>
-                                </svg>
-                            </a>
-                            <a href="javascript:void(0)" class="btn btn-control">
-                                <svg class="olymp-share-icon">
-                                    <use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use>
-                                </svg>
-                            </a>
                         </div>
                     </article>
                 </div>
@@ -92,7 +89,7 @@
                         <div class="post__author author vcard inline-items">
                             <img :src="action.user.image_thumbnail" alt="author">
                             <div class="author-date">
-                                <router-link :to="{ name: 'user.timeline', params: { slug: action.user.slug } }">l
+                                <router-link :to="{ name: 'user.timeline', params: { slug: action.user.slug } }">
                                     <a class="h6 post__author-name fn" href="javascript:void(0)">{{ action.user.name }}</a>
                                 </router-link>
                                 <div class="post__date">
@@ -101,7 +98,7 @@
                                     </time>
                                 </div>
                             </div>
-                            <div class="more" v-if="user.id === action.user_id">
+                            <div class="more" v-if="user.id === action.user_id && !action.expense_id">
                                 <svg class="olymp-three-dots-icon">
                                     <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
                                 </svg>
@@ -126,13 +123,20 @@
                                 </div>
                             </div>
                         </div>
-                        <a
+                        <a v-if="!action.expense_id"
                             href="javascript:void(0)"
                             data-toggle="modal"
                             data-target="#blog-post-popup"
                             class="h2 post-title"
                             @click="detailAction(action)">
-                                {{ action.caption }}
+                            {{ action.caption }}
+                        </a>
+                        <a v-else
+                            href="javascript:void(0)"
+                            data-toggle="modal"
+                            data-target="#blog-post-popup"
+                            class="h2 post-title">
+                            {{ showTextExpense(action.caption) }}
                         </a>
                         <show-text
                             :text="action.description"
@@ -150,13 +154,6 @@
                                 :numberOfComments="action.number_of_comments"
                                 :numberOfLikes="action.number_of_likes">
                             </master-like>
-
-                            <a href="javascript:void(0)" class="btn btn-control">
-                                <svg class="olymp-comments-post-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-comments-post-icon"></use></svg>
-                            </a>
-                            <a href="javascript:void(0)" class="btn btn-control">
-                                <svg class="olymp-share-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use></svg>
-                            </a>
                         </div>
                     </article>
                 </div>
@@ -172,7 +169,9 @@
                     @click="deleteAction">
                     {{ $t('form.button.agree') }}
                 </a>
-                <a href="javascript:void(0)" class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12">
+                <a href="javascript:void(0)"
+                    class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12"
+                    @click="cancelDelete">
                     {{ $t('form.button.no') }}
                 </a>
             </div>
@@ -273,12 +272,11 @@
             },
 
             deleteAction() {
-
+                this.isShowDelete = false
                 del(`action/delete/${this.actionId}`)
                     .then(res => {
                         this.$Progress.finish()
                         this.removeAction(this.actionId)
-                        this.isShowDelete = false
                         noty({
                             text: this.$i18n.t('messages.delete_success'),
                             force: false,
@@ -295,6 +293,15 @@
                             container: false
                         })
                     })
+            },
+
+            showTextExpense(data)
+            {
+                var caption = JSON.parse(data);
+
+                return `${caption.cost} ${caption.nameQuality} ${caption.typeName}
+                    ${this.$i18n.t('actions.is_used')} ${this.$i18n.t('actions.at')}
+                    ${moment(caption.expenseTime, 'YYYY-MM-DD').format('DD/MM/YYYY')}`
             }
         },
 
@@ -310,6 +317,7 @@
 
 <style lang="scss">
     .list-action {
+        position: relative;
         .load-search {
             position: absolute;
             left: 0;
