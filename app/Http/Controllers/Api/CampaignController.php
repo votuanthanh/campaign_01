@@ -16,7 +16,9 @@ use App\Http\Requests\CampaignRequest;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Campaign;
+use App\Models\Activity;
 use Exception;
+use LRedis;
 
 class CampaignController extends ApiController
 {
@@ -27,6 +29,7 @@ class CampaignController extends ApiController
     private $commentRepository;
     private $actionRepository;
     private $userRepository;
+    private $redis;
 
     public function __construct(
         CampaignInterface $campaignRepository,
@@ -66,7 +69,16 @@ class CampaignController extends ApiController
 
         return $this->doAction(function () use ($data) {
             $data['tags'] = $this->tagRepository->getOrCreate($data['tags']);
+            $feature = $this->getValueSetting($data['settings'], config('settings.campaigns.status'), [0]);
             $this->compacts['campaign'] = $this->campaignRepository->create($data);
+            $this->redis = LRedis::connection();
+            $this->redis->publish('createCampaign', json_encode([
+                'feature' => head($feature),
+                'info' => $this->compacts['campaign']->load('media', 'tags'),
+                'user' => $this->user,
+                'name' => Activity::CREATE,
+                'type' => $this->campaignRepository->model(),
+            ]));
         });
     }
 
@@ -118,6 +130,7 @@ class CampaignController extends ApiController
 
         return $this->getData(function () use ($campaign) {
             $this->compacts['campaign'] = $campaign->load('media', 'settings', 'tags');
+            $this->compacts['totalUser'] = $campaign->users()->count();
         });
     }
 
@@ -138,6 +151,12 @@ class CampaignController extends ApiController
 
         if ($this->user->cannot('manage', $campaign)) {
             throw new Exception('Policy fail');
+        }
+
+        $limit = $this->getValueSetting($data['settings'], config('settings.campaign.limit'), null);
+
+        if (head($limit)['value'] && $campaign->users()->count() < head($limit)['value']) {
+            throw new Exception('Setting error');
         }
 
         return $this->doAction(function () use ($data, $campaign) {
@@ -455,6 +474,19 @@ class CampaignController extends ApiController
             $this->compacts['campaign_user'] = $this->userRepository->openFromCampaign($campaign);
             $this->compacts['campaign'] = $this->campaignRepository->openCampaign($campaign);
             $this->compacts['actions'] = $this->actionRepository->openAction($eventIds);
+        });
+    }
+
+    private function getValueSetting($settings, $conditions, $valueIfNotFound)
+    {
+        if (!is_array($settings)) {
+            return $valueIfNotFound;
+        }
+
+        return array_where($settings, function ($value, $key) use ($conditions, $valueIfNotFound) {
+            return !empty($value['key'])
+                ? $value['key'] == $conditions
+                : $valueIfNotFound;
         });
     }
 }

@@ -129,10 +129,14 @@
                                         class="form-control"
                                         type="text"
                                         v-model="limit"
-                                        v-validate="'numeric'">
+                                        v-validate="'numeric'"
+                                        @change="checkLimit(limit)">
                                     <span class="material-input"></span>
                                     <span v-show="errors.has('limit')" class="material-input text-danger">
                                         {{ errors.first('limit') }}
+                                    </span>
+                                    <span v-show="totalError" class="material-input text-danger">
+                                        {{ totalError }}
                                     </span>
                                 </div>
                             </div>
@@ -257,7 +261,9 @@ export default {
             status: [
                 { name: this.$i18n.t('campaigns.public'), value: window.Laravel.settings.value.status.public },
                 { name: this.$i18n.t('campaigns.private'), value: window.Laravel.settings.value.status.private }
-            ]
+            ],
+            totalUser: 0,
+            totalError: ''
         }
     },
     mixins: [uploadedImage, searchMap],
@@ -296,6 +302,7 @@ export default {
                         this.$router.push({ name: 'user', params: { id: this.user.id } })
                     }
 
+                    this.totalUser = res.data.totalUser
                     let c = res.data.campaign
                     this.campaign.id = c.id
                     this.campaign.address = c.address
@@ -397,7 +404,6 @@ export default {
             }
 
             let flag = false
-
             this.campaign.settings.map(function (setting) {
                 if (setting.key == key) {
                     setting.value = String(value)
@@ -451,6 +457,17 @@ export default {
         },
         check(value) {
             return value == 1 ? 'selected' : ''
+        },
+        checkLimit(value) {
+            if (value && Number(value) < this.totalUser) {
+                this.totalError = this.$i18n.t('validations.setting_larger') + this.totalUser
+                this.flag = false
+
+                return
+            }
+
+            this.flag = true
+            this.totalError = ''
         }
     },
     components: {

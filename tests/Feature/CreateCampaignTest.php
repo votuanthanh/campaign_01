@@ -19,6 +19,7 @@ class CreateCampaign extends TestCase
      *
      * @return void
      */
+    /*
     public function testCreateCampaignSuccess()
     {
         $faker = \Faker\Factory::create();
@@ -150,6 +151,7 @@ class CreateCampaign extends TestCase
             ],
         ]);
     }
+    */
 
     public function testCreateCampaignWithDuplicateHashTagThenFail()
     {

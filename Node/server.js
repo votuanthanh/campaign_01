@@ -2,15 +2,18 @@ var app = require('express')()
 var server = require('http').Server(app)
 var io = require('socket.io')(server)
 var redis = require('redis')
-var moment = require('moment-timezone');
+var moment = require('moment-timezone')
+require('dotenv').config({path: '../.env'})
 
-server.listen(8890)
+server.listen(process.env.PORT_SERVER_NODE)
 var userConnection = []
 var userLogin = null
 var listFriend = []
 
-var redisClient = redis.createClient(6379, 'redis')
-var client = redis.createClient(6379, 'redis')
+var redisClient = redis.createClient(process.env.REDIS_PORT, 'redis')
+var client = redis.createClient(process.env.REDIS_PORT, 'redis')
+var subClient = redis.createClient(process.env.REDIS_PORT, 'redis')
+subClient.subscribe('createCampaign')
 redisClient.subscribe('singleChat', 'groupChat', 'activies', 'noty')
 redisClient.on('message', function(channel, data) {
     if (channel == 'activies') {
@@ -38,6 +41,20 @@ redisClient.on('error', function (err) {
 });
 
 client.on('error', function (err) {
+    client.lpush('err', 'Exception: ' + err)
+})
+
+subClient.on('message', function (channel, data) {
+    let campaign = JSON.parse(data)
+
+    if (!Number(campaign.feature.value)) {
+        return
+    }
+
+    io.sockets.emit('createCampaignSuccess', { data: campaign })
+})
+
+subClient.on('error', function (err) {
     client.lpush('err', 'Exception: ' + err)
 })
 

@@ -24,7 +24,7 @@ Quill.register('modules/imageResize', ImageResize)
 import VueSocketio from 'vue-socket.io'
 import socketio from 'socket.io-client'
 
-Vue.use(VueSocketio, socketio(':8890'))
+Vue.use(VueSocketio, socketio(':' + window.Laravel.port_connect_server))
 Vue.use(VueQuillEditor)
 Vue.use(VueI18n)
 Vue.use(VueTimeago, configPlugin.timeago)

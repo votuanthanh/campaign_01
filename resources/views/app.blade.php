@@ -29,7 +29,8 @@
                 'follow' => config('settings.pagination.follow'),
                 'friend' => config('settings.pagination.friend'),
             ],
-            'key_google_map' => env('KEY_GOOGLE_MAP')
+            'key_google_map' => env('KEY_GOOGLE_MAP'),
+            'port_connect_server' => env('PORT_SERVER_NODE')
         ]) !!};
         @if (session('access_token'))
             localStorage.setItem('access_token', '{{ session('access_token') }}')
