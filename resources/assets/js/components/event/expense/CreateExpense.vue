@@ -118,7 +118,8 @@
                 type: 0,
                 reason: ''
             },
-            dataGoals: []
+            dataGoals: [],
+            pageType: 'event'
         }),
 
         watch: {

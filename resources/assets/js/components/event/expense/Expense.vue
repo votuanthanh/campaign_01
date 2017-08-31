@@ -1,5 +1,5 @@
 <template>
-    <div class='container expense'>
+    <div class='expense'>
         <div class='row direct'>
             <div
                 :class="{

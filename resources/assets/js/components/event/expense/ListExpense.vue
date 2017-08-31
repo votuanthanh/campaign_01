@@ -142,7 +142,8 @@
             isShowUpdateBuy: false,
             deleteExpenseId: null,
             expenseIsUpdate: null,
-            expenseIsUpdateBuy: null
+            expenseIsUpdateBuy: null,
+            pageType: 'event'
         }),
 
         created() {

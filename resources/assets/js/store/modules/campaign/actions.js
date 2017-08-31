@@ -143,7 +143,6 @@ export const changeMemberRole = ({ commit }, data) => {
                 resolve(res.data.http_status.status)
             })
             .catch(err => {
-                console.log('bug', err)
                 reject(err)
             })
     })

@@ -176,6 +176,7 @@
             dataGoals: [],
             quantitys: [],
             qualitys: [],
+            pageType: 'event'
         }),
 
         watch: {

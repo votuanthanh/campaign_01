@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
                 <div class="ui-block">

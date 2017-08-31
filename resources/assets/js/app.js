@@ -49,7 +49,7 @@ const router = makeRouter(routes)
 Vue.mixin({
     computed: {
         pageId() {
-            const slug = this.$route.params.slug || ''
+            const slug = (this.pageType == 'event' ? this.$route.params.slugEvent : this.$route.params.slug) || ''
             if (Number.isInteger(slug))
                 return slug
             return slug.substr(slug.lastIndexOf('-') + 1)

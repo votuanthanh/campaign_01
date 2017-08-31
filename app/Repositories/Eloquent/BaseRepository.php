@@ -33,6 +33,12 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $model = $this->model;
 
+        if ($method == head($args)) {
+            $this->model = call_user_func_array([$model, $method], array_diff($args, [head($args)]));
+
+            return $this;
+        }
+
         if (!$model instanceof Model) {
             $model = $model->first();
 

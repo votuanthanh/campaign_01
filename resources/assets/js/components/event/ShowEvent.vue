@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="ui-block features-video wrap-event">
@@ -17,27 +17,20 @@
                             <div class="post__author author vcard inline-items user-event">
                                 <img :src="event.user.image_thumbnail" alt="author">
                                 <div class="author-date">
-                                    <router-link :to="{ name: 'user.timeline', params: { id: event.user.id } }">
+                                    <router-link :to="{ name: 'user.timeline', params: { slug: event.user.id } }">
                                         <a class="h6 post__author-name fn" href="javascript:void(0)">{{ event.user.name }}</a>
                                     </router-link>
                                     <div class="post__date">
                                         <time class="published" datetime="2017-03-24T18:18">
                                             {{ timeAgo(event.created_at) }}
                                         </time>
-                                        <router-link
-                                            :to="{
-                                                name: 'campaign.timeline',
-                                                params: { slug: event.campaign_id }
-                                            }">
-                                            {{ $t('events.back_campaign_of_event') }}
-                                        </router-link>
                                     </div>
                                 </div>
                                 <div class="more" v-if="isManager && !event.deleted_at">
                                     <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                                     <ul class="more-dropdown">
                                         <li>
-                                            <router-link :to="{ name: 'event.update', params: { id: event.id } }">
+                                            <router-link :to="{ name: 'event.update', params: { slug: event.slug } }">
                                                 {{ $t('events.edit-event') }}
                                             </router-link>
                                         </li>
@@ -77,7 +70,7 @@
                             :comments="event.comments"
                             :numberOfComments="event.number_of_comments"
                             :model-id ="event.id"
-                            :flag="model"
+                            :flag="pageType"
                             :classListComment="'list-comment-event'"
                             :classFormComment="'input-comment-event'">
                         </comment>
@@ -87,7 +80,7 @@
         </div>
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="ui-block">
+                <div class="ui-block show-description">
                     <span class="ui-block-title">
                         <show-text
                             :text="event.description"
@@ -138,7 +131,8 @@
             model: 'event',
             showExpense: false,
             isManager: false,
-            showComfirm: false
+            showComfirm: false,
+            pageType: 'event'
         }),
 
         computed : {
@@ -315,6 +309,11 @@
         fill: #ff5e3a !important;
         &:hover {
             fill: #9a9fbf !important;
+        }
+    }
+    .show-description {
+        .ui-block-title {
+            line-height: 1.5
         }
     }
 </style>

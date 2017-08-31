@@ -129,22 +129,7 @@ class EventController extends ApiController
         }
 
         return $this->getData(function () use ($event) {
-
-            $this->compacts['event'] = $this->eventRepository
-                ->getLikes()
-                ->getComments()
-                ->where('id', $event->id)
-                ->withTrashed()
-                ->with([
-                    'user',
-                    'media' => function ($query) {
-                        $query->withTrashed();
-                    },
-                    'settings' => function ($query) {
-                        $query->withTrashed();
-                    },
-                ])
-                ->get();
+            $this->compacts['event'] = $this->eventRepository->getDetailEvent($event->id);
 
             $this->compacts['actions'] = $this->actionRepository
                 ->getActionPaginate($event

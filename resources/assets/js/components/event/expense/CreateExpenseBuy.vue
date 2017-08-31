@@ -172,7 +172,8 @@
                 quality: '',
                 quantity: ''
             },
-            dataGoals: []
+            dataGoals: [],
+            pageType: 'event'
 
         }),
 

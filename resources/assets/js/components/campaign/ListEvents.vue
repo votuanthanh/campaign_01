@@ -8,7 +8,7 @@
                     </router-link>
                     <div class="author-date">
                         <router-link
-                            :to="{ name: 'event.index', params: { slug: event.slug }}">
+                            :to="{ name: 'event.index', params: { 'slugEvent': event.slug }}">
                             {{ event.title }}
                         </router-link>
 

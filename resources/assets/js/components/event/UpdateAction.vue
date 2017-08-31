@@ -119,7 +119,8 @@
                     files: [],
                     event_id: this.pageId,
                     upload: []
-                }
+                },
+                pageType: 'event'
             }
         },
 

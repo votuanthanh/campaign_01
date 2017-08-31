@@ -224,4 +224,22 @@ class EventRepository extends BaseRepository implements EventInterface
             return $events->restore();
         }
     }
+
+    public function getDetailEvent($id)
+    {
+        return $this->where('id', $id)
+            ->getLikes('getLikes')
+            ->getComments('getComments')
+            ->withTrashed()
+            ->with([
+                'user',
+                'media' => function ($query) {
+                    $query->withTrashed();
+                },
+                'settings' => function ($query) {
+                    $query->withTrashed();
+                },
+            ])
+            ->get();
+    }
 }

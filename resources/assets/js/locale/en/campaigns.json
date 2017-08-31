@@ -71,5 +71,6 @@
     "actions": "Actions",
     "manage_events": "Manage Events",
     "prev_page": "Previous Page",
-    "next_page": "Next Page"
+    "next_page": "Next Page",
+    "no_events_are_closed": "No events are closed"
 }

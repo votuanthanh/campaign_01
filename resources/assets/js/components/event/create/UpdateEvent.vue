@@ -235,7 +235,7 @@
                     language: {
                         dictRemoveFileConfirmation: this.$i18n.t('messages.delete_photo')
                     }
-                },
+                }
             }
         },
         mixins: [uploadedImage, searchMap],
@@ -358,7 +358,13 @@
                             container: false,
                             type: 'success'
                         })
-                        this.$router.push({ name: 'event.index', params: { slug: this.pageId }})
+                        this.$router.push({
+                            name: 'event.index',
+                            params: {
+                                slug: this.event.campaign_id,
+                                slugEvent: this.pageId
+                                }
+                            })
                     })
                     .catch(err => {
                         noty({
