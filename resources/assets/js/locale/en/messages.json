@@ -55,5 +55,6 @@
     "comfirm-close-campaign": "Do you want to close this campaign?",
     "close_campaign_success": "You closed this campaign is successfully!",
     "close_campaign_fail": "You don't close this campaign!",
-    "comfirm_open_campaign": "Are you sure you want to open this campaign?"
+    "comfirm_open_campaign": "Are you sure you want to open this campaign?",
+    "comfirm-invite-member": "Do you want invite this user?"
 }

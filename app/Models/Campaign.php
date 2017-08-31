@@ -14,6 +14,7 @@ class Campaign extends BaseModel
     const BLOCK = 0;
     const ACTIVE = 1;
     const APPROVING = 0;
+    const REQUEST_USER = 2;
     const APPROVED = 1;
     const REJECT = 0;
     const FLAG_APPROVE = 'approve';

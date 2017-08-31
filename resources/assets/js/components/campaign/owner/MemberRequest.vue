@@ -1,62 +1,62 @@
 <template lang="html">
-        <div class="col-xl-9 push-xl-3 col-lg-9 push-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="ui-block">
-                        <div class="ui-block-title search_action">
-                            <div class="row">
-                                <input
-                                    v-model="search"
-                                    @input="searchMembers"
-                                    class="form-control input-search-action"
-                                    :placeholder="$t('messages.search')"
-                                    type="text">
-                            </div>
+    <div class="col-xl-9 push-xl-3 col-lg-9 push-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="ui-block">
+                    <div class="ui-block-title search_action">
+                        <div class="row">
+                            <input
+                                v-model="search"
+                                @input="searchMembers"
+                                class="form-control input-search-action"
+                                :placeholder="$t('messages.search')"
+                                type="text">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="ui-block">
-                <div class="ui-block-title">
-                    <h6 class="title">{{ $t('campaigns.member-request') }}</h6>
-                    <a href="javascript:void(0)" class="more">
-                        <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
-                    </a>
-                </div>
-                <ul class="notification-list friend-requests">
-                    <li v-for="member in members.data">
-                        <div class="author-thumb">
-                            <router-link
-                                :to="{ name: 'user.timeline', params: { slug: member.id }}">
-                                <img :src="member.image_thumbnail" :alt="member.name" class="img-member">
-                            </router-link>
-                        </div>
-                        <div class="notification-event">
-                            <router-link
-                                :to="{ name: 'user.timeline', params: { slug: member.id }}"
-                                class="h6 notification-friend">
-                                {{ member.name }}
-                            </router-link>
-                            <span class="chat-message-item">{{ member.email }}</span>
-                        </div>
-                        <span class="notification-icon" v-if="!campaign.deleted_at">
-                            <a href="javascript:void(0)" @click="approveMembers(member.id)" class="accept-request">
-                                <span class="icon-add">
-                                    <svg class="olymp-happy-face-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use></svg>
-                                </span>
-                                {{ $t('campaigns.accept-request') }}
-                            </a>
-
-                            <a href="javascript:void(0)" @click="rejectMembers(member.id)" class="accept-request request-del">
-                                <span class="icon-minus">
-                                    <svg class="olymp-happy-face-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use></svg>
-                                </span>
-                            </a>
-                        </span>
-                    </li>
-                </ul>
-            </div>
         </div>
+        <div class="ui-block">
+            <div class="ui-block-title">
+                <h6 class="title">{{ $t('campaigns.member-request') }}</h6>
+                <a href="javascript:void(0)" class="more">
+                    <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
+                </a>
+            </div>
+            <ul class="notification-list friend-requests">
+                <li v-for="member in members.data">
+                    <div class="author-thumb">
+                        <router-link
+                            :to="{ name: 'user.timeline', params: { slug: member.slug }}">
+                            <img :src="member.image_thumbnail" :alt="member.name" class="img-member">
+                        </router-link>
+                    </div>
+                    <div class="notification-event">
+                        <router-link
+                            :to="{ name: 'user.timeline', params: { slug: member.slug }}"
+                            class="h6 notification-friend">
+                            {{ member.name }}
+                        </router-link>
+                        <span class="chat-message-item">{{ member.email }}</span>
+                    </div>
+                    <span class="notification-icon" v-if="!campaign.deleted_at">
+                        <a href="javascript:void(0)" @click="approveMembers(member.id)" class="accept-request">
+                            <span class="icon-add">
+                                <svg class="olymp-happy-face-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use></svg>
+                            </span>
+                            {{ $t('campaigns.accept-request') }}
+                        </a>
+
+                        <a href="javascript:void(0)" @click="rejectMembers(member.id)" class="accept-request request-del">
+                            <span class="icon-minus">
+                                <svg class="olymp-happy-face-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use></svg>
+                            </span>
+                        </a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -96,7 +96,7 @@
                     pageCurrent: 0
                 })
                 .then(data => {
-                    this.members = data
+                    this.members = data.members
                 })
                 .catch(err => {
                     const message = this.$i18n.t('messages.message-fail')

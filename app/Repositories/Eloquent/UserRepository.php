@@ -218,12 +218,7 @@ class UserRepository extends BaseRepository implements UserInterface
      */
     public function searchMembers($campaignId, $status, $search, $roleId)
     {
-
-        $user = $this;
-
-        if ($search) {
-            $user = $user->search($search, null, true);
-        }
+        $user = $search ? $this->search($search, null, true) : $this;
 
         return $user->where('status', User::ACTIVE)
             ->whereHas('campaigns', function ($query) use ($campaignId, $status, $roleId) {
@@ -367,5 +362,21 @@ class UserRepository extends BaseRepository implements UserInterface
         }
 
         return false;
+    }
+
+    /**
+     * search members to invite join to campaign
+     * @param  App\Models\Campaign $campaign
+     * @param  int $id
+     * @return boolen
+     */
+    public function searchMemberToInvite($data, $firendIds)
+    {
+        $memberIds = $data['campaign']->users->pluck('id')->all();
+        $user = $data['search'] ? $this->search($data['search'], null, true) : $this;
+
+        return $user->whereIn('id', $firendIds)
+            ->whereNotIn('id', $memberIds)
+            ->paginate(config('settings.paginate_member'));
     }
 }

@@ -35,4 +35,6 @@ interface UserInterface extends RepositoryInterface
     public function closedCampaign($user, $roleIdManagement);
 
     public function deleteFromCampaign($campaign);
+
+    public function searchMemberToInvite($data, $firendIds);
 }
