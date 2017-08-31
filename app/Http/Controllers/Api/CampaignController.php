@@ -401,6 +401,16 @@ class CampaignController extends ApiController
         });
     }
 
+    public function getExportData($id)
+    {
+        $campaign = $this->campaignRepository->findOrFail($id);
+
+        return $this->getData(function () use ($campaign) {
+            $this->authorize('view', $campaign);
+            $this->compacts['data'] = $this->campaignRepository->getExportData($campaign);
+        });
+    }
+
     public function getEventsClosed($campaignId)
     {
         $campaign = $this->campaignRepository->findOrFail($campaignId);

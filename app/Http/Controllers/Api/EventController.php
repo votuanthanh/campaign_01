@@ -212,19 +212,4 @@ class EventController extends ApiController
             $this->compacts['openEvent'] = $this->eventRepository->openFromEvent($event);
         });
     }
-
-    // public function openEvent($id)
-    // {
-    //     $event = $this->eventRepository->onlyTrashed()->findOrFail($id);
-
-    //     if ($this->user->cant('manage', $event)) {
-    //         throw new UnknowException('Permission error: User can not delete this event.');
-    //     }
-
-    //     return $this->doAction(function() use ($id, $event) {
-    //         $this->actionRepository->openFromEvent($event);
-    //         $this->expenseRepository->openFromEvent($event);
-    //         $this->compacts['openEvent'] = $this->eventRepository->openFromEvent($event);
-    //     });
-    // }
 }
