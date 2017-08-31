@@ -498,6 +498,33 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         return $data;
     }
 
+    public function getExportData(Campaign $campaign)
+    {
+        return $campaign
+            ->load([
+                'media',
+                'owner',
+                'activeUsers',
+                'settings' => function ($setting) {
+                    $setting->whereIn('key', [
+                        config('settings.campaigns.status'),
+                        config('settings.campaigns.start_day'),
+                        config('settings.campaigns.end_day'),
+                    ]);
+                },
+                'events.settings' => function ($setting) {
+                    $setting->whereIn('key', [
+                        config('settings.events.start_day'),
+                        config('settings.events.end_day'),
+                    ]);
+                },
+                'events.media',
+                'events.goals.donations',
+                'events.goals.donationType.quality',
+                'events.goals.expenses',
+            ]);
+    }
+
     public function getEventsClosed($campaignId)
     {
         return $this->find($campaignId)

@@ -127,6 +127,11 @@ class Campaign extends BaseModel
         return $this->getUserByRole('member');
     }
 
+    public function activeUsers()
+    {
+        return $this->getUserByRole(['owner', 'moderator', 'member']);
+    }
+
     public function blockeds()
     {
         return $this->getUserByRole('blocked')->get();

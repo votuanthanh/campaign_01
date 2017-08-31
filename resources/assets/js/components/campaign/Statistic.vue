@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                 <div class="ui-block">
                     <div class="ui-block-content">
                         <div class="monthly-indicator">
@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                 <div class="ui-block">
                     <div class="ui-block-content">
                         <div class="monthly-indicator">
@@ -37,7 +37,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                 <div class="ui-block">
                     <div class="ui-block-content">
                         <div class="monthly-indicator">
@@ -53,7 +53,24 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                <div class="ui-block">
+                    <div class="ui-block-content">
+                        <div class="monthly-indicator">
+                            <a href="#" class="btn btn-control bg-purple negative" @click.prevent="getStatisticInfo">
+                                <svg class="olymp-stats-arrows"><use xlink:href="/frontend/icons/icons.svg#olymp-stats-icon"></use></svg>
+                            </a>
+                            <div class="monthly-count">
+                                {{ $t('campaigns.statistic.statistic') }}
+                                <span class="period text-capitalize">{{ $t('campaigns.statistic.full_statistic') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        <information :show.sync="showInfo" :data="information" @reload="fetchStatisticInfo"/>
 
         <div class="row">
 
@@ -126,6 +143,7 @@
 <script>
 import LineChart from '../libs/chart/LineChart.js'
 import { get } from '../../helpers/api'
+import Information from './ExportInformation.vue'
 
 export default {
     data() {
@@ -170,6 +188,38 @@ export default {
                     }]
                 }
             },
+            showInfo: false,
+            information: {
+                title: '',
+                event_count: 0,
+                active_users: [],
+                owner: {},
+                settings: [],
+                reported_at: null
+            }
+        }
+    },
+    methods: {
+        fetchStatisticInfo() {
+            this.$Progress.start()
+            get(`campaign/${this.pageId}/get-export-data`)
+                .then(res => {
+                    this.information = res.data.data
+                    this.information.event_count = this.information.events.length
+                    this.information.events = _.groupBy(this.information.events, 'settings[0].date_string')
+                    this.information.media = this.information.media[0].image_medium
+                    this.information.owner = this.information.owner[0]
+                    this.information.reported_at = new Date().toLocaleString(window.Laravel.locale)
+                    this.$Progress.finish()
+                })
+                .catch(() => this.$Progress.fail)
+        },
+        getStatisticInfo() {
+            if (!this.information.created_at) {
+                this.fetchStatisticInfo()
+            }
+
+            this.showInfo = true
         }
     },
     created() {
@@ -217,7 +267,8 @@ export default {
             })
     },
     components: {
-        LineChart
+        LineChart,
+        Information
     }
 }
 </script>
