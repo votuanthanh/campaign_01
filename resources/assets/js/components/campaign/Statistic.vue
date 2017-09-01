@@ -191,6 +191,7 @@ export default {
             showInfo: false,
             information: {
                 title: '',
+                description: '',
                 event_count: 0,
                 active_users: [],
                 owner: {},

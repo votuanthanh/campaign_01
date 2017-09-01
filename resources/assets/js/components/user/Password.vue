@@ -56,20 +56,6 @@
                             </span>
                         </div>
 
-                        <div class="col-lg-12 col-sm-12 col-sm-12 col-xs-12">
-                            <div class="remember">
-
-                                <div class="checkbox">
-                                    <label>
-                                        <input name="optionsCheckboxes" type="checkbox">
-                                        {{ $t('form.label.remember_me') }}
-                                    </label>
-                                </div>
-
-                                <a href="#" class="forgot">{{ $t('form.label.forgot_password') }}</a>
-                            </div>
-                        </div>
-
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <button class="btn btn-primary btn-lg full-width">
                                 <i class="fa fa-spinner fa-spin" v-if="spinner"></i> {{ $t('form.button.change_password') }}

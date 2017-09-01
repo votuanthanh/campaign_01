@@ -422,7 +422,7 @@ class CampaignController extends ApiController
 
     public function getExportData($id)
     {
-        $campaign = $this->campaignRepository->findOrFail($id);
+        $campaign = $this->campaignRepository->withTrashed()->findOrFail($id);
 
         return $this->getData(function () use ($campaign) {
             $this->authorize('view', $campaign);
