@@ -4,7 +4,7 @@
             <!-- Main Content -->
             <main class="col-xl-6 push-xl-3 col-lg-12 push-lg-0 col-md-12 col-sm-12 col-xs-12">
                 <div id="newsfeed-items-grid">
-                    <div v-for="(activity, index) in listActivity">
+                    <div v-for="activity in listActivity">
                         <Campaign v-if="activity.activitiable_type === 'App\\Models\\Campaign'"
                             :type="activity.name"
                             :campaign="activity.activitiable"
@@ -103,6 +103,25 @@
             Event,
             LeftSidebar,
             RightSidebar
+        },
+        sockets: {
+            createCampaignSuccess: function (data) {
+                let campaign = data.data
+                let newCampaign = {
+                    activitiable: campaign.info,
+                    activitiable_type: campaign.type,
+                    user: campaign.user,
+                    name: campaign.name,
+                    created_at: null,
+                    deleted_at: null,
+                    id: null,
+                    number_of_comments: 0,
+                    number_of_likes: 0,
+                    updated_at: null
+                }
+
+                this.listActivity.unshift(newCampaign)
+            }
         }
     }
 

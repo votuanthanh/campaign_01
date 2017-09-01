@@ -38,7 +38,8 @@ class CommonController extends ApiController
 
     public function uploadImageForEditor(Request $request)
     {
-        $dataQuill = collect($request->input('file'))->map(function ($file) {
+        $data = $request->only('file');
+        $dataQuill = collect($data)->map(function ($file) {
             return [
                 'type' => Media::EDITOR_QUILL,
                 'url_file' => $this->getName($file),
