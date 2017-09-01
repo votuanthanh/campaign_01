@@ -65,6 +65,8 @@
         "no_event": "This campaign has no events yet!",
         "reported_at": "This report was created at",
         "recreate": "recreate now",
+        "donation_times": "Donation times",
+        "spent_times": "Spent times",
         "at": "at",
         "members": "members",
         "today": "today",

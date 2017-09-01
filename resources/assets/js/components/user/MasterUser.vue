@@ -41,12 +41,6 @@
                                                     <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                                                     <ul class="more-dropdown more-with-triangle">
                                                         <li>
-                                                            <a href="#">Report Profile</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">Block Profile</a>
-                                                        </li>
-                                                        <li>
                                                             <router-link :to="{ name: 'user.campaign', params: { id: userId, path: 'following-campaign' }}">{{ $t('user.label.following_campaign') }}</router-link>
 
                                                         </li>

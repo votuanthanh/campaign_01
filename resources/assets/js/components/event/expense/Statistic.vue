@@ -112,7 +112,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(expense, index) in expenses">
+                            <td colspan="5" class="text-center" v-if="!expenses.length">
+                                {{ $t('campaigns.statistic.not_enought_data') }}
+                            </td>
+                            <tr v-for="(expense, index) in expenses" v-else>
                                 <td class="text-center">{{index + 1 }}</td>
                                 <td>{{ expense.goal.donation_type.name }}</td>
                                 <td>{{ expense.cost }}</td>
@@ -129,7 +132,7 @@
             </div>
 
         </div>
-        <div class="row">
+        <div class="row" v-show="lineGraphicChart.labels && lineGraphicChart.labels.length > 1">
             <div class="col-xl-12 col-lg-12 col-md-7 col-sm-12 col-xs-12">
                 <div class="ui-block responsive-flex" data-mh="pie-chart">
                     <div class="ui-block-title">

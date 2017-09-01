@@ -114,34 +114,6 @@
                             </div>
                         </div>
 
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="form-group with-icon label-floating">
-                                <label class="control-label">Your Facebook Account</label>
-                                <input class="form-control" type="text" value="www.facebook.com/james-spiegel95321">
-                                <i class="fa fa-facebook c-facebook" aria-hidden="true"></i>
-                            </div>
-                            <div class="form-group with-icon label-floating">
-                                <label class="control-label">Your Twitter Account</label>
-                                <input class="form-control" type="text" value="www.twitter.com/james_spiegelOK">
-                                <i class="fa fa-twitter c-twitter" aria-hidden="true"></i>
-                            </div>
-                            <div class="form-group with-icon label-floating">
-                                <label class="control-label">Your RSS Feed Account</label>
-                                <input class="form-control" type="text">
-                                <i class="fa fa-rss c-rss" aria-hidden="true"></i>
-                            </div>
-                            <div class="form-group with-icon label-floating">
-                                <label class="control-label">Your Dribbble Account</label>
-                                <input class="form-control" type="text" value="www.dribbble.com/thecowboydesigner">
-                                <i class="fa fa-dribbble c-dribbble" aria-hidden="true"></i>
-                            </div>
-                            <div class="form-group with-icon label-floating">
-                                <label class="control-label">Your Spotify Account</label>
-                                <input class="form-control" type="text">
-                                <i class="fa fa-spotify c-spotify" aria-hidden="true"></i>
-                            </div>
-                        </div>
-
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" @click.prevent="restoreAll">
                             <button class="btn btn-secondary btn-lg full-width">{{ $t('form.button.restore') }}</button>
                         </div>

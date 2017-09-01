@@ -18,10 +18,6 @@ Route::get('/images/{path}', function (Illuminate\Http\Request $request, $path) 
     return app('glide')->getImageResponse($path, $request->all());
 })->where('path', '.*');
 
-Route::get('/{vue_capture?}', function () {
-    return view('app');
-})->where('vue_capture', '[\/\w\.-]*');
-
 Auth::routes();
 
 Route::group(['namespace' => 'Auth', 'prefix' => '/auth', 'middleware' => 'guest'], function () {
@@ -35,3 +31,7 @@ Route::group(['namespace' => 'Frontend'], function () {
 
     Route::get('/user', 'UserController@index');
 });
+
+Route::get('/{vue_capture?}', function () {
+    return view('app');
+})->where('vue_capture', '(.*)');

@@ -9,7 +9,7 @@
                 <div class="private-event-head inline-items">
                     <img src="/images/avatar77-sm.jpg" alt="author">
                     <div class="author-date">
-                        <a class="h3 event-title" href="#">{{ data.title.substr(0, 50) + '...' }}</a>
+                        <a class="h3 event-title" href="#">{{ shorten(data.title, false, 55) }}</a>
                         <div class="event__date">
                             <time class="published" datetime="2017-03-24T18:18">
                                 #{{ data.hashtag }}
@@ -35,7 +35,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-html="data.description"></div>
+                        <div>
+                            {{ shorten(data.description, true, 300) }}
+                        </div>
                     </div>
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                         <div class="event-description">
@@ -127,24 +129,45 @@
                             </a>
                         </div>
                         <div>
-                            <div class="mt-1" v-for="goal in event.goals">
-                                <a class="place inline-items post-add-icon">
-                                    <svg class="olymp-add-a-place-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use></svg>
-                                    <span>{{ goal.donation_type.name + ' (' + goal.donation_type.quality.name + '): ' }}
-                                        goals: {{ goal.goal }} |
-                                        received: {{ sumValue(goal.donations, 'value') }}
-                                        with: {{ goal.donations.length }} donation(s) |
-                                        {{ getPercent(sumValue(goal.donations, 'value'), goal.goal) }} %
-                                        <span v-show="goal.expenses.length"><br/>
-                                            spent: {{ sumValue(goal.expenses, 'cost') }}
-                                            with {{ goal.expenses.length }} time
-                                            ({{ getPercent(sumValue(goal.expenses, 'cost'), sumValue(goal.donations, 'value')) }}%) |
-                                            remain: {{ sumValue(goal.donations, 'value') - sumValue(goal.expenses, 'cost') }}
+                            <table class="mt-3 table-bordered table table-sm" v-if="event.goals.length">
+                                <thead class="thead-default">
+                                    <tr>
+                                        <th><a class="place inline-items post-add-icon">
+                                            <svg class="olymp-add-a-place-icon">
+                                                <use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use>
+                                            </svg>
+                                        </a></th>
+                                        <th>{{ $t('events.donation.donate') }}</th>
+                                        <th>{{ $t('events.donation.goal') }}</th>
+                                        <th>{{ $t('events.donation.received') }}</th>
+                                        <th>{{ $t('campaigns.statistic.donation_times') }}</th>
+                                        <th>{{ $t('events.expenses_statistic.spent') }}</th>
+                                        <th>{{ $t('campaigns.statistic.spent_times') }}</th>
+                                        <th class="text-capitalize">{{ $t('events.expenses_statistic.remain') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(goal, i) in event.goals">
+                                        <th scope="row">{{ i + 1 }}</th>
+                                        <td>{{ goal.donation_type.name + ' (' + goal.donation_type.quality.name + ')' }}</td>
+                                        <td>{{ goal.goal }}</td>
+                                        <td>
+                                            {{ sumValue(goal.donations, 'value') }}
+                                            ({{ getPercent(sumValue(goal.donations, 'value'), goal.goal) }} %)
+                                        </td>
+                                        <td>{{ goal.donations.length }}</td>
+                                        <td>
+                                            {{ sumValue(goal.expenses, 'cost') }}
+                                            ({{ getPercent(sumValue(goal.expenses, 'cost'), sumValue(goal.donations, 'value')) }}%)
+                                        </td>
+                                        <td>{{ goal.expenses.length }}</td>
+                                        <td>
+                                            {{ sumValue(goal.donations, 'value') - sumValue(goal.expenses, 'cost') }}
                                             ({{ 100 - getPercent(sumValue(goal.expenses, 'cost'), sumValue(goal.donations, 'value')) }}%)
-                                        </span>
-                                    </span>
-                                </a>
-                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </li>
                 </ul>
@@ -166,7 +189,9 @@
 </transition>
 </template>
 <script>
+import string from '../../helpers/mixin/string'
 export default {
+    mixins: [string],
     props: ['show', 'data'],
     data() {
         return {
@@ -210,7 +235,7 @@ export default {
                 this.closeModal()
             }
         })
-    },
+    }
 }
 </script>
 
