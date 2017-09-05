@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import Comment from '../comment/Comment.vue'
 import ShowText from '../libs/ShowText.vue'
@@ -116,10 +116,43 @@ export default {
             user: state => state.user
         })
     },
+    methods: {
+        ...mapActions('campaign', [
+            'updateEventsCampaign',
+        ])
+    },
     components: {
         Comment,
         ShowText,
         MasterLike
+    },
+    sockets: {
+        createEventSuccess: function (data) {
+            const event = data.data
+            const eventAdd = {
+                address: event.info.address,
+                campaign_id: Number(event.info.campaign_id),
+                comments: [],
+                likes: [],
+                created_at: event.info.created_at,
+                deleted_at: null,
+                description: event.info.description,
+                id: event.info.id,
+                latitude: event.info.latitude,
+                longitude: event.info.longitude,
+                number_of_comments: 0,
+                number_of_likes: 0,
+                slug: event.info.slug,
+                timeAgo: event.info.timeAgo,
+                title: event.info.title,
+                updated_at: event.info.updated_at,
+                user_id: Number(event.user.id),
+                user: event.user,
+                media: event.info.media
+            }
+
+            this.updateEventsCampaign(eventAdd)
+        }
     }
 }
 </script>

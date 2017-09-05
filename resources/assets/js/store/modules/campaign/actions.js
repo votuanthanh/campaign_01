@@ -178,6 +178,10 @@ export const setDetailcampaign = ({ commit }, data) => {
     commit(types.SET_DETAIL_CAMPAIGN, data)
 };
 
+export const updateEventsCampaign = ({ commit }, data) => {
+    commit(types.UPDATE_EVENTS_CAMPAIGN, data)
+};
+
 export default {
     campaignDetail,
     fetchData,
@@ -191,5 +195,6 @@ export default {
     searchMember,
     changeMemberRole,
     openCampaign,
-    searchMemberToInvite
+    searchMemberToInvite,
+    updateEventsCampaign
 };

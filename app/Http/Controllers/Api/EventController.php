@@ -16,6 +16,9 @@ use App\Repositories\Contracts\CampaignInterface;
 use App\Repositories\Contracts\ActionInterface;
 use App\Repositories\Contracts\GoalInterface;
 use App\Repositories\Contracts\ExpenseInterface;
+use LRedis;
+use App\Models\Event;
+use App\Models\Activity;
 
 class EventController extends ApiController
 {
@@ -26,6 +29,7 @@ class EventController extends ApiController
     protected $actionRepository;
     protected $goalRepository;
     protected $expenseRepository;
+    private $redis;
 
     public function __construct(
         EventInterface $eventRepository,
@@ -60,6 +64,21 @@ class EventController extends ApiController
             }
 
             $this->compacts['event'] = $this->eventRepository->create($input);
+            $this->redis = LRedis::connection();
+            $feature = $campaign
+                ->settings()
+                ->where('key', config('settings.campaigns.status'))
+                ->first();
+            $this->redis->publish('createEvent', json_encode([
+                'info' => $this->compacts['event']->load('campaign', 'media'),
+                'hashtag' => $campaign->hashtag,
+                'type' => Event::class,
+                'user' => $this->user,
+                'name' => Activity::CREATE,
+                'feature' => $feature
+                    ? $feature->value
+                    : config('settings.value_of_settings.status.private'),
+            ]));
         });
     }
 

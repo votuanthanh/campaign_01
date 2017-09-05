@@ -170,7 +170,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
 
     private function updateMedia($campaign, $media)
     {
-        if (!$campaign || str_contains($media, Carbon::now()->format('Y/m') . '/campaigns/')) {
+        if (!$campaign || str_contains($media, config('filesystems.disks.is_url_path'))) {
             return false;
         }
 

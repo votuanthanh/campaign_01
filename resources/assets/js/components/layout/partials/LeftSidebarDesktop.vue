@@ -5,7 +5,7 @@
                 <img src="/images/logo.png" alt="Olympus">
             </router-link>
             <div class="mCustomScrollbar" data-mcs-theme="dark">
-                <ul class="left-menu">
+                <ul class="left-menu" style="display: none;">
                     <li>
                         <a href="javascript:void(0)" class="js-sidebar-open" @click.stop="isOpen = true">
                             <svg class="olymp-menu-icon left-menu-icon">
@@ -92,7 +92,7 @@
                 <h6 class="logo-title">olympus</h6>
             </a>
             <div class="mCustomScrollbar" data-mcs-theme="dark">
-                <ul class="left-menu">
+                <ul class="left-menu" style="display: none;">
                     <li>
                         <a href="javascript:void(0)" class="js-sidebar-open" @click.stop="isOpen = false">
                             <svg class="olymp-close-icon left-menu-icon">

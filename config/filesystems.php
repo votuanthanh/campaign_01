@@ -67,6 +67,11 @@ return [
             'bucket' => env('AWS_BUCKET'),
         ],
 
+        'is_url_path' => [
+            \Carbon\Carbon::now()->format('Y/m'),
+            '/campaigns/',
+            '/images/',
+        ],
     ],
 
 ];

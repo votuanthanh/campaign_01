@@ -108,6 +108,22 @@
                             })
                         })
                 }
+            },
+            addNewActivity(data) {
+                let newActivity = {
+                    activitiable: data.info,
+                    activitiable_type: data.type,
+                    user: data.user,
+                    name: data.name,
+                    created_at: null,
+                    deleted_at: null,
+                    id: null,
+                    number_of_comments: 0,
+                    number_of_likes: 0,
+                    updated_at: null
+                }
+
+                this.listActivity.unshift(newActivity)
             }
         },
         components: {
@@ -120,19 +136,11 @@
         sockets: {
             createCampaignSuccess: function (data) {
                 let campaign = data.data
-                let newCampaign = {
-                    activitiable: campaign.info,
-                    activitiable_type: campaign.type,
-                    user: campaign.user,
-                    name: campaign.name,
-                    created_at: null,
-                    deleted_at: null,
-                    id: null,
-                    number_of_comments: 0,
-                    number_of_likes: 0,
-                    updated_at: null
-                }
-                this.listActivity.unshift(newCampaign)
+                this.addNewActivity(campaign)
+            },
+            createEventSuccess: function (data) {
+                let event = data.data
+                this.addNewActivity(event)
             }
         }
     }
