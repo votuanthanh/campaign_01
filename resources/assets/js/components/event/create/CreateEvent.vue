@@ -282,7 +282,7 @@
                                 container: false,
                                 type: 'success'
                             })
-                            this.$router.push({ name: 'event.index', params: { slug: res.data.event.slug }})
+                            this.$router.push({ name: 'event.index', params: { slugEvent: res.data.event.slug }})
                         })
                         .catch(err => {
                             noty({

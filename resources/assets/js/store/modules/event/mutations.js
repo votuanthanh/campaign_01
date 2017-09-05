@@ -58,7 +58,7 @@ export default {
     },
 
     [types.REMOVE_ACTION](state, actionId) {
-        state.actions.data = $.grep(state.actions.data, function (item, index) {
+        state.actions.list_action.data = $.grep(state.actions.list_action.data, function (item, index) {
             return item.id !== actionId
         });
     }

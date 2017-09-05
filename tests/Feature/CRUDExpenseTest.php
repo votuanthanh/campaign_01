@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\Goal;
 use App\Models\Event;
 use App\Models\Expense;
+use App\Models\Action;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -134,6 +135,13 @@ class CRUDExpenseTest extends TestCase
             'event_id' => $event->id,
             'goal_id' => $goal->id,
         ]);
+        factory(Action::class)->create([
+            'caption' => $faker->sentence(2),
+            'description' => $faker->sentence(10),
+            'event_id' => $event->id,
+            'user_id' => $user->id,
+            'expense_id' => $expense->id,
+        ]);
 
         $response = $this->json('DELETE', route('expense.destroy', ['expense' => $expense->id]), [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -155,6 +163,13 @@ class CRUDExpenseTest extends TestCase
             'user_id' => $user->id,
             'event_id' => $event->id,
             'goal_id' => $goal->id,
+        ]);
+        factory(Action::class)->create([
+            'caption' => $faker->sentence(2),
+            'description' => $faker->sentence(10),
+            'event_id' => $event->id,
+            'user_id' => $user->id,
+            'expense_id' => $expense->id,
         ]);
 
         $response = $this->json('DELETE', route('expense.destroy', ['expense' => $expense->id]), [
@@ -180,6 +195,13 @@ class CRUDExpenseTest extends TestCase
             'event_id' => $event->id,
             'goal_id' => $goal->id,
         ]);
+        factory(Action::class)->create([
+            'caption' => $faker->sentence(2),
+            'description' => $faker->sentence(10),
+            'event_id' => $event->id,
+            'user_id' => $user1->id,
+            'expense_id' => $expense->id,
+        ]);
 
         $response = $this->json('DELETE', route('expense.destroy', ['expense' => $expense->id]), [
             'HTTP_Authorization' => 'Bearer ' . $user2->createToken('myToken')->accessToken,
@@ -202,6 +224,13 @@ class CRUDExpenseTest extends TestCase
             'event_id' => $event->id,
             'goal_id' => $goal->id,
         ]);
+        factory(Action::class)->create([
+            'caption' => $faker->sentence(2),
+            'description' => $faker->sentence(10),
+            'event_id' => $event->id,
+            'user_id' => $user->id,
+            'expense_id' => $expense->id,
+        ]);
 
         $response = $this->json('DELETE', route('expense.destroy', ['expense' => -1]), [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -222,6 +251,13 @@ class CRUDExpenseTest extends TestCase
         $expense = factory(Expense::class)->create([
             'event_id' => $event->id,
             'goal_id' => $goal->id,
+        ]);
+        factory(Action::class)->create([
+            'caption' => $faker->sentence(2),
+            'description' => $faker->sentence(10),
+            'event_id' => $event->id,
+            'user_id' => $user->id,
+            'expense_id' => $expense->id,
         ]);
 
         $response = $this->json('PATCH', route('expense.update', ['expense' => $expense->id]), [
@@ -252,6 +288,13 @@ class CRUDExpenseTest extends TestCase
             'user_id' => $user->id,
             'event_id' => $event->id,
             'goal_id' => $goal->id,
+        ]);
+        factory(Action::class)->create([
+            'caption' => $faker->sentence(2),
+            'description' => $faker->sentence(10),
+            'event_id' => $event->id,
+            'user_id' => $user->id,
+            'expense_id' => $expense->id,
         ]);
 
         $response = $this->json('PATCH', route('expense-update-buy', ['id' => $expense->id]), [
@@ -289,6 +332,13 @@ class CRUDExpenseTest extends TestCase
             'user_id' => $user1->id,
             'event_id' => $event->id,
             'goal_id' => $goal->id,
+        ]);
+        factory(Action::class)->create([
+            'caption' => $faker->sentence(2),
+            'description' => $faker->sentence(10),
+            'event_id' => $event->id,
+            'user_id' => $user1->id,
+            'expense_id' => $expense->id,
         ]);
 
         $response = $this->json('PATCH', route('expense-update-buy', ['id' => $expense->id]), [

@@ -9,6 +9,7 @@ use App\Models\Action;
 use App\Models\Activity;
 use App\Traits\Common\UploadableTrait;
 use App\Exceptions\Api\UnknowException;
+use App\Exceptions\Api\NotFoundException;
 use App\Repositories\Contracts\ActionInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -122,9 +123,12 @@ class ActionRepository extends BaseRepository implements ActionInterface
             ->whereIn('event_id', $eventIds)
             ->getLikes()
             ->getComments()
-            ->with(['user', 'media' => function ($query) {
-                $query->withTrashed();
-            }])
+            ->with([
+                'user',
+                'media' => function ($query) {
+                    $query->withTrashed();
+                }
+            ])
             ->whereHas('media', function ($query) {
                 $query->withTrashed()->where('type', Media::IMAGE)
                     ->orderBy('created_at', 'desc');
@@ -217,5 +221,60 @@ class ActionRepository extends BaseRepository implements ActionInterface
             ->update(['deleted_at' => null]);
 
         return $event->actions()->restore();
+    }
+
+    public function createFromExpense($data, $goal)
+    {
+        $newData = $this->initData($data, $goal);
+
+        return parent::create($newData);
+    }
+
+    public function updateFromExpense($data, $goal)
+    {
+        $dataUpdate = $this->initData($data, $goal);
+        $actionId = $this->where('expense_id', $data['expense_id'])->first()->id;
+
+        return parent::update($actionId, $dataUpdate);
+    }
+
+    public function deleteFromExpense($expenseId)
+    {
+        $action = $this->where('expense_id', $expenseId)->first();
+
+        if (!$action) {
+            throw new NotFoundException('Not found action with expense_id:' . $expenseId, NOT_FOUND);
+        }
+
+        return $action->forceDelete();
+    }
+
+    public function forceDelete($action)
+    {
+        $action->comments()->forceDelete();
+        $action->likes()->forceDelete();
+        $action->activities()->forceDelete();
+
+        return $action->forceDelete();
+    }
+
+    private function initData($data, $goal)
+    {
+        $data['description'] = $data['reason'];
+        $caption = [
+            'expenseTime' => $data['time'],
+            'cost' => $data['cost'],
+            'typeName' => $goal->donationType->name,
+            'nameQuality' => $goal->donationType->quality->name,
+        ];
+        $data['caption'] = json_encode($caption);
+
+        return array_only($data, [
+            'caption',
+            'description',
+            'event_id',
+            'user_id',
+            'expense_id',
+        ]);
     }
 }

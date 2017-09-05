@@ -145,8 +145,8 @@
             $.material.init()
         },
         beforeRouteEnter(to, from, next) {
-            const slug = to.params.slug
-            const id = Number.isInteger(slug) ? slug : slug.substr(slug.lastIndexOf('-') + 1)
+            const slugEvent = to.params.slugEvent
+            const id = Number.isInteger(slugEvent) ? slugEvent : slugEvent.substr(slugEvent.lastIndexOf('-') + 1)
             get(`event/check-permission/${id}`)
                 .then(res => {
                     if (res.data)

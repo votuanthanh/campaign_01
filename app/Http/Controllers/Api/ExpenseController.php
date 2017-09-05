@@ -7,19 +7,27 @@ use App\Http\Requests\ExpenseRequest;
 use App\Http\Requests\ExpenseBuyRequest;
 use App\Repositories\Contracts\ExpenseInterface;
 use App\Repositories\Contracts\EventInterface;
+use App\Repositories\Contracts\ActionInterface;
+use App\Repositories\Contracts\GoalInterface;
 
 class ExpenseController extends ApiController
 {
     protected $expenseRepository;
     protected $eventRepository;
+    protected $actionRepository;
+    protected $goalRepository;
 
     public function __construct(
         ExpenseInterface $expenseRepository,
-        EventInterface $eventRepository
+        EventInterface $eventRepository,
+        ActionInterface $actionRepository,
+        GoalInterface $goalRepository
     ) {
         parent::__construct();
         $this->expenseRepository = $expenseRepository;
         $this->eventRepository = $eventRepository;
+        $this->actionRepository = $actionRepository;
+        $this->goalRepository = $goalRepository;
     }
 
     public function index(Request $request)
@@ -72,8 +80,13 @@ class ExpenseController extends ApiController
             throw new UnknowException('Have error when create expense');
         }
 
+
         return $this->doAction(function () use ($data, $event) {
             $this->compacts['expense'] = $this->expenseRepository->create($data);
+            $goal = $this->goalRepository->getInfoGoal($data['goal_id']);
+            $data['expense_id'] = $this->compacts['expense']->id;
+            $data['user_id'] = $this->user->id;
+            $this->actionRepository->createFromExpense($data, $goal);
         });
     }
 
@@ -87,8 +100,13 @@ class ExpenseController extends ApiController
             throw new UnknowException('Have error when create expense');
         }
 
+
         return $this->doAction(function () use ($data, $event) {
             $this->compacts['expense'] = $this->expenseRepository->createExpenseBuy($data);
+            $goal = $this->goalRepository->getInfoGoal($data['expense']['goal_id']);
+            $data['expense']['expense_id'] = $this->compacts['expense']->id;
+            $data['expense']['user_id'] = $this->user->id;
+            $this->actionRepository->createFromExpense($data['expense'], $goal);
         });
     }
 
@@ -102,8 +120,13 @@ class ExpenseController extends ApiController
             throw new UnknowException('Have error when update expense');
         }
 
-        return $this->doAction(function () use ($id, $data) {
+        $goal = $this->goalRepository->getInfoGoal($data['goal_id']);
+
+        return $this->doAction(function () use ($id, $data, $goal) {
             $this->compacts['expense'] = $this->expenseRepository->update($id, $data);
+            $data['expense_id'] = $id;
+            $data['user_id'] = $this->user->id;
+            $this->actionRepository->updateFromExpense($data, $goal);
         });
     }
 
@@ -117,8 +140,13 @@ class ExpenseController extends ApiController
             throw new UnknowException('Have error when update expense');
         }
 
-        return $this->doAction(function () use ($id, $data) {
+        $goal = $this->goalRepository->getInfoGoal($data['expense']['goal_id']);
+
+        return $this->doAction(function () use ($id, $data, $goal) {
             $this->compacts['expense'] = $this->expenseRepository->updateExpenseBuy($id, $data);
+            $data['expense']['expense_id'] = $id;
+            $data['expense']['user_id'] = $this->user->id;
+            $this->actionRepository->updateFromExpense($data['expense'], $goal);
         });
     }
 
@@ -131,8 +159,9 @@ class ExpenseController extends ApiController
             throw new UnknowException('Have error when delete expense');
         }
 
-        return $this->doAction(function () use ($expense) {
+        return $this->doAction(function () use ($id, $expense) {
             $this->compacts['expense'] = $this->expenseRepository->forceDelete($expense);
+            $this->actionRepository->deleteFromExpense($id);
         });
     }
 
