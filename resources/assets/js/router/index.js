@@ -155,7 +155,7 @@ const router = [
             ]
         },
     ]),
-    { path: '*', component: NotFound, name: 'not_found' },
+    { path: '/page-not-found.html', component: NotFound, name: 'not_found' },
 ]
 
 Vue.use(VueRouter)

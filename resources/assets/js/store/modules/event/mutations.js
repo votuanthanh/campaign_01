@@ -6,6 +6,7 @@ export default {
         state.event = dataEvent.event[0]
         state.event.complete_percent = dataEvent.goals
         state.event.manage = dataEvent.manage
+        state.event.isMember = dataEvent.member
         state.actions = dataEvent.actions
         state.dataGoals = dataEvent.goals
         state.checkLiked = dataEvent.checkLikeEvent

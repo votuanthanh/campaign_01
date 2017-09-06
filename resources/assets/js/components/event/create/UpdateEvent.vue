@@ -141,7 +141,22 @@
                         </dropzone>
                     </div>
                 </div>
-                <button class="btn btn-breez btn-lg full-width" @click="createEvent">{{ $t('form.button.save') }}</button>
+                <div class="wrap-button">
+                    <router-link :to="{
+                        name: 'event.index',
+                        params: {
+                            'slugEvent': event.slug,
+                            'slug': event.campaign_id
+                            }
+                        }">
+                        <button class="btn btn-breez btn-lg full-width btn-left">
+                            {{ $t('form.button.cancel') }}
+                        </button>
+                    </router-link>
+                    <button class="btn btn-breez btn-lg full-width btn-right" @click="createEvent">
+                        {{ $t('form.button.save') }}
+                    </button>
+                </div>
             </div>
             <upload-quill
                 :uploadVisible.sync="uploadVisible"
@@ -509,7 +524,7 @@
         },
 
         created() {
-            get(`event/show/${this.pageId}`)
+            get(`event/update/${this.pageId}`)
                 .then(res => {
                     this.event = res.data.event[0]
                     this.setDataUpdate()
@@ -522,7 +537,7 @@
             get(`event/check-permission/${this.pageId}`)
                 .then(res => {
                     if (!res.data) {
-                        this.$router.push({ name: 'event.index', params: { slug: this.pageId }})
+                        this.$router.push({ name: 'event.index', params: { slugEvent: this.pageId }})
                     }
                 })
         }

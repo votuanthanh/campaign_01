@@ -63,8 +63,8 @@ class ActionController extends ApiController
         $data['upload'] = $request->get('files');
         $event = $this->eventRepository->findOrFail($data['data_action']['event_id']);
 
-        if ($this->user->cant('view', $event)) {
-             throw new UnknowException('Permission error: User can not create this action.', UNAUTHORIZED);
+        if ($this->user->cant('comment', $event)) {
+            throw new UnknowException('Permission error: User can not create action.', UNAUTHORIZED);
         }
 
         return $this->doAction(function () use ($data) {

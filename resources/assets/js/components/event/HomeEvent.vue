@@ -27,13 +27,22 @@
         },
 
         created() {
+            var eventId = this.pageId
+            this.pageType = null
+            var campaignId = this.pageId
             this.$Progress.start()
-            this.get_event(this.pageId)
+            this.get_event({
+                eventId: eventId,
+                campaignId: campaignId
+            })
             .then(sucess => {
                 this.$Progress.finish()
             })
             .catch(err => {
                 this.$Progress.fail()
+                if (err.response.data.http_status.code == 404 || err.response.data.http_status.code == 401) {
+                    this.$router.push({ name: 'not_found' })
+                }
             })
         },
 
