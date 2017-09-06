@@ -379,4 +379,39 @@ class UserRepository extends BaseRepository implements UserInterface
             ->whereNotIn('id', $memberIds)
             ->paginate(config('settings.paginate_member'));
     }
+
+    public function getFriendsSuggest() {
+        $this->setGuard('api');
+        $countMutualFriends = [];
+        $friendIds = $this->user->friends()->pluck('id')->all();
+        $friendSuggestIds = \DB::table('relationships')
+            ->where('status', User::ACCEPTED)
+            ->whereIn('sender_id', $friendIds)
+            ->where('recipient_id', '<>' ,$this->user->id)
+            ->whereNotIn('recipient_id', $friendIds)
+            ->groupBy('recipient_id')
+            ->pluck('recipient_id');
+        $friendSuggests = $this->model
+            ->where('status', User::ACTIVE)
+            ->whereIn('id', $friendSuggestIds)
+            ->inRandomOrder()
+            ->take(config('settings.friend_suggest'))
+            ->get()
+            ->each(function ($query) use ($friendIds) {
+                $query->makeVisible([
+                    'is_friend',
+                    'has_pending_request',
+                    'has_send_request',
+                ]);
+            });
+
+        foreach($friendSuggests as $user) {
+            $countMutualFriends[] = count(array_intersect($user->friends()->pluck('id')->all(), $friendIds));
+        }
+
+        return [
+            'countMutualFriends' => $countMutualFriends,
+            'friendSuggests' => $friendSuggests,
+        ];
+    }
 }

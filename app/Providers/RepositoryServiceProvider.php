@@ -75,6 +75,10 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Contracts\ActivityInterface::class,
             \App\Repositories\Eloquent\ActivityRepository::class,
         ],
+        'setting' => [
+            \App\Repositories\Contracts\SettingInterface::class,
+            \App\Repositories\Eloquent\SettingRepository::class,
+        ],
     ];
 
     /**

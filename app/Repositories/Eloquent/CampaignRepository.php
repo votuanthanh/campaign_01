@@ -439,9 +439,27 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
         return $data;
     }
 
-    public function searchCampaign($page, $quantity, $keyword)
+    public function searchCampaign($roleIds, $page, $quantity, $keyword)
     {
+        $this->setGuard('api');
         $resutCampaign = $this->search($keyword, null, true)
+            ->where(function($query) {
+                $query->whereHas('settings', function ($subQuery) {
+                    $subQuery->where('key', config('settings.campaigns.status'))
+                        ->where('value', config('settings.value_of_settings.status.public'));
+                })
+                ->whereHas('settings', function ($subQuery) {
+                    $subQuery->where('key', config('settings.campaigns.end_day'))
+                        ->where('value', '>', Carbon::now()->format('m/d/Y'));
+                });
+            })
+            ->orWhere(function($query) use ($roleIds) {
+                $query->whereHas('users', function ($subQuery) use ($roleIds) {
+                    $subQuery->where('campaign_user.status', Campaign::APPROVED)
+                        ->whereIn('role_id', $roleIds)
+                        ->where('user_id', $this->user->id);
+                });
+            })
             ->with('media', 'owner', 'tags', 'events', 'members', 'isMember', 'isOwner')
             ->groupBy('created_at')
             ->orderBy('created_at', 'DESC')
@@ -464,7 +482,6 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             ->get();
         $users['chart_label'] = $userStatistic->pluck('date');
         $users['chart_data'] = $userStatistic->pluck('user_count');
-
         $events['count'] = $campaign->events()->withTrashed()->count();
         $events['finished'] = $campaign->events()->withTrashed()->whereHas('settings', function ($query) {
             $query->where([
@@ -586,5 +603,23 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             ->get();
 
         return $campaignsInvolve;
+    }
+
+    public function getHomepage() {
+        $campaigns = $this->whereHas('settings', function ($query) {
+            $query->where('key', config('settings.campaigns.status'))
+                ->where('value', config('settings.value_of_settings.status.public'));
+        })
+        ->model
+        ->with('media', 'tags', 'owner')
+        ->withCount('activeUsers')
+        ->inRandomOrder()
+        ->take(config('settings.campaigns_involve'))
+        ->get();
+
+        return [
+            'data' => $campaigns,
+            'totalCampaign' => $this->count(),
+        ];
     }
 }

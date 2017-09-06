@@ -1,6 +1,6 @@
 <template>
-    <aside class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-xs-12" style="display: none;">
-        <div class="ui-block">
+    <aside class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="ui-block" style="display: none;">
             <div class="widget w-birthday-alert">
                 <div class="icons-block">
                     <svg class="olymp-cupcake-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-cupcake-icon"></use></svg>
@@ -18,70 +18,33 @@
         </div>
         <div class="ui-block">
             <div class="ui-block-title">
-                <h6 class="title">Friend Suggestions</h6>
+                <h6 class="title">{{ $t('homepage.friend_suggestions') }}</h6>
+            </div>
+            <ul class="widget w-friend-pages-added notification-list friend-requests">
+                <li class="inline-items" v-for="(user, index) in listUser">
+                    <div class="author-thumb">
+                        <img :src="user.image_thumbnail" alt="author">
+                    </div>
+                    <div class="notification-event">
+                        <router-link class="h6 otification-friend" :to="{ name: 'user.timeline', params: { slug: user.slug }}">
+                            {{ user.name }}
+                        </router-link>
+                        <span class="chat-message-item">
+                            {{ numberMutualFriend[index] + ' ' + $t('homepage.friends') + ' ' + $t('homepage.in_common') }}
+                        </span>
+                    </div>
+                    <request-friend :friend="user"></request-friend>
+                </li>
+            </ul>
+        </div>
+        <div class="ui-block" style="display: none;">
+            <div class="ui-block-title">
+                <h6 class="title">Activity Feed</h6>
                 <a href="#" class="more">
                     <svg class="olymp-three-dots-icon">
                         <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
                     </svg>
                 </a>
-            </div>
-            <ul class="widget w-friend-pages-added notification-list friend-requests">
-                <li class="inline-items">
-                    <div class="author-thumb">
-                        <img src="/images/avatar38-sm.jpg" alt="author">
-                    </div>
-                    <div class="notification-event">
-                        <a href="#" class="h6 notification-friend">Francine Smith</a>
-                        <span class="chat-message-item">8 Friends in Common</span>
-                    </div>
-                    <span class="notification-icon">
-                        <a href="#" class="accept-request">
-                            <span class="icon-add without-text">
-                                <svg class="olymp-happy-face-icon">
-                                    <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
-                                </svg>
-                            </span>
-                        </a>
-                    </span>
-                </li>
-                <li class="inline-items">
-                    <div class="author-thumb">
-                        <img src="/images/avatar39-sm.jpg" alt="author">
-                    </div>
-                    <div class="notification-event">
-                        <a href="#" class="h6 notification-friend">Hugh Wilson</a>
-                        <span class="chat-message-item">6 Friends in Common</span>
-                    </div>
-                    <span class="notification-icon">
-                        <a href="#" class="accept-request">
-                            <span class="icon-add without-text">
-                                <svg class="olymp-happy-face-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use></svg>
-                            </span>
-                        </a>
-                    </span>
-                </li>
-                <li class="inline-items">
-                    <div class="author-thumb">
-                        <img src="/images/avatar40-sm.jpg" alt="author">
-                    </div>
-                    <div class="notification-event">
-                        <a href="#" class="h6 notification-friend">Karen Masters</a>
-                        <span class="chat-message-item">6 Friends in Common</span>
-                    </div>
-                    <span class="notification-icon">
-                        <a href="#" class="accept-request">
-                            <span class="icon-add without-text">
-                                <svg class="olymp-happy-face-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use></svg>
-                            </span>
-                        </a>
-                    </span>
-                </li>
-            </ul>
-        </div>
-        <div class="ui-block">
-            <div class="ui-block-title">
-                <h6 class="title">Activity Feed</h6>
-                <a href="#" class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg></a>
             </div>
             <ul class="widget w-activity-feed notification-list">
                 <li>
@@ -152,7 +115,7 @@
                         <img src="/images/avatar10-sm.jpg" alt="author">
                     </div>
                     <div class="notification-event">
-                        <a href="#" class="h6 notification-friend">Elaine Dreyfuss  </a> commented on your <a href="#" class="notification-link">blog post</a>.
+                        <a href="#" class="h6 notification-friend">Elaine Dreyfuss </a> commented on your <a href="#" class="notification-link">blog post</a>.
                         <span class="notification-date"><time class="entry-date updated" datetime="2004-07-24T18:18">2 hours ago</time></span>
                     </div>
                 </li>
@@ -167,7 +130,7 @@
                 </li>
             </ul>
         </div>
-        <div class="ui-block">
+        <div class="ui-block" style="display: none;">
             <div class="widget w-action">
                 <img src="/images/logo.png" alt="Olympus">
                 <div class="content">
@@ -180,8 +143,87 @@
     </aside>
 </template>
 
+<script>
+    import noty from '../../helpers/noty'
+    import { get } from '../../helpers/api'
+    import RequestFriend from '../user/RequestFriend.vue'
+
+    export default {
+        data: () => ({
+            listUser: [],
+            numberMutualFriend: []
+        }),
+        created() {
+            this.getFriendSuggest()
+        },
+        methods: {
+            getFriendSuggest() {
+                get('friends-suggest')
+                    .then(res => {
+                        this.listUser = res.data.data.friendSuggests
+                        this.numberMutualFriend = res.data.data.countMutualFriends
+                    })
+                    .catch(err => {
+                        noty({
+                            text: this.$i18n.t('messages.connection_error'),
+                            container: false,
+                            force: true
+                        })
+                    })
+            },
+        },
+        components: {
+            RequestFriend
+        }
+    }
+</script>
+
 <style lang="scss" scoped>
     .icon-add:after {
         content: '\f068';
     }
+
+    .author-thumb img {
+        height: 36px;
+        width: 36px;
+    }
+
+    .w-friend-pages-added {
+        .notification-event {
+            padding-left: 8px;
+            max-width: 48%;
+        }
+        .chat-message-item {
+            display: inline-block;
+        }
+    }
+
+    .btn-choose {
+        background: #38a9ff;
+        margin-bottom: 0;
+        float: right;
+        padding: 7px 10px;
+        font-size: 11px;
+        font-weight: bold;
+        border-radius: 0.2rem;
+    }
+
+    .notification-list {
+        li {
+            padding: 17px 15px 17px 15px;
+            border-bottom: 1px solid #e6ecf5;
+            display: block;
+        }
+
+        .more {
+            color: #ffffff;
+            position: initial;
+            right: initial;
+            top: initial;
+            font-size: 11px;
+            color: #ffffff;
+            opacity: 1;
+        }
+    }
+
 </style>

@@ -1,5 +1,8 @@
 <template>
-    <div class="hompage container">
+    <div v-if="!user">
+        <index-page></index-page>
+    </div>
+    <div class="hompage container" v-else>
         <div class="row">
             <!-- Main Content -->
             <main class="col-xl-6 push-xl-3 col-lg-12 push-lg-0 col-md-12 col-sm-12 col-xs-12">
@@ -41,6 +44,8 @@
     import { get, post } from '../../helpers/api'
     import Campaign from './Campaign.vue'
     import Event from './Event.vue'
+    import { mapState } from 'vuex'
+    import IndexPage from './IndexPage.vue'
     import LeftSidebar from './LeftSidebar.vue'
     import RightSidebar from './RightSidebar.vue'
 
@@ -52,10 +57,17 @@
             totalPage: 1
         }),
         created() {
-            this.getDataHomePage()
+            if (this.user) {
+                this.getDataHomePage()
+            }
         },
         beforeDestroy() {
             $(window).off()
+        },
+        computed: {
+            ...mapState('auth',[
+                'user',
+            ])
         },
         mounted() {
             $(window).scroll(() => {
@@ -66,7 +78,7 @@
         },
         methods: {
             getDataHomePage() {
-                get('homepage')
+                get('news-feed')
                     .then(res => {
                         this.totalPage = res.data.listActivity.infoPaginate.last_page
                         this.listActivity = res.data.listActivity.data
@@ -82,7 +94,7 @@
             loadActivity() {
                 if (this.page < this.totalPage) {
                     this.loading = true
-                    get(`homepage?page=${++this.page}`)
+                    get(`news-feed?page=${++this.page}`)
                         .then(res => {
                             this.listActivity = this.listActivity.concat(res.data.listActivity.data)
                             this.loading = false
@@ -102,7 +114,8 @@
             Campaign,
             Event,
             LeftSidebar,
-            RightSidebar
+            RightSidebar,
+            IndexPage
         },
         sockets: {
             createCampaignSuccess: function (data) {
@@ -119,7 +132,6 @@
                     number_of_likes: 0,
                     updated_at: null
                 }
-
                 this.listActivity.unshift(newCampaign)
             }
         }

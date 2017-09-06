@@ -330,8 +330,13 @@ class CampaignController extends ApiController
     public function search($page, $quantity, $type, Request $request)
     {
         $keyword = $request->keyword;
+        $roleIds = $this->roleRepository->whereIn('name', [
+            Role::ROLE_MEMBER,
+            Role::ROLE_OWNER,
+            Role::ROLE_MODERATOR,
+        ])->pluck('id')->all();
 
-        return $this->getData(function () use ($keyword, $page, $quantity, $type) {
+        return $this->getData(function () use ($roleIds, $keyword, $page, $quantity, $type) {
             if (in_array($type, ['user', 'all'])) {
                 $resutUser = $this->userRepository->searchUser($page, $quantity, $keyword);
                 $this->compacts['users'] = $resutUser['users'];
@@ -339,7 +344,7 @@ class CampaignController extends ApiController
             }
 
             if (in_array($type, ['campaign', 'all'])) {
-                $resutCampaign = $this->campaignRepository->searchCampaign($page, $quantity, $keyword);
+                $resutCampaign = $this->campaignRepository->searchCampaign($roleIds, $page, $quantity, $keyword);
                 $this->compacts['campaigns'] = $resutCampaign['campaigns'];
                 $this->compacts['totalCampaign'] = $resutCampaign['totalCampaign'];
             }
@@ -474,6 +479,14 @@ class CampaignController extends ApiController
             $this->compacts['campaign_user'] = $this->userRepository->openFromCampaign($campaign);
             $this->compacts['campaign'] = $this->campaignRepository->openCampaign($campaign);
             $this->compacts['actions'] = $this->actionRepository->openAction($eventIds);
+       });
+    }
+
+    public function getHomepage()
+    {
+        return $this->getData(function () {
+            $this->compacts['totalUser'] = $this->userRepository->count();
+            $this->compacts['campaigns'] = $this->campaignRepository->getHomepage();
         });
     }
 
