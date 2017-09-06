@@ -23,7 +23,7 @@
                         </div>
                         <div class="align-right">
                             <button
-                                v-if="!event.deleted_at"
+                                v-if="!event.deleted_at && event.isMember"
                                 href="#"
                                 class="btn btn-primary btn-md-2 bg-breez"
                                 data-toggle="modal"

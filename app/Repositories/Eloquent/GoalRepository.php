@@ -39,4 +39,20 @@ class GoalRepository extends BaseRepository implements GoalInterface
     {
         return $this->findOrFail($goalId)->load('donationType.quality');
     }
+
+    public function getGoalFromEvent($event)
+    {
+        return $event->goals()
+            ->withTrashed()
+            ->select('id', 'donation_type_id', 'goal')
+            ->with([
+                'donations' => function ($query) {
+                    return $query->with('user')->latest();
+                },
+                'donationType.quality' => function($query) {
+                    $query->withTrashed();
+                },
+            ])
+            ->get();
+    }
 }

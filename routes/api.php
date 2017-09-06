@@ -104,6 +104,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
 
         Route::group(['prefix' => '/event', 'as' => 'event.'], function () {
             Route::post('create', 'EventController@create')->name('create');
+            Route::get('/update/{id}', 'EventController@edit')->name('update-event');
             Route::patch('/update/{id}', 'EventController@update')->name('update-event');
             Route::patch('/update-setting/{id}', 'EventController@updateSetting')->name('update-setting');
             Route::post('like/{eventId}', 'EventController@like')->name('like');

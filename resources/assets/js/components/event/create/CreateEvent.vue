@@ -95,7 +95,16 @@
                         </dropzone>
                     </div>
                 </div>
-                <button class="btn btn-breez btn-lg full-width" @click="createEvent">{{ $t('form.button.create_event') }}</button>
+                <div class="wrap-button">
+                    <router-link :to="{ name: 'campaign.timeline', params: { 'slug': this.pageId } }">
+                        <button class="btn btn-breez btn-lg full-width btn-left">
+                            {{ $t('form.button.cancel') }}
+                        </button>
+                    </router-link>
+                    <button class="btn btn-breez btn-lg full-width btn-right" @click="createEvent">
+                        {{ $t('form.button.create_event') }}
+                    </button>
+                </div>
             </div>
             <upload-quill
                 :uploadVisible.sync="uploadVisible"
@@ -357,6 +366,22 @@
         .dz-error-message {
             top: 5px !important;
             left: 59px !important;
+        }
+        .wrap-button {
+            height: 50px;
+            .btn-breez {
+                width: 45%;
+            }
+            a {
+                color: white;
+                .btn-left {
+                    float: left;
+                    background-color: #ff5e3a;
+                }
+            }
+            .btn-right {
+                float: right;
+            }
         }
     }
 </style>

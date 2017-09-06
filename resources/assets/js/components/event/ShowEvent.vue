@@ -283,7 +283,7 @@
             }
         }
         .list-comment-event {
-            height: 272px;
+            height: 225px;
             overflow-y: scroll;
             &::-webkit-scrollbar {
                 display: none;

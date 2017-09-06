@@ -1,11 +1,11 @@
 import * as types from './mutation-types'
 import { post, get, patch } from '../../../helpers/api'
 
-export const get_event = ({ commit }, event_id) => {
+export const get_event = ({ commit }, params) => {
     commit('SET_LOADING', false, { root: true })
 
     return new Promise((resolve, reject) => {
-        get(`event/show/${event_id}`)
+        get(`event/show/${params.eventId}?campaignId=${params.campaignId}`)
             .then(res => {
                 commit(types.SET_EVENT, res.data)
                 commit('SET_LOADING', true, { root: true })

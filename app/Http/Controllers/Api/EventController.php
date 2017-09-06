@@ -82,6 +82,20 @@ class EventController extends ApiController
         });
     }
 
+    public function edit($id)
+    {
+        $event = $this->eventRepository->findOrFail($id);
+
+        if ($this->user->cannot('manage', $event)) {
+            throw new UnknowException('Permission error: User can not edit this event.');
+        }
+
+        return $this->getData(function () use ($event) {
+            $this->compacts['event'] = $this->eventRepository->getDetailEvent($event->id);
+            $this->compacts['goals'] = $this->goalRepository->getGoalFromEvent($event);
+        });
+    }
+
     public function update(EventRequest $request, $id)
     {
         $data = $request->only(
@@ -139,12 +153,12 @@ class EventController extends ApiController
         });
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $event = $this->eventRepository->withTrashed()->findOrFail($id);
+        $event = $this->eventRepository->withTrashed()->where('campaign_id', $request->campaignId)->findOrFail($id);
 
         if ($this->user->cannot('view', $event)) {
-            throw new UnknowException('Permission error: User can not edit this event.');
+            throw new UnknowException('Permission error: User can not view this event.');
         }
 
         return $this->getData(function () use ($event) {
@@ -170,6 +184,7 @@ class EventController extends ApiController
                 ->get();
 
             $this->compacts['manage'] = $this->user->can('manage', $event);
+            $this->compacts['member'] = $this->user->can('comment', $event);
             $this->compacts['checkLikeEvent'] = $this->eventRepository->checkLike($event, $this->user->id);
         });
     }

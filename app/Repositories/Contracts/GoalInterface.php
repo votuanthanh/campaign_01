@@ -7,4 +7,6 @@ interface GoalInterface extends RepositoryInterface
     public function updateManyRow($data);
 
     public function listGoal($event);
+
+    public function getGoalFromEvent($event);
 }

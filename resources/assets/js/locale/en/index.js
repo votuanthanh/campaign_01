@@ -8,6 +8,7 @@ import chat from './chat.json'
 import actions from './actions.json'
 import post from './post.json'
 import homepage from './homepage.json'
+import errors from './errors.json'
 
 export default {
     campaigns,
@@ -19,5 +20,6 @@ export default {
     chat,
     actions,
     post,
-    homepage
+    homepage,
+    errors
 }
