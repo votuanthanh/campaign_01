@@ -97,69 +97,16 @@
                     </div>
                 </div>
             </div>
-            <div class="ui-block">
-            <div class="ui-block-title">
-                <h6 class="title">{{ $t('homepage.campaigns_may_join') }}</h6>
-                <a href="#" class="more">
-                    <svg class="olymp-three-dots-icon">
-                        <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                    </svg>
-                </a>
-            </div>
-            <ul class="widget w-friend-pages-added notification-list friend-requests">
-                <li class="inline-items" v-for="campaign in listCampaign">
-                    <div class="author-thumb">
-                        <img :src="campaign.media[0].image_medium" alt="author">
-                    </div>
-                    <div class="notification-event">
-                        <router-link class="h6 notification-friend" :to="{ name: 'campaign.timeline', params: { slug: campaign.slug }}">
-                            <span v-if="campaign.title.length < 51">{{ campaign.title }}</span>
-                            <span v-else>{{ campaign.title.substr(0, 50) }}...</span>
-                        </router-link>
-                        <span class="chat-message-item">
-                            <span class="tag-info" v-for="tag in campaign.tags">{{ tag.name }}</span>
-                        </span>
-                    </div>
-                    <span class="notification-icon">
-                        <router-link :to="{ name: 'campaign.timeline', params: { slug: campaign.slug }}">
-                            <svg class="olymp-star-icon">
-                                <use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use>
-                            </svg>
-                        </router-link>
-                    </span>
-                </li>
-            </ul>
-        </div>
+            <campaign-involve></campaign-involve>
         </div>
     </aside>
 </template>
 
-
 <script>
-    import noty from '../../helpers/noty'
-    import { get } from '../../helpers/api'
-
+    import CampaignInvolve from './CampaignInvolve.vue'
     export default {
-        data: () => ({
-            listCampaign: []
-        }),
-        created() {
-            this.getCampaignInvolve()
-        },
-        methods: {
-            getCampaignInvolve() {
-                get('campaign/involve')
-                    .then(res => {
-                        this.listCampaign = res.data.campaignInvolve
-                    })
-                    .catch(err => {
-                        noty({
-                            text: this.$i18n.t('messages.connection_error'),
-                            container: false,
-                            force: true
-                        })
-                    })
-            },
+        components: {
+            CampaignInvolve,
         }
     }
 </script>
@@ -171,27 +118,6 @@
         .olymp-star-icon {
             width: 35px;
             height: 35px;
-        }
-    }
-
-    .author-thumb img {
-        width: 36px;
-        height: 36px;
-    }
-
-    .tag-info {
-        padding: 2px 7px;
-        color: white;
-        display: inline-block;
-        margin: auto 1px 3px 1px;
-        border-radius: 4px;
-        background: #57b6ff;
-        font-weight: bold;
-    }
-
-    .notification-list {
-        li {
-            padding: 15px 15px;
         }
     }
 </style>

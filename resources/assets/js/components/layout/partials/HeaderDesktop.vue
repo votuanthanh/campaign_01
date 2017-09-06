@@ -1,10 +1,10 @@
 <template lang="html">
     <header class="header" id="site-header">
         <div class="page-title">
-            <h6>favourite page</h6>
+            <h6>FCAMPAIGN</h6>
         </div>
         <div class="header-content-wrapper">
-            <div class="search-bar w-search notification-list friend-requests">
+            <div class="search-bar w-search notification-list friend-requests" v-if="user">
                 <div class="form-group with-button">
                     <input class="form-control js-user-search"
                         v-model="keyword"
@@ -17,7 +17,7 @@
                             <use xlink:href="/frontend/icons/icons.svg#olymp-magnifying-glass-icon"></use>
                         </svg>
                     </button>
-                    <div class="selectize-dropdown multi form-control js-user-search" style="display: block; width: 500px; top: 70px; left: 0px; visibility: visible;">
+                    <div class="selectize-dropdown multi form-control js-user-search">
                         <div class="selectize-dropdown-content">
                             <div class="inline-items" v-for="(result, index) in usersFinded" v-if="index < 3">
                                 <div class="author-thumb">
@@ -64,7 +64,9 @@
                     </div>
                 </div>
             </div>
-            <a href="#" class="link-find-friend">Find Friends</a>
+            <router-link class="link-find-friend" :to="{ name: 'homepage' }">
+                {{ $t('homepage.home') }}
+            </router-link>
             <div class="control-block" v-if="authenticated">
                 <div class="control-icon more has-items" @click="markRead(0)">
                     <svg class="olymp-happy-face-icon">
@@ -168,7 +170,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="control-icon more has-items">
+                <div class="control-icon more has-items" style="display:none;">
                     <svg class="olymp-thunder-icon">
                         <use xlink:href="/frontend/icons/icons.svg#olymp-thunder-icon"></use>
                     </svg>
@@ -369,7 +371,7 @@
             </div>
             <!--End: control-block -->
 
-            <div class="control-block" v-else>
+            <div class="control-log control-block" v-else>
                 <router-link to="/login">Login</router-link> |
                 <router-link to="/register">Register</router-link>
             </div>
@@ -761,6 +763,14 @@ export default {
 }
 
 .search-bar {
+    .selectize-dropdown {
+        display: block;
+        width: 500px;
+        top: 70px;
+        left: 0px;
+        visibility: visible;
+        border: none;
+    }
     .form-group.with-button {
         input {
             padding: 0px 15px;
@@ -769,6 +779,15 @@ export default {
     .img-campaign {
         width: 100%;
         height: 100%;
+    }
+}
+
+.control-log {
+    text-transform: uppercase;
+    font-weight: bold;
+    a {
+        padding: 0px 3px;
+        color: #08ddc1;
     }
 }
 </style>

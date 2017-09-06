@@ -113,11 +113,11 @@
                                         <span class="h6 count">{{ result.events.length }}</span>
                                     </td>
                                     <td class="freshness">
-                                        <div class="author-freshness">
+                                        <div class="author-freshness" v-if="result.owner.length">
                                             <div class="author-thumb">
                                                 <img :src="result.media[0].image_small" alt="author">
                                             </div>
-                                            <router-link class="h6 title" :to="{ name: 'user.timeline', params: { id: result.owner[0].id }}">
+                                            <router-link class="h6 title" :to="{ name: 'user.timeline', params: { slug: result.owner[0].slug }}">
                                                 {{ result.owner[0].name }}
                                             </router-link>
                                             <time class="entry-date updated">{{ result.owner[0].email }}</time>
@@ -146,7 +146,6 @@
 <script>
     import Noty from 'noty'
     import noty from '../../helpers/noty'
-    import ShowText from '../libs/ShowText.vue'
     import { get } from '../../helpers/api'
     import RequestFriend from './RequestFriend.vue'
 
@@ -265,8 +264,7 @@
             }
         },
         components: {
-            RequestFriend,
-            ShowText
+            RequestFriend
         }
     }
 
@@ -283,6 +281,7 @@
 .author-thumb {
     img {
         width: 40px;
+        height: 40px;
     }
  }
 

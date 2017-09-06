@@ -45,7 +45,9 @@
                                         <img :src="user.image_small" alt="author">
                                     </div>
                                     <div class="author-content">
-                                        <router-link :to="{ name: 'user.timeline', params: { id: user.id } }" class="h5 author-name">{{ user.name }}</router-link>
+                                        <router-link :to="{ name: 'user.timeline', params: { slug: user.slug } }" class="h5 author-name">
+                                            {{ user.name }}
+                                        </router-link>
                                         <div class="country">{{ user.address }}</div>
                                     </div>
                                 </div>

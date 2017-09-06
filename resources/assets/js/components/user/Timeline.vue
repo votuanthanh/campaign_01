@@ -3,7 +3,17 @@
         <div class="row">
             <!-- Main Content -->
             <div class="col-xl-6 push-xl-3 col-lg-12 push-lg-0 col-md-12 col-sm-12 col-xs-12">
-                <div id="newsfeed-items-grid">
+                <div class="page-description" v-if="!listActivity.data.length">
+                    <div class="icon">
+                        <svg class="olymp-star-icon left-menu-icon">
+                            <use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use>
+                        </svg>
+                    </div>
+                    <span>{{ $t('user.activity_empty') }}</span>
+                </div>
+
+                <div v-else>
+                    <div id="newsfeed-items-grid">
                     <div class="ui-block" v-for="(activity, index) in listActivity.data">
                         <article class="hentry post has-post-thumbnail thumb-full-width">
                             <div class="post__author author vcard inline-items">
@@ -21,7 +31,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="post-thumb" v-if="activity.activitiable.media != null">
+                            <div class="post-thumb" v-if="activity.activitiable.media.length">
                                 <a href="javascript:void(0)" v-if="activity.activitiable_type == 'App\\Models\\Action'" @click="detailAction(activity.activitiable_id)">
                                     <img :src="activity.activitiable.media[0].image_medium" alt="photo">
                                 </a>
@@ -84,9 +94,11 @@
                         </comment>
                     </div>
                 </div>
-                <a href="javascript:void(0)" class="btn btn-control btn-more" data-load-link="items-to-load.html" data-container="newsfeed-items-grid">
+                <a href="javascript:void(0)" class="btn btn-control btn-more">
                     <i class="fa fa-spinner fa-pulse fa-spin fa-5x" v-if="loading"></i>
                 </a>
+
+                </div>
             </div>
             <!-- end Main Content -->
 

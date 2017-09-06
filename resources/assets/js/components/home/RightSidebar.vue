@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </div>
-            <div class="ui-block">
+            <div class="ui-block" v-if="listUser.length">
                 <div class="ui-block-title">
                     <h6 class="title">{{ $t('homepage.friend_suggestions') }}</h6>
                 </div>

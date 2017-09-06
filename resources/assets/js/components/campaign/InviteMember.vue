@@ -2,11 +2,8 @@
     <div class="ui-block" v-if="!campaign.deleted_at">
         <div class="ui-block-title">
             <h6 class="title">{{ $t('campaigns.invite_user') }}</h6>
-            <a href="javascript:void(0)" class="more">
-                <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
-            </a>
         </div>
-        <div class="ui-block-content">
+        <div class="invite-user ui-block-content">
             <div class="searchbox">
                 <input
                     type="text"
@@ -14,6 +11,7 @@
                     v-model="search_invite"
                     @input="searchMemberToInvites"
                     :placeholder="$t('messages.search')">
+                    <i class="fa fa-search" aria-hidden="true"></i>
             </div>
             <div class="div-invite-user">
                 <ul class="widget w-friend-pages-added notification-list friend-requests" v-if="listInviteUser">
@@ -35,10 +33,15 @@
                         <span class="notification-icon">
                             <a href="javascript:void(0)" class="accept-request" @click="comfirmRequest(member.id)">
                                 <span class="icon-add without-text">
-                                    <svg class="olymp-happy-face-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use></svg>
+                                    <svg class="olymp-happy-face-icon">
+                                        <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
+                                    </svg>
                                 </span>
                             </a>
                         </span>
+                    </li>
+                    <li class="no-data inline-items" v-if="!listInviteUser.data.length">
+                        {{ $t('campaigns.no_data') }}
                     </li>
                 </ul>
             </div>
@@ -160,7 +163,8 @@
                         }
                     })
                     .catch(err => {
-                        //
+                        const message = this.$i18n.t('messages.message-fail')
+                        noty({ text: message, force: true, container: false })
                     })
                 }
             })
@@ -172,18 +176,47 @@
 </script>
 
 <style lang="scss" scoped>
-    .searchbox {
-        margin-bottom: 2%;
-    }
+    .invite-user {
+        padding: 20px 15px 20px;
+        .div-invite-user {
+            margin-top: 15px;
+            border: 1px solid #e6ecf5;
+            border-radius: 5px;
+            overflow-y: auto;
+            height: 300px;
 
-    .div-invite-user {
-        border: 1px solid #e6ecf5;
-        border-radius: 5px;
-        overflow-y: auto;
-        min-height: 0px;
-        max-height: 300px;
-    }
+            .notification-list {
+                margin-bottom: 0;
+                li {
+                    padding: 15px 10px;
+                    &:last-child {
+                        border: 0;
+                    }
+                }
+                .no-data {
+                    text-align: center;
+                    font-size: 14px;
+                }
+            }
 
+            &::-webkit-scrollbar-track
+            {
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+                background-color: #F5F5F5;
+            }
+
+            &::-webkit-scrollbar
+            {
+                width: 2px;
+                background-color: #ff5e3a;
+            }
+
+            &::-webkit-scrollbar-thumb
+            {
+                background-color: #494c62;
+            }
+        }
+    }
     .img-member {
         width: 40px !important;
         height: 40px !important;
@@ -191,5 +224,18 @@
 
     .name-member {
         max-width: 55% !important;
+    }
+
+    .searchbox {
+        position: relative;
+        .form-control {
+            padding: 10px 15px;
+        }
+        i {
+            position: absolute;
+            top: 11px;
+            font-size: 20px;
+            right: 15px;
+        }
     }
 </style>

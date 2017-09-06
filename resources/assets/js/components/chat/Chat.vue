@@ -3,10 +3,13 @@
         <div class="ui-block popup-chat col-md-4 col-md-offset-4"
             :style="'right:' + marginRight + 'px !important'">
             <div class="ui-block-title">
-                <h6 class="title">{{ receiveName }}</h6>
+
+                <router-link :to="{ name: 'user.timeline', params: { slug: user.slug } }" class="title-name">
+                    {{ receiveName }}
+                </router-link>
                 <div class="more">
                     <svg class="olymp-little-delete" @click="closeComponent">
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/frontend/icons/icons.svg#olymp-little-delete"></use>
+                        <use xlink:href="/frontend/icons/icons.svg#olymp-little-delete"></use>
                     </svg>
                 </div>
             </div>

@@ -30,7 +30,7 @@
     "other-social": "Other Social Networks",
     "operation-time": "Operation Time",
     "typical-images": "Typical Images",
-    "tags": "Tags",
+    "total_tags": "Tags",
     "related-campaigns": "Related Campaigns",
     "list-members": "List members",
     "lbl-members": "members attended to this campaign",
@@ -85,9 +85,9 @@
     "prev_page": "Previous Page",
     "next_page": "Next Page",
     "no_events_are_closed": "No events are closed",
-    "close_campaign": "Close campaign",
     "manage_campaigns": "Manage Campaign",
     "open_campaign": "Open Campaign",
     "invite_user": "Invite user",
-    "accept": "Accept"
+    "accept": "Accept",
+    "no_data": "No data"
 }

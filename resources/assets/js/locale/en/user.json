@@ -116,5 +116,6 @@
         "result_finded": "There is no user with key word | There is a user with key word | There are {value} users with key word",
         "result_campaign_finded": "There is no campaign with key word | There is a campaign with key word | There are {value} campaigns with key word",
         "check_joined": "You have not joined this campaign yet. | You joined this campaign. | You are owner in this campaign."
-    }
+    },
+    "activity_empty": "Here you'll see the recent updates of activities"
 }

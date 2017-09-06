@@ -6,24 +6,49 @@
         <div class="row">
             <!-- Main Content -->
             <main class="col-xl-6 push-xl-3 col-lg-12 push-lg-0 col-md-12 col-sm-12 col-xs-12">
-                <div id="newsfeed-items-grid">
-                    <div v-for="activity in listActivity">
-                        <Campaign v-if="activity.activitiable_type === 'App\\Models\\Campaign'"
-                            :type="activity.name"
-                            :campaign="activity.activitiable"
-                            :owner="activity.user">
-                        </Campaign>
-                        <Event v-if="activity.activitiable_type === 'App\\Models\\Event'"
-                            :event="activity.activitiable"
-                            :owner="activity.user">
-                        </Event>
+                <div v-if="listActivity.length">
+                    <div id="newsfeed-items-grid">
+                        <div v-for="activity in listActivity">
+                            <Campaign v-if="activity.activitiable_type === 'App\\Models\\Campaign'"
+                                :type="activity.name"
+                                :campaign="activity.activitiable"
+                                :owner="activity.user">
+                            </Campaign>
+                            <Event v-if="activity.activitiable_type === 'App\\Models\\Event'"
+                                :event="activity.activitiable"
+                                :owner="activity.user">
+                            </Event>
+                        </div>
+                    </div>
+                    <div class="div-more">
+                        <span v-show="loading">
+                            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                            <span>{{ $t('homepage.loading') }}</span>
+                        </span>
                     </div>
                 </div>
-                <div class="div-more">
-                    <span v-show="loading">
-                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-                        <span>{{ $t('homepage.loading') }}</span>
-                    </span>
+                <div v-else>
+                    <div class="main-header bg-events">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8 offset-lg-2 col-md-8 offset-md-2 col-sm-12 col-xs-12">
+                                    <div class="main-header-content">
+                                        <h1>{{ $t('homepage.welcome_web') }}</h1>
+                                        <p>{{ $t('homepage.description_web') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <img src="/images/account-bottom.png" alt="friends" class="img-bottom">
+                    </div>
+                    <div class="page-description">
+                        <div class="icon">
+                            <svg class="olymp-star-icon left-menu-icon">
+                                <use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use>
+                            </svg>
+                        </div>
+                        <span>{{ $t('homepage.intro') }}</span>
+                    </div>
                 </div>
             </main>
             <!-- end Main Content -->
@@ -158,6 +183,18 @@
             i {
                 font-size: 25px;
             }
+        }
+    }
+    .page-description {
+        font-size: 14px;
+    }
+    .main-header {
+        padding: 3px 0px 175px 0;
+        max-width: 100%;
+        border-radius: 5px;
+        margin: 0 auto 30px;
+        >img {
+            margin-bottom: 15px;
         }
     }
 </style>
