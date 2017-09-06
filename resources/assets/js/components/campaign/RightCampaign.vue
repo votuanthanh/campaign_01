@@ -65,7 +65,7 @@
                             <div class="counter-friends">{{ listMembers.members.total }} {{ $t('campaigns.lbl-members') }}</div>
                             <ul class="widget w-faved-page js-zoom-gallery" v-if="listMembers.members.total > 0">
                                 <li v-for="(member, index) in listMembers.members.data" v-if="index < 10">
-                                    <router-link :to="{ name: 'user.timeline', params: { id: member.id }}">
+                                    <router-link :to="{ name: 'user.timeline', params: { slug: member.slug }}">
                                         <img :src="member.image_thumbnail" :alt="member.name">
                                     </router-link>
                                 </li>
@@ -94,13 +94,20 @@
                     {{ $t('campaigns.aproving') }}</a>
             </div>
         </div>
-
+        <!-- invite user to join campaign -->
+        <invite-member></invite-member>
+        <!-- close campaign -->
         <div class="ui-block" v-if="checkPermission || checkAdmin">
             <div class="ui-block-title">
-                <a href="javascript:void(0)"class="btn btn-md-2 btn-border-think custom-color c-grey full-width" v-if="!campaign.deleted_at" @click="comfirmCloseCampaign">
+                <a href="javascript:void(0)"
+                    class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                    v-if="!campaign.deleted_at"
+                    @click="comfirmCloseCampaign">
                     {{ $t('campaigns.close_campaign') }}
                 </a>
-                <a href="javascript:void(0)"class="btn btn-md-2 btn-border-think custom-color c-grey full-width" v-else @click="comfirmOpenCampaign">
+                <a href="javascript:void(0)"
+                    class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                    v-else @click="comfirmOpenCampaign">
                     {{ $t('campaigns.open_campaign') }}
                 </a>
             </div>
@@ -129,7 +136,6 @@
             :messages="$t('messages.comfirm-leave-campaign')"
             @handelMethod="leaveCampaigns">
         </message-comfirm>
-
     </div>
 </template>
 
@@ -154,6 +160,7 @@
     import Member from './Member.vue'
     import MessageComfirm from '../libs/MessageComfirm.vue'
     import { del } from '../../helpers/api'
+    import InviteMember from './InviteMember.vue'
 
     export default {
         created() {
@@ -162,9 +169,9 @@
         data: () => ({
             flag_confirm_join: false,
             flag_confirm_leave: false,
-            flag_show_list_member : false,
+            flag_show_list_member: false,
             flag_confirm_close: false,
-            flag_confirm_open: false
+            flag_confirm_open: false,
         }),
         computed: {
             ...mapGetters('campaign', [
@@ -196,7 +203,7 @@
                 'attendCampaign',
                 'getlistPhotos',
                 'openCampaign',
-                'campaignDetail'
+                'campaignDetail',
             ]),
             showListMember() {
                 this.flag_show_list_member = true
@@ -234,16 +241,16 @@
                     campaignId: this.pageId,
                     flag: 'leave'
                 })
-                    .then(status => {
-                        this.flag_confirm_leave = false
-                        const message = this.$i18n.t('messages.leave_campaign_success')
-                        noty({ text: message, force: true, type: 'success', container: false })
-                    })
-                    .catch(err => {
-                        this.flag_confirm_leave = false
-                        const message = this.$i18n.t('messages.leave_campaign_fail')
-                        noty({ text: message, force: true, container: false })
-                    })
+                .then(status => {
+                    this.flag_confirm_leave = false
+                    const message = this.$i18n.t('messages.leave_campaign_success')
+                    noty({ text: message, force: true, type: 'success', container: false })
+                })
+                .catch(err => {
+                    this.flag_confirm_leave = false
+                    const message = this.$i18n.t('messages.leave_campaign_fail')
+                    noty({ text: message, force: true, container: false })
+                })
             },
             remainingData(data) {
                 return data - 8
@@ -303,12 +310,12 @@
 
                     this.flag_confirm_open = false
             },
-
         },
         components: {
            Modal,
            Member,
-           MessageComfirm
+           MessageComfirm,
+           InviteMember
         }
     }
 </script>

@@ -160,6 +160,20 @@ export const openCampaign = ({ commit }, data) => {
     })
 };
 
+export const searchMemberToInvite = ({ commit }, data) => {
+    if ((parseInt(data.pageCurrent) + 1) <= data.pageNumberEvent) {
+        return new Promise((resolve, reject) => {
+            get(`campaign/search-members-invite/${data.campaignId}?search=${data.search}&page=${(parseInt(data.pageCurrent) + 1)}`)
+                .then(res => {
+                    resolve(res.data)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    }
+};
+
 export const setDetailcampaign = ({ commit }, data) => {
     commit(types.SET_DETAIL_CAMPAIGN, data)
 };
@@ -176,5 +190,6 @@ export default {
     loadMoreMembers,
     searchMember,
     changeMemberRole,
-    openCampaign
+    openCampaign,
+    searchMemberToInvite
 };

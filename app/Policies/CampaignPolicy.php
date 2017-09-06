@@ -165,4 +165,35 @@ class CampaignPolicy extends BasePolicy
 
         return in_array($user->id, $userInCampaign);
     }
+
+    /**
+     * Determine whether the user can search member to invite the campaign.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Campaign  $campaign
+     * @return mixed
+     */
+    public function inviteUser(User $user, Campaign $campaign)
+    {
+        $private = $campaign->settings
+            ->where('key', config('settings.campaigns.status'))
+            ->where('value', config('settings.value_of_settings.status.private'));
+        $ownerId = $campaign->owner()->first()->id;
+        $moderatorIds = $campaign->moderators()->pluck('id');
+
+        if ($private->isNotEmpty() && ($user->id == $ownerId || $moderatorIds->contains($user->id))) {
+            return true;
+        }
+
+        $public = $campaign->settings
+            ->where('key', config('settings.campaigns.status'))
+            ->where('value', config('settings.value_of_settings.status.public'));
+
+        if (in_array($user->id, $campaign->users->pluck('id')->all())
+            && $public->isNotEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
 }

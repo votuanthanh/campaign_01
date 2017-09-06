@@ -489,4 +489,22 @@ class CampaignController extends ApiController
                 : $valueIfNotFound;
         });
     }
+
+     public function searchMemberToInvites($campaignId, Request $request)
+    {
+        $data = $request->only('search');
+        $data['campaign'] = $this->campaignRepository->findOrFail($campaignId);
+        $data['roleIdBlocked'] = $this->roleRepository->findRoleOrFail(Role::ROLE_BLOCKED, Role::TYPE_CAMPAIGN)->id;
+        $data['campaignId'] = $campaignId;
+        $data['userId'] = $this->user->id;
+
+        if ($this->user->cannot('inviteUser', $data['campaign'])) {
+            throw new UnknowException('You do not have authorize to invite member to join this campaign', UNAUTHORIZED);
+        }
+
+        return $this->getData(function () use ($data) {
+            $firendIds = $this->user->friends('users.id')->pluck('id')->all();
+            $this->compacts['members'] = $this->userRepository->searchMemberToInvite($data, $firendIds);
+        });
+    }
 }

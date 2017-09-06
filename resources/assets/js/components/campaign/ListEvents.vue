@@ -3,7 +3,7 @@
         <div class="ui-block" v-for="event in events.data">
             <article class="hentry post">
                 <div class="post__author author vcard inline-items" v-if="event.media != null">
-                    <router-link :to="{ name: 'event.index', params: { slug: event.slug }}">
+                    <router-link :to="{ name: 'event.index', params: { slugEvent: event.slug }}">
                         <img :src="event.media[0].image_thumbnail" :alt="event.name">
                     </router-link>
                     <div class="author-date">
