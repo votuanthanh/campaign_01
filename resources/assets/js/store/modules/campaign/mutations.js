@@ -96,4 +96,12 @@ export default {
     [types.SET_DETAIL_CAMPAIGN](state, campaign) {
         state.detailCampaign[campaign.id] = campaign
     },
+
+    [types.UPDATE_EVENTS_CAMPAIGN](state, event) {
+        let events = state.events.data
+        events.unshift(event)
+        state.events.data = []
+        state.events.data = events
+        state.events.total++
+    },
 };

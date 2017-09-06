@@ -1,19 +1,23 @@
-var app = require('express')()
-var server = require('http').Server(app)
-var io = require('socket.io')(server)
-var redis = require('redis')
-var moment = require('moment-timezone')
+const app = require('express')()
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
+const redis = require('redis')
+const moment = require('moment-timezone')
 require('dotenv').config({path: '../.env'})
 
-server.listen(process.env.PORT_SERVER_NODE)
-var userConnection = []
-var userLogin = null
-var listFriend = []
+const createEvent = 'App\\Models\\Event'
+const createCampaign = 'App\\Models\\Campaign'
 
-var redisClient = redis.createClient(process.env.REDIS_PORT, 'redis')
-var client = redis.createClient(process.env.REDIS_PORT, 'redis')
-var subClient = redis.createClient(process.env.REDIS_PORT, 'redis')
-subClient.subscribe('createCampaign')
+server.listen(process.env.PORT_SERVER_NODE)
+let userConnection = []
+let userLogin = null
+let listFriend = []
+
+const redisClient = redis.createClient(process.env.REDIS_PORT, 'redis')
+const client = redis.createClient(process.env.REDIS_PORT, 'redis')
+const subClient = redis.createClient(process.env.REDIS_PORT, 'redis')
+
+subClient.subscribe('createCampaign', 'createEvent')
 redisClient.subscribe('singleChat', 'groupChat', 'activies', 'noty')
 redisClient.on('message', function(channel, data) {
     if (channel == 'activies') {
@@ -45,13 +49,13 @@ client.on('error', function (err) {
 })
 
 subClient.on('message', function (channel, data) {
-    let campaign = JSON.parse(data)
+    let activity = JSON.parse(data)
 
-    if (!Number(campaign.feature.value)) {
-        return
+    if (activity.type == createEvent) {
+        sendIfCreateEvent(activity)
+    } else {
+        sendIfCreateCampaign(activity)
     }
-
-    io.sockets.emit('createCampaignSuccess', { data: campaign })
 })
 
 subClient.on('error', function (err) {
@@ -172,8 +176,7 @@ io.on('connection', function (socket) {
     })
 })
 
-function callOnline (socket, listFriend, userLogin)
-{
+function callOnline (socket, listFriend, userLogin) {
     let index = findIndexById(listFriend, userLogin)
 
     if (index != -1) {
@@ -211,4 +214,22 @@ function callOffline (socket, listFriend, id) {
 
 function findIndexById (array, id) {
     return array.findIndex(arr => arr.id == id)
+}
+
+function sendIfCreateEvent (data) {
+    let room = 'hashtag:' + data.hashtag
+
+    if (!Number(data.feature)) {
+        io.sockets.in(room).emit('createEventSuccess', { data: data })
+    } else {
+        io.sockets.emit('createEventSuccess', { data: data })
+    }
+}
+
+function sendIfCreateCampaign (data) {
+    if (!Number(data.feature.value)) {
+        return
+    }
+
+    io.sockets.emit('createCampaignSuccess', { data: data })
 }
