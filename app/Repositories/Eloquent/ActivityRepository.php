@@ -28,12 +28,12 @@ class ActivityRepository extends BaseRepository implements ActivityInterface
         ])
         ->where('name', Activity::CREATE)
         ->where(function ($query) use ($campaignIds, $eventIds) {
-            return $query->where(function ($query) use ($eventIds) {
-                    return $query->whereIn('activitiable_id', $eventIds)
+            $query->where(function ($query) use ($eventIds) {
+                    $query->whereIn('activitiable_id', $eventIds)
                         ->where('activitiable_type', Event::class);
                 })
                 ->orWhere(function ($sub) use ($campaignIds) {
-                    return $sub->where('activitiable_type', Campaign::class)
+                    $sub->where('activitiable_type', Campaign::class)
                         ->whereIn('activitiable_id', $campaignIds);
                 });
         })

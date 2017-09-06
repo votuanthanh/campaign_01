@@ -11,4 +11,6 @@ interface EventInterface extends RepositoryInterface
     public function getEvent($campaign, $userId);
 
     public function createOrDeleteLike($event, $userId);
+
+    public function getEventIds($campaignIds);
 }

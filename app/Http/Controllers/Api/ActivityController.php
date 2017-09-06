@@ -30,11 +30,11 @@ class ActivityController extends ApiController
 
     public function getNewsFeed()
     {
-        $campaignPublic = $this->settingRepository->getCampaignPublicIds();
-        $eventPublic = $this->eventRepository->getEventPublicIds($campaignPublic);
+        $campaigns = $this->settingRepository->getCampaignIds();
+        $events = $this->eventRepository->getEventIds($campaigns);
 
-        return $this->getData(function () use ($campaignPublic, $eventPublic) {
-            $this->compacts['listActivity'] = $this->activityRepository->getNewsFeed($campaignPublic, $eventPublic);
+        return $this->getData(function () use ($campaigns, $events) {
+            $this->compacts['listActivity'] = $this->activityRepository->getNewsFeed($campaigns, $events);
         });
     }
 }
