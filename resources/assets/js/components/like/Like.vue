@@ -9,7 +9,8 @@
                     user: user,
                     flag: flag,
                     numberOfLikes: like[flag][modelId].numberOfLikes,
-                    deleteDate: like[flag][modelId].deleteDate
+                    deleteDate: like[flag][modelId].deleteDate,
+                    messages: modelClosed
                 })">
                 <svg class="olymp-heart-icon">
                      <use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"
@@ -39,8 +40,10 @@
                 </router-link>
             </li>
 
-            <li v-if="like[flag][modelId].numberOfLikes >= 4">
-                <a href="#" class="all-users">+{{ like[flag][modelId].numberOfLikes - 4 }}</a>
+            <li v-if="like[flag][modelId].numberOfLikes > 4">
+                <a href="javascript:void(0)"
+                    @click="showMembersLiked()"
+                    class="all-users">+{{ like[flag][modelId].numberOfLikes - 4 }}</a>
             </li>
         </ul>
 
@@ -50,16 +53,16 @@
 
         <div class="names-people-likes" v-else-if="showMore">
             <a href="javascript:void(0)"
-                v-for="(item, index) in like[flag][modelId]">
+                v-for="(item, index) in like[flag][modelId]" v-if="index <= 1">
                 {{ item.user.name }}
                 {{ showLike(index, like[flag][modelId].numberOfLikes) }}
             </a>
             <a href="javascript:void(0)" >
-                <span v-if="like[flag][modelId].numberOfLikes <= 3 &&
+                <span v-if="like[flag][modelId].numberOfLikes <= 2 &&
                     like[flag][modelId].numberOfLikes > 0">
                     {{ $t('post.like.liked_this') }}
                 </span>
-                <span v-if="like[flag][modelId].numberOfLikes >= 4"
+                <span v-if="like[flag][modelId].numberOfLikes >= 3"
                     @click="showMembersLiked()" class="more-like">
                     {{ $t('post.like.more_like') }}
                 </span>
@@ -92,6 +95,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import ListMemberLiked from './ListMemberLiked.vue'
+import noty from '../../helpers/noty'
 
 export default {
     data: () =>({
@@ -105,6 +109,7 @@ export default {
         numberOfLikes: 0,
         numberOfComments: 0,
         showMore: true,
+        modelClosed: ''
     },
     computed: {
         ...mapState('like', [
@@ -123,12 +128,18 @@ export default {
         ]),
 
         showMembersLiked() {
-            this.flagShowListMember = true
             this.getListMemberLiked({
                 modelId: this.modelId,
                 model: this.flag,
                 lastPage: 1,
                 pageCurrent: 0
+            })
+            .then(status => {
+                this.flagShowListMember = true
+            })
+            .catch(err => {
+                const message = this.$i18n.t('messages.join_campaign_fail')
+                noty({ text: message, force: true, container: false })
             })
         },
         showLike(index, numberLike) {
@@ -152,7 +163,7 @@ export default {
 
                     return '';
                 default:
-                    if (index <= 1) {
+                    if (index < 1) {
                         return ','
                     } else {
                         return this.$i18n.t('post.like.and')

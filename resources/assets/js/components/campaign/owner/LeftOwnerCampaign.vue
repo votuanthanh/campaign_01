@@ -7,15 +7,7 @@
                     <h6 class="">{{ $t('campaigns.campaign-management') }}</h6>
                 </div>
 
-                <div class="ui-block-title" v-if="!campaign.deleted_at">
-                    <router-link
-                        :to="{ name: 'campaign.member_request', params: { slug: campaign.slug}}"
-                        class="h6 title">
-                        {{ $t('campaigns.member-request') }}
-                    </router-link>
-                </div>
-
-                <div class="ui-block-title" v-if="checkOwner || checkAdmin">
+                <div :class="`ui-block-title ${checkActiveUrl('campaign.list_member')}`" v-if="checkOwner || checkAdmin">
                     <router-link
                         :to="{ name: 'campaign.list_member', params: { slug: campaign.slug }}"
                         class="h6 title">
@@ -23,7 +15,15 @@
                     </router-link>
                 </div>
 
-                <div class="ui-block-title" v-if="(checkOwner || checkAdmin) && !campaign.deleted_at">
+                <div :class="`ui-block-title ${checkActiveUrl('campaign.member_request')}`" v-if="!campaign.deleted_at">
+                    <router-link
+                        :to="{ name: 'campaign.member_request', params: { slug: campaign.slug }}"
+                        class="h6 title">
+                        {{ $t('campaigns.member-request') }}
+                    </router-link>
+                </div>
+
+                <div :class="`ui-block-title ${checkActiveUrl('campaign.update')}`" v-if="(checkOwner || checkAdmin) && !campaign.deleted_at">
                     <router-link
                         :to="{ name: 'campaign.update', params: { slug: campaign.slug }}"
                         class="h6 title">
@@ -52,6 +52,15 @@
                 'checkOwner'
             ]),
         },
+        methods: {
+            checkActiveUrl(name) {
+                if (this.$route.name == name) {
+                    return 'active'
+                }
+
+                return ''
+            }
+        }
     }
 </script>
 
@@ -68,6 +77,12 @@
         }
         .ui-block-title {
             padding: 17px 10px 0px 25px;
+            a {
+                padding-bottom: 12px;
+            }
+        }
+        .active {
+            background-color: #f8f8f8;
         }
     }
 </style>

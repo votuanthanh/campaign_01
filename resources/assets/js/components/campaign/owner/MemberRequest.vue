@@ -23,7 +23,7 @@
                     <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                 </a>
             </div>
-            <ul class="notification-list friend-requests">
+            <ul class="notification-list friend-requests" v-if="members.total">
                 <li v-for="member in members.data">
                     <div class="author-thumb">
                         <router-link
@@ -53,6 +53,11 @@
                             </span>
                         </a>
                     </span>
+                </li>
+            </ul>
+            <ul class="notification-list friend-requests" v-else>
+                <li>
+                    {{ $t('messages.no_member_show') }}
                 </li>
             </ul>
         </div>
@@ -117,7 +122,8 @@
                     this.members = data.members
                 })
                 .catch(err => {
-                    //
+                    const message = this.$i18n.t('messages.message-fail')
+                    noty({ text: message, force: true, container: false })
                 })
             }, 100),
             approveMembers(userId) {
@@ -153,7 +159,6 @@
                         })
                     ]
                 }).show();
-
             },
             rejectMembers(userId) {
                 let campaignId = this.pageId
@@ -194,6 +199,7 @@
                     return member.id != userId;
                 });
 
+                this.members.total -= 1
                 this.members.data = data
             }
         },

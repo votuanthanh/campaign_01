@@ -8,14 +8,16 @@
             :modelId="modelId"
             :numberOfComments="numberOfComments"
             :numberOfLikes="numberOfLikes"
-            :showMore="showMore">
+            :showMore="showMore"
+            :modelClosed="modelClosed">
         </like>
 
         <like-infor
             v-if="type == 'like-infor'"
             :flag="flag"
             :modelId="modelId"
-            :numberOfLikes="numberOfLikes">
+            :numberOfLikes="numberOfLikes"
+            :modelClosed="modelClosed">
         </like-infor>
 
     </div>
@@ -27,6 +29,11 @@
     import { mapActions, mapState } from 'vuex'
 
     export default {
+        data() {
+            return {
+                modelClosed: this.$i18n.t('messages.model_closed')
+            }
+        },
         created() {
             this.setLike({
                 likes: this.likes,

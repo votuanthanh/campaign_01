@@ -4,14 +4,15 @@
             :model-id="modelId"
             :flag="flag"
             :classListComment="classListComment"
-            :deleteDate="deleteDate">
+            :deleteDate="deleteDate"
+            :canComment="canComment">
         </list-comment>
         <form-comment
             :model-id="modelId"
             :comment-parent-id="0"
             :flag="flag"
             :classFormComment="classFormComment"
-            v-if="deleteDate == null">
+            v-if="deleteDate == null && canComment">
         </form-comment>
     </div>
 </template>
@@ -38,6 +39,7 @@ export default {
         classFormComment: '',
         numberOfComments: 0,
         deleteDate: null,
+        canComment: true
     },
     methods: {
         ...mapActions('comment', [

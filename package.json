@@ -24,7 +24,7 @@
     "socket.io": "2.0.3",
     "socket.io-client": "1.7.1",
     "vee-validate": "2.0.0-rc.5",
-    "vue": "2.3.4",
+    "vue": "2.4.2",
     "vue-easy-slider": "3.1.0",
     "vue-i18n": "7.0.3",
     "vue-multiselect": "2.0.0-beta.15",
@@ -42,6 +42,7 @@
   "dependencies": {
     "chart.js": "2.6.0",
     "photoswipe": "4.1.2",
-    "vue-chartjs": "2.8.1"
+    "vue-chartjs": "2.8.1",
+    "waypoints": "^4.0.1"
   }
 }

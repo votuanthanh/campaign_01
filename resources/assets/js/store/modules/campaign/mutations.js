@@ -104,4 +104,18 @@ export default {
         state.events.data = events
         state.events.total++
     },
+
+    [types.ACCEPT_CAMPAIGN](state, data) {
+        let campaign = state.campaign
+        data.user.pivot = []
+        data.user.pivot.status = 0
+
+        if (data.isManager) {
+            data.user.pivot.status = 1
+        }
+
+        campaign.check_status = data.user
+        state.campaign = []
+        state.campaign = campaign
+    },
 };

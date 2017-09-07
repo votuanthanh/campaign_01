@@ -49,12 +49,11 @@ export const attendCampaign = ({ commit }, data) => {
                 if (res.data.http_status.status) {
                     if (data.flag == 'join') {
                         commit(types.JOIN_CAMPAIGN, res.data.attend_campaign)
-                        resolve(res.data.http_status.status)
                     } else {
                         commit(types.LEAVE_CAMPAIGN, res.data.attend_campaign)
-                        resolve(res.data.http_status.status)
                     }
 
+                    resolve(res.data.http_status.status)
                 }
             })
             .catch(err => {
@@ -182,6 +181,35 @@ export const updateEventsCampaign = ({ commit }, data) => {
     commit(types.UPDATE_EVENTS_CAMPAIGN, data)
 };
 
+export const inviteUser = ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+        post(`campaign/invite-user/${data.campaignId}/${data.userId}`)
+            .then(res => {
+                resolve(res.data)
+            })
+            .catch(err => {
+                reject(err)
+            })
+    })
+};
+
+export const acceptCampaign = ({ commit }, campaignId) => {
+    return new Promise((resolve, reject) => {
+        post(`campaign/accept/${campaignId}`)
+            .then(res => {
+                commit(types.ACCEPT_CAMPAIGN, {
+                    user: res.data.user,
+                    isManager: res.data.is_manager
+                })
+
+                resolve(res.data)
+            })
+            .catch(err => {
+                reject(err)
+            })
+    })
+};
+
 export default {
     campaignDetail,
     fetchData,
@@ -196,5 +224,7 @@ export default {
     changeMemberRole,
     openCampaign,
     searchMemberToInvite,
-    updateEventsCampaign
+    updateEventsCampaign,
+    inviteUser,
+    acceptCampaign
 };

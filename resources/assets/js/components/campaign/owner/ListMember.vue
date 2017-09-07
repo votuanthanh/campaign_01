@@ -44,7 +44,7 @@
                                 <th class="center">{{ $t('form.role') }}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody v-if="members.total">
                             <tr v-for="(member, index) in members.data">
                                 <td class="center">{{ index + 1 }}</td>
                                 <td>
@@ -93,6 +93,9 @@
                                     </div>
                                 </td>
                             </tr>
+                        </tbody>
+                        <tbody v-else>
+                            <tr>{{ $t('messages.no_member_show') }}</tr>
                         </tbody>
                     </table>
                 </div>
@@ -173,7 +176,8 @@
                     this.members = data.members
                 })
                 .catch(err => {
-                    //
+                    const message = this.$i18n.t('messages.message-fail')
+                    noty({ text: message, force: true, container: false })
                 })
             }, 100),
 
@@ -181,45 +185,59 @@
                 let campaignId = this.pageId
                 let target = $(e.currentTarget)
                 let userId = target.attr('data-user-id')
-                var n = new Noty({
-                    type: 'alert',
-                    text: this.$i18n.t('messages.comfirm-block-member'),
-                    layout: 'center',
-                    closeWith: 'button',
-                    modal: true,
-                    buttons: [
-                        Noty.button(this.$i18n.t('form.button.agree'), 'btn-upper btn btn-primary btn--half-width', () => {
-                            n.close();
-                            this.changeMemberRole({
-                                campaignId: campaignId,
-                                userId: userId,
-                                roleId: target.attr('data-id')
-                            })
-                            .then(status => {
-                                const message = this.$i18n.t('messages.message-success')
-                                noty({ text: message, force: true, type: 'success', container: false })
-                            })
-                            .catch(err => {
-                                const message = this.$i18n.t('messages.message-fail')
-                                noty({ text: message, force: true, container: false })
+                if (userId != this.user.id) {
+                    var n = new Noty({
+                        type: 'alert',
+                        text: this.$i18n.t('messages.comfirm-block-member'),
+                        layout: 'center',
+                        closeWith: 'button',
+                        modal: true,
+                        buttons: [
+                            Noty.button(this.$i18n.t('form.button.agree'), 'btn-upper btn btn-primary btn--half-width', () => {
+                                n.close();
+                                this.changeMemberRole({
+                                    campaignId: campaignId,
+                                    userId: userId,
+                                    roleId: target.attr('data-id')
+                                })
+                                .then(status => {
+                                    const message = this.$i18n.t('messages.message-success')
+                                    noty({ text: message, force: true, type: 'success', container: false })
+                                    target.prop('checked', true)
+                                    this.members.data.forEach( (item, index) => {
+                                        if (item.id == userId) {
+                                            item.campaigns[0].pivot.role_id = []
+                                            item.campaigns[0].pivot.role_id = target.attr('data-id')
+                                        }
+                                    })
+                                })
+                                .catch(err => {
+                                    const message = this.$i18n.t('messages.message-fail')
+                                    noty({ text: message, force: true, container: false })
+                                    target.prop('checked', false)
+                                    this.members.data.forEach( (item, index) => {
+                                        if (item.id == userId) {
+                                            item.campaigns[0].pivot.role_id = []
+                                            item.campaigns[0].pivot.role_id = target.attr('data-id')
+                                        }
+                                    })
+                                })
+                            }, { id: 'button1', 'data-status': 'ok' }),
+
+                            Noty.button(this.$i18n.t('form.button.cancel'), 'btn-upper btn btn-secondary btn--half-width', () => {
                                 target.prop('checked', false)
+                                this.members.data.forEach( (item, index) => {
+                                    if (item.id == userId) {
+                                        item.campaigns[0].pivot.role_id = []
+                                        item.campaigns[0].pivot.role_id = this.roleCurrent[userId]
+                                    }
+                                })
+
+                                n.close();
                             })
-                        }, { id: 'button1', 'data-status': 'ok' }),
-
-                        Noty.button(this.$i18n.t('form.button.cancel'), 'btn-upper btn btn-secondary btn--half-width', () => {
-                            target.prop('checked', false)
-                            this.members.data.forEach( (item, index) => {
-                                if (item.id == userId) {
-                                    item.campaigns[0].pivot.role_id = []
-                                    item.campaigns[0].pivot.role_id = this.roleCurrent[userId]
-                                }
-                            })
-
-                            n.close();
-                        })
-                    ]
-                }).show();
-
+                        ]
+                    }).show();
+                }
             },
             checkDeleted() {
                 if (!this.campaign.deleted_at) {
