@@ -100,9 +100,9 @@ class ActionRepository extends BaseRepository implements ActionInterface
         return $data;
     }
 
-    public function searchAction($eventId, $key)
+    public function searchAction($eventId, $key, $userId)
     {
-        return $this->model
+        $actions = $this->model
             ->with([
                 'user',
                 'media' => function ($query) {
@@ -112,8 +112,12 @@ class ActionRepository extends BaseRepository implements ActionInterface
             ->where('event_id', $eventId)
             ->withTrashed()
             ->search($key, null, true)
-            ->orderBy('created_at', 'DESC')
-            ->paginate(config('settings.actions.paginate_in_event'));
+            ->orderBy('created_at', 'DESC');
+
+        $data['list_action'] = $actions->paginate(config('settings.actions.paginate_in_event'));
+        $data['checkLikeAction'] = $this->checkLike($actions, $userId);
+
+        return $data;
     }
 
     public function getActionPhotos($eventIds, $userId)

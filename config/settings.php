@@ -63,4 +63,5 @@ return [
     'take_friend' => 9,
     'is_manager' => 1,
     'not_manager' => 0,
+    'image_event_default' => '/images/image_event_default.jpg',
 ];
