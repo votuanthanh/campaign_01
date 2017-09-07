@@ -86,7 +86,7 @@ class ActionController extends ApiController
         $key = $request->key;
 
         return $this->doAction(function () use ($eventId, $key) {
-            $this->compacts['actions'] = $this->actionRepository->searchAction($eventId, $key);
+            $this->compacts['actions'] = $this->actionRepository->searchAction($eventId, $key, $this->user->id);
         });
     }
 

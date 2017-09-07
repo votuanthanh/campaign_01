@@ -11,7 +11,7 @@
                                 <div class="author-date">
                                     <a class="h6 post__author-name fn" href="javascript:void(0)">{{ currentPageUser.name }}</a>
                                     <span>{{ detemineAction(activity.name) }}</span>
-                                    <router-link :to="url(activity.activitiable_type, activity.activitiable.slug)">
+                                    <router-link :to="url(activity.activitiable_type, activity.activitiable)">
                                         {{ nameActivity(activity.activitiable_type) }}
                                     </router-link>
                                     <div class="post__date">
@@ -27,7 +27,7 @@
                                 </a>
                                 <img :src="activity.activitiable.media[0].image_medium" alt="photo" v-else>
                             </div>
-                            <router-link :to="url(activity.activitiable_type, activity.activitiable.slug)"
+                            <router-link :to="url(activity.activitiable_type, activity.activitiable)"
                                 class="h2 post-title">
                                 {{ activity.activitiable.title }}
                             </router-link>
@@ -184,14 +184,12 @@
                         return ''
                 }
             },
-            url(type, slug) {
+            url(type, activity) {
                 switch(type) {
                     case 'App\\Models\\Campaign':
-                        return { name: 'campaign.timeline',
-                            params: { slug: slug }}
+                        return { name: 'campaign.timeline', params: { slug: activity.slug } }
                     case 'App\\Models\\Event':
-                        return { name: 'event.index',
-                            params: { slug: slug }}
+                        return { name: 'event.index', params: { slug: activity.campaign_id, slugEvent: activity.slug } }
                     default:
                         return {}
                 }

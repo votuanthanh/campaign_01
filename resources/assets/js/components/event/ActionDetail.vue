@@ -128,7 +128,8 @@
                         :flag="'action'"
                         :classListComment="''"
                         :classFormComment="''"
-                        :deleteDate="dataAction.deleted_at">
+                        :deleteDate="dataAction.deleted_at"
+                        :canComment="event.isMember">
                     </comment>
 
                 </div>
@@ -161,6 +162,7 @@
             ...mapState('auth', {
                 user: state => state.user
             }),
+            ...mapState('event', ['event']),
         },
 
         updated() {

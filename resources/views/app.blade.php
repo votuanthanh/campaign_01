@@ -24,6 +24,7 @@
                 'events' => config('settings.events'),
                 'actions' => config('settings.actions'),
                 'value' => config('settings.value_of_settings'),
+                'imageEventDefault' => config('settings.image_event_default'),
             ],
             'pagination' => [
                 'follow' => config('settings.pagination.follow'),

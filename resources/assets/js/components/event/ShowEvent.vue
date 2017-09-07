@@ -4,13 +4,14 @@
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="ui-block features-video wrap-event">
                     <div class="slider-event video-player">
-                        <slider animation="fade" height="100%" :interval="300000">
+                        <slider v-if="event.media.length" animation="fade" height="100%" :interval="300000">
                             <slider-item v-for="(i, index) in event.media" :key="index">
                                 <div :style="style">
                                     <img :src="i.image_slider" class="image-event">
                                 </div>
                             </slider-item>
                         </slider>
+                        <img v-else :src="imageEventDefault" class="image-event">
                     </div>
                     <div class="features-video-content">
                         <article class="hentry post info-event">
@@ -51,7 +52,8 @@
                                 :modelId="event.id"
                                 :numberOfComments="event.number_of_comments"
                                 :numberOfLikes="event.number_of_likes"
-                                :showMore="true">
+                                :showMore="true"
+                                :deleteDate="event.deleted_at">
                             </master-like>
                             <div class="control-block-button post-control-button">
                                 <master-like
@@ -61,7 +63,8 @@
                                     :type="'like-infor'"
                                     :modelId="event.id"
                                     :numberOfComments="event.number_of_comments"
-                                    :numberOfLikes="event.number_of_likes">
+                                    :numberOfLikes="event.number_of_likes"
+                                    :deleteDate="event.deleted_at">
                                 </master-like>
                             </div>
                         </article>
@@ -72,7 +75,9 @@
                             :model-id ="event.id"
                             :flag="pageType"
                             :classListComment="'list-comment-event'"
-                            :classFormComment="'input-comment-event'">
+                            :classFormComment="'input-comment-event'"
+                            :deleteDate="event.deleted_at"
+                            :canComment="event.isMember">
                         </comment>
                     </div>
                 </div>
@@ -132,7 +137,8 @@
             showExpense: false,
             isManager: false,
             showComfirm: false,
-            pageType: 'event'
+            pageType: 'event',
+            imageEventDefault: window.Laravel.settings.imageEventDefault
         }),
 
         computed : {
@@ -202,7 +208,7 @@
 
             show() {
                 this.showExpense = true
-            }
+            },
         },
 
         created() {
