@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container js-waypoint-wrap">
         <div class="row">
             <!-- Main Content -->
             <div class="col-xl-6 push-xl-3 col-lg-12 push-lg-0 col-md-12 col-sm-12 col-xs-12">
@@ -116,6 +116,7 @@
     import MasterLike from '../like/MasterLike.vue'
     import Comment from '../comment/Comment.vue'
     import ActionDetail from '../event/ActionDetail.vue'
+    import sideWaypoint from '../../helpers/mixin/sideWaypoint'
 
     export default {
         data: () => ({
@@ -136,6 +137,7 @@
                 user: state => state.user
             })
         },
+        mixins: [sideWaypoint],
         mounted() {
             $(window).scroll(() => {
                 if ($(document).height() - $(window).height() < $(window).scrollTop() + 1) {
