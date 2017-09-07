@@ -24,6 +24,12 @@ class CreateDonationTest extends TestCase
         $campaign = factory(Campaign::class)->create([
             'status' => Campaign::ACTIVE,
         ]);
+
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
         $roleCampaign = Role::where('name', Role::ROLE_OWNER)->where('type', Role::TYPE_CAMPAIGN)->first();
         $campaign->users()->attach([
             $user->id => [
@@ -44,6 +50,7 @@ class CreateDonationTest extends TestCase
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
+
         $data = $response->getdata()->donation;
 
         $response->assertStatus(CODE_OK);

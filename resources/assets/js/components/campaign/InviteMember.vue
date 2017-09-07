@@ -172,6 +172,10 @@
 </script>
 
 <style lang="scss" scoped>
+    .searchbox {
+        margin-bottom: 2%;
+    }
+
     .div-invite-user {
         border: 1px solid #e6ecf5;
         border-radius: 5px;

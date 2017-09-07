@@ -29,4 +29,8 @@ interface CampaignInterface extends RepositoryInterface
     public function listPhotos($campaign);
 
     public function getCampaignRelated($campaign, $userId);
+
+    public function inviteUser($data);
+
+    public function acceptInvitation($data);
 }

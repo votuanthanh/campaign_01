@@ -161,7 +161,7 @@ class LikeTest extends TestCase
         ]);
         $user = factory(User::class)->create(['email' => 'test.nothavepermission@gmail.com']);
         $user->roles()->attach($user->id, [
-            'role_id' => Role::where(['name' => Role::ROLE_USER, 'type' => Role::TYPE_SYSTEM])->pluck('id')
+            'role_id' => Role::where(['name' => Role::ROLE_USER, 'type' => Role::TYPE_SYSTEM])->pluck('id'),
         ]);
 
         $this->actingAs($user, 'api');
@@ -170,6 +170,6 @@ class LikeTest extends TestCase
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
         ]);
 
-        $response->assertStatus(INTERNAL_SERVER_ERROR);
+        $response->assertStatus(UNAUTHORIZED);
     }
 }

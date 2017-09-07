@@ -405,36 +405,24 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
      * @param  int $campaign
      * @return mixed
     */
-    public function getCampaignRelated($campaign, $userId)
+    public function getCampaignRelated($campaign, $user)
     {
         $tagIds = $campaign->tags()->pluck('tag_id')->all();
         $enday = Carbon::today()->format('Y-m-d');
+        $campaignIds = $user->campaigns->pluck('id')->all();
 
-        $listCampaigns = $this->whereHas('tags', function ($query) use ($tagIds) {
+        $campaign = $campaignCheckLike = $this->whereHas('tags', function ($query) use ($tagIds) {
             $query->whereIn('tag_id', $tagIds);
         })
         ->where('campaigns.status', Campaign::ACTIVE)
-        ->where('campaigns.id', '!=', $campaign->id);
-
-        $campaignIds = $listCampaigns->whereHas('users', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->get()->pluck('id')->all();
+        ->where('campaigns.id', '!=', $campaign->id)
+        ->whereNotIn('campaigns.id', $campaignIds);
 
         $data = [];
-
-        $campaign = $campaignCheckLike = $this
-            ->whereHas('tags', function ($query) use ($tagIds) {
-                $query->whereIn('tag_id', $tagIds);
-            })
-            ->getLikes()
-            ->where('campaigns.status', Campaign::ACTIVE)
-            ->where('campaigns.id', '!=', $campaign->id)
-            ->whereNotIn('id', $campaignIds);
-
         $data['campaign'] = $campaign->with('media')
             ->paginate(config('settings.paginate_default'));
 
-        $data['checkLiked'] = $this->checkLike($campaignCheckLike, $userId);
+        $data['checkLiked'] = $this->checkLike($campaignCheckLike, $user->id);
 
         return $data;
     }
@@ -621,5 +609,44 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             'data' => $campaigns,
             'totalCampaign' => $this->count(),
         ];
+    }
+
+    /**
+     *invite user join to campaign
+     * @param  App\Models\Campaign $campaign
+     * @param  int $campaign, $userId
+     * @return
+     */
+    public function inviteUser($data)
+    {
+        return $data['campaign']->users()->toggle([
+            $data['userId'] => [
+                'role_id' => $data['roleIdMember'],
+                'status' => Campaign::REQUEST_USER,
+                'is_manager' => $data['is_manager'],
+            ]
+        ]);
+    }
+
+    /**
+     *accpet invitation user join to campaign
+     * @param  App\Models\Campaign $campaign
+     * @param  int $campaign, $userId
+     * @return
+     */
+    public function acceptInvitation($data)
+    {
+        $member = $data['campaign']->users()->wherePivot('user_id', $data['userId'])->first();
+        $status = Campaign::APPROVING;
+
+        if ($member->pivot->is_manager) {
+            $status = Campaign::APPROVED;
+        }
+
+        $data['campaign']->users()->updateExistingPivot($data['userId'], [
+            'status' => $status,
+        ]);
+
+        return $member->pivot->is_manager;
     }
 }

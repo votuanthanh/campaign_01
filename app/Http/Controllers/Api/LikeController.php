@@ -28,7 +28,7 @@ class LikeController extends ApiController
         }
 
         if ($this->user->cant('like', $model)) {
-            throw new UnknowException('Permission error: User can not like in this post.');
+            throw new UnknowException('Permission error: User can not like in this post.', UNAUTHORIZED);
         }
 
         return $this->doAction(function () use ($model) {
@@ -51,7 +51,7 @@ class LikeController extends ApiController
     public function getListMemberLiked($modelId, $flag)
     {
         $likeClass = new \ReflectionClass($this->likeRepository);
-        $model = app($likeClass->getNamespaceName() . '\\' . ucfirst($flag . 'Repository'))->findOrFail($modelId);
+        $model = app($likeClass->getNamespaceName() . '\\' . ucfirst($flag . 'Repository'))->withTrashed()->findOrFail($modelId);
 
         if ($this->user->cant('like', $model)) {
             throw new UnknowException('Permission error: User can not see this members liked in this post.');

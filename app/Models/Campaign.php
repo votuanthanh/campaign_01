@@ -58,7 +58,12 @@ class Campaign extends BaseModel
     public function users()
     {
         return $this->belongsToMany(User::class)
-            ->withPivot('role_id', 'status', 'deleted_at')
+            ->withPivot(
+                'role_id',
+                'status',
+                'is_manager',
+                'deleted_at'
+            )
             ->withTimestamps();
     }
 

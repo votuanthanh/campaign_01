@@ -82,20 +82,25 @@
 
                 <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
                     v-if="checkJoinCampaign == 1 && !checkPermission && !campaign.deleted_at"
-                    @click="comfirmJoinCampaign()">{{ $t('campaigns.join-now') }}</a>
+                    @click="comfirmJoinCampaign">{{ $t('campaigns.join-now') }}</a>
 
                 <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
                     v-if="checkJoinCampaign == 3 && !checkOwner && !campaign.deleted_at"
-                    @click="comfirmLeaveCampaign()" >
+                    @click="comfirmLeaveCampaign" >
                     {{ $t('campaigns.leave') }}</a>
 
                 <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
                     v-if="checkJoinCampaign == 2 && !checkOwner && !campaign.deleted_at">
                     {{ $t('campaigns.aproving') }}</a>
+
+                <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                    @click="comfirmAcceptCampaign"
+                    v-if="checkJoinCampaign == 4 && !checkOwner && !campaign.deleted_at">
+                    {{ $t('campaigns.accept') }}</a>
             </div>
         </div>
         <!-- invite user to join campaign -->
-        <invite-member></invite-member>
+        <invite-member v-if="checkInvite()"></invite-member>
         <!-- close campaign -->
         <div class="ui-block" v-if="checkPermission || checkAdmin">
             <div class="ui-block-title">
@@ -136,6 +141,13 @@
             :messages="$t('messages.comfirm-leave-campaign')"
             @handelMethod="leaveCampaigns">
         </message-comfirm>
+        <!-- form comfirm accept join to this campaign -->
+        <message-comfirm
+            :show.sync="flag_confirm_accept"
+            :messages="$t('messages.comfirm-accept-campaign')"
+            @handelMethod="acceptCampaigns">
+        </message-comfirm>
+
     </div>
 </template>
 
@@ -159,7 +171,7 @@
     import noty from '../../helpers/noty'
     import Member from './Member.vue'
     import MessageComfirm from '../libs/MessageComfirm.vue'
-    import { del } from '../../helpers/api'
+    import { del, post } from '../../helpers/api'
     import InviteMember from './InviteMember.vue'
 
     export default {
@@ -172,6 +184,7 @@
             flag_show_list_member: false,
             flag_confirm_close: false,
             flag_confirm_open: false,
+            flag_confirm_accept: false
         }),
         computed: {
             ...mapGetters('campaign', [
@@ -204,6 +217,7 @@
                 'getlistPhotos',
                 'openCampaign',
                 'campaignDetail',
+                'acceptCampaign',
             ]),
             showListMember() {
                 this.flag_show_list_member = true
@@ -219,6 +233,9 @@
             },
             comfirmOpenCampaign() {
                 this.flag_confirm_open = true
+            },
+            comfirmAcceptCampaign() {
+                this.flag_confirm_accept = true
             },
             joinCampaigns() {
                 this.attendCampaign({
@@ -266,7 +283,7 @@
                 return checkStatus
             },
             closeCampaigns() {
-                del(`campaign/${this.campaign.id}`)
+                del(`campaign/${this.pageId}`)
                     .then(res => {
                         this.flag_confirm_close = false
                         const message = this.$i18n.t('messages.close_campaign_success')
@@ -288,6 +305,7 @@
             agreeOpen() {
                 this.openCampaign({ campaignId: this.campaign.id })
                     .then(res => {
+                        this.flag_confirm_open = false
                         this.campaignDetail(this.pageId)
                             .then(status => {
                                 //
@@ -307,9 +325,30 @@
                             container: false
                         })
                     })
-
-                    this.flag_confirm_open = false
             },
+            acceptCampaigns() {
+                this.acceptCampaign(this.pageId)
+                    .then(res => {
+                        this.flag_confirm_accept = false
+                        const message = this.$i18n.t('messages.close_campaign_success')
+                        noty({ text: message, force: true, type: 'success', container: false })
+                    })
+                    .catch(err => {
+                        this.flag_confirm_accept = false
+                        const message = this.$i18n.t('messages.close_campaign_fail')
+                        noty({ text: message, force: true, container: false })
+                    })
+            },
+            checkInvite() {
+                if (this.campaign.status) {
+                    if ((this.campaign.status['value'] == 0 && (this.checkPermission || this.checkAdmin))
+                        || (this.campaign.status['value'] == 1 && this.checkJoinCampaign == 3))  {
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
         },
         components: {
            Modal,

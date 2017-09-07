@@ -56,8 +56,10 @@
                                             </li>
                                             <li v-if="checkPermission || checkAdmin">
                                                 <router-link
-                                                    :to="{ name: 'campaign.member_request' }"
-                                                    :class="checkActiveUrl('campaign.member_request')">
+                                                    :to="{ name: 'campaign.list_member' }"
+                                                    :class="checkActiveUrl('campaign.list_member')
+                                                        || checkActiveUrl('campaign.member_request')
+                                                        || checkActiveUrl('campaign.update')">
                                                     {{ $t('campaigns.campaign-management') }}
                                                 </router-link>
                                             </li>

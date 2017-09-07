@@ -23,10 +23,16 @@ class ShowCampaignTest extends TestCase
     {
         $user = factory(User::class)->create();
         $campaign = factory(Campaign::class)->create(['hashtag' => 'Default', 'status' => Campaign::ACTIVE]);
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
         $roleOwnerId = Role::where('type', Role::TYPE_CAMPAIGN)->where('name', Role::ROLE_OWNER)->pluck('id')->first();
         $campaign->users()->attach([
             $user->id => [
                 'role_id' => $roleOwnerId,
+                'status' => Campaign::APPROVED,
             ],
         ]);
 
@@ -51,8 +57,11 @@ class ShowCampaignTest extends TestCase
         $campaign->users()->attach([
             '1' => [
                 'role_id' => $roleOwnerId,
+                'status' => Campaign::APPROVED,
             ],
         ]);
+
+
 
         $this->actingAs($user, 'api');
         $response = $this->json('GET', route('campaign.show', ['id' => $campaign->id]), [

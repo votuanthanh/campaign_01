@@ -411,7 +411,7 @@ class CampaignController extends ApiController
         }
 
         return $this->doAction(function () use ($campaign) {
-            $this->compacts['campaign_related'] = $this->campaignRepository->getCampaignRelated($campaign, $this->user->id);
+            $this->compacts['campaign_related'] = $this->campaignRepository->getCampaignRelated($campaign, $this->user);
         });
     }
 
@@ -479,7 +479,7 @@ class CampaignController extends ApiController
             $this->compacts['campaign_user'] = $this->userRepository->openFromCampaign($campaign);
             $this->compacts['campaign'] = $this->campaignRepository->openCampaign($campaign);
             $this->compacts['actions'] = $this->actionRepository->openAction($eventIds);
-       });
+        });
     }
 
     public function getHomepage()
@@ -503,10 +503,10 @@ class CampaignController extends ApiController
         });
     }
 
-     public function searchMemberToInvites($campaignId, Request $request)
+    public function searchMemberToInvites($campaignId, Request $request)
     {
         $data = $request->only('search');
-        $data['campaign'] = $this->campaignRepository->findOrFail($campaignId);
+        $data['campaign'] = $this->campaignRepository->withTrashed()->findOrFail($campaignId);
         $data['roleIdBlocked'] = $this->roleRepository->findRoleOrFail(Role::ROLE_BLOCKED, Role::TYPE_CAMPAIGN)->id;
         $data['campaignId'] = $campaignId;
         $data['userId'] = $this->user->id;
@@ -517,7 +517,41 @@ class CampaignController extends ApiController
 
         return $this->getData(function () use ($data) {
             $firendIds = $this->user->friends('users.id')->pluck('id')->all();
+
             $this->compacts['members'] = $this->userRepository->searchMemberToInvite($data, $firendIds);
+        });
+    }
+
+    public function inviteUser($campaignId, $userId)
+    {
+        $data = [];
+        $data['userId'] = $userId;
+        $data['campaign'] = $this->campaignRepository->findOrFail($campaignId);
+        $data['roleIdMember'] = $this->roleRepository->findRoleOrFail(Role::ROLE_MEMBER, Role::TYPE_CAMPAIGN)->id;
+
+        if ($this->user->cannot('inviteUser', $data['campaign'])) {
+            throw new UnknowException('You do not have authorize to invite member to join this campaign', UNAUTHORIZED);
+        }
+
+        return $this->doAction(function () use ($data) {
+            $data['is_manager'] = $this->user->can('permission', $data['campaign']) ? config('settings.is_manager') : config('settings.not_manager');
+            $this->compacts['members'] = $this->campaignRepository->inviteUser($data);
+        });
+    }
+
+    public function acceptInvitation($campaignId)
+    {
+        $data = [];
+        $data['userId'] = $this->user->id;
+        $data['campaign'] = $this->campaignRepository->findOrFail($campaignId);
+
+        if ($this->user->cannot('view', $data['campaign'])) {
+            throw new UnknowException('You do not have authorize to accept', UNAUTHORIZED);
+        }
+
+        return $this->doAction(function () use ($data) {
+            $this->compacts['user'] = $this->user;
+            $this->compacts['is_manager'] = $this->campaignRepository->acceptInvitation($data);
         });
     }
 }
