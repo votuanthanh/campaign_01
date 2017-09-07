@@ -98,6 +98,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['xssProtection']], function
             Route::get('events-closed/{campaignId}', 'CampaignController@getEventsClosed');
             Route::post('open/{id}', 'CampaignController@openCampaign');
             Route::get('search-members-invite/{campaignId}', 'CampaignController@searchMemberToInvites');
+            Route::post('invite-user/{campaignId}/{userId}', 'CampaignController@inviteUser');
+            Route::post('accept/{campaignId}', 'CampaignController@acceptInvitation');
         });
 
         Route::resource('campaign', 'CampaignController', ['only' => ['store', 'update', 'destroy', 'show', 'edit']]);

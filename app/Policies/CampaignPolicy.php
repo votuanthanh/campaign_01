@@ -29,17 +29,28 @@ class CampaignPolicy extends BasePolicy
      */
     public function view(User $user, Campaign $campaign)
     {
-        if (in_array($user->id, $campaign->blockeds()->pluck('id')->toArray())
+        if ($campaign->blockeds()->pluck('id')->contains($user->id)
             || $campaign->status == Campaign::BLOCK
         ) {
             return false;
         }
 
-        return in_array($user->id, $campaign->users->pluck('id')->toArray())
-            || $campaign->settings
-                ->where('key', config('settings.campaigns.status'))
-                ->where('value', config('settings.value_of_settings.status.public'))
-                ->isNotEmpty();
+        $public = $campaign->settings()
+            ->where('key', config('settings.campaigns.status'))
+            ->where('value', config('settings.value_of_settings.status.public'))
+            ->get()
+            ->isNotEmpty();
+
+        $private = $campaign->settings()
+            ->where('key', config('settings.campaigns.status'))
+            ->where('value', config('settings.value_of_settings.status.private'))
+            ->get()
+            ->isNotEmpty();
+
+        if ($public || ($campaign->users->pluck('user_id')->contains($user->id)
+            && $private)) {
+            return true;
+        }
     }
 
     /**
@@ -146,7 +157,7 @@ class CampaignPolicy extends BasePolicy
     public function permission(User $user, Campaign $campaign)
     {
         if ($user->id == $campaign->owner()->first()->id ||
-            $campaign->moderators()->pluck('id')->contains($user->id)) {
+            $campaign->moderators()->pluck('user_id')->contains($user->id)) {
             return true;
         }
 
@@ -179,7 +190,7 @@ class CampaignPolicy extends BasePolicy
             ->where('key', config('settings.campaigns.status'))
             ->where('value', config('settings.value_of_settings.status.private'));
         $ownerId = $campaign->owner()->first()->id;
-        $moderatorIds = $campaign->moderators()->pluck('id');
+        $moderatorIds = $campaign->moderators()->pluck('user_id');
 
         if ($private->isNotEmpty() && ($user->id == $ownerId || $moderatorIds->contains($user->id))) {
             return true;
@@ -189,7 +200,7 @@ class CampaignPolicy extends BasePolicy
             ->where('key', config('settings.campaigns.status'))
             ->where('value', config('settings.value_of_settings.status.public'));
 
-        if (in_array($user->id, $campaign->users->pluck('id')->all())
+        if ($campaign->users->pluck('id')->contains($user->id)
             && $public->isNotEmpty()) {
             return true;
         }

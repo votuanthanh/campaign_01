@@ -91,10 +91,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="empty center-block" v-else>
-                        <h2>
-                            {{ $t('messages.not_found_campaign') }}
-                        </h2>
+                    <div class="tab-content" v-else>
+                        <div class="ui-block">
+                            <article class="hentry post">
+                                {{ $t('messages.not_found_campaign') }}
+                            </article>
+                        </div>
                     </div>
                 </div>
             </div>

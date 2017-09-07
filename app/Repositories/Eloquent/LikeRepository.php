@@ -45,7 +45,7 @@ class LikeRepository extends BaseRepository implements LikeInterface
 
     public function getListMemberLiked($model)
     {
-        return $this->with('user')
+        return $this->withTrashed()->with('user')
             ->where('likeable_id', $model->id)
             ->where('likeable_type', get_class($model))
             ->paginate(config('settings.paginate_default'));

@@ -61,4 +61,6 @@ return [
     'read_notification_friend' => 0,
     'read_notification_action' => 1,
     'take_friend' => 9,
+    'is_manager' => 1,
+    'not_manager' => 0,
 ];
