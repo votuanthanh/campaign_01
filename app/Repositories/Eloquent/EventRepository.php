@@ -245,6 +245,6 @@ class EventRepository extends BaseRepository implements EventInterface
 
     public function getEventPublicIds($campaignPublic)
     {
-        return $this->whereIn('campaign_id', $campaignPublic)->pluck('id')->all();
+        return $this->whereIn('campaign_id', $campaignPublic)->get(['id'])->toArray();
     }
 }
