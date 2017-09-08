@@ -66,7 +66,7 @@
                             {{ $t('actions.cancel') }}
                         </a>
                         <a href="javascript:void(0)" class="btn btn-primary btn-lg btn--half-width" @click="updateAction">
-                            {{ $t('actions.create_action') }}
+                            {{ $t('actions.update_action') }}
                         </a>
                     </div>
                 </div>
