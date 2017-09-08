@@ -74,10 +74,11 @@ class ActionController extends ApiController
 
     public function listAction($eventId)
     {
-        $event = $this->eventRepository->findOrFail($eventId);
+        $event = $this->eventRepository->withTrashed()->findOrFail($eventId);
 
         return $this->doAction(function () use ($event) {
-            $this->compacts['actions'] = $this->actionRepository->getActionPaginate($event->actions());
+            $this->compacts['actions'] = $this->actionRepository
+                ->getActionPaginate($event->actions()->withTrashed(), $this->user->id);
         });
     }
 
@@ -100,7 +101,7 @@ class ActionController extends ApiController
 
         return $this->doAction(function () use ($action) {
             $this->compacts['actions'] = $this->actionRepository->forceDelete($action);
-            $this->mediaRepository->deleteMedia($action->$media);
+            $this->mediaRepository->deleteMedia($action->media);
         });
     }
 

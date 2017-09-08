@@ -64,7 +64,7 @@
     import { config } from '../../config'
     import { del, post } from '../../helpers/api'
     import noty from '../../helpers/noty'
-    import { mapActions } from 'vuex'
+    import { mapActions, mapState } from 'vuex'
     export default {
         props: [
             'show',
@@ -105,6 +105,11 @@
                 pageType: 'event'
             }
         },
+
+        computed: {
+            ...mapState('event', ['event']),
+        },
+
         created() {
             this.newAction.event_id = this.pageId
         },
@@ -148,7 +153,10 @@
                                 container: false,
                                 type: 'success'
                             })
-                            this.get_event(this.pageId)
+                            this.get_event({
+                                eventId: this.event.id,
+                                campaignId: this.event.campaign_id
+                            })
                             this.onClose()
                         })
                         .catch(err => {

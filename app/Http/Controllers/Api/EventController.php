@@ -165,9 +165,7 @@ class EventController extends ApiController
             $this->compacts['event'] = $this->eventRepository->getDetailEvent($event->id);
 
             $this->compacts['actions'] = $this->actionRepository
-                ->getActionPaginate($event
-                ->actions()
-                ->withTrashed(), $this->user->id);
+                ->getActionPaginate($event->actions()->withTrashed(), $this->user->id);
 
             $this->compacts['goals'] = $event
                 ->goals()
