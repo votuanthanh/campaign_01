@@ -22,32 +22,19 @@ class ActionRepository extends BaseRepository implements ActionInterface
         return Action::class;
     }
 
-    public function createOrDeleteLike($action, $userId)
-    {
-        if (!is_numeric($userId) || !$action) {
-            return false;
-        }
-
-        if ($action->likes->where('user_id', $userId)->isEmpty()) {
-            return $this->createByRelationship('likes', [
-                'model' => $action,
-                'attribute' => ['user_id' => $userId],
-            ]);
-        }
-
-        return $action->likes()->where('user_id', $userId)->first()->forceDelete();
-    }
-
     public function showAction($action, $userId)
     {
         $data = [];
-        $actions = $this->model->where('id', $action->id)
+        $checkLikeAction = $actions = $this->model->withTrashed()
+            ->where('id', $action->id)
             ->getLikes()
             ->getComments()
-            ->with('user', 'media');
+            ->with(['user', 'media' => function ($query) {
+                $query->withTrashed();
+            }]);
 
         $data['list_action'] = $actions->first();
-        $data['checkLikeAction'] = $this->checkLike($action, $userId);
+        $data['checkLikeAction'] = $this->checkLike($checkLikeAction, $userId);
 
         return $data;
     }

@@ -11,7 +11,7 @@
                 </a>
                 <div class="open-photo-thumb">
                     <div class="swiper-container" data-slide="fade" ref="swiper">
-                        <div class="swiper-wrapper">
+                        <div class="swiper-wrapper" v-if="dataAction.media">
                             <div class="swiper-slide" v-for="(item, index) in dataAction.media">
                                 <div class="photo-item">
                                     <img :src="item.image_default" alt="photo">
@@ -41,7 +41,7 @@
 
                 <div class="open-photo-content">
 
-                    <article class="hentry post">
+                    <article class="hentry post" v-if="dataAction.user">
 
                         <div class="post__author author vcard inline-items">
                             <img :src="dataAction.user.image_thumbnail" alt="author">
@@ -74,6 +74,7 @@
                                 </ul>
                             </div>
                         </div>
+
                         <p>
                             <span class="ui-block-title">
                                 <show-text
@@ -120,19 +121,18 @@
                         </div>
 
                     </article>
-
-                    <comment
-                        :comments="dataAction.comments"
-                        :numberOfComments="dataAction.number_of_comments"
-                        :model-id ="dataAction.id"
-                        :flag="'action'"
-                        :classListComment="''"
-                        :classFormComment="''"
-                        :deleteDate="dataAction.deleted_at"
-                        :canComment="event.isMember">
-                    </comment>
-
                 </div>
+                <comment
+                    v-if="dataAction.comments"
+                    :comments="dataAction.comments"
+                    :numberOfComments="dataAction.number_of_comments"
+                    :model-id ="dataAction.id"
+                    :flag="'action'"
+                    :classListComment="''"
+                    :classFormComment="''"
+                    :deleteDate="dataAction.deleted_at"
+                    :canComment="canComment">
+                </comment>
 
             </div>
         </div>
@@ -146,11 +146,12 @@
     import MasterLike from '../like/MasterLike.vue'
 
     export default {
-        props: [
-            'showAction',
-            'dataAction',
-            'checkLikeActions',
-        ],
+        props: {
+            showAction: {},
+            dataAction: {},
+            checkLikeActions: {},
+            canComment: true
+        },
 
         data() {
             return {
