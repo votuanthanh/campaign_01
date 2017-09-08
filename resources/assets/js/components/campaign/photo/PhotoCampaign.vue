@@ -27,7 +27,8 @@
                                         :numberOfComments="photo.number_of_comments"
                                         :numberOfLikes="photo.number_of_likes"
                                         :class="'post-add-icon'"
-                                        :showMore="false">
+                                        :showMore="false"
+                                        :deleteDate="photo.deleted_at">
                                     </master-like>
 
                                     <a href="javascript:void(0)"
