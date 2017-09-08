@@ -43,7 +43,7 @@
                             </timeago>
                         </div>
                     </div>
-                    <div class="more" v-if="comment.user.id == user.id && !comment.deleted_at">
+                    <div class="more" v-if="comment.user.id == user.id && !comment.deleted_at && canComment">
                         <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                         <ul class="more-dropdown" >
                             <li>
@@ -217,8 +217,9 @@
                     :comment-parent-id="comment.id"
                     :flag="flag"
                     :classFormComment="''"
-                    v-if="flagReply == comment.id && !comment.deleted_at">
+                    v-if="flagReply == comment.id && !comment.deleted_at && canComment">
                 </form-comment>
+                <div class="cant-comment" v-else></div>
             </li>
         </ul>
     </div>
@@ -242,7 +243,8 @@ export default {
         modelId: 0,
         flag: '',
         classListComment: '',
-        numberOfComments: 0
+        numberOfComments: 0,
+        canComment: true
     },
     computed: {
         ...mapState('comment', [
@@ -320,6 +322,10 @@ export default {
         li {
             border-bottom: 0px;
             padding: 15px 20px 0px 20px;
+        }
+
+        .cant-comment {
+            padding-bottom: 3%;
         }
 
         .children {

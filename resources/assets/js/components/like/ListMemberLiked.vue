@@ -15,7 +15,7 @@
                         <div class="ui-block-content">
                             <form class="form-group label-floating is-select">
                                 <div class="btn-group bootstrap-select show-tick form-control style-2">
-                                    <ul class="dropdown-menu scroll-list-member inner">
+                                    <ul class="dropdown-menu scroll-list-member inner" v-if="listMember">
                                         <li class="member" v-for="member in listMember[flag][modelId].data">
                                             <router-link :to="{ name: 'user.timeline', params: { slug: member.user.slug }}">
                                                 <span class="text">
@@ -125,7 +125,9 @@
     .bootstrap-select {
         &.btn-group {
             .scroll-list-member {
-                overflow-y: scroll;
+                overflow-y: auto;
+                min-height: 0px;
+                max-height: 500px;
             }
 
             .dropdown-menu {

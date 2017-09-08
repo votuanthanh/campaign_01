@@ -1,5 +1,6 @@
 import * as types from './mutation-types';
 import { post, get } from '../../../helpers/api'
+import noty from '../../../helpers/noty'
 
 export const setLike = ({ commit }, data) => {
     commit(types.SET_LIKE, data)
@@ -10,7 +11,6 @@ export const likeActivity = ({ commit }, data) => {
         return new Promise((resolve, reject) => {
             post(`like/${data.modelId}/${data.model}`)
                 .then(res => {
-                    if (res.data.http_status.status) {
                         commit(types.LIKE_ACTIVITY, {
                             like: res.data.like,
                             modelId: data.modelId,
@@ -21,12 +21,17 @@ export const likeActivity = ({ commit }, data) => {
                         })
 
                         resolve(res.data.http_status.status)
-                    }
                 })
                 .catch(err => {
-                    reject(err)
+                    noty({
+                        text: err.response.data.http_status.message,
+                        force: true, container: false
+                    })
                 })
         })
+    } else {
+        const message = data.messages
+        noty({ text: message, force: true, container: false })
     }
 };
 
@@ -40,6 +45,8 @@ export const getListMemberLiked = ({ commit }, data) => {
                         modelId: data.modelId,
                         flag: data.model,
                     })
+
+                    resolve(res.data.http_status.status)
                 })
                 .catch(err => {
                     reject(err)

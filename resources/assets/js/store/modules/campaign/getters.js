@@ -15,13 +15,16 @@ export default {
     },
 
     checkJoinCampaign(state, getters) {
-
         if (jQuery.isEmptyObject(state.campaign.check_status)) {
             return 1 //join campaign
         }
 
         if (state.campaign.check_status.pivot.status == 0) {
             return 2 //approving
+        }
+
+        if (state.campaign.check_status.pivot.status == 2) {
+            return 4 //invting
         }
 
         return 3 //approved

@@ -21,7 +21,7 @@
     "leave_campaign_success": "You left campaign is successfully!",
     "leave_campaign_fail": "You leave campaign is fail!",
     "comment_not_empty": "Comment not empty!",
-    "not_found_campaign": "Not found campaign!",
+    "not_found_campaign": "There is no campaign to show.",
     "members": "Members",
     "search": "Search",
     "load_notification_message_fail": "Could't load messages",
@@ -56,5 +56,11 @@
     "close_campaign_success": "You closed this campaign is successfully!",
     "close_campaign_fail": "You don't close this campaign!",
     "comfirm_open_campaign": "Are you sure you want to open this campaign?",
-    "comfirm-invite-member": "Do you want invite this user?"
+    "comfirm-invite-member": "Do you want invite this user?",
+    "not_found_photo": "There is no picture to show.",
+    "no_member_show": "There is no member to show.",
+    "message-join-campaign": "You must join to campaign to like this.",
+    "comfirm-accept-campaign": "Would you like to accept this invitation?",
+    "no_event_show": "There is no event to show.",
+    "model_closed": "This model are closed so you can't like this."
 }

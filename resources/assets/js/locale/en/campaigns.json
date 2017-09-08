@@ -88,5 +88,6 @@
     "close_campaign": "Close campaign",
     "manage_campaigns": "Manage Campaign",
     "open_campaign": "Open Campaign",
-    "invite_user": "Invite user"
+    "invite_user": "Invite user",
+    "accept": "Accept"
 }

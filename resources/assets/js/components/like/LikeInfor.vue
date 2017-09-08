@@ -7,7 +7,8 @@
             user: user,
             flag: flag,
             numberOfLikes: like[flag][modelId].numberOfLikes,
-            deleteDate: like[flag][modelId].deleteDate
+            deleteDate: like[flag][modelId].deleteDate,
+            messages: modelClosed
         })">
         <svg class="olymp-like-post-icon">
             <use xlink:href="/frontend/icons/icons.svg#olymp-like-post-icon"></use>
@@ -22,7 +23,8 @@ export default {
     props: {
         modelId: 0,
         flag: '',
-        numberOfLikes: 0
+        numberOfLikes: 0,
+        modelClosed: ''
     },
     computed: {
         ...mapState('like', [
