@@ -23,10 +23,14 @@
                                 <a href="#">Help & Support</a>
                             </li>
                             <li>
-                                <a href="#" class="js-expanded-menu">
-                                    <svg class="olymp-menu-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-menu-icon"></use></svg>
-                                    <svg class="olymp-close-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-close-icon"></use></svg>
-                                </a>
+                                <router-link class="js-expanded-menu" :to="{ name: 'homepage' }">
+                                    <svg class="olymp-menu-icon">
+                                        <use xlink:href="/frontend/icons/icons.svg#olymp-menu-icon"></use>
+                                    </svg>
+                                    <svg class="olymp-close-icon">
+                                        <use xlink:href="/frontend/icons/icons.svg#olymp-close-icon"></use>
+                                    </svg>
+                                </router-link>
                             </li>
                         </ul>
                     </div>

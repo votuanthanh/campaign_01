@@ -8,8 +8,12 @@
                         {{ owner.name }}
                     </router-link>
                     {{ $t('homepage.create_a') }}
-                    <router-link class="link-event" :to="{ name: 'event.index', params: { slug: event.slug }}">
-                        <span class="span-event">{{ $t('homepage.event') }}</span>
+                    <span class="span-event">{{ $t('homepage.event') }}</span>
+                    <router-link class="link-event" :to="{ name: 'event.index', params: {
+                        slug: event.campaign_id,
+                        slugEvent: event.slug
+                    }}">
+                        "<b class="title-event">{{ event.title }}</b>"
                     </router-link>
                     <b>{{ $t('homepage.in_campaign') }}</b>
                     <router-link class="link-event" :to="{ name: 'campaign.timeline', params: { slug: event.campaign.slug }}">
@@ -32,8 +36,15 @@
                     </ul>
                 </div>
             </div>
-            <p v-if="event.title.length < 851" v-html="event.description"></p>
-            <p v-else v-html="event.description.substr(0, 850) + '...'"></p>
+            <p>
+                <show-text
+                    :text="event.description"
+                    :show_char=850
+                    :number_char_show=700
+                    :show="$t('events.show_more')"
+                    :hide="$t('events.show_less')">
+                </show-text>
+            </p>
             <div class="post-thumb">
                 <img v-if="event.media.length" :src="event.media[0].image_medium" alt="photo">
             </div>
@@ -106,10 +117,15 @@
 </template>
 <script>
    import { mapState, mapActions } from 'vuex'
+   import ShowText from '../libs/ShowText.vue'
+
    export default {
         props: {
             event: {},
             owner: {}
+        },
+         components: {
+            ShowText
         }
     }
 </script>
@@ -121,11 +137,12 @@
     .post-thumb {
         margin-top: 10px;
     }
+    .span-event{
+        color: #fe5d39;
+        font-weight: bold;
+    }
     .link-event {
         color: rgb(97, 99, 115);
-        .span-event{
-            color: #fe5d39;
-        }
         .title-event {
             color: #616373;
             &:hover {

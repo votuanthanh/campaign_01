@@ -384,16 +384,32 @@ class UserRepository extends BaseRepository implements UserInterface
         $this->setGuard('api');
         $countMutualFriends = [];
         $friendIds = $this->user->friends()->pluck('id')->all();
-        $friendSuggestIds = \DB::table('relationships')
-            ->where('status', User::ACCEPTED)
-            ->whereIn('sender_id', $friendIds)
-            ->where('recipient_id', '<>' ,$this->user->id)
-            ->whereNotIn('recipient_id', $friendIds)
-            ->groupBy('recipient_id')
-            ->pluck('recipient_id');
+        $friendIds[] = $this->user->id;
+        // if (count($friendIds)) {
+        //     $friendSuggestIds = \DB::table('relationships')
+        //         ->where('status', User::ACCEPTED)
+        //         ->whereIn('sender_id', $friendIds)
+        //         ->where('recipient_id', '<>' ,$this->user->id)
+        //         ->whereNotIn('recipient_id', $friendIds)
+        //         ->groupBy('recipient_id')
+        //         ->pluck('recipient_id');
+        //     $friendSuggests = $this->model
+        //         ->where('status', User::ACTIVE)
+        //         ->whereIn('id', $friendSuggestIds)
+        //         ->inRandomOrder()
+        //         ->take(config('settings.friend_suggest'))
+        //         ->get()
+        //         ->each(function ($query) use ($friendIds) {
+        //             $query->makeVisible([
+        //                 'is_friend',
+        //                 'has_pending_request',
+        //                 'has_send_request',
+        //             ]);
+        //         });
+
         $friendSuggests = $this->model
             ->where('status', User::ACTIVE)
-            ->whereIn('id', $friendSuggestIds)
+            ->whereNotIn('id', $friendIds)
             ->inRandomOrder()
             ->take(config('settings.friend_suggest'))
             ->get()

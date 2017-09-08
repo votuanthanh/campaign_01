@@ -590,10 +590,27 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
             ->take(config('settings.campaigns_involve'))
             ->get();
 
+        if ($campaignsInvolve->isEmpty()) {
+            $campaignsInvolve = $this->whereHas('settings', function ($query) {
+                $query->where('key', config('settings.campaigns.status'))
+                    ->where('value', config('settings.value_of_settings.status.public'));
+                })
+                ->whereHas('settings', function ($query) {
+                    $query->where('key', config('settings.campaigns.end_day'))
+                        ->where('value', '>', Carbon::now()->format('m/d/Y'));
+                })
+                ->model
+                ->with('media', 'tags')
+                ->inRandomOrder()
+                ->take(config('settings.campaigns_involve'))
+                ->get();
+        }
+
         return $campaignsInvolve;
     }
 
     public function getHomepage() {
+        $totalCampaign = $this->count();
         $campaigns = $this->whereHas('settings', function ($query) {
             $query->where('key', config('settings.campaigns.status'))
                 ->where('value', config('settings.value_of_settings.status.public'));
@@ -607,7 +624,7 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
 
         return [
             'data' => $campaigns,
-            'totalCampaign' => $this->count(),
+            'totalCampaign' => $totalCampaign,
         ];
     }
 

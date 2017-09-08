@@ -12,7 +12,7 @@
 
         <div class="ui-block">
             <div class="ui-block-title">
-                <h6 class="title">{{ $t('campaigns.tags') }}</h6>
+                <h6 class="title">{{ $t('campaigns.total_tags') }}</h6>
                 <a href="javascript:void(0)" class="more">
                     <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                 </a>

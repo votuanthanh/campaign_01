@@ -4,15 +4,19 @@
 }
 
 .ps__scrollbar-x {
-    left: 0px; width: 0px;
+    left: 0px;
+    width: 0px;
 }
 
 .ps__scrollbar-y-rail {
-    top: 0px; height: 10px; right: 0px;
+    top: 0px;
+    height: 10px;
+    right: 0px;
 }
 
 .ps__scrollbar-y {
-    top: 0px; height: 10px;
+    top: 0px;
+    height: 10px;
 }
 
 .mCustomScrollbar.ps.ps--theme_default.ps--active-y {
@@ -88,18 +92,15 @@
             }
         }
     }
-
     .mCustomScrollbar {
         max-height: 300px !important;
         min-height: 300px !important;
     }
-
     textarea {
         &:focus {
             min-height: 60px;
         }
     }
-
     position: fixed !important;
     z-index: 999 !important;
     right: 69px !important;
@@ -121,7 +122,6 @@
 .chat-friend {
     margin-left: -20px;
     margin-right: 45px;
-
     .chat-message-item {
         color: #767082;
     }
@@ -143,4 +143,14 @@
 .top-load-more-chat {
     text-align: center;
     font-size: 18px;
+}
+
+.title-name {
+    color: white;
+    font-size: 14px !important;
+    font-weight: bold;
+    text-transform: none !important;
+    &:hover {
+        text-decoration: underline;
+    }
 }

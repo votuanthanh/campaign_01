@@ -54,7 +54,6 @@
                                     March 18th, at 6:52pm
                                 </time>
                             </div>
-
                         </article>
                     </li>
                 </ul>
@@ -73,7 +72,7 @@
                     </span>
                     <ul v-else class="widget w-faved-page js-zoom-gallery">
                         <li v-for="friend in listFriend" v-tooltip:top="friend.name" >
-                            <router-link :to="{ name: 'user.timeline', params: { id: friend.id } }">
+                            <router-link :to="{ name: 'user.timeline', params: { slug: friend.slug } }">
                                 <img :src="friend.image_medium" alt="author">
                             </router-link>
                         </li>
