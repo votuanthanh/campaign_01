@@ -49,7 +49,7 @@
                                             </li>
                                             <li>
                                                 <router-link
-                                                    :to="{ name: 'campaign.statistic', params: { id: campaign.id }}"
+                                                    :to="{ name: 'campaign.statistic', params: { slug: campaign.slug }}"
                                                     :class="checkActiveUrl('campaign.statistic')">
                                                     {{ $t('campaigns.statistic.statistic') }}
                                                 </router-link>

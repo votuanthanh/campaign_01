@@ -3,7 +3,7 @@
         <div class="ui-block" v-if="(checkPermission || checkAdmin) && !campaign.deleted_at">
             <div class="ui-block-title">
                 <router-link
-                    :to="{ name: 'event.create', params: { campaign_id: campaign.id }}"
+                    :to="{ name: 'event.create', params: { slug: campaign.slug }}"
                     class="btn btn-md-2 btn-border-think custom-color c-grey full-width">
                     {{ $t('campaigns.create-event') }}
                 </router-link>

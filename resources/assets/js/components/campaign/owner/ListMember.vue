@@ -79,7 +79,7 @@
                                                 v-if="role.id == member.campaigns[0].pivot.role_id"
                                                 :value="roleCurrent[member.id] = role.id">
                                             <input type="radio"
-                                                :name="member.name + member.id"
+                                                :name="member.email + member.id"
                                                 :value="role.id"
                                                 :data-id="role.id"
                                                 :data-user-id="member.id"
@@ -185,6 +185,8 @@
                 let campaignId = this.pageId
                 let target = $(e.currentTarget)
                 let userId = target.attr('data-user-id')
+                let roleId = target.attr('data-id')
+
                 if (userId != this.user.id) {
                     var n = new Noty({
                         type: 'alert',
@@ -198,29 +200,24 @@
                                 this.changeMemberRole({
                                     campaignId: campaignId,
                                     userId: userId,
-                                    roleId: target.attr('data-id')
+                                    roleId: roleId
                                 })
                                 .then(status => {
+                                    target.prop('checked', true)
+                                    this.roleCurrent[userId] = parseInt(roleId)
                                     const message = this.$i18n.t('messages.message-success')
                                     noty({ text: message, force: true, type: 'success', container: false })
-                                    target.prop('checked', true)
-                                    this.members.data.forEach( (item, index) => {
-                                        if (item.id == userId) {
-                                            item.campaigns[0].pivot.role_id = []
-                                            item.campaigns[0].pivot.role_id = target.attr('data-id')
-                                        }
-                                    })
                                 })
                                 .catch(err => {
-                                    const message = this.$i18n.t('messages.message-fail')
-                                    noty({ text: message, force: true, container: false })
                                     target.prop('checked', false)
                                     this.members.data.forEach( (item, index) => {
                                         if (item.id == userId) {
                                             item.campaigns[0].pivot.role_id = []
-                                            item.campaigns[0].pivot.role_id = target.attr('data-id')
+                                            item.campaigns[0].pivot.role_id = this.roleCurrent[userId]
                                         }
                                     })
+                                    const message = this.$i18n.t('messages.message-fail')
+                                    noty({ text: message, force: true, container: false })
                                 })
                             }, { id: 'button1', 'data-status': 'ok' }),
 
@@ -237,6 +234,14 @@
                             })
                         ]
                     }).show();
+                } else {
+                    target.prop('checked', false)
+                    this.members.data.forEach( (item, index) => {
+                        if (item.id == userId) {
+                            item.campaigns[0].pivot.role_id = []
+                            item.campaigns[0].pivot.role_id = this.roleCurrent[userId]
+                        }
+                    })
                 }
             },
             checkDeleted() {

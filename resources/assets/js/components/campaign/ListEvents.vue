@@ -1,18 +1,19 @@
 <template lang="html">
     <div ref="scrollContainer" id ="data-loadmore">
         <div id="newsfeed-items-grid" v-if="events.total > 0">
-            <div class="ui-block"  v-for="event in events.data">
-                <article class="hentry post">
-                    <div class="post__author author vcard inline-items" v-if="event.media != null">
-                        <router-link :to="{ name: 'event.index', params: { slugEvent: event.slug }}">
-                            <img :src="event.media[0].image_thumbnail" :alt="event.name">
-                        </router-link>
-                        <div class="author-date">
-                            <router-link
-                                :to="{ name: 'event.index', params: { 'slugEvent': event.slug }}">
-                                {{ event.title }}
-                            </router-link>
+            <div class="ui-block" v-for="event in events.data">
+                <article class="hentry post has-post-thumbnail thumb-full-width">
 
+                    <div class="post__author author vcard inline-items" v-if="event.user">
+                        <router-link :to="{ name: 'user.timeline', params: { slug: event.user.slug }}">
+                            <img :src="event.user.image_thumbnail" :alt="event.user.name">
+                        </router-link>
+
+                        <div class="author-date">
+                            <router-link :to="{ name: 'user.timeline', params: { slug: event.user.slug }}"
+                                class="h6 post__author-name fn">
+                                {{ event.user.name }}
+                            </router-link>
                             <div class="post__date">
                                 <timeago
                                     :max-time="86400 * 365"
@@ -22,6 +23,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="post-thumb" v-if="event.media">
+                        <router-link :to="{ name: 'event.index', params: { slugEvent: event.slug }}"
+                            v-if="event.media[0] != null">
+                            <img :src="event.media[0].image_thumbnail" :alt="event.name">
+                        </router-link>
+                    </div>
+
+                    <router-link :to="{ name: 'event.index', params: { slugEvent: event.slug }}"
+                        class="h2 post-title">
+                        {{ event.title }}
+                    </router-link>
+
                     <show-text
                         :type="false"
                         :text="event.description"
@@ -62,10 +75,8 @@
                         <a href="javascript:void(0)" class="btn btn-control">
                             <svg class="olymp-share-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-share-icon"></use></svg>
                         </a>
-
                     </div>
                 </article>
-
                 <comment
                     :comments="event.comments"
                     :numberOfComments="event.number_of_comments"
