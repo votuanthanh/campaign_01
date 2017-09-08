@@ -37,6 +37,10 @@ export default function router(routes) {
                 store.dispatch('auth/setUser', res.data)
                 next()
             })
+            .catch((err) => {
+                store.dispatch('auth/logout')
+                next({ name: 'login' })
+            })
         } else {
             next()
         }
