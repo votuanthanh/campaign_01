@@ -79,15 +79,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.comment-form textarea {
-    resize: none;
-    overflow: hidden;
-    min-height: 45px;
-    height: 45px;
-    padding: 12px;
+.comment-form {
+    border-top: 0px;
+    textarea {
+        resize: none;
+        overflow: hidden;
+        min-height: 45px;
+        height: 45px;
+        padding: 12px;
 
-    &:focus {
-        min-height: 70px;
+        &:focus {
+            min-height: 70px;
+        }
     }
 }
 </style>

@@ -255,11 +255,6 @@
         width: 80%;
     }
 
-    .post-additional-info {
-        border-bottom: 1px solid #e6ecf5;
-        padding-bottom: 15px;
-    }
-
     .post__author {
         margin-bottom: 10px;
     }

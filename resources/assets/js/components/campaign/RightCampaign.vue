@@ -13,24 +13,25 @@
         <div class="ui-block">
             <div class="ui-block-title">
                 <h6 class="title">{{ $t('campaigns.total_tags') }}</h6>
-                <a href="javascript:void(0)" class="more">
-                    <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
+                <a href="javascript:void(0)" class="more" style="display: none;">
+                    <svg class="olymp-three-dots-icon">
+                        <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
+                    </svg>
                 </a>
             </div>
             <div class="ui-block-content">
-                <p v-for="tag, index in tags" class="div-tags">
-                    <span class="tag is-info">
-                        {{ tag.name }}
-                    </span>
-                </p>
+                <span v-for="tag, index in tags" class="div-tags">
+                    {{ tag.name }}
+                </span>
             </div>
         </div>
 
-        <div class="ui-block">
+        <div class="ui-block" v-if="listPhotos.list_action.length">
             <div class="ui-block-title">
                 <h6 class="title">{{ $t('campaigns.typical-images') }}</h6>
-                <a href="javascript:void(0)" class="more">
-                    <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
+                <a href="javascript:void(0)" class="more" style="display: none;">
+                    <svg class="olymp-three-dots-icon">
+                    <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                 </a>
             </div>
             <div class="ui-block-content" v-if="listPhotos.list_action">
@@ -54,8 +55,10 @@
             <member :flagShowListMember.sync="flag_show_list_member"></member>
             <div class="ui-block-title">
                 <h6 class="title">{{ $t('campaigns.list-members') }}</h6>
-                <a href="javascript:void(0)" class="more">
-                    <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
+                <a href="javascript:void(0)" class="more" style="display: none;">
+                    <svg class="olymp-three-dots-icon">
+                        <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
+                    </svg>
                 </a>
             </div>
             <div class="ui-block-content">
@@ -150,21 +153,6 @@
 
     </div>
 </template>
-
-<style>
-    span.tag.is-info {
-        background: #2185d0;
-        border-color: #2185d0;
-        padding: 3%;
-        border-radius: 3px;
-        color: #fff;
-        margin-right: 2px;
-    }
-
-    .div-tags {
-        padding:1%;
-    }
-</style>
 
 <script>
     import { mapState, mapActions, mapGetters } from 'vuex'
@@ -359,5 +347,13 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+    .div-tags {
+        display: inline-block;
+        background: #3f4257;
+        padding: 5px 10px;
+        border-radius: 3px;
+        color: #fff;
+        margin: 3px 0px 0px 3px;
+    }
 </style>
