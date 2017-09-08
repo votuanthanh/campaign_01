@@ -13,7 +13,7 @@
                         <div class="post__author author vcard inline-items">
                             <img :src="action.user.image_thumbnail" alt="author">
                             <div class="author-date">
-                                <router-link :to="{ name: 'user.timeline', params: { slug: action.user.id } }">
+                                <router-link :to="{ name: 'user.timeline', params: { slug: action.user.slug } }">
                                     <a class="h6 post__author-name fn" href="javascript:void(0)">{{ action.user.name }}</a>
                                 </router-link>
                                 <div class="post__date">
@@ -36,10 +36,10 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="post-thumb one-image" v-if="action.media.length === 1" @click="detailAction(action)">
+                        <div class="post-thumb one-image" v-if="action.media.length === 1" @click="detailAction(action.id)">
                             <img v-for="imgs in action.media" :src="imgs.image_medium">
                         </div>
-                        <div class="post-thumb more-image" v-if="action.media.length > 1" @click="detailAction(action)">
+                        <div class="post-thumb more-image" v-if="action.media.length > 1" @click="detailAction(action.id)">
                             <div class="wrap-img" v-for="(imgs, index) in action.media" v-if="index < numberImgShow">
                                 <img :src="imgs.image_small">
                                 <div v-if="index == numberImgShow - 1">
@@ -52,7 +52,7 @@
                             data-toggle="modal"
                             data-target="#blog-post-popup"
                             class="h2 post-title"
-                            @click="detailAction(action)">
+                            @click="detailAction(action.id)">
                             {{ action.caption }}
                         </a>
                         <a v-else
@@ -77,7 +77,8 @@
                                 :type="'like-infor'"
                                 :modelId="action.id"
                                 :numberOfComments="action.number_of_comments"
-                                :numberOfLikes="action.number_of_likes">
+                                :numberOfLikes="action.number_of_likes"
+                                :deleteDate="action.deleted_at">
                             </master-like>
                         </div>
                     </article>
@@ -112,10 +113,10 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="post-thumb one-image" v-if="action.media.length === 1" @click="detailAction(action)">
+                        <div class="post-thumb one-image" v-if="action.media.length === 1" @click="detailAction(action.id)">
                             <img v-for="imgs in action.media" :src="imgs.image_medium">
                         </div>
-                        <div class="post-thumb more-image" v-if="action.media.length > 1" @click="detailAction(action)">
+                        <div class="post-thumb more-image" v-if="action.media.length > 1" @click="detailAction(action.id)">
                             <div class="wrap-img" v-for="(imgs, index) in action.media" v-if="index < numberImgShow">
                                 <img :src="imgs.image_small">
                                 <div v-if="index == numberImgShow - 1">
@@ -128,7 +129,7 @@
                             data-toggle="modal"
                             data-target="#blog-post-popup"
                             class="h2 post-title"
-                            @click="detailAction(action)">
+                            @click="detailAction(action.id)">
                             {{ action.caption }}
                         </a>
                         <a v-else
@@ -152,7 +153,8 @@
                                 :type="'like-infor'"
                                 :modelId="action.id"
                                 :numberOfComments="action.number_of_comments"
-                                :numberOfLikes="action.number_of_likes">
+                                :numberOfLikes="action.number_of_likes"
+                                :deleteDate="action.deleted_at">
                             </master-like>
                         </div>
                     </article>
@@ -179,7 +181,8 @@
         <action-detail
             :showAction.sync="showAction"
             :dataAction="dataAction"
-            :checkLikeActions="actions.checkLikeAction" >
+            :checkLikeActions="checkLikeAction"
+            :canComment="checkPermission">
         </action-detail>
         <update-action
             :showUpdate.sync="showUpdate"
@@ -207,7 +210,9 @@
             dataAction: {},
             isShowDelete: false,
             actionId: null,
-            pageType: 'event'
+            pageType: 'event',
+            checkLikeAction: {},
+            checkPermission: true
         }),
 
         computed: {
@@ -251,9 +256,23 @@
                 'removeAction'
             ]),
 
-            detailAction(data) {
-                this.dataAction = data
+            ...mapActions('action', [
+                'getDetailAction',
+            ]),
+
+            detailAction(actionId) {
                 this.showAction = true
+                this.getDetailAction(actionId)
+                .then(data => {
+                    this.checkLikeAction = data.actions.checkLikeAction
+                    this.dataAction = data.actions.list_action
+                    this.checkPermission = data.checkPermission
+                })
+                .catch(err => {
+                    this.showAction = false
+                    const message = this.$i18n.t('messages.message-fail')
+                    noty({ text: message, force: true, container: false })
+                })
             },
 
             updateAction(data) {

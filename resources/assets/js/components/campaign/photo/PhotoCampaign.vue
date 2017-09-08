@@ -35,7 +35,7 @@
                                         data-toggle="modal"
                                         data-target="#open-photo-popup-v2"
                                         class="full-block"
-                                        @click="detailAction(photo)">
+                                        @click="detailAction(photo.id)">
                                     </a>
                                 </div>
 
@@ -74,7 +74,7 @@
                                             <div class="swiper-slide">
                                                 <div class="friend-count" data-swiper-parallax="-500">
                                                     <a href="javascript:void(0)" class="friend-count-item"   >
-                                                        <div class="h6" v-if="photo.media != null">{{ photo.media.length }}</div>
+                                                        <div class="h6" v-if="photo.media">{{ photo.media.length }}</div>
                                                         <div class="title">Photos</div>
                                                     </a>
                                                     <a href="javascript:void(0)" class="friend-count-item">
@@ -105,7 +105,8 @@
         <action-detail
             :showAction.sync="showAction"
             :dataAction="dataAction"
-            :checkLikeAction="listPhotos.checkLikeAction">
+            :checkLikeActions="checkLikeAction"
+            :canComment="checkPermission">
         </action-detail>
     </div>
 </template>
@@ -126,7 +127,9 @@ export default {
     },
     data: () => ({
         showAction: false,
-        dataAction: {}
+        dataAction: {},
+        checkLikeAction: {},
+        checkPermission: true
     }),
     computed: {
         ...mapState('campaign', [
@@ -148,6 +151,9 @@ export default {
         ...mapActions('campaign', [
             'getlistPhotos',
             'loadMorePhotos'
+        ]),
+        ...mapActions('action', [
+            'getDetailAction',
         ]),
         timeAgo(time) {
             return moment(time, "YYYY-MM-DD h:mm:ss").fromNow()
@@ -240,9 +246,18 @@ export default {
         beforeDestroy() {
             $(window).off()
         },
-        detailAction(data) {
+        detailAction(photoId) {
             this.showAction = true
-            this.dataAction = data
+            this.getDetailAction(photoId)
+                .then(data => {
+                    this.checkLikeAction = data.actions.checkLikeAction
+                    this.dataAction = data.actions.list_action
+                    this.checkPermission = data.checkPermission
+                })
+                .catch(err => {
+                    const message = this.$i18n.t('messages.message-fail')
+                    noty({ text: message, force: true, container: false })
+                })
         }
     },
     components: {

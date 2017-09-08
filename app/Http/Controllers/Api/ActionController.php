@@ -113,8 +113,9 @@ class ActionController extends ApiController
             throw new UnknowException('Permission error: User can not see this action.');
         }
 
-        return $this->doAction(function () use ($action) {
+        return $this->getData(function () use ($action) {
             $this->compacts['actions'] = $this->actionRepository->showAction($action, $this->user->id);
+            $this->compacts['checkPermission'] = $this->user->can('comment', $action);
         });
     }
 }
