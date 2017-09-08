@@ -20,23 +20,24 @@
         <div class="container" v-else>
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="tab-content">
+                    <div class="tab-content ui-block box-tag-image">
                         <div id="photo-page" role="tabpanel" aria-expanded="true" class="tab-pane active">
                             <div class="photo-album-wrapper">
                                 <div class="photo-item col-4-width" v-for="(image, index) in listPhoto">
-                                    <img :src="image.image_large" alt="photo">
-                                    <div class="overlay overlay-dark"></div>
-                                    <div class="more" v-if="user.id == image.mediable_id">
-                                        <svg class="olymp-three-dots-icon">
-                                            <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                                        </svg>
-                                        <ul class="more-dropdown">
-                                            <li>
-                                                <a href="javascript:void(0)" @click="deletePhoto(image.id)">
-                                                    {{ $t('user.photo.delete') }}
-                                                </a>
-                                            </li>
-                                        </ul>
+                                    <div class="tag-image" :style="{ 'background-image': 'url(' + image.image_large + ')' }">
+                                        <div class="overlay overlay-dark"></div>
+                                        <div class="more" v-if="user.id == image.mediable_id">
+                                            <svg class="olymp-three-dots-icon">
+                                                <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
+                                            </svg>
+                                            <ul class="more-dropdown">
+                                                <li>
+                                                    <a href="javascript:void(0)" @click="deletePhoto(image.id)">
+                                                        {{ $t('user.photo.delete') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     <a href="javascript:void(0)" @click="showImageDetail(index)" class="full-block"></a>
                                     <div class="content">
@@ -201,6 +202,23 @@
             i {
                 margin-right: 5px;
                 font-size: 25px;
+            }
+        }
+    }
+    .box-tag-image {
+        padding: 10px 0 10px 10px;
+        .photo-item {
+            padding: 0 12px 3px 0;
+            .tag-image {
+                height: 206px;
+                background-position: 50% 25%;
+                background-repeat: no-repeat;
+                background-size: cover;
+                .overlay {
+                    bottom: 3px;
+                    right: 12px;
+                    border-radius: 0px;
+                }
             }
         }
     }
