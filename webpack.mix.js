@@ -27,4 +27,5 @@ mix.js('resources/assets/js/app.js', FRONTEND_PATH + 'js')
     .sass(THEME_PATH + 'sass/theme-styles.scss', FRONTEND_PATH + 'css/theme.css')
     .sass(THEME_PATH + 'sass/blocks.scss', FRONTEND_PATH + 'css')
     .sass(NODE_PATH + 'font-awesome/scss/font-awesome.scss', FRONTEND_PATH + 'css/font.css')
-    .sass(SCSS_PATH + 'app.scss', FRONTEND_PATH + 'css');
+    .sass(SCSS_PATH + 'app.scss', FRONTEND_PATH + 'css')
+    .version();

@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->registerGlide();
         $this->registerUrlBuilder();
+        $this->registerDebugbar();
     }
 
     protected function registerGlide()
@@ -80,5 +81,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('glide.url', function ($app) {
             return UrlBuilderFactory::create('/images/');
         });
+    }
+
+    protected function registerDebugbar()
+    {
+        if (env('APP_ENV') === 'local') {
+            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
+        }
     }
 }
