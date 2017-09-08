@@ -3,7 +3,7 @@
         <div class="fixed-sidebar-right sidebar--small" id="sidebar-right">
             <div class="mCustomScrollbar" data-mcs-theme="dark" id="listClose">
                 <ul class="chat-users" v-for="friend in listUsers">
-                    <li class="inline-items" @click="addChatComponent(friend.id, friend.name, true)">
+                    <li class="inline-items" @click="addChatComponent(friend.id, friend.name, true, friend.slug)">
                         <div class="author-thumb">
                             <img alt="author" :src="friend.image_thumbnail" class="avatar">
                             <span class="icon-status online" v-if="friend.online"></span>
@@ -36,7 +36,7 @@
                         <div class="author-thumb">
                             <img alt="author" :src="friend.image_thumbnail"
                                 class="avatar"
-                                @click="addChatComponent(friend.id, friend.name, true)">
+                                @click="addChatComponent(friend.id, friend.name, true, friend.slug)">
                             <span class="icon-status online" v-if="friend.online"></span>
                             <span class="icon-status disconected" v-else></span>
                         </div>
@@ -150,6 +150,7 @@
             <chat v-for="(chat, index) in chats"
                 :receive="chat.id"
                 :key="chat.id"
+                :slug="chat.slug"
                 :name="chat.name"
                 :type="chat.type"
                 :list.sync="chats"
@@ -198,7 +199,8 @@ export default {
                     name: this.friends[index].name,
                     email: this.friends[index].email,
                     online: (check != -1) ? this.listOnline[check].status : false,
-                    image_thumbnail: this.friends[index].image_thumbnail
+                    image_thumbnail: this.friends[index].image_thumbnail,
+                    slug: this.friends[index].slug
                 })
             }
 
@@ -256,7 +258,7 @@ export default {
         ...mapActions('auth', [
             'getListFollow'
         ]),
-        addChatComponent(id, name, singleChat) {
+        addChatComponent(id, name, singleChat, slug) {
             var flag = true
 
             //check if conponent chat is exists in array chats
@@ -281,7 +283,8 @@ export default {
                     id: id,
                     name: name,
                     marginRight: this.marginRight,
-                    type: singleChat
+                    type: singleChat,
+                    slug: slug
                 }
 
                 this.chats.push(chat)

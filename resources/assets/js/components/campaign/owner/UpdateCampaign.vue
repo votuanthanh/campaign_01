@@ -3,7 +3,7 @@
         <div id="create-campagin">
             <div id="container-campaign" class="modal-dialog ui-block window-popup create-event">
                 <div class="ui-block-title">
-                    <h6 class="title">{{ $t('campaigns.create_campaign') }}</h6>
+                    <h6 class="title">{{ $t('campaigns.update_campaign') }}</h6>
                 </div>
                 <form class="content" @submit.prevent="updateCampagin">
                     <div class="ui-block-content">
@@ -194,19 +194,10 @@
                                 {{ errors.first('description') }}
                             </span>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                <button type="submit" class="btn btn-breez btn-lg full-width">
-                                    {{ $t('campaigns.update_campaign') }}
-                                </button>
-                            </div>
 
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                <button class="btn btn-breez btn-lg full-width">
-                                    {{ $t('campaigns.close_campaign') }}
-                                </button>
-                            </div>
-                        </div>
+                        <button type="submit" class="btn btn-breez btn-lg full-width">
+                            {{ $t('campaigns.update_campaign') }}
+                        </button>
                     </div>
                 </form>
             </div>
@@ -363,13 +354,13 @@ export default {
                 this.$Progress.start()
                 put(`campaign/${this.campaign.id}`, this.campaign)
                     .then(res => {
-                        const message = this.$i18n.t('messages.create_success')
+                        const message = this.$i18n.t('messages.update_success')
                         this.$Progress.finish()
                         noty({ text: message, container: false, force: true, type: 'success'})
                         this.$router.push({ name: 'campaign.timeline', params: { id: res.data.campaign.id }})
                     })
                     .catch(err => {
-                        const message = this.$i18n.t('messages.create_fail')
+                        const message = this.$i18n.t('messages.update_fail')
                         this.$Progress.fail()
                         noty({ text: message, container: false, force: true})
                     })

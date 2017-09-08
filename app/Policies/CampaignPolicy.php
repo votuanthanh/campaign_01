@@ -47,10 +47,7 @@ class CampaignPolicy extends BasePolicy
             ->get()
             ->isNotEmpty();
 
-        if ($public || ($campaign->users->pluck('user_id')->contains($user->id)
-            && $private)) {
-            return true;
-        }
+        return $public || ($campaign->users->contains('id', $user->id) && $private);
     }
 
     /**
