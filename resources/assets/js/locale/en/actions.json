@@ -9,5 +9,6 @@
     "delete_action": "Delete action",
     "is_used": "is used",
     "with_reason": "with reason:",
-    "at": "at"
+    "at": "at",
+    "update_action": "Update Action"
 }
