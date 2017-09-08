@@ -27,7 +27,7 @@ return [
         'set_video' => 6, // set video for event
     ],
     'actions' => [
-        'paginate_in_event' => 15,
+        'paginate_in_event' => 4,
     ],
     'value_of_settings' => [
         'status' => [ // key of setting

@@ -13,9 +13,10 @@ export default {
     },
 
     [types.LOAD_ACTION](state, dataAction) {
-        let old_data = state.actions.data
-        state.actions = dataAction.actions
-        state.actions.data = $.merge(old_data, state.actions.data)
+        state.actions.checkLikeAction = $.merge(state.actions.checkLikeAction, dataAction.actions.checkLikeAction)
+        let old_data = state.actions.list_action.data
+        state.actions.list_action = dataAction.actions.list_action
+        state.actions.list_action.data = $.merge(old_data, state.actions.list_action.data)
     },
 
     [types.SET_ACTION](state, dataAction) {

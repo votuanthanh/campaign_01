@@ -80,10 +80,7 @@ class ActionRepository extends BaseRepository implements ActionInterface
 
     public function getActionPaginate($action, $userId)
     {
-        $data = [];
-
         $data['list_action'] = $action
-            ->withTrashed()
             ->getLikes()
             ->getComments()
             ->with([
@@ -111,10 +108,11 @@ class ActionRepository extends BaseRepository implements ActionInterface
             ])
             ->where('event_id', $eventId)
             ->withTrashed()
-            ->search($key, null, true)
-            ->orderBy('created_at', 'DESC');
+            ->search($key, null, true);
 
-        $data['list_action'] = $actions->paginate(config('settings.actions.paginate_in_event'));
+        $data['list_action'] = $actions
+            ->orderBy('created_at', 'DESC')
+            ->paginate(config('settings.actions.paginate_in_event'));
         $data['checkLikeAction'] = $this->checkLike($actions, $userId);
 
         return $data;
