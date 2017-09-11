@@ -59,6 +59,7 @@ import noty from '../../helpers/noty'
 import { passwordReset } from '../../router/router'
 
 export default {
+    layout: 'default',
     data: function () {
         return {
             user: {

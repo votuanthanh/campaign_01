@@ -14,6 +14,11 @@
     import slug from '../../helpers/mixin/getFullSlug'
     export default {
         mixins: [slug],
+        metaInfo() {
+            return {
+                title: this.event.title || this.$t('homepage.loading')
+            }
+        },
         data() {
             return  {
                 pageType: 'event'
@@ -27,9 +32,9 @@
         },
 
         created() {
-            var eventId = this.pageId
+            const eventId = this.pageId
             this.pageType = null
-            var campaignId = this.pageId
+            const campaignId = this.pageId
             this.$Progress.start()
             this.get_event({
                 eventId: eventId,

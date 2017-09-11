@@ -41,6 +41,7 @@ import { passwordEmail } from '../../router/router'
 import noty from '../../helpers/noty'
 
 export default {
+    layout: 'default',
     data: () => ({
         email: '',
         messageValidate: '',
@@ -88,9 +89,6 @@ export default {
                 })
                 .catch(() => {})
         }
-    },
-    created() {
-        console.log(123)
     }
 }
 </script>

@@ -76,8 +76,12 @@
 </template>
 
 <script>
-
 export default {
+    metaInfo() {
+        return {
+            title: this.$t('user.label.account_setting')
+        }
+    }
 }
 </script>
 

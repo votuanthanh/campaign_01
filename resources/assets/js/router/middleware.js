@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import store from '../store'
 import Router from 'vue-router'
+import Meta from 'vue-meta'
 import { getUser } from './router'
 import { get } from '../helpers/api'
 
+Vue.use(Meta)
 Vue.use(Router)
 
 /**

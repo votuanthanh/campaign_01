@@ -76,6 +76,11 @@
     import sideWaypoint from '../../helpers/mixin/sideWaypoint'
 
     export default {
+        metaInfo() {
+            return {
+                title: this.$t('homepage.home')
+            }
+        },
         data: () => ({
             listActivity: [],
             loading: false,

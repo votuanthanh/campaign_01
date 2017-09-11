@@ -14,6 +14,7 @@
             }
         });
         window.Laravel = {!! json_encode([
+            'appName' => config('app.name'),
             'csrfToken' => csrf_token(),
             'locale' => config('app.locale'),
             'fallbackLocale' => config('app.fallback_locale'),
