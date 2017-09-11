@@ -12,6 +12,14 @@ const layouts = {
 }
 
 export default {
+    metaInfo() {
+        const { appName } = window.Laravel
+
+        return {
+            title: appName,
+            titleTemplate: `%s | ${appName}`
+        }
+    },
     data() {
         return {
             layout: null,

@@ -46,7 +46,11 @@ import { passwordEmail } from '../../router/router'
 import noty from '../../helpers/noty'
 
 export default {
-
+    metaInfo() {
+        return {
+            title: this.$t('form.title.reset_password')
+        }
+    }
 }
 </script>
 

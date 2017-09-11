@@ -101,6 +101,11 @@ import { mapState, mapGetters } from 'vuex'
 import { EventBus } from '../../EventBus.js'
 
 export default {
+    metaInfo() {
+        return {
+            title: this.campaign.title || this.$t('homepage.loading')
+        }
+    },
     computed: {
         ...mapGetters('campaign', [
             'checkPermission',

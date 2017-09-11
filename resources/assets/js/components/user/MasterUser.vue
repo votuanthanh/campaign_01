@@ -269,6 +269,11 @@
 
     export default {
         mixins: [slug],
+        metaInfo() {
+            return {
+                title: this.currentPageUser.name || this.$t('homepage.loading')
+            }
+        },
         data: () => ({
             showAvatar: false,
             showAllAvatar: false,

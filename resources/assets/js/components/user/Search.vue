@@ -150,6 +150,11 @@
     import RequestFriend from './RequestFriend.vue'
 
     export default {
+        metaInfo() {
+            return {
+                title: this.$t('messages.search')
+            }
+        },
         data: () => ({
             loadingUser: false,
             loadingCampaign: false,

@@ -97,6 +97,11 @@ import { mapState } from 'vuex'
 
 export default {
     layout: 'default',
+    metaInfo() {
+        return {
+            title: this.loginTab ? this.$t('form.title.login') : this.$t('form.title.register_campaign')
+        }
+    },
     data: () => ({
         user: {
             email: '',
