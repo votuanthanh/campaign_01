@@ -159,7 +159,7 @@ io.on('connection', function (socket) {
     })
 
     socket.on('accept_donation', data => {
-        socket.broadcast.emit('accept_donation', data)
+        io.sockets.in(data.room).emit('accept_donation', data.donate)
     })
 
     socket.on('disconnect', function() {
@@ -173,6 +173,18 @@ io.on('connection', function (socket) {
                 callOffline(socket, listFriend, userId)
             }
         }
+    })
+
+    socket.on('viewing_event', function (data) {
+        socket.join(data)
+    })
+
+    socket.on('stop_view_even', function (data) {
+        socket.leave(data)
+    })
+
+    socket.on('created_action', function (data) {
+        io.sockets.in(data.room).emit('new_action_created', { action: data.newAction })
     })
 })
 

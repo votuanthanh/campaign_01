@@ -253,7 +253,8 @@
 
             ...mapActions('event', [
                 'load_action',
-                'removeAction'
+                'removeAction',
+                'appendOneAction'
             ]),
 
             ...mapActions('action', [
@@ -330,6 +331,16 @@
             UpdateAction,
             MasterLike,
             Message
+        },
+
+        sockets: {
+            new_action_created: function (data) {
+                this.appendOneAction(data)
+            }
+        },
+
+        beforeDestroy() {
+            $(window).off()
         }
     }
 </script>

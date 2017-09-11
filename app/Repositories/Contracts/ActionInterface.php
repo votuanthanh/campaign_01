@@ -19,4 +19,6 @@ interface ActionInterface extends RepositoryInterface
     public function updateFromExpense($data, $goal);
 
     public function deleteFromExpense($expenseId);
+
+    public function getOneAction($id);
 }

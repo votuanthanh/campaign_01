@@ -33,6 +33,7 @@
 
         created() {
             const eventId = this.pageId
+            this.$socket.emit('viewing_event', `event${eventId}`)
             this.pageType = null
             const campaignId = this.pageId
             this.$Progress.start()
@@ -64,6 +65,7 @@
             ShowEvent,
             SearchAction
         },
+
         sockets: {
             accept_donation(data) {
                 const goal = this.event.complete_percent.filter(goal => goal.id == data.goal_id)[0]
@@ -71,6 +73,10 @@
                 updatedData.status = data.status
                 this.change_status(updatedData)
             }
+        },
+
+        beforeDestroy() {
+            this.$socket.emit('stop_view_even', `event${this.event.id}`)
         }
     }
 </script>

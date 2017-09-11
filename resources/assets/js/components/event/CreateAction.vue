@@ -153,9 +153,9 @@
                                 container: false,
                                 type: 'success'
                             })
-                            this.get_event({
-                                eventId: this.event.id,
-                                campaignId: this.event.campaign_id
+                            this.$socket.emit('created_action', {
+                                newAction: res.data.action,
+                                room: `event${this.pageId}`
                             })
                             this.onClose()
                         })

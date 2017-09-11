@@ -84,6 +84,11 @@ export const removeAction = ({ commit }, actionId) => {
     commit(types.REMOVE_ACTION, actionId)
 }
 
+export const appendOneAction = ({ commit, rootState }, data) => {
+    data.rootStateLike = rootState.like
+    commit(types.APPEND_ONE_ACTION, data)
+}
+
 export default {
     get_event,
     load_action,
@@ -92,5 +97,6 @@ export default {
     setDetailEvent,
     update_donate,
     change_donate_status,
-    removeAction
+    removeAction,
+    appendOneAction
 }
