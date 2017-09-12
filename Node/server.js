@@ -26,9 +26,9 @@ redisClient.on('message', function(channel, data) {
         if (data.status && findIndexById(listFriend, data.userId) == -1) {
             userLogin = data.userId
             listFriend.push({ id: data.userId, listFriend: data.listFollow })
-        } else {
-            callOffline(io.sockets, listFriend, data.userId)
         }
+
+        callOnline(io.sockets, listFriend, data.userId)
     } else {
         var message = JSON.parse(data)
 

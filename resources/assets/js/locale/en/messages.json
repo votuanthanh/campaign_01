@@ -32,6 +32,7 @@
     "delete_fail": "Delete fail",
     "comfirm_delete_expense": "Are you sure delete this expense",
     "update_success": "Update successfully",
+    "update_fail": "Update fail",
     "comfirm-accept-request": "Do you want to accept this member join to campaign?",
     "comfirm-cancel-request": "Do you want to reject this member join to campaign?",
     "message-success": "Successfully!",

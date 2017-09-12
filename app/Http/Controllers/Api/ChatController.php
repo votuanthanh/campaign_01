@@ -72,7 +72,7 @@ class ChatController extends ApiController
             $read = json_decode($read);
             $time = $read->time;
             $lastMessage = $this->redis->command('lrange', [$groupKey, 0, 0]);
-            $read = $read->id == $lastMessage[0]
+            $read = $read->id == head($lastMessage)
                 ? json_decode($this->redis->get($read->id))->userId
                 : null;
             $read = $read ? true : false;
@@ -317,17 +317,18 @@ class ChatController extends ApiController
 
         foreach ($keyGroups as $key) {
             $idMessage = $this->redis->command('lrange', [$key, 0, 0]);
-            $content = json_decode($this->redis->get($idMessage[0]));
+            $content = json_decode($this->redis->get(head($idMessage)));
 
             if ($content) {
                 $read = null;
                 $time = null;
+
                 if (!is_numeric($content->receive)) {
                     $content->groupKey = $content->nameReceive;
                 } else {
                     $read = json_decode($this->redis->get('read' . $key));
-                    $time = ($read && $read->id === $idMessage[0]) ? $read->time : null;
-                    $read = ($read && $read->id === $idMessage[0]);
+                    $time = ($read && $read->id === head($idMessage)) ? $read->time : null;
+                    $read = ($read && $read->id === head($idMessage));
                 }
 
                 $notifications[] = [

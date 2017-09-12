@@ -4,7 +4,7 @@
             :style="'right:' + marginRight + 'px !important'">
             <div class="ui-block-title">
 
-                <router-link :to="{ name: 'user.timeline', params: { slug: user.slug } }" class="title-name">
+                <router-link :to="{ name: 'user.timeline', params: { slug: receiveSlug } }" class="title-name">
                     {{ receiveName }}
                 </router-link>
                 <div class="more">
@@ -79,7 +79,8 @@ export default {
         type: Boolean,
         index: {
             type: Number
-        }
+        },
+        slug: null
     },
     data: function () {
         return {
@@ -87,6 +88,7 @@ export default {
             content: ``,
             receiveUser: this.receive,
             receiveName: this.name,
+            receiveSlug: this.slug,
             groupChat: '',
             listChat: this.list,
             right: this.marginRight,
@@ -188,7 +190,8 @@ export default {
                                     this.messages.unshift(mess)
                                 }
                             }
-                            if (this.paginate == 0) {
+
+                            if (this.paginate) {
                                 this.scrollTopBoxChat()
                             } else {
                                 setTimeout(() => {
