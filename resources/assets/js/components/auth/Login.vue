@@ -61,6 +61,13 @@
                         {{ $t('form.button.login_google') }}
                     </a>
 
+                    <a href="#" @click.prevent="redirect('framgia')" class="btn btn-lg btn-wsm full-width btn-icon-left">
+                        <img src="/images/white_wsm.png" alt="Wsm" class="fa">
+                        <span>
+                            {{ $t('form.button.login_wsm') }}
+                        </span>
+                    </a>
+
                     <p>{{ $t('form.quote.confirm_account') }}
                         <a href="#" @click="$emit('handleTab', 'register')">
                             {{ $t('form.button.register') }}

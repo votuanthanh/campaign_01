@@ -40,7 +40,7 @@ export default {
     [SET_USER](state, user) {
         state.user = user
 
-        if (state.user.roles[0].id == 1) {
+        if (typeof state.user.roles[0] != 'undefined' && state.user.roles[0].id == 1) {
             state.checkAdmin = true
         }
     },

@@ -40,6 +40,15 @@
     &.btn-google {
         background-color: #db4437;
     }
+    &.btn-wsm {
+        height: 52px;
+        img {
+            width: 22px;
+            margin-left: -14px;
+            margin-right: 12px;
+        }
+        background-color: #f55c2b;
+    }
 }
 
 .profile-section {

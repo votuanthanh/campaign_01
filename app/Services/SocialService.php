@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Repositories\Contracts\SocialAccountInterface;
 use App\Repositories\Contracts\UserInterface;
 use Laravel\Socialite\Contracts\Provider;
+use App\Models\User;
 
 class SocialService
 {
@@ -18,7 +19,7 @@ class SocialService
         $this->socialAccountRepository = $socialAccountRepository;
     }
 
-    public function createOrGetUser(Provider $provider)
+    public function createOrGetUser($provider)
     {
         $infoSocial = $this->getInforAccountSocial($provider);
 
@@ -28,14 +29,14 @@ class SocialService
             $user = $this->userRepository->find($account->user_id);
 
             if (!empty($account->getDirty())) {
-                $account->forceFill($infoSocial)->save();
+                $account->fill($infoSocial)->save();
                 $user->fill($infoSocial)->save();
             }
 
             return $user;
         }
 
-        $account = $this->socialAccountRepository->getModel()->forceFill($infoSocial);
+        $account = $this->socialAccountRepository->getModel()->fill($infoSocial);
 
         $user = $this->userRepository->where('email', $infoSocial['email'])->first();
 
@@ -64,6 +65,7 @@ class SocialService
             'name' => $user->getName(),
             'email' => $user->getEmail(),
             'url_file' => $user->getAvatar(),
+            'status' => User::ACTIVE,
         ];
     }
 }
