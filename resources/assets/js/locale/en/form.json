@@ -46,6 +46,7 @@
         "login_facebook": "Login with Facebook",
         "login_twitter": "Login with Twitter",
         "login_google": "Login with Google",
+        "login_wsm": "Login with Wsm",
         "complete_register": "Complete Registration!",
         "register": "Register Now!",
         "create_event": "Create Event",

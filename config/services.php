@@ -46,11 +46,16 @@ return [
         'client_secret' => env('TWITTER_CLIENT_SECRET'),
         'redirect' =>  env('APP_URL') . '/callback/twitter',
     ],
-    
+
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('APP_URL') . '/callback/google',
     ],
 
+    'framgia' => [
+        'client_id' => env('FRAMGIA_CLIENT_ID'),
+        'client_secret' => env('FRAMGIA_CLIENT_SECRET'),
+        'redirect' => env('APP_URL') . '/callback/framgia',
+    ],
 ];

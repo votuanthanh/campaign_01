@@ -164,6 +164,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Spatie\Activitylog\ActivitylogServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        Framgia\Education\Auth\FramgiaAuthServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -234,7 +235,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-
+        'FAuth' => Framgia\Education\Auth\Facades\FramgiaAuth::class,
     ],
 
 ];

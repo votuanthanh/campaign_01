@@ -2,6 +2,8 @@ require('waypoints/lib/noframework.waypoints.js')
 
 export default {
     mounted() {
+        window.Waypoint.destroyAll()
+        
         const elContainer = document.querySelector('.js-waypoint-wrap')
         if (typeof(elContainer) != 'undefined' && elContainer != null) {
             var waypoint = new window.Waypoint({

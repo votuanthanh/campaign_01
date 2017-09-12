@@ -8,6 +8,8 @@ class SocialAccount extends BaseModel
 {
     use SoftDeletes;
 
+    const FRAMGIA_PROVIDER = 'framgia';
+
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
@@ -16,10 +18,10 @@ class SocialAccount extends BaseModel
     protected $fillable = [
         'id',
         'user_id',
-        'provide_id',
+        'provider_id',
         'email',
         'name',
-        'provide',
+        'provider',
         'url_file',
     ];
 
