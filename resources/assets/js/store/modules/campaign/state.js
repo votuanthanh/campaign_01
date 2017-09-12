@@ -8,7 +8,9 @@ export default {
     checkLiked: [],
     tags: [],
     loading: true,
-    listPhotos: [],
+    listPhotos: {
+        list_action: []
+    },
     detailCampaign: {},
     showCampaignDetail: []
 }

@@ -1,5 +1,7 @@
 export default {
-    event: {},
+    event: {
+        media: [],
+    },
     actions: {},
     dataGoals: [],
     flag_search: false,

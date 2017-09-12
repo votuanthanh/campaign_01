@@ -1,26 +1,23 @@
 <template lang="html">
-    <div>
-        <like
-            v-if="type == 'like'"
-            :likes="likes"
-            :checkLiked="checkLiked"
-            :flag="flag"
-            :modelId="modelId"
-            :numberOfComments="numberOfComments"
-            :numberOfLikes="numberOfLikes"
-            :showMore="showMore"
-            :modelClosed="modelClosed">
-        </like>
+    <like
+        v-if="type == 'like'"
+        :likes="likes"
+        :checkLiked="checkLiked"
+        :flag="flag"
+        :modelId="modelId"
+        :numberOfComments="numberOfComments"
+        :numberOfLikes="numberOfLikes"
+        :showMore="showMore"
+        :modelClosed="modelClosed">
+    </like>
 
-        <like-infor
-            v-if="type == 'like-infor'"
-            :flag="flag"
-            :modelId="modelId"
-            :numberOfLikes="numberOfLikes"
-            :modelClosed="modelClosed">
-        </like-infor>
-
-    </div>
+    <like-infor
+        v-else
+        :flag="flag"
+        :modelId="modelId"
+        :numberOfLikes="numberOfLikes"
+        :modelClosed="modelClosed">
+    </like-infor>
 </template>
 
 <script>

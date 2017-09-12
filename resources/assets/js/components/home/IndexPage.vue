@@ -195,6 +195,11 @@
 </script>
 
 <style lang="scss" scoped>
+    @media (max-width: 560px) {
+        .blog-post.post-additional-info.comments-shared {
+            float: none;
+        }
+    }
     .hompage {
         margin-top: 20px;
         .div-more {
@@ -216,6 +221,12 @@
                     border-radius: 0px 3px 3px 0px;
                 }
             }
+        }
+        .names-people-likes {
+            margin-right: 22px;
+        }
+        .comments-shared {
+            margin-left: 0px;
         }
         .blog-post-v3 {
             .post-content {

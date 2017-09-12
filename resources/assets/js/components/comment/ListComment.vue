@@ -9,16 +9,16 @@
             <div class="ripple-container"></div>
         </a>
         <a href="javascript:void(0)" class="more-comments"
-            v-show="comments[flag][modelId].length <= paginates[flag][modelId].total &&
-                paginates[flag][modelId].total > 2"
+            v-show="comments[flag][modelId].length <= paginates[flag][modelId].total
+                && paginates[flag][modelId].total > 2"
             @click="handelLoadMoreParentComment({
                 modelId: modelId,
                 flag: flag,
                 pageCurrent: paginates[flag][modelId].current_page,
                 lastPage: paginates[flag][modelId].last_page
             })">
-             {{ $t('campaigns.more-comment') }}
-             <span>+</span>
+                {{ $t('campaigns.more-comment') }}
+            <span>+</span>
         </a>
         <ul class="comments-list">
             <li v-for="(comment, index) in comments[flag][modelId]" class="has-children comment">
@@ -47,8 +47,7 @@
                         <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                         <ul class="more-dropdown" >
                             <li>
-                                <a href="javascript:void(0)"
-                                    @click="editComments(comment, index)">
+                                <a href="javascript:void(0)" @click="editComments(comment, index)">
                                     {{ $t('form.edit') }}
                                 </a>
                             </li>
@@ -96,34 +95,40 @@
                     :deleteDate="comment.deleted_at">
                 </master-like>
 
-                <a href="javascript:void(0)"
-                    @click="showSubComment(comment, index)"
-                    class="reply">{{ $t('campaigns.reply') }}
-                </a>
-                <a href="javascript:void(0)"
-                    @click="showSubComment(comment, index)"
-                    class="reply">
-                    <span>
-                        {{ comment.number_of_comments }}
-                    </span>
-                </a>
+                <div class="div-reply">
+                    <a href="javascript:void(0)"
+                        @click="showSubComment(comment, index)"
+                        class="reply">{{ $t('campaigns.reply') }}
+                    </a>
+                    <a href="javascript:void(0)"
+                        @click="showSubComment(comment, index)"
+                        class="reply">
+                        <span>
+                            {{ comment.number_of_comments }}
+                        </span>
+                    </a>
+                </div>
+
                 <a href="javascript:void(0)"
                     @click="hideSubComment()"
-                    class="reply"
+                    class="reply-hidden reply"
                     v-if="flagReply == comment.id">
                     {{ $t('form.hidden') }}
                 </a>
                 <ul class="children" v-if ="comment.sub_comment != null" >
                     <li v-show="loading == comment.id">
-                        <a ref="loadmore" href="javascript:void(0)"
-                            class="btn btn-control btn-more" data-container="newsfeed-items-grid" >
+                        <a ref="loadmore"
+                            href="javascript:void(0)"
+                            class="btn btn-control btn-more"
+                            data-container="newsfeed-items-grid" >
                             <i class="fa fa-spinner fa-spin"></i>
                             <div class="ripple-container"></div>
                         </a>
                     </li>
                     <li class="view-more"
-                        v-if="comment.sub_comment.data.length <=  comment.number_of_comments &&
-                            flagReply == comment.id && comment.number_of_comments > 2">
+                        v-if="comment.sub_comment.data.length <= comment.number_of_comments
+                            && flagReply == comment.id
+                            && comment.number_of_comments > 2">
                         <a href="javascript:void(0)" class="morpCame-comments"
                             @click="handelLoadMoreSubComment({
                                 commentParentId: comment.id,
@@ -132,13 +137,15 @@
                                 pageCurrent: comment.sub_comment.current_page,
                                 lastPage: comment.sub_comment.last_page
                             })">
-                            {{ $t('campaigns.more-comment') }}
+                            <i class="fa fa-comments-o" aria-hidden="true"></i>
+                            {{ $t('campaigns.more-reply') }}
                             <span>+</span>
                         </a>
                     </li>
-                    <li v-for="subComment in comment.sub_comment.data" v-if="flagReply == comment.id">
+                    <li v-for="subComment in comment.sub_comment.data"
+                        class="li-sub-comment"
+                        v-if="flagReply == comment.id">
                         <div class="post__author author vcard inline-items">
-
                             <router-link :to="{ name: 'user.timeline', params: { slug: subComment.user.slug }}"
                                 class="h6 post__author-name fn">
                                 <img :src="subComment.user.image_thumbnail" :alt="subComment.user.name">
@@ -321,11 +328,7 @@ export default {
     .comments-list {
         li {
             border-bottom: 0px;
-            padding: 15px 20px 0px 20px;
-        }
-
-        .cant-comment {
-            padding-bottom: 3%;
+            padding: 20px 20px 0px 20px;
         }
 
         .children {
@@ -337,6 +340,9 @@ export default {
                     border-bottom: 0px;
                 }
             }
+            .li-sub-comment {
+                padding: 15px 20px 10px 20px;
+            }
         }
         .view-more {
             padding: 0px !important;
@@ -344,70 +350,88 @@ export default {
                 background-color: initial;
                 border: 0px;
             }
-        }
-    }
 
-    .more {
-        margin-right: 0px;
-         > .more-dropdown {
-            top: 75%;
-            right: -20px;
-            width: 110px;
-            padding: 2px 15px;
-             > li {
-                padding: initial;
-                border-bottom: initial;
-                background-color: initial;
-                position: initial;
-                border-left: 0px;
-                &:before {
-                    background-color: initial;
-                    border: 0px;
-                }
-                i {
-                    margin-right: 3px;
-                }
+            .morpCame-comments {
+                display: block;
+                font-weight: bold;
+                color: #3f4257;
+                text-align: left;
+                padding: 5px 10px;
             }
         }
-    }
+        .div-reply {
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .reply-hidden {
+            margin-left: 10px;
+        }
+        .btn-control.btn-more {
+            fill: #fff;
+            background: initial;
+            margin: 20px auto;
+            line-height: initial;
+            margin: 20px auto -25px;
 
-    .has-children {
-        .post__author {
+            > i {
+                font-size: 30px;
+                color: #b6b6b6;
+            }
+        }
+
+        .show-text {
             margin-bottom: 5px;
-             .more {
-                float: right;
-                font-size: 16px;
-                margin-right: 0px;
+            margin-left: 40px;
+            font-size: 14px;
+        }
+
+        .comment-form {
+            background: white;
+            border-bottom: 1px solid #e6ecf5;
+            border-top: 1px solid #e6ecf5;
+            padding: 10px 35px;
+        }
+
+        .date-format {
+            font-size: 13px;
+            color: #888da8;
+        }
+         .has-children {
+            .post__author {
+                margin-bottom: 8px;
+                .more {
+                    float: right;
+                    font-size: 16px;
+                    margin-right: 0px;
+                }
+            }
+        }
+        .more {
+            margin-right: 0px;
+            > .more-dropdown {
+                top: 75%;
+                right: -20px;
+                width: 110px;
+                padding: 2px 15px;
+                > li {
+                    padding: initial;
+                    border-bottom: initial;
+                    background-color: initial;
+                    position: initial;
+                    border-left: 0px;
+                    &:before {
+                        background-color: initial;
+                        border: 0px;
+                    }
+                    i {
+                        margin-right: 3px;
+                    }
+                }
             }
         }
     }
 
-    .btn-control.btn-more {
-        fill: #fff;
-        background: initial;
-        margin: 20px auto;
-        line-height: initial;
-        margin: 20px auto -25px;
-
-        > i {
-            font-size: 30px;
-            color: #b6b6b6;
-        }
+    .more-comments {
+        padding: 10px 0;
     }
-
-    .show-text {
-        margin-bottom: 5px;
-        margin-left: 40px;
-    }
-
-    .comment-form {
-        background: white;
-        border-bottom: 1px solid #e6ecf5;
-    }
-
-    .date-format {
-        font-size: 13px;
-        color: #bbb;
-    }
-
 </style>

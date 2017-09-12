@@ -6,13 +6,16 @@
                     <div class="ui-block">
                         <div class="top-header top-header-favorit">
                             <div class="top-header-thumb" v-if="campaign.campaign_images != null">
-                                <img :src="campaign.campaign_images.image_small" :alt="campaign.name" class="images-campaign">
+                                <img :src="campaign.campaign_images.image_slider" :alt="campaign.name" class="images-campaign">
                                 <div class="top-header-author">
-                                    <div class="author-thumb images-campaign-thumb" v-if="campaign.owner != null">
-                                        <img :src="campaign.owner[0].image_thumbnail" :alt="campaign.name">
+                                    <div class="avatar-campaign author-thumb"
+                                        :style="{ 'background-image': 'url(' + campaign.campaign_images.image_medium + ')' }"
+                                        v-if="campaign.owner != null">
                                     </div>
-                                        <a href="javascript:void(0)" class="h3 author-name">{{ campaign.title }}</a>
-                                        <div class="country">#{{ campaign.hashtag }}</div>
+                                </div>
+                                <div class="title-campaign">
+                                    <a href="javascript:void(0)" class="h3 author-name">{{ campaign.title }}</a>
+                                    <div class="country">#{{ campaign.hashtag }}</div>
                                 </div>
                             </div>
                             <div class="profile-section">
@@ -138,13 +141,29 @@ export default {
 
 <style lang="scss" scoped>
     .images-campaign {
-        height: 542px !important;
+        height: 400px !important;
     }
 
-    .images-campaign-thumb {
-        top: 163px !important;
-    }
     .profile-section {
-        padding: 61px 0 20px;
+        padding: 55px 0px 20px;
+    }
+
+    .title-campaign {
+        position: absolute;
+        left: 250px;
+        bottom: -35px;
+        z-index: 1;
+        .country {
+            margin-top: 15px;
+            color: #494c62;
+            font-size: 20px;
+        }
+    }
+
+    .avatar-campaign {
+        top: 150px !important;
+        background-position: 50% 25%;
+        background-size: cover;
+        background-repeat: no-repeat;
     }
 </style>

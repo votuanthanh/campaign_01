@@ -333,8 +333,8 @@
                     </ul>
                 </div>
             </div>
+            <campaign-involve></campaign-involve>
         </div>
-        <campaign-involve></campaign-involve>
     </div>
 </template>
 

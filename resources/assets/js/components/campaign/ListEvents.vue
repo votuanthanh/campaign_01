@@ -26,7 +26,7 @@
                     <div class="post-thumb" v-if="event.media">
                         <router-link :to="{ name: 'event.index', params: { slugEvent: event.slug }}"
                             v-if="event.media[0] != null">
-                            <img :src="event.media[0].image_thumbnail" :alt="event.name">
+                            <img :src="event.media[0].image_lagre" :alt="event.name">
                         </router-link>
                     </div>
 
@@ -89,12 +89,13 @@
                 </comment>
             </div>
         </div>
-        <div id="newsfeed-items-grid" v-else>
-            <div class="ui-block">
-                <article class="hentry post">
-                    {{ $t('messages.no_event_show') }}
-                </article>
+        <div class="page-description" v-else>
+            <div class="icon">
+                <svg class="olymp-star-icon left-menu-icon">
+                    <use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use>
+                </svg>
             </div>
+            <span>{{ $t('messages.no_event_show') }}</span>
         </div>
     </div>
 </template>
@@ -168,9 +169,14 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .date-format {
         font-size: 13px;
         color: #bbb;
+    }
+
+    .post {
+        padding: 25px 25px 0px 25px;
+        border-bottom: 0px;
     }
 </style>
