@@ -2,7 +2,7 @@
     <a href="javascript:void(0)" v-if="userRequest.is_friend" class="btn-choose more">
         <i class="fa fa-smile-o" aria-hidden="true"></i>
         {{ $t('user.search.friends') }}
-        <ul class="more-dropdown">
+        <ul :class="className">
             <li>
                 <a href="javascript:void(0)" @click="unfriend">
                     {{ $t('user.search.unfriend') }}
@@ -14,7 +14,7 @@
     <a href="javascript:void(0)" v-else-if="userRequest.has_pending_request" class="btn-choose more">
         <i class="fa fa-share" aria-hidden="true"></i>
         {{ $t('user.search.friend_request_send') }}
-        <ul class="more-dropdown" >
+        <ul :class="className">
             <li>
                 <a href="javascript:void(0)" @click.stop="cancelRequest">
                     {{ $t('user.search.cancel_request') }}
@@ -29,7 +29,7 @@
         class="confirm btn-choose more">
         <i class="fa fa-reply-all" aria-hidden="true"></i>
         {{ $t('user.search.confirm') }}
-        <ul class="more-dropdown">
+        <ul :class="className">
             <li>
                 <a href="javascript:void(0)" @click.stop="denyRequest">
                     {{ $t('user.search.delete_request') }}
@@ -53,15 +53,17 @@
     export default {
         data: () => ({
             userRequest: {},
+            className: '',
         }),
         computed: {
             ...mapState('auth',[
                 'user',
             ])
         },
-        props: ['friend'],
+        props: ['friend', 'classTemp'],
         created() {
             this.userRequest = this.friend
+            this.className = 'more-dropdown ' + this.classTemp
         },
         methods: {
             modal(text, callback) {
@@ -188,9 +190,14 @@
 
 <style lang="scss" scoped>
     .more-dropdown {
-        top: 35px;
         padding: 5px 20px;
         width: 130px;
+        &.home {
+            top: 50px;
+        }
+        &.search {
+            top: 35px;
+        }
     }
 
     .confirm {

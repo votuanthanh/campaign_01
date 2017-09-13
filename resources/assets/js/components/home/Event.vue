@@ -13,11 +13,11 @@
                         slug: event.campaign_id,
                         slugEvent: event.slug
                     }}">
-                        "<b class="title-event">{{ event.title }}</b>"
+                        "<span class="title-event">{{ event.title }}</span>"
                     </router-link>
-                    <b>{{ $t('homepage.in_campaign') }}</b>
+                    - {{ $t('homepage.in_campaign') }}
                     <router-link class="link-event" :to="{ name: 'campaign.timeline', params: { slug: event.campaign.slug }}">
-                        "<b class="title-event">{{ event.campaign.title }}</b>"
+                        "<span class="title-event">{{ event.campaign.title }}</span>"
                     </router-link>
                     <div class="post__date">
                         <time class="published">
@@ -45,9 +45,7 @@
                     :hide="$t('events.show_less')">
                 </show-text>
             </p>
-            <div class="post-thumb">
-                <img v-if="event.media.length" :src="event.media[0].image_medium" alt="photo">
-            </div>
+            <list-image v-if="event.media.length" :listImage="event.media" ></list-image>
             <div class="post-additional-info inline-items" style="display: none;">
                 <a href="#" class="post-add-icon inline-items">
                     <svg class="olymp-heart-icon">
@@ -116,16 +114,18 @@
     </div>
 </template>
 <script>
-   import { mapState, mapActions } from 'vuex'
-   import ShowText from '../libs/ShowText.vue'
+    import { mapState, mapActions } from 'vuex'
+    import ShowText from '../libs/ShowText.vue'
+    import ListImage from './ListImage.vue'
 
-   export default {
+    export default {
         props: {
             event: {},
             owner: {}
         },
-         components: {
-            ShowText
+        components: {
+            ShowText,
+            ListImage
         }
     }
 </script>
@@ -136,18 +136,27 @@
     }
     .post-thumb {
         margin-top: 10px;
+        margin-bottom: 0px;
     }
     .span-event{
         color: #fe5d39;
-        font-weight: bold;
     }
-    .link-event {
-        color: rgb(97, 99, 115);
-        .title-event {
-            color: #616373;
-            &:hover {
-                color: #fe5d39;
+
+    .author-date {
+        font-size: 14px;
+        .link-event {
+            color: rgb(97, 99, 115);
+            text-transform: uppercase;
+            font-weight: 400;
+            .title-event {
+                color: #616373;
+                &:hover {
+                    color: #fe5d39;
+                }
             }
+        }
+        .published {
+            font-size: 13px;
         }
     }
 </style>

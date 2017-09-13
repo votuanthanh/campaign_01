@@ -11,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <div class="info-empty" v-if="listPhoto.lenght">
+        <div class="info-empty" v-if="!listPhoto.length">
             <span>
                 <i class="fa fa-file-image-o" aria-hidden="true"></i>
                 {{ $t('user.photo.dont_have_images') }}

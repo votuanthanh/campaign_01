@@ -15,9 +15,10 @@
                     </span>
                     <ul v-else class="widget w-last-photo js-zoom-gallery">
                         <li v-for="(image, index) in listPhoto">
-                            <a href="javascript:void(0)">
-                                <img :src="image.image_medium" @click="showImageDetail(index)" alt="photo">
-                            </a>
+                            <div class="image-user"
+                                @click="showImageDetail(index)"
+                                :style="{ 'background-image': `url(${image.image_medium})` }">
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -565,5 +566,14 @@
         .fa {
             margin-right: 5px;
         }
+    }
+
+    .image-user {
+        width: 100%;
+        height: 78px;
+        border-radius: 3px;
+        background-position: 50% 25%;
+        background-size: cover;
+        background-repeat: no-repeat;
     }
 </style>

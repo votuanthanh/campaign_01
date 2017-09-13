@@ -4,7 +4,7 @@
             <div class="ui-block-title">
                 <router-link
                     :to="{ name: 'event.create', params: { slug: campaign.slug }}"
-                    class="btn btn-md-2 btn-border-think custom-color c-grey full-width">
+                    class="btn-join btn btn-md-2 btn-border-think c-grey full-width">
                     {{ $t('campaigns.create-event') }}
                 </router-link>
             </div>
@@ -61,7 +61,7 @@
                     </svg>
                 </a>
             </div>
-            <div class="ui-block-content">
+            <div class="w-pool-content ui-block-content">
                 <ul class="widget w-pool">
                     <li>
                         <div class="skills-item">
@@ -355,5 +355,20 @@
         border-radius: 3px;
         color: #fff;
         margin: 3px 0px 0px 3px;
+    }
+
+    .w-pool-content {
+        padding: 15px 25px 10px;
+        .skills-item {
+            margin-bottom: 0px;
+        }
+
+        .btn-join {
+            margin-bottom: 5px;
+        }
+
+        .w-pool {
+            margin-bottom: 20px;
+        }
     }
 </style>

@@ -23,13 +23,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="post-thumb" v-if="event.media">
-                        <router-link :to="{ name: 'event.index', params: { slugEvent: event.slug }}"
-                            v-if="event.media[0] != null">
-                            <img :src="event.media[0].image_lagre" :alt="event.name">
-                        </router-link>
-                    </div>
-
+                    <list-image v-if="event.media.length" :listImage="event.media" ></list-image>
                     <router-link :to="{ name: 'event.index', params: { slugEvent: event.slug }}"
                         class="h2 post-title">
                         {{ event.title }}
@@ -106,6 +100,7 @@ import axios from 'axios'
 import Comment from '../comment/Comment.vue'
 import ShowText from '../libs/ShowText.vue'
 import MasterLike from '../like/MasterLike.vue'
+import ListImage from '../home/ListImage.vue'
 
 export default {
     data: () => ({
@@ -136,7 +131,8 @@ export default {
     components: {
         Comment,
         ShowText,
-        MasterLike
+        MasterLike,
+        ListImage
     },
     sockets: {
         createEventSuccess: function (data) {
@@ -178,5 +174,8 @@ export default {
     .post {
         padding: 25px 25px 0px 25px;
         border-bottom: 0px;
+        .post-additional-info {
+            margin-bottom: 20px;
+        }
     }
 </style>

@@ -17,7 +17,7 @@
                     <div class="ui-block" v-for="(activity, index) in listActivity.data">
                         <article class="hentry post has-post-thumbnail thumb-full-width">
                             <div class="post__author author vcard inline-items">
-                                <img :src="currentPageUser.url_file" alt="author" class="image-auth">
+                                <img :src="currentPageUser.thumbnail" alt="author" class="image-auth">
                                 <div class="author-date">
                                     <a class="h6 post__author-name fn" href="javascript:void(0)">{{ currentPageUser.name }}</a>
                                     <span>{{ detemineAction(activity.name) }}</span>
