@@ -137,7 +137,7 @@
                             <ul class="notification-list chat-message">
                                 <li v-for="mess in messages" :class="mess.class">
                                     <div class="author-thumb">
-                                        <img :src="mess.showAvatar" alt="author">
+                                        <img :src="mess.showAvatar" alt="author" id="img-author-showAvatar">
                                     </div>
                                     <div class="notification-event">
                                         <a href="#" class="h6 notification-friend">{{ mess.showName }}</a>
@@ -414,7 +414,10 @@ export default {
         })
 
         if (this.authenticated) {
-            this.getMessagesNotification()
+            EventBus.$on('getListFriends', () => {
+                this.getMessagesNotification()
+            })
+
             this.getListRequest()
             EventBus.$on('markRead', data => {
                 let index = this.messages.findIndex(mess => parseInt(mess.to) == parseInt(data.receiveId)
@@ -436,7 +439,8 @@ export default {
         ...mapState('auth', {
             authenticated: state => state.authenticated,
             user: state => state.user,
-            groups: state => state.groups
+            groups: state => state.groups,
+            friends: state => state.listContact
         })
     },
     methods: {
@@ -462,19 +466,13 @@ export default {
                             for (var index = 0; index < noty.length; index++) {
                                 let isSendToUser = Number.isInteger(Number(noty[index].content.receive))
                                 let mess = {
-                                    form: noty[index].content.userId,
-                                    sendName: (noty[index].content.userId == this.user.id)
-                                        ? this.$i18n.t('messages.you')
-                                        : noty[index].content.name + ": ",
+                                    from: noty[index].content.userId,
+                                    sendName: this.$i18n.t('messages.you'),
                                     to: noty[index].content.receive,
                                     groupChat: noty[index].content.groupKey,
                                     message: noty[index].content.message,
-                                    showName: (noty[index].content.userId == this.user.id || !isSendToUser)
-                                        ? noty[index].content.nameReceive
-                                        : noty[index].content.name,
-                                    showAvatar: (noty[index].content.userId == this.user.id || !isSendToUser)
-                                        ? noty[index].content.avatarReceive
-                                        : noty[index].content.avatar,
+                                    showName: noty[index].content.nameReceive,
+                                    showAvatar: noty[index].content.avatarReceive,
                                     class: isSendToUser
                                         ? (noty[index].isRead || this.user.id == noty[index].content.userId ? "" : "message-unread")
                                         : "group-chat",
@@ -493,6 +491,7 @@ export default {
                         }
 
                         this.continue = res.data.continue
+                        this.revertMessage()
                     })
                     .catch(err => {
                         const message = this.$i18n.t('messages.load_notification_message_fail')
@@ -648,7 +647,23 @@ export default {
             } else {
                  this.usersFinded = this.campaignsFinded = []
             }
-        }, 500)
+        }, 500),
+        revertMessage() {
+            for (let i = 0; i < this.messages.length; i++) {
+                let index = this.friends
+                    .findIndex(user => user.id == Number(this.messages[i].to)
+                        || user.id == Number(this.messages[i].from))
+
+                if (index != -1) {
+                    this.messages[i].showName = this.friends[index].name
+                    this.messages[i].showAvatar = this.friends[index].image_small
+
+                    if (Number(this.messages[i].from) != this.user.id) {
+                        this.messages[i].sendName = this.friends[index].name + ' :'
+                    }
+                }
+            }
+        }
     },
     mounted() {
         const vm = this
@@ -789,5 +804,10 @@ export default {
         padding: 0px 3px;
         color: #08ddc1;
     }
+}
+
+#img-author-showAvatar {
+    height: 34px;
+    width: 34px;
 }
 </style>

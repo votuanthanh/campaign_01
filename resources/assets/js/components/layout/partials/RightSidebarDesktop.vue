@@ -169,6 +169,7 @@ import { follow } from '../../../router/router'
 import { mapState, mapActions } from 'vuex'
 import Chat from '../../../components/chat/Chat.vue'
 import noty from '../../../helpers/noty'
+import { EventBus } from '../../../EventBus.js'
 
 export default {
     data: () => ({
@@ -246,6 +247,7 @@ export default {
                     if (res) {
                         this.$socket.emit('register', { id: this.user.id, type: true })
                         this.emitListCampaign()
+                        EventBus.$emit('getListFriends')
                     }
                 })
                 .catch(err => {
