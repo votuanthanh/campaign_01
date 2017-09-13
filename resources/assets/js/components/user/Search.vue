@@ -30,7 +30,7 @@
                                     </router-link>
                                     <div class="birthday-date">{{ result.email }}</div>
                                 </div>
-                                <request-friend :friend="result"></request-friend>
+                                <request-friend :friend="result" :classTemp="'search'"></request-friend>
                             </div>
                         </div>
                     </div>

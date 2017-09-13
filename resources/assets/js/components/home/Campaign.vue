@@ -147,4 +147,10 @@
             }
         }
     }
+    .author-date {
+        font-size: 14px;
+        .published {
+            font-size: 13px;
+        }
+    }
 </style>

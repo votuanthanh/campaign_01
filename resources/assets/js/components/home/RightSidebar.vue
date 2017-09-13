@@ -34,7 +34,7 @@
                                 {{ numberMutualFriend[index] + ' ' + $t('homepage.friends') + ' ' + $t('homepage.in_common') }}
                             </span>
                         </div>
-                        <request-friend :friend="user"></request-friend>
+                        <request-friend :friend="user" :classTemp="'home'"></request-friend>
                     </li>
                 </ul>
             </div>
@@ -227,5 +227,7 @@
             opacity: 1;
         }
     }
-
+    .more-dropdown {
+        top: 50px;
+    }
 </style>
