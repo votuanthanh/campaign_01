@@ -62,7 +62,7 @@ class ActionRepository extends BaseRepository implements ActionInterface
             $action->media()->createMany($media);
         }
 
-        return true;
+        return $this->getOneAction($action->id);
     }
 
     public function getActionPaginate($action, $userId)
@@ -265,5 +265,22 @@ class ActionRepository extends BaseRepository implements ActionInterface
             'user_id',
             'expense_id',
         ]);
+    }
+
+    public function getOneAction($id)
+    {
+        $data['list_action'] = $this->where('id', $id)
+            ->getLikes('getLikes')
+            ->getComments('getComments')
+            ->withTrashed()
+            ->with([
+                'user',
+                'media' => function ($query) {
+                    $query->withTrashed();
+                },
+            ])
+            ->first();
+
+        return $data;
     }
 }

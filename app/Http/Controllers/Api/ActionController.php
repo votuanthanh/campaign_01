@@ -107,7 +107,7 @@ class ActionController extends ApiController
 
     public function show($id)
     {
-        $action = $this->actionRepository->findOrFail($id);
+        $action = $this->actionRepository->withTrashed()->findOrFail($id);
 
         if ($this->user->cant('view', $action)) {
             throw new UnknowException('Permission error: User can not see this action.');

@@ -63,5 +63,17 @@ export default {
         state.actions.list_action.data = $.grep(state.actions.list_action.data, function (item, index) {
             return item.id !== actionId
         });
+    },
+
+    [types.APPEND_ONE_ACTION](state, data) {
+        if (typeof(data.rootStateLike.like['action']) === "undefined") {
+            data.rootStateLike.like['action'] = []
+        }
+
+        data.rootStateLike.like['action'][data.action.list_action.id] = []
+        data.rootStateLike.checkLike['action'][data.action.list_action.id] = false
+
+        state.actions.list_action.data = [data.action.list_action, ...state.actions.list_action.data]
+        state.actions.checkLikeAction = []
     }
 };
