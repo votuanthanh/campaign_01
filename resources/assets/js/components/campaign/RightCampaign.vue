@@ -4,7 +4,7 @@
             <div class="ui-block-title">
                 <router-link
                     :to="{ name: 'event.create', params: { slug: campaign.slug }}"
-                    class="btn-join btn btn-md-2 btn-border-think c-grey full-width">
+                    class="btn-join btn btn-md-2 btn-border-think bg-blue full-width">
                     {{ $t('campaigns.create-event') }}
                 </router-link>
             </div>
@@ -83,20 +83,20 @@
                     </li>
                 </ul>
 
-                <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color bg-primary full-width"
                     v-if="checkJoinCampaign == 1 && !checkPermission && !campaign.deleted_at"
                     @click="comfirmJoinCampaign">{{ $t('campaigns.join-now') }}</a>
 
-                <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color bg-grey full-width"
                     v-if="checkJoinCampaign == 3 && !checkOwner && !campaign.deleted_at"
                     @click="comfirmLeaveCampaign" >
                     {{ $t('campaigns.leave') }}</a>
 
-                <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color bg-purple full-width"
                     v-if="checkJoinCampaign == 2 && !checkOwner && !campaign.deleted_at">
                     {{ $t('campaigns.aproving') }}</a>
 
-                <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                <a href="javascript:void(0)" class="btn btn-md-2 btn-border-think custom-color bg-purple full-width"
                     @click="comfirmAcceptCampaign"
                     v-if="checkJoinCampaign == 4 && !checkOwner && !campaign.deleted_at">
                     {{ $t('campaigns.accept') }}</a>
@@ -108,13 +108,13 @@
         <div class="ui-block" v-if="checkPermission || checkAdmin">
             <div class="ui-block-title">
                 <a href="javascript:void(0)"
-                    class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                    class="btn btn-md-2 btn-border-think custom-color bg-grey full-width"
                     v-if="!campaign.deleted_at"
                     @click="comfirmCloseCampaign">
                     {{ $t('campaigns.close_campaign') }}
                 </a>
                 <a href="javascript:void(0)"
-                    class="btn btn-md-2 btn-border-think custom-color c-grey full-width"
+                    class="btn btn-md-2 btn-border-think custom-color bg-primary full-width"
                     v-else @click="comfirmOpenCampaign">
                     {{ $t('campaigns.open_campaign') }}
                 </a>
@@ -330,7 +330,7 @@
             checkInvite() {
                 if (this.campaign.status) {
                     if ((this.campaign.status['value'] == 0 && (this.checkPermission || this.checkAdmin))
-                        || (this.campaign.status['value'] == 1 && this.checkJoinCampaign == 3))  {
+                        || (this.campaign.status['value'] == 1 && (this.checkJoinCampaign == 3 || this.checkAdmin)))  {
                         return true;
                     }
 
