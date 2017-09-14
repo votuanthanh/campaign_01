@@ -4,7 +4,6 @@ import VueRouter from 'vue-router'
 import store from '../store'
 import { getUser } from './router'
 // Register Components to router
-import Index from '../components/Index.vue'
 import NotFound from '../components/errors/404.vue'
 import Campaign from '../components/campaign/Campaign.vue'
 import TimelineCampaign from '../components/campaign/TimelineCampaign.vue'

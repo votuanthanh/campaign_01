@@ -6,12 +6,16 @@
                     <button type="button" class="close" aria-label="Close" @click.stop="onClose">
                         <span aria-hidden="true">×</span>
                     </button>
-                     <h5 class="exclamation-header" slot="header">
-                        {{  messages }}
+                     <h5 class="exclamation-header modal-title text-uppercase " slot="header">
+                        {{ header || $t('form.label.confirm') }}
                     </h5>
                 </div>
 
                 <div class="v-modal-body" slot="main">
+                    <h5>{{ messages }}</h5>
+                </div>
+
+                <div class="v-modal-footer text-right">
                     <a href="javascript:void(0)"
                         class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12"
                         @click="method">
@@ -22,9 +26,6 @@
                         @click="onClose">
                         {{ $t('form.button.cancel') }}
                     </a>
-                </div>
-
-                <div class="v-modal-footer text-right">
                     <slot name="footer"></slot>
                 </div>
             </div>
@@ -37,6 +38,7 @@ export default {
     props: [
         'show',
         'messages',
+        'header'
     ],
     mounted() {
         document.addEventListener("keydown", (e) => {
@@ -105,5 +107,8 @@ export default {
     .modal-leave .v-modal-container {
         -webkit-transform: scale(1.1);
         transform: scale(1.1);
+    }
+    .btn {
+        margin-bottom: 0;
     }
 </style>

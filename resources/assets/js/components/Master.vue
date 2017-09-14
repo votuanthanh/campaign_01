@@ -54,3 +54,10 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+    .noty_buttons {
+        .btn-secondary {
+            margin-left: 5px;
+        }
+    }
+</style>

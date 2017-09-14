@@ -27,7 +27,8 @@
         "name_product": "Name product",
         "quantity": "Quantity",
         "quality": "Quality",
-        "type": "Type"
+        "type": "Type",
+        "confirm": "Confirm"
     },
     "title": {
         "login": "Login to your Account",
