@@ -25,7 +25,9 @@ RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g gulp-cli bower eslint babel-eslint eslint-plugin-react yarn
 
+RUN apt-get update
 RUN apt-get -y install git
+RUN apt-get -y install supervisor
 RUN npm install -g bower
 RUN npm install --global gulp-cli
 RUN apt-get install -y ruby-full rubygems
@@ -47,6 +49,7 @@ EXPOSE 80
 
 # Update the default apache site with the config we created.
 ADD conf.d/vhosts.conf /etc/apache2/sites-enabled/000-default.conf
+ADD conf.d/laravel-worker.conf /etc/supervisor/conf.d/laravel-worker.conf
 
 ADD conf.d/startup.sh /usr/bin/startup.sh
 RUN chmod +x /usr/bin/startup.sh
