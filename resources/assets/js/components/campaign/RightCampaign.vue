@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div class="ui-block" v-if="listPhotos.list_action.length">
+        <div class="ui-block" v-if="listPhotos.list_action">
             <div class="ui-block-title">
                 <h6 class="title">{{ $t('campaigns.typical-images') }}</h6>
                 <a href="javascript:void(0)" class="more" style="display: none;">

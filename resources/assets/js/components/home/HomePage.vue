@@ -2,7 +2,7 @@
     <div v-if="!user">
         <index-page></index-page>
     </div>
-    <div class="hompage container js-waypoint-wrap" v-else>
+    <div class="hompage container" v-else>
         <div class="row">
             <!-- Main Content -->
             <main class="col-xl-6 push-xl-3 col-lg-12 push-lg-0 col-md-12 col-sm-12 col-xs-12">

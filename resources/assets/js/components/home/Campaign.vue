@@ -2,7 +2,7 @@
     <div class="ui-block">
         <article class="hentry post video">
             <div class="post__author author vcard inline-items">
-                <img :src="owner.url_file" alt="author">
+                <img :src="owner.image_thumbnail" alt="author">
                 <div class="author-date">
                     <router-link class="h6 post__author-name fn" :to="{ name: 'user.timeline', params: { slug: owner.slug }}">
                         {{ owner.name }}
