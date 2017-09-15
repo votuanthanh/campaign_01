@@ -32,7 +32,7 @@
         </span>
 
         <ul class="friends-harmonic" v-if="like[flag][modelId].numberOfLikes">
-            <li v-for="(item, index) in like[flag][modelId]" v-if="index < 4">
+            <li v-for="(item, index) in like[flag][modelId]" v-if="index < 3">
                 <router-link
                     :to="{ name: 'user.timeline', params: { slug: item.user.slug }}"
                     class="h6 post__author-name fn">
@@ -40,46 +40,33 @@
                 </router-link>
             </li>
 
-            <li v-if="like[flag][modelId].numberOfLikes > 4">
+            <li v-if="like[flag][modelId].numberOfLikes > 3">
                 <a href="javascript:void(0)"
                     @click="showMembersLiked()"
-                    class="all-users">+{{ like[flag][modelId].numberOfLikes - 4 }}</a>
+                    class="all-users">+{{ like[flag][modelId].numberOfLikes - 3 }}</a>
             </li>
         </ul>
 
         <div class="names-people-likes" v-if="like[flag][modelId].numberOfLikes == 0">
             {{ $t('post.like.like_first') }}
         </div>
-
-        <div class="names-people-likes" v-else-if="like[flag][modelId].numberOfLikes == 1">
-            <router-link :to="{ name: 'user.timeline', params: { slug: like[flag][modelId][0].user.slug }}">
-                {{ like[flag][modelId][0].user.name }}
+        <div class="names-people-likes" v-else>
+            <router-link :to="{ name: 'user.timeline', params: { slug: like[flag][modelId][index].user.slug }}"
+                v-for="(item, index) in like[flag][modelId]"
+                v-if="index < 2">
+                {{ item.user.name }}<span class="temp-name" v-if="like[flag][modelId].numberOfLikes > 2 && index == 0">,</span>
+                <span class="temp-name" v-if="like[flag][modelId].numberOfLikes == 2 && index == 0">
+                    {{ $t('post.like.and') }}
+                </span>
             </router-link>
-            {{ $t('post.like.liked_this') }}
-        </div>
-
-        <div class="names-people-likes" v-else-if="like[flag][modelId].numberOfLikes == 2">
-            <router-link :to="{ name: 'user.timeline', params: { slug: like[flag][modelId][0].user.slug }}">
-                {{ like[flag][modelId][0].user.name }}
-            </router-link>
-            {{ $t('post.like.and') }}
-            <router-link :to="{ name: 'user.timeline', params: { slug: like[flag][modelId][1].user.slug }}">
-                {{ like[flag][modelId][1].user.name }}
-            </router-link>
-            {{ $t('post.like.liked_this') }}
-        </div>
-
-        <div class="names-people-likes" v-else="like[flag][modelId].numberOfLikes > 2">
-            <router-link :to="{ name: 'user.timeline', params: { slug: like[flag][modelId][0].user.slug }}">
-                {{ like[flag][modelId][0].user.name }}
-            </router-link>,
-            <router-link :to="{ name: 'user.timeline', params: { slug: like[flag][modelId][1].user.slug }}">
-                {{ like[flag][modelId][1].user.name }}
-            </router-link>
-            <br>{{ $t('post.like.and') + ' ' + like[flag][modelId].numberOfLikes - 2 }}
-            <span v-if="like[flag][modelId].numberOfLikes >= 3"
-                @click="showMembersLiked()" class="more-like">
-                {{ $t('post.like.more_like') }}
+            <span v-if="like[flag][modelId].numberOfLikes < 3">
+                {{ $t('post.like.liked_this') }}
+            </span>
+            <span v-else="like[flag][modelId].numberOfLikes">
+                {{ $t('post.like.and') }}</br>
+                <span @click="showMembersLiked()" class="more-like">
+                    {{ (like[flag][modelId].numberOfLikes - 2) + ' ' +$t('post.like.more_like') }}
+                </span>
             </span>
         </div>
 
@@ -184,34 +171,6 @@ export default {
                 const message = this.$i18n.t('messages.join_campaign_fail')
                 noty({ text: message, force: true, container: false })
             })
-        },
-        showLike(index, numberLike) {
-            switch (numberLike) {
-                case 1 :
-                    return '';
-                case 2 :
-                    if (index == 0) {
-                        return this.$i18n.t('post.like.and')
-                    }
-
-                    return '';
-                case 3 :
-                    if (index == 0) {
-                        return ','
-                    }
-
-                    if (index == 1) {
-                        return this.$i18n.t('post.like.and')
-                    }
-
-                    return '';
-                default:
-                    if (index < 1) {
-                        return ','
-                    } else {
-                        return this.$i18n.t('post.like.and')
-                    }
-            }
         }
     },
     components: {
@@ -231,7 +190,9 @@ export default {
 
     .more-like{
         &:hover {
-            color: #ff5e3a;
+            color: #767a91;
+            text-decoration: underline;
+            cursor: pointer;
         }
     }
 
@@ -303,6 +264,10 @@ export default {
         svg {
             margin-right: 5px;
         }
+    }
+
+    .temp-name {
+        font-weight: initial;
     }
 
     pre {
