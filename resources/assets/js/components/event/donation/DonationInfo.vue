@@ -33,7 +33,7 @@
                                 {{ $t('events.donation.waiting')
                                     + ' : ' + infoNotAccepted.notReceived
                                     + " " + infoNotAccepted.quantity
-                                    + infoNotAccepted.type
+                                    + " " + infoNotAccepted.type
                                 }}
                                 <span class="indicator negative">{{ Math.round(infoNotAccepted.percent) }}%</span>
                                 <span class="period">

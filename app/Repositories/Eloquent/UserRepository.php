@@ -38,7 +38,7 @@ class UserRepository extends BaseRepository implements UserInterface
             'token_confirm' => null,
         ]);
 
-        return true;
+        return $user;
     }
 
     public function register($inputs, $roleId)
@@ -58,7 +58,6 @@ class UserRepository extends BaseRepository implements UserInterface
         ];
 
         $fields = [
-            'linkActive' => action('Frontend\UserController@active', $user->token_confirm),
             'content' => trans('emails.active_account', ['object' => $user->name]),
         ];
 

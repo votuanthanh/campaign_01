@@ -17,7 +17,7 @@
                     <div class="ui-block" v-for="(activity, index) in listActivity.data">
                         <article class="hentry post has-post-thumbnail thumb-full-width">
                             <div class="post__author author vcard inline-items">
-                                <img :src="currentPageUser.thumbnail" alt="author" class="image-auth">
+                                <img :src="currentPageUser.image_thumbnail" alt="author" class="image-auth">
                                 <div class="author-date">
                                     <a class="h6 post__author-name fn" href="javascript:void(0)">{{ currentPageUser.name }}</a>
                                     <span>{{ detemineAction(activity.name) }}</span>
@@ -32,17 +32,35 @@
                                 </div>
                             </div>
                             <div class="post-thumb" v-if="activity.activitiable.media.length">
-                                <a href="javascript:void(0)" v-if="activity.activitiable_type == 'App\\Models\\Action'" @click="detailAction(activity.activitiable_id)">
+                                <a href="javascript:void(0)"
+                                    v-if="activity.activitiable_type == 'App\\Models\\Action'"
+                                    @click="detailAction(activity.activitiable_id)">
                                     <img :src="activity.activitiable.media[0].image_medium" alt="photo">
                                 </a>
                                 <img :src="activity.activitiable.media[0].image_medium" alt="photo" v-else>
                             </div>
-                            <router-link :to="url(activity.activitiable_type, activity.activitiable)"
+                            <a href="javascript:void(0)"
+                                @click="detailAction(activity.activitiable_id)"
+                                v-if="activity.activitiable_type == 'App\\Models\\Action'"
+                                :to="url(activity.activitiable_type, activity.activitiable)"
+                                class="h2 post-title">
+                                {{ activity.activitiable.caption }}
+                            </a>
+                            <router-link v-else
+                                :to="url(activity.activitiable_type, activity.activitiable)"
                                 class="h2 post-title">
                                 {{ activity.activitiable.title }}
                             </router-link>
 
-                            <p v-html="activity.activitiable.description"></p>
+                            <p>
+                                <show-text
+                                    :text="activity.activitiable.description"
+                                    :show_char=850
+                                    :number_char_show=700
+                                    :show="$t('events.show_more')"
+                                    :hide="$t('events.show_less')">
+                                </show-text>
+                            </p>
 
                             <a href="javascript:void(0)" style="display: none;"
                                 data-toggle="modal"
@@ -129,6 +147,7 @@
     import Comment from '../comment/Comment.vue'
     import ActionDetail from '../event/ActionDetail.vue'
     import sideWaypoint from '../../helpers/mixin/sideWaypoint'
+    import ShowText from '../libs/ShowText.vue'
 
     export default {
         data: () => ({
@@ -228,7 +247,8 @@
             RightSidebar,
             MasterLike,
             Comment,
-            ActionDetail
+            ActionDetail,
+            ShowText
         },
     }
 </script>

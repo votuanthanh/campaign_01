@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Frontend;
 use Illuminate\Http\Request;
 use App\Repositories\Contracts\UserInterface;
 use Exception;
+use Facades\ {
+    App\Services\PassportService
+};
 
 class UserController extends FrontendController
 {
@@ -29,11 +32,9 @@ class UserController extends FrontendController
                 throw new Exception();
             }
 
-            return redirect()->action('Frontend\UserController@index')
-                ->with('messages', trans('messages.login_success'));
+            return redirect('/')->with('access_token', PassportService::getTokenByUser($user));
         } catch (Exception $e) {
-            return redirect()->action('Auth\LoginController@getLogin')
-                ->with('messages-fail', tran_choice('messages.login_fail', 1));
+            return redirect('/');
         }
     }
 }

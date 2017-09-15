@@ -18,7 +18,7 @@
             </div>
             <div
                 class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3"
-                v-if="!event.deleted_at">
+                v-if="!event.deleted_at && event.manage">
                 <router-link
                     tag="button"
                     class="btn btn-primary btn-md-2 bg-breez"
@@ -31,7 +31,7 @@
             </div>
             <div
                 class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3"
-                v-if="!event.deleted_at">
+                v-if="!event.deleted_at && event.manage">
                 <router-link
                     tag="button"
                     class="btn btn-primary btn-md-2 bg-breez"
