@@ -87,7 +87,7 @@
                                                 @change="changeRoleMember"
                                                 :checked="member.campaigns[0].pivot.role_id === role.id"
                                                 :disabled="member.campaigns[0].pivot.role_id == 3
-                                                    || member.id == user.id || checkDeleted()">
+                                                    || member.id == user.id || checkDeleted() || (checkModerators && member.campaigns[0].pivot.role_id == 4)    ">
                                             {{ role.name }}
                                         </label>
                                     </div>
@@ -105,7 +105,7 @@
 </template>
 
 <script>
-    import { mapActions, mapState } from 'vuex'
+    import { mapActions, mapState, mapGetters } from 'vuex'
     import noty from '../../../helpers/noty'
     import Noty from 'noty'
 
@@ -127,10 +127,13 @@
         },
         computed: {
             ...mapState('auth', [
-                'user'
+                'user',
             ]),
             ...mapState('campaign', [
                 'campaign',
+            ]),
+             ...mapGetters('campaign', [
+                'checkModerators',
             ]),
         },
         methods: {
@@ -205,6 +208,13 @@
                                 .then(status => {
                                     target.prop('checked', true)
                                     this.roleCurrent[userId] = parseInt(roleId)
+                                    this.members.data.forEach( (item, index) => {
+                                        if (item.id == userId) {
+                                            item.campaigns[0].pivot.role_id = []
+                                            item.campaigns[0].pivot.role_id = this.roleCurrent[userId]
+                                        }
+                                    })
+
                                     const message = this.$i18n.t('messages.message-success')
                                     noty({ text: message, force: true, type: 'success', container: false })
                                 })
@@ -270,7 +280,8 @@
                         this.members = data.members
                     })
                     .catch(err => {
-                        //
+                        const message = this.$i18n.t('messages.message-fail')
+                        noty({ text: message, force: true, container: false })
                     })
                 }
             })
