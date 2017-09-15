@@ -60,4 +60,14 @@ export default {
             margin-left: 5px;
         }
     }
+    .show-text {
+        >p {
+            >span {
+                >img {
+                    max-width: 100%;
+                    height: auto;
+                }
+            }
+        }
+    }
 </style>
