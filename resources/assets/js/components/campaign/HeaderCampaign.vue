@@ -141,7 +141,8 @@ export default {
 
 <style lang="scss" scoped>
     .images-campaign {
-        height: 400px !important;
+        max-height: 500px !important;
+        object-fit: cover;
     }
 
     .profile-section {

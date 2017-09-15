@@ -246,6 +246,7 @@
             .image-event {
                 width: 100% !important;
                 height: 100% !important;
+                object-fit: cover;
             }
             .slider-item {
                 z-index: 19 !important;
