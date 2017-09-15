@@ -13,6 +13,10 @@
 Route::get('/redirect/{provider}', 'SocialController@redirectToProvider');
 Route::get('/callback/{provider}', 'SocialController@callback');
 
+Route::group(['namespace' => 'Frontend'], function () {
+    Route::get('/active/{token}', 'UserController@active');
+});
+
 // Server response to url image files
 Route::get('/images/{path}', function (Illuminate\Http\Request $request, $path) {
     return app('glide')->getImageResponse($path, $request->all());

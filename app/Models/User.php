@@ -282,6 +282,7 @@ class User extends Authenticatable
             // Set filtering params before creating that it executes saving
             $user->token_confirm = Str::random(60);
             $user->birthday = is_null($user->birthday) ? null : Carbon::parse($user->birthday);
+            $user->url_file = $user->url_file ?: config('settings.default_avatar');
         });
     }
 

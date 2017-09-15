@@ -1,6 +1,6 @@
 <template>
     <div class="container page-error">
-        <img src="images/error-img.png" title="error">
+        <img src="/images/error-img.png" title="error">
         <router-link :to="{ name: 'homepage' }">
             {{ $t('errors.back_homepage')}}
         </router-link>

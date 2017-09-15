@@ -119,10 +119,13 @@
                                 </div>
                             </div>
                             <div class="top-header-author">
-                                <a href="#" class="author-thumb">
-                                    <img :src="authUser.image_small" alt="author" v-if="authUser.id == currentPageUser.id" @click.prevent="showAvatar = true">
-                                    <img :src="currentPageUser.image_small" alt="author" v-else @click.prevent>
-                                </a>
+                                <a href="#" class="author-thumb"
+                                    :style="`background-image: url('${authUser.image_small}')`"
+                                    v-if="authUser.id == currentPageUser.id"
+                                    @click.prevent="showAvatar = true"></a>
+                                <a href="#" class="author-thumb"
+                                    :style="`background-image: url('${currentPageUser.image_small}')`"
+                                    v-else @click.prevent></a>
                                 <div class="author-content">
                                     <a href="02-ProfilePage.html" class="h4 author-name">{{ currentPageUser.name }}</a>
                                     <div class="country">{{ currentPageUser.address }}</div>
@@ -509,9 +512,9 @@
 
 <style lang="scss" scoped>
     .author-thumb {
-        >img {
-            max-height: 100%;
-        }
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
     }
     .clickable:hover {
         cursor: pointer;

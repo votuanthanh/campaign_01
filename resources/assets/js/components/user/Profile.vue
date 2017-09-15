@@ -154,9 +154,14 @@ export default {
         fullName() {
             return `${this.firstName} ${this.lastName}`.trim()
         },
-        birthday() {
-            let birthday = new Date(this.user.birthday).toLocaleDateString(window.Laravel.locale)
-            return birthday
+        birthday: {
+            get() {
+                let birthday = new Date(this.user.birthday).toLocaleDateString(window.Laravel.locale)
+                return birthday
+            },
+            set(value) {
+                this.user.birthday = value
+            }
         },
         maxDate() {
             return new Date().toLocaleString(window.Laravel.locale)
