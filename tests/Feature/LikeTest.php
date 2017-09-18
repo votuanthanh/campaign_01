@@ -24,6 +24,11 @@ class LikeTest extends TestCase
     public function testLikeActionSuccess()
     {
         $campaign = factory(Campaign::class)->create(['hashtag' => '#likeCampaign', 'status' => Campaign::ACTIVE]);
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
         $event = factory(Event::class)->create(['campaign_id' => $campaign->id]);
         $action = factory(Action::class)->create(['event_id' => $event->id]);
         $user = factory(User::class)->create(['email' => 'test.like.action@gmail.com']);
@@ -45,6 +50,11 @@ class LikeTest extends TestCase
     public function testUnLikeActionSuccess()
     {
         $campaign = factory(Campaign::class)->create(['hashtag' => '#likeCampaign', 'status' => Campaign::ACTIVE]);
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
         $event = factory(Event::class)->create(['campaign_id' => $campaign->id]);
         $action = factory(Action::class)->create(['event_id' => $event->id]);
         $user = factory(User::class)->create(['email' => 'test.like.action@gmail.com']);
@@ -70,6 +80,11 @@ class LikeTest extends TestCase
     public function testUnLikeEventSuccess()
     {
         $campaign = factory(Campaign::class)->create(['hashtag' => '#likeCampaign', 'status' => Campaign::ACTIVE]);
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
         $event = factory(Event::class)->create(['campaign_id' => $campaign->id]);
         $user = factory(User::class)->create(['email' => 'test.ublike.event@gmail.com']);
         $campaign->users()->attach($user->id, [
@@ -95,6 +110,11 @@ class LikeTest extends TestCase
     public function testLikeEventSuccess()
     {
         $campaign = factory(Campaign::class)->create(['hashtag' => '#likeCampaign', 'status' => Campaign::ACTIVE]);
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
         $event = factory(Event::class)->create(['campaign_id' => $campaign->id]);
         $user = factory(User::class)->create(['email' => 'test.like.event@gmail.com']);
         $user->campaigns()->attach($campaign->id, [
@@ -114,6 +134,11 @@ class LikeTest extends TestCase
     public function testLikeCampaignSuccess()
     {
         $campaign = factory(Campaign::class)->create(['hashtag' => '#likeCampaign', 'status' => Campaign::ACTIVE]);
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
         $user = factory(User::class)->create(['email' => 'test.like.campaign@gmail.com']);
         $user->campaigns()->attach($campaign->id, [
             'role_id' => Role::where(['name' => Role::ROLE_MEMBER, 'type' => Role::TYPE_CAMPAIGN])->pluck('id'),
@@ -132,6 +157,11 @@ class LikeTest extends TestCase
     public function testUnLikeCampaignSuccess()
     {
         $campaign = factory(Campaign::class)->create(['hashtag' => '#likedemo', 'status' => Campaign::ACTIVE]);
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
         $user = factory(User::class)->create(['email' => 'test.unlike.campaign@gmail.com']);
         $campaign->users()->attach($user->id, [
             'role_id' => Role::where(['name' => Role::ROLE_MEMBER, 'type' => Role::TYPE_CAMPAIGN])->pluck('id'),
@@ -155,6 +185,11 @@ class LikeTest extends TestCase
     public function testUserNotHavePermissionThenFail()
     {
         $campaign = factory(Campaign::class)->create(['hashtag' => '#cantlike', 'status' => Campaign::ACTIVE]);
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.private'),
+        ]);
+
         $campaign->settings()->create([
             'key' => config('settings.campaigns.status'),
             'value' => config('settings.value_of_settings.status.private'),

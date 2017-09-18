@@ -10,9 +10,9 @@ export default {
 
         state.comments[data.flag][data.modelId] = []
 
-        data.comments.forEach(function (item, index) {
+        data.comments.reverse().forEach(function (item, index) {
             state.comments[data.flag][item.commentable_id][index] = item
-            state.comments[data.flag][item.commentable_id][index]['sub_comment']['data'] = item.sub_comment
+            state.comments[data.flag][item.commentable_id][index]['sub_comment']['data'] = item.sub_comment.reverse()
             state.comments[data.flag][item.commentable_id][index]['sub_comment']['last_page'] = 2
             state.comments[data.flag][item.commentable_id][index]['sub_comment']['total'] = item.number_of_comments
             state.comments[data.flag][item.commentable_id][index]['sub_comment']['current_page'] = 1
@@ -152,6 +152,7 @@ export default {
     [types.LOAD_MORE_PARENT_COMMENT](state, data) {
         var comments = state.comments
         var paginates = state.paginates
+        var commentReverse = data.comments.data.reverse()
 
         let like = data.rootStateLike.like;
         for (let comment of data.comments.data) {
@@ -163,20 +164,20 @@ export default {
         data.rootStateLike.like = []
         data.rootStateLike.like = like
         // comment
-        data.comments.data.forEach(function (item, index) {
-            data.comments.data[index]['sub_comment'] = []
-            data.comments.data[index]['sub_comment']['data'] = item.sub_comment
-            data.comments.data[index]['sub_comment']['last_page'] = 2
-            data.comments.data[index]['sub_comment']['total'] = item.number_of_comments
-            data.comments.data[index]['sub_comment']['current_page'] = 1
+        commentReverse.forEach(function (item, index) {
+            commentReverse[index]['sub_comment'] = []
+            commentReverse[index]['sub_comment']['data'] = item.sub_comment
+            commentReverse[index]['sub_comment']['last_page'] = 2
+            commentReverse[index]['sub_comment']['total'] = item.number_of_comments
+            commentReverse[index]['sub_comment']['current_page'] = 1
         })
 
-        comments[data.flag][data.modelId] = [...data.comments.data, ...comments[data.flag][data.modelId]]
+        comments[data.flag][data.modelId] = [...commentReverse, ...comments[data.flag][data.modelId]]
         state.comments = []
         state.comments = comments
         //page
-        paginates[data.flag][data.modelId].current_page = paginates[data.flag][data.modelId].current_page + 1;
-        paginates[data.flag][data.modelId].last_page = data.comments.last_page;
+        paginates[data.flag][data.modelId].current_page = data.comments.current_page
+        paginates[data.flag][data.modelId].last_page = data.comments.last_page
         state.paginates = paginates
     },
 
@@ -189,8 +190,19 @@ export default {
         });
 
         // comment
-        data.comments.data = data.comments.data.concat(comments[data.flag][data.modelId][index[0]].sub_comment.data)
+        data.comments.data = data.comments.data.reverse().concat(comments[data.flag][data.modelId][index[0]].sub_comment.data)
         comments[data.flag][data.modelId][index[0]].sub_comment = data.comments
+
+        let like = data.rootStateLike.like
+
+        for (let subComment of data.comments.data) {
+            like.like['comment'][subComment.id] = subComment.likes
+            like.checkLike['comment'][subComment.id] = subComment.checkLike
+            like.like['comment'][subComment.id]['numberOfLikes'] = subComment.number_of_likes
+        }
+
+        data.rootStateLike.like = []
+        data.rootStateLike.like = like
 
         state.comments = []
         state.comments = comments

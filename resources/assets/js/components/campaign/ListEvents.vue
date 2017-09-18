@@ -15,11 +15,7 @@
                                 {{ event.user.name }}
                             </router-link>
                             <div class="post__date">
-                                <timeago
-                                    :max-time="86400 * 365"
-                                    class="published date-format"
-                                    :since="event.created_at">
-                                </timeago>
+                                {{ timeAgo(event.created_at) }}
                             </div>
                         </div>
                     </div>
@@ -79,7 +75,7 @@
                     :classListComment="''"
                     :classFormComment="''"
                     :deleteDate="event.deleted_at"
-                    :canComment="checkJoinCampaign == 3">
+                    :canComment="checkComemnt()">
                 </comment>
             </div>
         </div>
@@ -126,7 +122,20 @@ export default {
     methods: {
         ...mapActions('campaign', [
             'updateEventsCampaign',
-        ])
+        ]),
+        timeAgo(time) {
+            return moment(time, "YYYY-MM-DD h:mm:ss").fromNow()
+        },
+        checkComemnt() {
+            if (this.campaign.status) {
+                if ((this.campaign.status['value'] == 0 && this.checkJoinCampaign == 3)
+                    || (this.campaign.status['value'] == 1))  {
+                    return true;
+                }
+
+                return false;
+            }
+        }
     },
     components: {
         Comment,

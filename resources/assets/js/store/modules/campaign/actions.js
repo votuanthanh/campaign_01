@@ -106,7 +106,7 @@ export const changeStatusMember = ({ commit }, data) => {
 };
 
 export const loadMoreMembers = ({ commit }, data) => {
-    if ((parseInt(data.pageCurrent) + 1) <= data.pageNumberEvent) {
+    if ((parseInt(data.pageCurrent) + 1) < data.pageNumberEvent) {
         return new Promise((resolve, reject) => {
             get(`campaign/search-members/${data.campaignId}/${data.status}?=${(parseInt(data.pageCurrent) + 1)}`)
                 .then(res => {
@@ -120,7 +120,7 @@ export const loadMoreMembers = ({ commit }, data) => {
 };
 
 export const searchMember = ({ commit }, data) => {
-    if ((parseInt(data.pageCurrent) + 1) <= data.pageNumberEvent) {
+    if ((parseInt(data.pageCurrent) + 1) < data.pageNumberEvent) {
         return new Promise((resolve, reject) => {
             get(`campaign/search-members/${data.campaignId}/${data.status}?search=${data.search}&roleId=${data.roleId}&page=${(parseInt(data.pageCurrent) + 1)}`)
                 .then(res => {

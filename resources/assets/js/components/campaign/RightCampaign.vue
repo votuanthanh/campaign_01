@@ -321,12 +321,12 @@
                 this.acceptCampaign(this.pageId)
                     .then(res => {
                         this.flag_confirm_accept = false
-                        const message = this.$i18n.t('messages.close_campaign_success')
+                        const message = this.$i18n.t('messages.comfirm-accept-campaign')
                         noty({ text: message, force: true, type: 'success', container: false })
                     })
                     .catch(err => {
                         this.flag_confirm_accept = false
-                        const message = this.$i18n.t('messages.close_campaign_fail')
+                        const message = this.$i18n.t('messages.fail')
                         noty({ text: message, force: true, container: false })
                     })
             },

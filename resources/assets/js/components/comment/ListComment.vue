@@ -35,11 +35,7 @@
                             {{ comment.user.name }}
                         </router-link>
                         <div class="post__date">
-                            <timeago
-                                :max-time="86400 * 365"
-                                class="published date-format"
-                                :since="comment.created_at">
-                            </timeago>
+                            {{ timeAgo(comment.created_at) }}
                         </div>
                     </div>
                     <div class="more" v-if="comment.user.id == user.id && !comment.deleted_at && canComment">
@@ -155,11 +151,7 @@
                                     {{ subComment.user.name }}
                                 </router-link>
                                 <div class="post__date">
-                                    <timeago
-                                        :max-time="86400 * 365"
-                                        class="published date-format"
-                                        :since="subComment.created_at">
-                                    </timeago>
+                                    {{ timeAgo(subComment.created_at) }}
                                 </div>
                             </div>
                             <div class="more" v-if="subComment.user.id == user.id">
@@ -311,7 +303,10 @@ export default {
         },
         convertToHTML(text) {
             return text.replace(/(?:\r\n|\r|\n)/g, '<br />');
-        }
+        },
+        timeAgo(time) {
+            return moment(time, "YYYY-MM-DD h:mm:ss").fromNow()
+        },
     },
     components: {
         FormComment,

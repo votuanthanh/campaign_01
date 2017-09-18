@@ -8,7 +8,8 @@
             flag: flag,
             numberOfLikes: like[flag][modelId].numberOfLikes,
             deleteDate: like[flag][modelId].deleteDate,
-            messages: modelClosed
+            messages: modelClosed,
+            permission: permission
         })">
         <svg class="olymp-like-post-icon">
             <use xlink:href="/frontend/icons/icons.svg#olymp-like-post-icon"></use>
@@ -24,7 +25,8 @@ export default {
         modelId: 0,
         flag: '',
         numberOfLikes: 0,
-        modelClosed: ''
+        modelClosed: '',
+        permission: ''
     },
     computed: {
         ...mapState('like', [

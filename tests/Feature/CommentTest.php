@@ -21,11 +21,26 @@ class CommentTest extends TestCase
     {
         $faker = \Faker\Factory::create();
         $user = factory(User::class)->create();
-        $event = factory(Event::class)->create();
+        $campaign = factory(Campaign::class)->create(['hashtag' => '#likedemo', 'status' => Campaign::ACTIVE]);
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
+        $campaign->events()->create([
+            'title' => $faker->sentence(10),
+            'description' => $faker->paragraph(),
+            'longitude' => $faker->longitude,
+            'latitude' => $faker->latitude,
+            'user_id' => $user->id,
+        ]);
+
+        $eventId = $campaign->events()->pluck('id')->first();
+
         $roleAdminId = Role::where('type', Role::TYPE_SYSTEM)->pluck('id')->first();
         $user->roles()->attach($roleAdminId);
         $this->actingAs($user, 'api');
-        $response = $this->json('POST', route('comment.create', ['modelId' => $event->id, 'parentId' => 0, 'flag' => 'event']), [
+        $response = $this->json('POST', route('comment.create', ['modelId' => $eventId, 'parentId' => 0, 'flag' => 'event']), [
             'content' => $faker->sentence(10),
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -50,6 +65,19 @@ class CommentTest extends TestCase
             'hashtag' => 'Heath socical',
         ]);
 
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
+        $campaign->events()->create([
+            'title' => $faker->sentence(10),
+            'description' => $faker->paragraph(),
+            'longitude' => $faker->longitude,
+            'latitude' => $faker->latitude,
+            'user_id' => $user->id,
+        ]);
+
         $campaign->users()->attach([
             $user->id => [
                 'role_id' => $roleCampaign->id,
@@ -57,14 +85,11 @@ class CommentTest extends TestCase
             ],
         ]);
 
-        $event = factory(Event::class)->create([
-            'user_id' => $user->id,
-            'campaign_id' => $campaign->id,
-        ]);
+        $eventId = $campaign->events()->pluck('id')->first();
 
         $this->actingAs($user, 'api');
 
-        $response = $this->json('POST', route('comment.create', ['modelId' => $event->id, 'parentId' => 0, 'flag' => 'event']), [
+        $response = $this->json('POST', route('comment.create', ['modelId' => $eventId, 'parentId' => 0, 'flag' => 'event']), [
             'content' => $faker->sentence(10),
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -94,14 +119,25 @@ class CommentTest extends TestCase
                 'status' => Campaign::APPROVED,
             ],
         ]);
-        $event = factory(Event::class)->create([
-            'user_id' => $user->id,
-            'campaign_id' => $campaign->id,
+
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
         ]);
+
+        $campaign->events()->create([
+            'title' => $faker->sentence(10),
+            'description' => $faker->paragraph(),
+            'longitude' => $faker->longitude,
+            'latitude' => $faker->latitude,
+            'user_id' => $user->id,
+        ]);
+
+        $eventId = $campaign->events()->pluck('id')->first();
 
         $this->actingAs($user, 'api');
 
-        $response = $this->json('POST', route('comment.create', ['modelId' => $event->id, 'parentId' => 0, 'flag' => 'event']), [
+        $response = $this->json('POST', route('comment.create', ['modelId' => $eventId, 'parentId' => 0, 'flag' => 'event']), [
             'content' => '',
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -119,14 +155,24 @@ class CommentTest extends TestCase
             'hashtag' => 'Heath socical',
         ]);
 
-        $event = factory(Event::class)->create([
-            'user_id' => $user->id,
-            'campaign_id' => $campaign->id,
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.private'),
         ]);
+
+        $campaign->events()->create([
+            'title' => $faker->sentence(10),
+            'description' => $faker->paragraph(),
+            'longitude' => $faker->longitude,
+            'latitude' => $faker->latitude,
+            'user_id' => $user->id,
+        ]);
+
+        $eventId = $campaign->events()->pluck('id')->first();
 
         $this->actingAs($user, 'api');
 
-        $response = $this->json('POST', route('comment.create', ['modelId' => $event->id, 'parentId' => 0, 'flag' => 'event']), [
+        $response = $this->json('POST', route('comment.create', ['modelId' => $eventId, 'parentId' => 0, 'flag' => 'event']), [
             'content' => $faker->sentence(10),
         ], [
             'HTTP_Authorization' => 'Bearer ' . $user->createToken('myToken')->accessToken,
@@ -143,7 +189,8 @@ class CommentTest extends TestCase
         $user->roles()->attach([Role::ROLE_MEMBER]);
         $roleCampaign = Role::where('name', Role::ROLE_MEMBER)->first();
         $campaign = factory(Campaign::class)->create([
-            'hashtag' => 'Heath socical',
+            'hashtag' => 'Default',
+            'status' => Campaign::ACTIVE,
         ]);
 
         $campaign->users()->attach([
@@ -153,10 +200,20 @@ class CommentTest extends TestCase
             ],
         ]);
 
-        $event = factory(Event::class)->create([
-            'user_id' => $user->id,
-            'campaign_id' => $campaign->id,
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.private'),
         ]);
+
+
+        $event = $campaign->events()->create([
+            'title' => $faker->sentence(10),
+            'description' => $faker->paragraph(),
+            'longitude' => $faker->longitude,
+            'latitude' => $faker->latitude,
+            'user_id' => $user->id,
+        ]);
+        // $eventId = $campaign->events()->pluck('id')->first();
 
         $comment = factory(Comment::class)->make([
             'user_id' => $user->id,

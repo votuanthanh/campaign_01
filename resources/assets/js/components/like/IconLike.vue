@@ -9,7 +9,8 @@
                 flag: flag,
                 numberOfLikes: like[flag][modelId].numberOfLikes,
                 deleteDate: like[flag][modelId].deleteDate,
-                messages: modelClosed
+                messages: modelClosed,
+                permission: permission
             })">
             <svg class="olymp-heart-icon">
                 <use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"
@@ -28,14 +29,24 @@
             </ul>
             {{ like[flag][modelId].numberOfLikes }}
         </span>
+
+        <list-member-liked
+            :modelId="modelId"
+            :flag="flag"
+            :flagShowListMember.sync="flagShowListMember">
+        </list-member-liked>
     </span>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
 import noty from '../../helpers/noty'
+import ListMemberLiked from './ListMemberLiked.vue'
 
 export default {
+    data: () => ({
+        flagShowListMember: false
+    }),
     props: {
         likes: {},
         modelId: 0,
@@ -44,7 +55,8 @@ export default {
         numberOfLikes: 0,
         numberOfComments: 0,
         modelClosed: '',
-        onlyComment: ''
+        onlyComment: '',
+        permission: ''
     },
     computed: {
         ...mapState('like', [
@@ -59,8 +71,27 @@ export default {
     methods: {
         ...mapActions('like', [
             'likeActivity',
+            'getListMemberLiked',
         ]),
+        showMembersLiked() {
+            this.getListMemberLiked({
+                modelId: this.modelId,
+                model: this.flag,
+                lastPage: 1,
+                pageCurrent: 0
+            })
+            .then(status => {
+                this.flagShowListMember = true
+            })
+            .catch(err => {
+                const message = this.$i18n.t('messages.join_campaign_fail')
+                noty({ text: message, force: true, container: false })
+            })
+        }
     },
+    components: {
+        ListMemberLiked
+    }
 }
 </script>
 

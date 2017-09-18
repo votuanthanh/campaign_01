@@ -149,7 +149,7 @@
         props: {
             showAction: {},
             dataAction: {},
-            checkLikeActions: {},
+            checkLikeActions: [],
             canComment: true
         },
 

@@ -33,6 +33,12 @@ class CreateActionTest extends TestCase
             'hashtag' => 'Default',
             'status' => Campaign::ACTIVE,
         ]);
+
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
         $roleCampaigns = Role::where('type', Role::TYPE_CAMPAIGN)->pluck('id', 'name')->all();
         $campaign->users()->attach([
             $user->id => [
@@ -91,6 +97,12 @@ class CreateActionTest extends TestCase
             'hashtag' => 'Default',
             'status' => Campaign::ACTIVE,
         ]);
+
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
         $roleCampaigns = Role::where('type', Role::TYPE_CAMPAIGN)->pluck('id', 'name')->all();
         $campaign->users()->attach([
             $user->id => [
@@ -141,6 +153,12 @@ class CreateActionTest extends TestCase
             'hashtag' => 'Default',
             'status' => Campaign::ACTIVE,
         ]);
+
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
         $roleCampaigns = Role::where('type', Role::TYPE_CAMPAIGN)->pluck('id', 'name')->all();
         $campaign->users()->attach([
             $user->id => [
@@ -204,6 +222,12 @@ class CreateActionTest extends TestCase
             'hashtag' => 'Default',
             'status' => Campaign::ACTIVE,
         ]);
+
+        $campaign->settings()->create([
+            'key' => config('settings.campaigns.status'),
+            'value' => config('settings.value_of_settings.status.public'),
+        ]);
+
         $roleCampaigns = Role::where('type', Role::TYPE_CAMPAIGN)->pluck('id', 'name')->all();
         $campaign->users()->attach([
             $user->id => [

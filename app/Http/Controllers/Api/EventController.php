@@ -175,12 +175,11 @@ class EventController extends ApiController
                     'donations' => function ($query) {
                         return $query->with('user')->latest();
                     },
-                    'donationType.quality' => function($query) {
+                    'donationType.quality' => function ($query) {
                         $query->withTrashed();
                     },
                 ])
                 ->get();
-
             $this->compacts['manage'] = $this->user->can('manage', $event);
             $this->compacts['member'] = $this->user->can('comment', $event);
             $this->compacts['checkLikeEvent'] = $this->eventRepository->checkLike($event, $this->user->id);
@@ -205,7 +204,7 @@ class EventController extends ApiController
         $actions = $event->actions();
         $expenses = $event->expenses();
 
-        return $this->doAction(function() use ($event, $actions, $expenses) {
+        return $this->doAction(function () use ($event, $actions, $expenses) {
             $this->actionRepository->deleteFromEvent($actions);
             $this->expenseRepository->deleteFromEvent($expenses);
             $this->compacts['deleteEvent'] = $this->eventRepository->deleteFromEvent($event);
@@ -238,7 +237,7 @@ class EventController extends ApiController
             throw new UnknowException('Permission error: User can not delete this event.');
         }
 
-        return $this->doAction(function() use ($id, $event) {
+        return $this->doAction(function () use ($id, $event) {
             $this->actionRepository->openFromEvent($event);
             $this->expenseRepository->openFromEvent($event);
             $this->compacts['openEvent'] = $this->eventRepository->openFromEvent($event);
