@@ -109,15 +109,10 @@
         computed: {
             ...mapState('event', ['event']),
         },
-
         created() {
             this.newAction.event_id = this.pageId
         },
         methods: {
-            ...mapActions('event', [
-                'get_event'
-            ]),
-
             showSuccess(file, response) {
                 this.newAction.files.push(response)
             },

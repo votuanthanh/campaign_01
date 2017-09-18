@@ -66,14 +66,28 @@ export default {
     },
 
     [types.APPEND_ONE_ACTION](state, data) {
-        if (typeof(data.rootStateLike.like['action']) === "undefined") {
+        if (typeof (data.rootStateLike.like['action']) === "undefined") {
             data.rootStateLike.like['action'] = []
         }
 
         data.rootStateLike.like['action'][data.action.list_action.id] = []
         data.rootStateLike.checkLike['action'][data.action.list_action.id] = false
-
         state.actions.list_action.data = [data.action.list_action, ...state.actions.list_action.data]
         state.actions.checkLikeAction = []
+    },
+
+    [types.UPDATE_ACTION](state, data) {
+        let actions = state.actions
+
+        actions.list_action.data.forEach(function (item, index) {
+            if (item.id == data.id) {
+                actions.list_action.data[index] = data;
+                actions.list_action.data[index].likes = item.likes;
+                actions.list_action.data[index].user = item.user;
+            }
+        })
+
+        state.actions = []
+        state.actions = actions
     }
 };

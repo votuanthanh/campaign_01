@@ -42,7 +42,10 @@ trait UploadableTrait
         $storage = Storage::disk($uploadDisk);
 
         if ($storage->has($destinationTarget)) {
-            return $storage->delete($destinationTarget);
+            $storage->delete($destinationTarget);
+            $storage->deleteDirectory('cache/' + $destinationTarget);
+
+            return true;
         }
     }
 

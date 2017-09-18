@@ -76,8 +76,8 @@
                     <div class="more-dropdown more-with-triangle triangle-top-center">
                         <div class="ui-block-title ui-block-title-small">
                             <h6 class="title">{{ $t('messages.friend_popup') }}</h6>
-                            <a href="javascript:void(0)">{{ $t('messages.find_friend') }}</a>
-                            <a href="javascript:void(0)">{{ $t('messages.settings') }}</a>
+                            <a href="javascript:void(0)" style="display: none;">{{ $t('messages.find_friend') }}</a>
+                            <a href="javascript:void(0)" style="display: none;">{{ $t('messages.settings') }}</a>
                         </div>
                         <div class="mCustomScrollbar" id="notification_list_request" data-mcs-theme="dark">
                             <ul class="notification-list friend-requests">
@@ -130,8 +130,8 @@
                     <div class="more-dropdown more-with-triangle triangle-top-center">
                         <div class="ui-block-title ui-block-title-small">
                             <h6 class="title">Chat / Messages</h6>
-                            <a href="#">Mark all as read</a>
-                            <a href="#">Settings</a>
+                            <a href="#" style="display:none;">Mark all as read</a>
+                            <a href="#" style="display:none;">Settings</a>
                         </div>
                         <div class="mCustomScrollbar" data-mcs-theme="dark" id="notification_messages">
                             <ul class="notification-list chat-message">

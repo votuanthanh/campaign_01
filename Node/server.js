@@ -3,7 +3,7 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const redis = require('redis')
 const moment = require('moment-timezone')
-require('dotenv').config({path: '../.env'})
+require('dotenv').config({ path: '../.env' })
 
 const createEvent = 'App\\Models\\Event'
 const createCampaign = 'App\\Models\\Campaign'
@@ -19,7 +19,7 @@ const subClient = redis.createClient(process.env.REDIS_PORT, 'redis')
 
 subClient.subscribe('createCampaign', 'createEvent')
 redisClient.subscribe('singleChat', 'groupChat', 'activies', 'noty')
-redisClient.on('message', function(channel, data) {
+redisClient.on('message', function (channel, data) {
     if (channel == 'activies') {
         data = JSON.parse(data)
 
@@ -140,9 +140,9 @@ io.on('connection', function (socket) {
 
     socket.on('markRead', data => {
         if (parseInt(data.receive)) {
-            let key = (parseInt(data.receive) > parseInt(data.send))
-                ? parseInt(data.send) + '-' + parseInt(data.receive)
-                : parseInt(data.receive) + '-' + parseInt(data.send)
+            let key = (parseInt(data.receive) > parseInt(data.send)) ?
+                parseInt(data.send) + '-' + parseInt(data.receive) :
+                parseInt(data.receive) + '-' + parseInt(data.send)
             let now = moment().tz('Asia/Ho_Chi_Minh').format('MM-DD-YYYY HH:mm:ss')
             client.lrange(key, 0, 0, function (err, replies) {
                 let idMessage = replies[0]
@@ -154,7 +154,7 @@ io.on('connection', function (socket) {
                 client.set('read' + key, JSON.stringify(message))
             })
 
-            socket.to(data.receive).emit('read', { id: data.receive, status : true, time: now, readBy: data.send })
+            socket.to(data.receive).emit('read', { id: data.receive, status: true, time: now, readBy: data.send })
         }
     })
 
@@ -162,7 +162,7 @@ io.on('connection', function (socket) {
         io.sockets.in(data.room).emit('accept_donation', data.donate)
     })
 
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function () {
         var index = userConnection.findIndex(user => user.socketId === socket.id)
 
         if (index != -1) {
@@ -186,9 +186,17 @@ io.on('connection', function (socket) {
     socket.on('created_action', function (data) {
         io.sockets.in(data.room).emit('new_action_created', { action: data.newAction })
     })
+
+    socket.on('update_action', function (data) {
+        io.sockets.in(data.room).emit('update_data_action', { action: data.action })
+    })
+
+    socket.on('remove_action', function (data) {
+        io.sockets.in(data.room).emit('delete_action', { actionId: data.actionId })
+    })
 })
 
-function callOnline (socket, listFriend, userLogin) {
+function callOnline(socket, listFriend, userLogin) {
     let index = findIndexById(listFriend, userLogin)
 
     if (index != -1) {
@@ -210,7 +218,7 @@ function callOnline (socket, listFriend, userLogin) {
     }
 }
 
-function callOffline (socket, listFriend, id) {
+function callOffline(socket, listFriend, id) {
     let index = findIndexById(listFriend, id)
 
     if (index != -1) {
@@ -224,11 +232,11 @@ function callOffline (socket, listFriend, id) {
     return true
 }
 
-function findIndexById (array, id) {
+function findIndexById(array, id) {
     return array.findIndex(arr => arr.id == id)
 }
 
-function sendIfCreateEvent (data) {
+function sendIfCreateEvent(data) {
     let room = 'hashtag:' + data.hashtag
 
     if (!Number(data.feature)) {
@@ -238,7 +246,7 @@ function sendIfCreateEvent (data) {
     }
 }
 
-function sendIfCreateCampaign (data) {
+function sendIfCreateCampaign(data) {
     if (!Number(data.feature.value)) {
         return
     }
