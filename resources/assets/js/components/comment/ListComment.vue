@@ -9,8 +9,7 @@
             <div class="ripple-container"></div>
         </a>
         <a href="javascript:void(0)" class="more-comments"
-            v-show="comments[flag][modelId].length <= paginates[flag][modelId].total
-                && paginates[flag][modelId].total > 2"
+            v-show="comments[flag][modelId].length < paginates[flag][modelId].total"
             @click="handelLoadMoreParentComment({
                 modelId: modelId,
                 flag: flag,
@@ -126,9 +125,8 @@
                         </a>
                     </li>
                     <li class="view-more"
-                        v-if="comment.sub_comment.data.length <= comment.number_of_comments
-                            && flagReply == comment.id
-                            && comment.number_of_comments > 2">
+                        v-if="comment.sub_comment.data.length < comment.number_of_comments
+                            && flagReply == comment.id">
                         <a href="javascript:void(0)" class="morpCame-comments"
                             @click="handelLoadMoreSubComment({
                                 commentParentId: comment.id,

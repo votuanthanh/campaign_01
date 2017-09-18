@@ -7,7 +7,7 @@
  */
 export default {
     checkPermission(state, getters) {
-        if (jQuery.isEmptyObject(state.campaign.check_owner) && jQuery.isEmptyObject(state.campaign.check_moderators)) {
+        if ($.isEmptyObject(state.campaign.check_owner) && $.isEmptyObject(state.campaign.check_moderators)) {
             return false
         }
 
@@ -15,7 +15,7 @@ export default {
     },
 
     checkJoinCampaign(state, getters) {
-        if (jQuery.isEmptyObject(state.campaign.check_status)) {
+        if ($.isEmptyObject(state.campaign.check_status)) {
             return 1 //join campaign
         }
 
@@ -31,7 +31,15 @@ export default {
     },
 
     checkOwner(state, getters) {
-        if (jQuery.isEmptyObject(state.campaign.check_owner)) {
+        if ($.isEmptyObject(state.campaign.check_owner)) {
+            return false
+        }
+
+        return true
+    },
+
+    checkModerators(state, getters) {
+        if ($.isEmptyObject(state.campaign.check_moderators)) {
             return false
         }
 

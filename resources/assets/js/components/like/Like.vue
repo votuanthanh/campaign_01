@@ -1,35 +1,14 @@
 <template lang="html">
     <div class="post-additional-info inline-items" v-if="showMore">
-        <span>
-            <a href="javascript:void(0)"
-                class="post-add-icon inline-items"
-                @click="likeActivity({
-                    model: flag,
-                    modelId: modelId,
-                    user: user,
-                    flag: flag,
-                    numberOfLikes: like[flag][modelId].numberOfLikes,
-                    deleteDate: like[flag][modelId].deleteDate,
-                    messages: modelClosed
-                })">
-                <svg class="olymp-heart-icon">
-                    <use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"
-                        :class="{ fill: checkLike[flag][modelId] }">
-                    </use>
-                </svg>
-            </a>
-            <span class="span-show-name" @click="showMembersLiked()">
-                <ul class="show-name" v-if="like[flag][modelId].numberOfLikes">
-                    <li v-for="(item, index) in like[flag][modelId]" v-if="index < 4">
-                        <pre>{{ item.user.name }}</pre>
-                    </li>
-                    <li v-if="like[flag][modelId].numberOfLikes >= 4">
-                        <pre>{{ $t('post.like.and') + (like[flag][modelId].numberOfLikes - 4) + $t('post.like.more_like') }}</pre>
-                    </li>
-                </ul>
-                {{ like[flag][modelId].numberOfLikes }}
-            </span>
-        </span>
+        <icon-like
+            :likes="likes"
+            :checkLiked="checkLiked"
+            :flag="flag"
+            :modelId="modelId"
+            :numberOfComments="numberOfComments"
+            :numberOfLikes="numberOfLikes"
+            :modelClosed="modelClosed">
+        </icon-like>
 
         <ul class="friends-harmonic" v-if="like[flag][modelId].numberOfLikes">
             <li v-for="(item, index) in like[flag][modelId]" v-if="index < 3">
@@ -53,6 +32,7 @@
         <div class="names-people-likes" v-else>
             <router-link :to="{ name: 'user.timeline', params: { slug: like[flag][modelId][index].user.slug }}"
                 v-for="(item, index) in like[flag][modelId]"
+                :key="item.id"
                 v-if="index < 2">
                 {{ item.user.name }}<span class="temp-name" v-if="like[flag][modelId].numberOfLikes > 2 && index == 0">,</span>
                 <span class="temp-name" v-if="like[flag][modelId].numberOfLikes == 2 && index == 0">
@@ -65,7 +45,7 @@
             <span v-else="like[flag][modelId].numberOfLikes">
                 {{ $t('post.like.and') }}</br>
                 <span @click="showMembersLiked()" class="more-like">
-                    {{ (like[flag][modelId].numberOfLikes - 2) + ' ' +$t('post.like.more_like') }}
+                    {{ (like[flag][modelId].numberOfLikes - 2) + ' ' + $t('post.like.more_like') }}
                 </span>
             </span>
         </div>
@@ -90,41 +70,22 @@
         </list-member-liked>
     </div>
 
-    <span v-else>
-        <a href="javascript:void(0)"
-            class="post-add-icon inline-items"
-            @click="likeActivity({
-                model: flag,
-                modelId: modelId,
-                user: user,
-                flag: flag,
-                numberOfLikes: like[flag][modelId].numberOfLikes,
-                deleteDate: like[flag][modelId].deleteDate,
-                messages: modelClosed
-            })">
-            <svg class="olymp-heart-icon">
-                <use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"
-                    :class="{ fill: checkLike[flag][modelId] }">
-                </use>
-            </svg>
-        </a>
-        <span class="span-show-name" @click="showMembersLiked()">
-            <ul class="show-name" v-if="like[flag][modelId].numberOfLikes">
-                <li v-for="(item, index) in like[flag][modelId]" v-if="index < 4">
-                    <pre>{{ item.user.name }}</pre>
-                </li>
-                <li v-if="like[flag][modelId].numberOfLikes >= 4">
-                    <pre>{{ $t('post.like.and') + (like[flag][modelId].numberOfLikes - 4) + $t('post.like.more_like') }}</pre>
-                </li>
-            </ul>
-            {{ like[flag][modelId].numberOfLikes }}
-        </span>
-    </span>
+    <icon-like
+        v-else
+        :likes="likes"
+        :checkLiked="checkLiked"
+        :flag="flag"
+        :modelId="modelId"
+        :numberOfComments="numberOfComments"
+        :numberOfLikes="numberOfLikes"
+        :modelClosed="modelClosed">
+    </icon-like>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
 import ListMemberLiked from './ListMemberLiked.vue'
+import IconLike from './IconLike.vue'
 import noty from '../../helpers/noty'
 
 export default {
@@ -153,7 +114,6 @@ export default {
     },
     methods: {
         ...mapActions('like', [
-            'likeActivity',
             'getListMemberLiked'
         ]),
 
@@ -174,7 +134,8 @@ export default {
         }
     },
     components: {
-        ListMemberLiked
+        ListMemberLiked,
+        IconLike
     }
 }
 </script>
@@ -256,13 +217,6 @@ export default {
         }
         .mrg-top {
             margin-top: 3px !important;
-        }
-    }
-
-    .post-add-icon {
-        margin-right: 0px;
-        svg {
-            margin-right: 5px;
         }
     }
 

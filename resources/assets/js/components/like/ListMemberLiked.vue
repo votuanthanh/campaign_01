@@ -23,7 +23,15 @@
                                                         <div class="author-thumb">
                                                             <img :src="member.user.image_thumbnail" :alt="member.user.name">
                                                         </div>
-                                                        <div class="h6 author-title">{{ member.user.name }}</div>
+                                                        <div class="author-title">
+                                                            <span class="h6">
+                                                                <router-link :to="{ name: 'user.timeline', params: { slug: member.user.slug }}">
+                                                                    {{ member.user.name }}
+                                                                </router-link>
+                                                            </span>
+                                                            <br />
+                                                            <span>{{ member.user.email }}</span>
+                                                        </div>
                                                     </div>
                                                 </span>
                                                 <span class="glyphicon glyphicon-ok check-mark"></span>
@@ -141,6 +149,23 @@
                                 height: 34px;
                             }
                         }
+                        .author-title {
+                            span {
+                                margin-bottom: 0px !important;
+                                a {
+                                    font-weight: bold !important;
+                                    color: #333 !important;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                li {
+                    padding-left: 10px !important;
+                    margin-bottom: 5% !important;
+                    a {
+                        padding-left: 0px !important;
                     }
                 }
             }

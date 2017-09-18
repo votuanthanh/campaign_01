@@ -7,7 +7,7 @@
                     <h6 class="">{{ $t('campaigns.campaign-management') }}</h6>
                 </div>
 
-                <div :class="`ui-block-title ${checkActiveUrl('campaign.list_member')}`" v-if="checkOwner || checkAdmin">
+                <div :class="`ui-block-title ${checkActiveUrl('campaign.list_member')}`" v-if="checkPermission || checkAdmin">
                     <router-link
                         :to="{ name: 'campaign.list_member', params: { slug: campaign.slug }}"
                         class="h6 title">

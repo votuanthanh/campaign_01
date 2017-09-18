@@ -67,7 +67,10 @@
                         <div class="skills-item">
                             <div class="counter-friends">{{ listMembers.members.total }} {{ $t('campaigns.lbl-members') }}</div>
                             <ul class="widget w-faved-page js-zoom-gallery" v-if="listMembers.members.total > 0">
-                                <li v-for="(member, index) in listMembers.members.data" v-if="index < 10">
+                                <li
+                                    v-for="(member, index) in listMembers.members.data"
+                                    v-if="index < 10"
+                                    v-tooltip:top="member.name">
                                     <router-link :to="{ name: 'user.timeline', params: { slug: member.slug }}">
                                         <img :src="member.image_thumbnail" :alt="member.name">
                                     </router-link>
