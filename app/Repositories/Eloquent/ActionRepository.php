@@ -92,6 +92,7 @@ class ActionRepository extends BaseRepository implements ActionInterface
                     $query->withTrashed();
                 },
             ])
+            ->getLikes()
             ->where('event_id', $eventId)
             ->withTrashed()
             ->search($key, null, true);
@@ -152,14 +153,15 @@ class ActionRepository extends BaseRepository implements ActionInterface
     {
         if (!is_null($eventIds)) {
             $actions = $this->model->whereIn('event_id', $eventIds);
-            $actions->get()->each(function ($action) {
+            $actions->restore();
+            $actions->each(function ($action) {
                 $action->comments()->restore();
                 $action->likes()->restore();
                 $action->media()->restore();
                 $action->activities()->restore();
             });
 
-            return $actions->restore();
+            return true;
         }
 
         return false;

@@ -2,7 +2,7 @@
     <div v-if="showAction">
         <div class="background-modal">
         </div>
-        <div class="modal fade show wrap-action" id="open-photo-popup-v1" style="display: block">
+        <div class="modal fade show wrap-action" id="open-photo-popup-v1" style="display: block" v-if="dataAction">
             <div class="modal-dialog ui-block window-popup open-photo-popup open-photo-popup-v1">
                 <a href="javascript:void(0)" @click="close" class="close icon-close" data-dismiss="modal" aria-label="Close">
                     <svg class="olymp-close-icon">
@@ -149,7 +149,7 @@
         props: {
             showAction: {},
             dataAction: {},
-            checkLikeActions: [],
+            checkLikeActions: {},
             canComment: true
         },
 
@@ -175,6 +175,8 @@
         methods: {
             close() {
                 this.$emit('update:showAction', false)
+                this.$emit('update:dataAction', {})
+                this.$emit('update:checkLikeActions', {})
             },
 
             timeAgo(time) {

@@ -39,6 +39,7 @@ class CommentController extends ApiController
         $data['parent_id'] = $parentId;
         $data['content'] = $request->content;
         $data['user_id'] = $this->user->id;
+        $data['number_of_likes'] = 0;
 
         if ($this->user->cant('comment', $model)) {
             throw new UnknowException('Permission error: User can not create comment in this post.');

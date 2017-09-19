@@ -104,9 +104,9 @@
         </div>
         <action-detail
             :showAction.sync="showAction"
-            :dataAction="dataAction"
-            :checkLikeActions="checkLikeAction"
-            :canComment="checkPermission">
+            :dataAction.sync="dataAction.list_action"
+            :checkLikeActions.sync="dataAction.checkLikeAction"
+            :canComment.sync="checkPermission">
         </action-detail>
     </div>
 </template>
@@ -128,7 +128,6 @@ export default {
     data: () => ({
         showAction: false,
         dataAction: {},
-        checkLikeAction: {},
         checkPermission: true
     }),
     computed: {
@@ -250,8 +249,7 @@ export default {
             this.showAction = true
             this.getDetailAction(photoId)
                 .then(data => {
-                    this.checkLikeAction = data.actions.checkLikeAction
-                    this.dataAction = data.actions.list_action
+                    this.dataAction = data.actions
                     this.checkPermission = data.checkPermission
                 })
                 .catch(err => {

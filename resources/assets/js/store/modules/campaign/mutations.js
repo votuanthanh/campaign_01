@@ -4,10 +4,14 @@ export default {
     [types.CAMPAIGN_DETAIL](state, data) {
         state.campaign = data.show_campaign.campaign
         state.listMembers.members = data.members
-        state.events = data.events
+        let events = []
+        events.data = data.events.data
+        events.total = data.events.inforPage.total
+        events.last_page = data.events.inforPage.last_page
+        events.current_page = data.events.inforPage.current_page
+
+        state.events = events
         state.checkLiked = data.checkLiked
-        state.pageNumberEvent = data.events.last_page
-        state.pageCurrentEvent = data.events.current_page
         state.tags = data.show_campaign.tags
     },
 
