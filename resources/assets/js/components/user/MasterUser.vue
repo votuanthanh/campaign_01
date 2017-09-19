@@ -491,20 +491,34 @@
         },
         sockets: {
             acceptRequestSuccess: function (data) {
-                this.changeState(false, false, 1)
+                if ((data.data.acceptId == this.authUser.id && data.data.userId == this.currentPageUser.id)
+                    || (data.data.acceptId == this.currentPageUser.id && data.data.userId == this.authUser.id)
+                ) {
+                    this.changeState(false, false, 1)
+                }
             },
             rejectRequestSuccess: function (data) {
-                this.changeState(false, false, 0)
+                if ((data.data.rejectId == this.authUser.id && data.data.userId == this.currentPageUser.id)
+                    || (data.data.rejectId == this.currentPageUser.id && data.data.userId == this.authUser.id)
+                ) {
+                    this.changeState(false, false, 0)
+                }
             },
             sendRequestSuccess: function (data) {
-                if (this.authUser.id == data.data.userId) {
+                if (this.authUser.id == data.data.userId && this.currentPageUser.id == data.data.acceptId) {
                     this.changeState(true, false, 0)
-                } else {
+                }
+
+                if (data.data.acceptId == this.authUser.id && data.data.userId == this.currentPageUser.id) {
                     this.changeState(false, true, 0)
                 }
             },
             unfriendSuccess: function (data) {
-                this.changeState(false, false, false)
+                if ((data.data.unfriendId == this.authUser.id && data.data.userId == this.currentPageUser.id)
+                    || (data.data.unfriendId == this.currentPageUser.id && data.data.userId == this.authUser.id)
+                ) {
+                    this.changeState(false, false, false)
+                }
             }
         }
     }
