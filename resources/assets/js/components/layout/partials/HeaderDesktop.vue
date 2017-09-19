@@ -83,7 +83,7 @@
                             <ul class="notification-list friend-requests">
                                 <li v-for="request in listRequest" :class="request.accept ? 'accepted' : ''">
                                     <div class="author-thumb">
-                                        <img :src="request.avatar" alt="author">
+                                        <img :src="request.avatar" alt="author" id="img-author-showAvatar">
                                     </div>
                                     <div class="notification-event" v-if="!request.accept">
                                         <a href="#" class="h6 notification-friend">{{ request.userName }}</a>
@@ -691,7 +691,7 @@ export default {
                     avatar: data.noty.image_small
                 }
 
-                this.listRequest.push(user)
+                this.listRequest.unshift(user)
                 this.count += 1
             } else {
                 let index = this.listRequest.findIndex(user => user.userId == data.noty.id)
