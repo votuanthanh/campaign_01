@@ -1,4 +1,6 @@
 {
-    "unique": "The :attribute has already been taken",
-    "required": "Hãy nhập :attribute của bạn"
+    "unique": ":attribute đã được dùng rồi",
+    "required": ":attribute là dữ liệu bắt buộc",
+    "required_with": ":value là giá trị bắt buộc, khi :attribute hiện tại",
+    "setting_larger": "Tùy chọn này phải lớn hơn"
 }
