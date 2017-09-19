@@ -26,7 +26,7 @@ class MediaRepository extends BaseRepository implements MediaInterface
             $item->forceDelete();
 
             if ($item->type == Media::IMAGE) {
-                return $this->destroyFile($item->url_file, 'image');
+                return $this->destroyFile($item->url_file);
             }
 
             return true;

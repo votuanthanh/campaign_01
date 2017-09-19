@@ -37,7 +37,6 @@ class ActionController extends ApiController
         $inputs['data_action']['user_id'] = $this->user->id;
         $inputs['upload'] = $request->upload;
         $mediaIds = $request->delete;
-
         $action = $this->actionRepository->findOrFail($id);
 
         if ($this->user->cant('manage', $action)) {
@@ -47,8 +46,13 @@ class ActionController extends ApiController
         $media = $action->media->whereIn('id', $mediaIds);
 
         return $this->doAction(function () use ($action, $inputs, $media) {
-            $this->compacts['action'] = $this->actionRepository->update($action, $inputs);
+            $result = $this->actionRepository->update($action, $inputs);
             $this->mediaRepository->deleteMedia($media);
+            $this->compacts['action'] = $result->load([
+                'media' => function ($query) {
+                    $query->withTrashed();
+                },
+            ]);
         });
     }
 

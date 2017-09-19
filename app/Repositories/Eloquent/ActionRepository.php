@@ -69,7 +69,6 @@ class ActionRepository extends BaseRepository implements ActionInterface
     {
         $data['list_action'] = $action
             ->getLikes()
-            ->getComments()
             ->with([
                 'user',
                 'media' => function ($query) {
@@ -123,7 +122,8 @@ class ActionRepository extends BaseRepository implements ActionInterface
                     ->orderBy('created_at', 'desc');
             });
 
-        $dataAction['list_action'] = $actions->groupBy('created_at')->orderBy('created_at', 'DESC')
+        $dataAction['list_action'] = $actions->groupBy('created_at')
+            ->orderBy('created_at', 'DESC')
             ->paginate(config('settings.pagination.action'));
 
         $dataAction['checkLikeAction'] = $this->checkLike($actions, $userId);

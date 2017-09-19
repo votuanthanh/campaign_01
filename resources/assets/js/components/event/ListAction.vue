@@ -81,6 +81,17 @@
                                 :deleteDate="action.deleted_at">
                             </master-like>
                         </div>
+                        <master-like
+                            :likes="action.likes"
+                            :checkLiked="actions.checkLikeAction"
+                            :flag="'action'"
+                            :type="'like'"
+                            :modelId="action.id"
+                            :numberOfComments="action.number_of_comments"
+                            :numberOfLikes="action.number_of_likes"
+                            :showMore="true"
+                            :deleteDate="action.deleted_at">
+                        </master-like>
                     </article>
                 </div>
             </div>
@@ -157,7 +168,20 @@
                                 :deleteDate="action.deleted_at">
                             </master-like>
                         </div>
+
+                        <master-like
+                            :likes="action.likes"
+                            :checkLiked="actions.checkLikeAction"
+                            :flag="'action'"
+                            :type="'like'"
+                            :modelId="action.id"
+                            :numberOfComments="action.number_of_comments"
+                            :numberOfLikes="action.number_of_likes"
+                            :showMore="true"
+                            :deleteDate="action.deleted_at">
+                        </master-like>
                     </article>
+
                 </div>
             </div>
         </div>
@@ -254,7 +278,8 @@
             ...mapActions('event', [
                 'load_action',
                 'removeAction',
-                'appendOneAction'
+                'appendOneAction',
+                'updateDataAction',
             ]),
 
             ...mapActions('action', [
@@ -296,7 +321,10 @@
                 del(`action/delete/${this.actionId}`)
                     .then(res => {
                         this.$Progress.finish()
-                        this.removeAction(this.actionId)
+                        this.$socket.emit('remove_action', {
+                            actionId: this.actionId,
+                            room: `event${this.pageId}`
+                        })
                         noty({
                             text: this.$i18n.t('messages.delete_success'),
                             force: false,
@@ -336,6 +364,14 @@
         sockets: {
             new_action_created: function (data) {
                 this.appendOneAction(data)
+            },
+
+            update_data_action: function (data) {
+                this.updateDataAction(data.action)
+            },
+
+            delete_action: function(data) {
+                this.removeAction(data.actionId)
             }
         },
 

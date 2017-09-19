@@ -3,8 +3,8 @@
         <div class='row direct'>
             <div
                 :class="{
-                    'col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3': !event.deleted_at,
-                    'col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6': event.deleted_at
+                    'col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3': !event.deleted_at && event.manage,
+                    'col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6': event.deleted_at && !event.manage
                 }">
                 <router-link
                     tag="button"
@@ -44,8 +44,8 @@
             </div>
             <div
                 :class="{
-                    'col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3': !event.deleted_at,
-                    'col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6': event.deleted_at
+                    'col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3': !event.deleted_at && event.manage,
+                    'col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6': event.deleted_at && !event.manage
                 }">
                 <router-link
                     tag="button"

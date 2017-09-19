@@ -38,7 +38,7 @@
                     </li>
                 </ul>
 
-                <div class="widget w-socials">
+                <div class="widget w-socials" style="display: none;">
                     <h6 class="title">{{ $t('campaigns.other-social') }}:</h6>
                     <a href="javascript:void(0)" class="social-item bg-facebook">
                         <i class="fa fa-facebook" aria-hidden="true"></i>

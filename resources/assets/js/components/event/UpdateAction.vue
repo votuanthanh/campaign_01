@@ -130,10 +130,6 @@
         },
 
         methods: {
-            ...mapActions('event', [
-                'get_event'
-            ]),
-
             showSuccess(file, response) {
                 this.data.upload.push(response)
             },
@@ -169,13 +165,16 @@
                                 container: false,
                                 type: 'success'
                             })
-                            this.get_event(this.pageId)
+                            this.$socket.emit('update_action', {
+                                action: res.data.action,
+                                room: `event${this.pageId}`
+                            })
                             this.onClose()
                         })
                         .catch(err => {
                             this.$Progress.fail()
                             noty({
-                                text: this.$i18n.t('messages.create_fail'),
+                                text: this.$i18n.t('messages.update_fail'),
                                 type: 'error',
                                 force: false,
                                 container: false
