@@ -7,7 +7,8 @@
             :modelId="modelId"
             :numberOfComments="numberOfComments"
             :numberOfLikes="numberOfLikes"
-            :modelClosed="modelClosed">
+            :modelClosed="modelClosed"
+            :permission="permission">
         </icon-like>
 
         <ul class="friends-harmonic" v-if="like[flag][modelId].numberOfLikes">
@@ -78,7 +79,8 @@
         :modelId="modelId"
         :numberOfComments="numberOfComments"
         :numberOfLikes="numberOfLikes"
-        :modelClosed="modelClosed">
+        :modelClosed="modelClosed"
+        :permission="permission">
     </icon-like>
 </template>
 
@@ -100,7 +102,8 @@ export default {
         numberOfLikes: 0,
         numberOfComments: 0,
         showMore: true,
-        modelClosed: ''
+        modelClosed: '',
+        permission: ''
     },
     computed: {
         ...mapState('like', [

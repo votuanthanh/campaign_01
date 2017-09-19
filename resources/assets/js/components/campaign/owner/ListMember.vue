@@ -152,7 +152,7 @@
                     status: 1,
                     search: this.search,
                     roleId: this.roleId,
-                    pageNumberEvent: 1,
+                    pageNumberEvent: 2,
                     pageCurrent: 0
                 })
                 .then(data => {

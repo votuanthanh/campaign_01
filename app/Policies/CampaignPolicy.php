@@ -163,15 +163,36 @@ class CampaignPolicy extends BasePolicy
 
     public function like(User $user, Campaign $campaign)
     {
-        $roleBlockId = Role::where('name', Role::ROLE_BLOCKED)->pluck('id');
+        $public = $campaign->settings()
+            ->where('key', config('settings.campaigns.status'))
+            ->where('value', config('settings.value_of_settings.status.public'))
+            ->get()
+            ->isNotEmpty();
 
-        $userInCampaign = $campaign->users()
-            ->wherePivot('status', Campaign::APPROVED)
-            ->wherePivot('role_id', '<>', $roleBlockId)
-            ->pluck('user_id')
-            ->all();
+        $private = $campaign->settings()
+            ->where('key', config('settings.campaigns.status'))
+            ->where('value', config('settings.value_of_settings.status.private'))
+            ->get()
+            ->isNotEmpty();
 
-        return in_array($user->id, $userInCampaign);
+        return $public || ($campaign->users()->wherePivot('status', Campaign::APPROVED)->pluck('user_id')->contains($user->id) && $private);
+    }
+
+    public function comment(User $user, Campaign $campaign)
+    {
+         $public = $campaign->settings()
+            ->where('key', config('settings.campaigns.status'))
+            ->where('value', config('settings.value_of_settings.status.public'))
+            ->get()
+            ->isNotEmpty();
+
+        $private = $campaign->settings()
+            ->where('key', config('settings.campaigns.status'))
+            ->where('value', config('settings.value_of_settings.status.private'))
+            ->get()
+            ->isNotEmpty();
+
+        return $public || ($campaign->users()->wherePivot('status', Campaign::APPROVED)->pluck('user_id')->contains($user->id) && $private);
     }
 
     /**

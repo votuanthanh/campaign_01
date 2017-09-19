@@ -54,7 +54,8 @@ class CommentRepository extends BaseRepository implements CommentInterface
         return $this->withTrashed()
             ->with(['user', 'likes.user',
                 'subComment' => function ($subQuery) {
-                    $subQuery->withTrashed()->with('user', 'likes.user')
+                    $subQuery->withTrashed()->with('user')
+                        ->getLikes()
                         ->groupBy('created_at')
                         ->orderBy('created_at', 'desc')
                         ->paginate(config('settings.paginate_comment'), ['*'], 1);
@@ -72,6 +73,7 @@ class CommentRepository extends BaseRepository implements CommentInterface
 
         return $comment->subComment()->withTrashed()
            ->with('user')
+           ->getLikes()
            ->groupBy('created_at')
            ->orderBy('created_at', 'desc')
            ->paginate(config('settings.paginate_comment'));

@@ -129,11 +129,6 @@ export const loadMoreSubComment = ({ commit, rootState }, data) => {
                         rootStateLike: rootState
                     })
 
-                    for (let subComment of res.data.subComment.data) {
-                        rootState.like.like['comment'][subComment.id] = subComment.likes
-                        rootState.like.checkLike['comment'][subComment.id] = subComment.checkLike
-                    }
-
                     resolve(res.data.http_status.status)
                 })
                 .catch(err => {

@@ -8,7 +8,8 @@
         :numberOfComments="numberOfComments"
         :numberOfLikes="numberOfLikes"
         :showMore="showMore"
-        :modelClosed="modelClosed">
+        :modelClosed="modelClosed"
+        :permission="permission">
     </like>
 
     <like-infor
@@ -16,7 +17,8 @@
         :flag="flag"
         :modelId="modelId"
         :numberOfLikes="numberOfLikes"
-        :modelClosed="modelClosed">
+        :modelClosed="modelClosed"
+        :permission="permission">
     </like-infor>
 </template>
 
@@ -28,7 +30,8 @@
     export default {
         data() {
             return {
-                modelClosed: this.$i18n.t('messages.model_closed')
+                modelClosed: this.$i18n.t('messages.model_closed'),
+                permission: this.$i18n.t('messages.permission'),
             }
         },
         created() {

@@ -23,10 +23,12 @@ export const likeActivity = ({ commit }, data) => {
                         resolve(res.data.http_status.status)
                 })
                 .catch(err => {
-                    noty({
-                        text: err.response.data.http_status.message,
-                        force: true, container: false
-                    })
+                    if (err.response.data.http_status.code == 401) {
+                        noty({
+                            text: data.permission,
+                            force: true, container: false
+                        })
+                    }
                 })
         })
     } else {
