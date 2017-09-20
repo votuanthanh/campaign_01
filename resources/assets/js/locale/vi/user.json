@@ -1,0 +1,105 @@
+{
+    "friend": {
+        "block": "Chặn người này",
+        "report": "Báo cáo",
+        "turn_off_notifications": "Tắt thông báo",
+        "birthday": "Ngày sinh",
+        "phone": "Số điện thoại",
+        "gender": "Giới tính",
+        "address": "Đại chỉ",
+        "email": "Email",
+        "male": "Nam",
+        "female": "Nữ",
+        "loading": "Đang tải...",
+        "photo": "Ảnh",
+        "video": "Video",
+        "friends": "Bạn bè",
+        "search": "Tìm kiếm bạn bè...",
+        "unfriend": "Hủy kết bạn",
+        "cancel_request": "Hủy yêu cầu",
+        "accept_request": "Chấp nhận",
+        "reject_request": "Từ chối",
+        "add_friend": "Thêm bạn bè"
+    },
+    "title": {
+        "login": "Đăng nhập vào tài khoản",
+        "register_campaign": "Tạo chiến dịch"
+    },
+    "label": {
+        "following_campaign": "Chiến dịch đang theo dõi",
+        "joined_campaign": "Chiến dịch đã tham gia",
+        "owned_campaign": "Chiến dịch của bạn",
+        "account_setting": "Cài đặt tài khoản",
+        "list_campaign_close": "Các chiến dịch đã đóng"
+    },
+    "button": {
+        "read_more": "Chi tiết"
+    },
+    "quote": {
+        "create_campaign": "Tạo một chiến dịch mới",
+        "more_user": "và <br> {0} nữa đã tham gia chiến dịch này",
+        "no_data": "không còn dữ liệu nữa...",
+        "unfriend_msg": "Bạn có muốn hủy kết bạn với người này không?",
+        "deny_request_msg": "Từ chối yêu cầu kết bạn từ người này?"
+    },
+    "upload": {
+        "update_avatar": "Cập nhật ảnh đại diện",
+        "upload_photo": "Ảnh tải lên",
+        "upload_photo_desc": "Trình duyệt...",
+        "choose_from_my_photo": "Chọn từ ảnh của bạn",
+        "choose_from_my_photo_desc": "Chọn từ ảnh tải lên của bạn",
+        "select_photo": "Chọn ảnh",
+        "cancel": "Hủy",
+        "confirm": "Xác nhận ảnh",
+        "update_header_photo": "Cập nhật ảnh bìa",
+        "no_photo_msg": "Bạn không có bất kỳ hình ảnh nào, vui lòng tải lên"
+    },
+    "connect": {
+        "online": "TRỰC TUYẾN",
+        "offline": "NGOẠI TUYẾN"
+    },
+    "sidebar": {
+        "about_me": "Giới thiệu",
+        "birthday": "Ngày sinh",
+        "address": "Địa chỉ",
+        "profile_intro": "Thông tin hồ sơ",
+        "friends": "Bạn bè",
+        "list_photo": "Danh sách hình ảnh",
+        "done_have_friend": "Bạn không có bạn bè",
+        "done_have_photo": "Bạn không có bất kỳ bức ảnh nào",
+        "search_friends": "tìm kiếm bạn bè ...",
+        "load_more": "Tải thêm",
+        "of": "của",
+        "previous": "Trước (Phím mũi tên Trái)",
+        "next": "Sau (Phím mũi tên phải)",
+        "close": "Đóng (Esc)"
+    },
+    "photo": {
+        "gallery": "và thư viện ảnh",
+        "header": "Ảnh bìa",
+        "delete": "Xóa hình ảnh này",
+        "dont_have_images": "Không có bất kỳ tấm ảnh nào."
+    },
+    "header": {
+        "search": "Tìm kiếm người dùng và chiến dịch tại đây...",
+        "tag": "thẻ"
+    },
+    "search": {
+        "unfriend": "Hủy kết bạn",
+        "cancel_request": "Hủy yêu cầu",
+        "confirm": "Xác nhận",
+        "friends": "Bạn bè",
+        "owner": "Quản trị viên",
+        "add_friend": "Kết bạn",
+        "delete_request": "Xóa yêu cầu",
+        "friend_request_send": "Đã gữi yêu cầu",
+        "view_more": "Xem thêm",
+        "campaign": "Chiến dịch",
+        "number_of_participants": "Số người tham gia",
+        "number_of_events": "Số sự kiện",
+        "result_finded": "Không tìm thấy người dùng với từ khóa | Tìm thấy một người dùng với từ khóa | Tìm thấy {value} người dùng với từ khoá",
+        "result_campaign_finded": "Không có chiến dịch với từ khóa | Có một chiến dịch với từ khóa | Có {value} các chiến dịch có từ khóa",
+        "check_joined": "Bạn chưa tham gia chiến dịch này. | Bạn đã tham gia vào chiến dịch này. | Bạn là quản trị viên của chiến dịch này."
+    },
+    "activity_empty": "Tại đây bạn sẽ thấy các hoạt động cập nhật gần đây"
+}

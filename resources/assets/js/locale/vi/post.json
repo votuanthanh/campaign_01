@@ -1,0 +1,16 @@
+{
+    "like": {
+        "liked_this": "đã thích",
+        "more_like": "nữa đã thích",
+        "like_first": "Hãy là người đầu tiên thích bài đăng này",
+        "and": "và"
+    },
+    "campaign": {
+        "created_a": "tạo một",
+        "joined": "đã tham gia",
+        "new_campaign": "chiến dịch mới"
+    },
+    "created_a_event": "tạo một sự kiện",
+    "created_a_post": "tạo một bài đăng",
+    "read_more": "Chi tiết"
+}
