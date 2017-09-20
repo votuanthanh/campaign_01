@@ -4,7 +4,10 @@
             :style="'right:' + marginRight + 'px !important'">
             <div class="ui-block-title">
 
-                <router-link :to="{ name: 'user.timeline', params: { slug: receiveSlug } }" class="title-name">
+                <router-link v-if="type" :to="{ name: 'user.timeline', params: { slug: receiveSlug }}" class="title-name">
+                    {{ receiveName }}
+                </router-link>
+                <router-link v-else :to="{ name: 'campaign.timeline', params: { slug: receiveSlug }}" class="title-name">
                     {{ receiveName }}
                 </router-link>
                 <div class="more">

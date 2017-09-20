@@ -177,8 +177,8 @@ export const setDetailcampaign = ({ commit }, data) => {
     commit(types.SET_DETAIL_CAMPAIGN, data)
 };
 
-export const updateEventsCampaign = ({ commit }, data) => {
-    commit(types.UPDATE_EVENTS_CAMPAIGN, data)
+export const updateEventsCampaign = ({ commit, rootState }, data) => {
+    commit(types.UPDATE_EVENTS_CAMPAIGN, { event: data,  rootStateLike: rootState.like })
 };
 
 export const inviteUser = ({ commit }, data) => {

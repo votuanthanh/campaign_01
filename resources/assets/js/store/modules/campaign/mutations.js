@@ -97,12 +97,17 @@ export default {
         state.detailCampaign[campaign.id] = campaign
     },
 
-    [types.UPDATE_EVENTS_CAMPAIGN](state, event) {
+    [types.UPDATE_EVENTS_CAMPAIGN](state, data) {
         let events = state.events.data
-        events.unshift(event)
+        events.unshift(data.event)
         state.events.data = []
         state.events.data = events
         state.events.total++
+
+        data.rootStateLike
+        data.rootStateLike.like['event'][data.event.id] = []
+        data.rootStateLike.checkLike['event'][data.event.id] = false
+        data.rootStateLike.like['event'][data.event.id]['numberOfLikes'] = 0
     },
 
     [types.ACCEPT_CAMPAIGN](state, data) {

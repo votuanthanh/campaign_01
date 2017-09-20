@@ -84,7 +84,7 @@
                             <img alt="author"
                                 :src="group.media[0].image_thumbnail"
                                 class="avatar"
-                                @click="addChatComponent(group.hashtag, group.hashtag, false)">
+                                @click="addChatComponent(group.hashtag, group.hashtag, false, group.slug)">
                             <span class="icon-status online"></span>
                         </div>
                         <div class="author-status">
@@ -101,7 +101,7 @@
                                         data-placement="top"
                                         data-original-title="START CONVERSATION"
                                         class="olymp-comments-post-icon"
-                                        @click="addChatComponent(group.hashtag, group.hashtag, false)">
+                                        @click="addChatComponent(group.hashtag, group.hashtag, false, group.slug)">
                                         <use xlink:href='/frontend/icons/icons.svg#olymp-comments-post-icon'></use>
                                     </svg>
                                 </li>
@@ -254,6 +254,10 @@ export default {
                     const message = this.$i18n.t('messages.connection_error')
                     noty({ text: message, container: false, force: true })
                 })
+
+            EventBus.$on('addChatComponent', (data) => {
+                this.addChatComponent(data.id, data.name, data.singleChat, data.slug)
+            })
         }
     },
     methods: {
