@@ -20,7 +20,7 @@ export const likeActivity = ({ commit }, data) => {
                             deleteDate: data.deleteDate
                         })
 
-                        resolve(res.data.http_status.status)
+                        resolve(res.data)
                 })
                 .catch(err => {
                     if (err.response.data.http_status.code == 401) {
@@ -29,6 +29,7 @@ export const likeActivity = ({ commit }, data) => {
                             force: true, container: false
                         })
                     }
+                    reject(err)
                 })
         })
     } else {
@@ -57,8 +58,14 @@ export const getListMemberLiked = ({ commit }, data) => {
     }
 };
 
+export const appendLike = ({ commit, rootState }, data) => {
+    commit(types.APPEND_LIKE, data)
+
+};
+
 export default {
     setLike,
     likeActivity,
-    getListMemberLiked
+    getListMemberLiked,
+    appendLike
 };

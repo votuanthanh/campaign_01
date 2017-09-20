@@ -22,6 +22,7 @@
             '$route' : 'intialize',
         },
         created: function () {
+            this.$socket.emit('viewing_like', `campaign${this.pageId}`)
             this.intialize()
         },
         methods: {
@@ -43,6 +44,9 @@
         },
         components: {
            HeaderCampaign
+        },
+        beforeDestroy() {
+            this.$socket.emit('stop_view_like', `campaign${this.pageId}`)
         }
     }
 </script>

@@ -5,6 +5,7 @@
             :flag="flag"
             :classListComment="classListComment"
             :deleteDate="deleteDate"
+            :roomLike="roomLike"
             :canComment="canComment">
         </list-comment>
         <form-comment
@@ -39,7 +40,8 @@ export default {
         classFormComment: '',
         numberOfComments: 0,
         deleteDate: null,
-        canComment: true
+        canComment: true,
+        roomLike: ''
     },
     methods: {
         ...mapActions('comment', [

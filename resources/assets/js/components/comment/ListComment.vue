@@ -88,7 +88,8 @@
                     :modelId="comment.id"
                     :numberOfLikes="comment.number_of_likes"
                     :showMore="false"
-                    :deleteDate="comment.deleted_at">
+                    :deleteDate="comment.deleted_at"
+                    :roomLike="roomLike">
                 </master-like>
 
                 <div class="div-reply">
@@ -207,7 +208,8 @@
                             :modelId="subComment.id"
                             :numberOfLikes="subComment.number_of_likes"
                             :showMore="false"
-                            :deleteDate="subComment.deleted_at">
+                            :deleteDate="subComment.deleted_at"
+                            :roomLike="roomLike">
                         </master-like>
                     </li>
                 </ul>
@@ -243,7 +245,8 @@ export default {
         flag: '',
         classListComment: '',
         numberOfComments: 0,
-        canComment: true
+        canComment: true,
+        roomLike: ''
     },
     computed: {
         ...mapState('comment', [
@@ -262,6 +265,9 @@ export default {
             'deleteComment',
             'loadMoreParentComment',
             'loadMoreSubComment'
+        ]),
+        ...mapActions('like', [
+            'appendLike',
         ]),
         showSubComment(comment, index) {
             this.flagReply = comment.id
@@ -315,6 +321,13 @@ export default {
         FormCommentEdit,
         ShowText,
         MasterLike
+    },
+    sockets: {
+        newLike: function (data) {
+            if (this.user.id != data.user.id) {
+                this.appendLike(data)
+            }
+        }
     }
 }
 </script>

@@ -147,6 +147,7 @@
                         .author-thumb {
                             img {
                                 height: 34px;
+                                width: 34px;
                             }
                         }
                         .author-title {

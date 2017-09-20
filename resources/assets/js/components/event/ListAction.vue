@@ -6,7 +6,7 @@
                 {{ $t('events.not_found_action') }}
             </h2>
         </div>
-        <div class="row">
+        <div class="row" v-if="event">
             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="ui-block" v-for="(action, index) in actions.list_action.data" v-if="!(index % 2)">
                     <article class="hentry post has-post-thumbnail thumb-full-width">
@@ -78,7 +78,8 @@
                                 :modelId="action.id"
                                 :numberOfComments="action.number_of_comments"
                                 :numberOfLikes="action.number_of_likes"
-                                :deleteDate="action.deleted_at">
+                                :deleteDate="action.deleted_at"
+                                :roomLike="`campaign${event.campaign_id}`">
                             </master-like>
                         </div>
                         <master-like
@@ -90,7 +91,8 @@
                             :numberOfComments="action.number_of_comments"
                             :numberOfLikes="action.number_of_likes"
                             :showMore="true"
-                            :deleteDate="action.deleted_at">
+                            :deleteDate="action.deleted_at"
+                            :roomLike="`campaign${event.campaign_id}`">
                         </master-like>
                     </article>
                 </div>
@@ -165,7 +167,8 @@
                                 :modelId="action.id"
                                 :numberOfComments="action.number_of_comments"
                                 :numberOfLikes="action.number_of_likes"
-                                :deleteDate="action.deleted_at">
+                                :deleteDate="action.deleted_at"
+                                :roomLike="`campaign${event.campaign_id}`">
                             </master-like>
                         </div>
 
@@ -178,7 +181,8 @@
                             :numberOfComments="action.number_of_comments"
                             :numberOfLikes="action.number_of_likes"
                             :showMore="true"
-                            :deleteDate="action.deleted_at">
+                            :deleteDate="action.deleted_at"
+                            :roomLike="`campaign${event.campaign_id}`">
                         </master-like>
                     </article>
 
@@ -206,7 +210,8 @@
             :showAction.sync="showAction"
             :dataAction.sync="dataAction.list_action"
             :checkLikeActions.sync="dataAction.checkLikeAction"
-            :canComment.sync="checkPermission">
+            :canComment.sync="checkPermission"
+            :roomLike="`campaign${event.campaign_id}`">
         </action-detail>
         <update-action
             :showUpdate.sync="showUpdate"
@@ -244,7 +249,8 @@
                 'flag_search',
                 'key_search',
                 'load_search',
-                'load_paginate'
+                'load_paginate',
+                'event'
             ]),
 
             ...mapState('auth', {
@@ -283,6 +289,10 @@
 
             ...mapActions('action', [
                 'getDetailAction',
+            ]),
+
+            ...mapActions('like', [
+                'appendLike',
             ]),
 
             detailAction(actionId) {
@@ -370,6 +380,11 @@
 
             delete_action: function(data) {
                 this.removeAction(data.actionId)
+            },
+            newLike: function (data) {
+                if (this.user.id != data.user.id) {
+                    this.appendLike(data)
+                }
             }
         },
 

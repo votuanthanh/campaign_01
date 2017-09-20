@@ -43,4 +43,9 @@ class EventPolicy extends BasePolicy
     {
         return $user->can('like', $event->campaign);
     }
+
+    public function member(User $user, Event $event)
+    {
+        return $user->can('member', $event->campaign);
+    }
 }

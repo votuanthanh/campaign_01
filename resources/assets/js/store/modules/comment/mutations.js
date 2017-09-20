@@ -100,7 +100,6 @@ export default {
             comments[data.flag][data.modelId][index[0]].sub_comment.data = dataComment
             comments[data.flag][data.modelId][index[0]].number_of_comments = data.numberComment
         } else {
-            comments[data.flag][data.modelId][index[0]].sub_comment.total = data.numberComment
             comments[data.flag][data.modelId][index[0]].number_of_comments = data.numberComment
             comments[data.flag][data.modelId][index[0]].sub_comment.data = comments[data.flag][data.modelId][index[0]].sub_comment.data.concat(data.comments)
         }

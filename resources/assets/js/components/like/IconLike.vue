@@ -2,16 +2,7 @@
     <span>
         <a href="javascript:void(0)"
             class="post-add-icon inline-items"
-            @click="likeActivity({
-                model: flag,
-                modelId: modelId,
-                user: user,
-                flag: flag,
-                numberOfLikes: like[flag][modelId].numberOfLikes,
-                deleteDate: like[flag][modelId].deleteDate,
-                messages: modelClosed,
-                permission: permission
-            })">
+            @click="likeActivities">
             <svg class="olymp-heart-icon">
                 <use xlink:href="/frontend/icons/icons.svg#olymp-heart-icon"
                     :class="{ fill: checkLike[flag][modelId] }">
@@ -56,7 +47,8 @@ export default {
         numberOfComments: 0,
         modelClosed: '',
         onlyComment: '',
-        permission: ''
+        permission: '',
+        roomLike: ''
     },
     computed: {
         ...mapState('like', [
@@ -82,6 +74,37 @@ export default {
             })
             .then(status => {
                 this.flagShowListMember = true
+            })
+            .catch(err => {
+                const message = this.$i18n.t('messages.join_campaign_fail')
+                noty({ text: message, force: true, container: false })
+            })
+        },
+        likeActivities() {
+            this.likeActivity({
+                model: this.flag,
+                modelId: this.modelId,
+                user: this.user,
+                flag: this.flag,
+                numberOfLikes: this.like[this.flag][this.modelId].numberOfLikes,
+                deleteDate: this.like[this.flag][this.modelId].deleteDate,
+                messages: this.modelClosed,
+                permission: this.permission
+            })
+            .then(res => {
+                let data = {
+                    like: res.like,
+                    modelId: this.modelId,
+                    flag: this.flag,
+                    user: this.user,
+                    numberOfLikes: res.numberOfLikes,
+                    deleteDate: this.deleteDate
+                }
+
+                this.$socket.emit('likeActivity', {
+                    newLike: data,
+                    room: this.roomLike
+                })
             })
             .catch(err => {
                 const message = this.$i18n.t('messages.join_campaign_fail')

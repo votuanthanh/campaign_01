@@ -85,6 +85,7 @@
                                 </show-text>
                             </span>
                         </p>
+                        <p>{{ roomLike }}</p>
 
                         <master-like
                             :likes="dataAction.likes"
@@ -95,7 +96,8 @@
                             :numberOfComments="dataAction.number_of_comments"
                             :numberOfLikes="dataAction.number_of_likes"
                             :showMore="true"
-                            :deleteDate="dataAction.deleted_at">
+                            :deleteDate="dataAction.deleted_at"
+                            :roomLike="roomLike">
                         </master-like>
 
                         <div class="control-block-button post-control-button">
@@ -107,7 +109,8 @@
                                 :modelId="dataAction.id"
                                 :numberOfComments="dataAction.number_of_comments"
                                 :numberOfLikes="dataAction.number_of_likes"
-                                :deleteDate="dataAction.deleted_at">
+                                :deleteDate="dataAction.deleted_at"
+                                :roomLike="roomLike">
                             </master-like>
 
                             <a href="javascript:void(0)" class="btn btn-control">
@@ -131,7 +134,8 @@
                     :classListComment="''"
                     :classFormComment="''"
                     :deleteDate="dataAction.deleted_at"
-                    :canComment="canComment">
+                    :canComment="canComment"
+                    :roomLike="roomLike">
                 </comment>
 
             </div>
@@ -150,7 +154,8 @@
             showAction: {},
             dataAction: {},
             checkLikeActions: {},
-            canComment: true
+            canComment: true,
+            roomLike: ''
         },
 
         data() {
@@ -158,7 +163,6 @@
                 model: 'action'
             }
         },
-
         computed: {
             ...mapState('auth', {
                 user: state => state.user
@@ -173,6 +177,10 @@
         },
 
         methods: {
+            ...mapActions('like', [
+                'appendLike',
+            ]),
+
             close() {
                 this.$emit('update:showAction', false)
                 this.$emit('update:dataAction', {})
@@ -282,6 +290,13 @@
             ShowText,
             Comment,
             MasterLike
+        },
+        sockets: {
+            newLike: function (data) {
+                if (this.user.id != data.user.id) {
+                    this.appendLike(data)
+                }
+            }
         }
     }
 </script>

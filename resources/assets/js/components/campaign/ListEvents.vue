@@ -43,7 +43,8 @@
                         :numberOfComments="event.number_of_comments"
                         :numberOfLikes="event.number_of_likes"
                         :showMore="true"
-                        :deleteDate="event.deleted_at">
+                        :deleteDate="event.deleted_at"
+                        :roomLike="`campaign${pageId}`">
                     </master-like>
 
                     <div class="control-block-button post-control-button">
@@ -55,7 +56,8 @@
                             :modelId="event.id"
                             :numberOfComments="event.number_of_comments"
                             :numberOfLikes="event.number_of_likes"
-                            :deleteDate="event.deleted_at">
+                            :deleteDate="event.deleted_at"
+                            :roomLike="`campaign${pageId}`">
                         </master-like>
 
                         <a href="javascript:void(0)" class="btn btn-control">
@@ -75,7 +77,8 @@
                     :classListComment="''"
                     :classFormComment="''"
                     :deleteDate="event.deleted_at"
-                    :canComment="checkComemnt()">
+                    :canComment="checkComemnt()"
+                    :roomLike="`campaign${pageId}`">
                 </comment>
             </div>
         </div>
@@ -99,10 +102,14 @@ import MasterLike from '../like/MasterLike.vue'
 import ListImage from '../home/ListImage.vue'
 
 export default {
-    data: () => ({
-        model: 'event',
-        flagComments: []
-    }),
+    data()
+    {
+        return {
+            model: 'event',
+            flagComments: [],
+            roomLike: `campaign${this.pageId}`
+        }
+    },
     computed: {
         ...mapGetters('campaign', [
             'checkPermission',
@@ -122,6 +129,9 @@ export default {
     methods: {
         ...mapActions('campaign', [
             'updateEventsCampaign',
+        ]),
+        ...mapActions('like', [
+            'appendLike',
         ]),
         timeAgo(time) {
             return moment(time, "YYYY-MM-DD h:mm:ss").fromNow()
@@ -169,6 +179,11 @@ export default {
             }
 
             this.updateEventsCampaign(eventAdd)
+        },
+        newLike: function (data) {
+            if (this.user.id != data.user.id) {
+                this.appendLike(data)
+            }
         }
     }
 }
