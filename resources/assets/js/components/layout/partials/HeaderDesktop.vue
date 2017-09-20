@@ -135,7 +135,7 @@
                         </div>
                         <div class="mCustomScrollbar" data-mcs-theme="dark" id="notification_messages">
                             <ul class="notification-list chat-message">
-                                <li v-for="mess in messages" :class="mess.class">
+                                <li v-for="mess in messages" :class="mess.class" @click="addChatComponent(mess)">
                                     <div class="author-thumb">
                                         <img :src="mess.showAvatar" alt="author" id="img-author-showAvatar">
                                     </div>
@@ -662,6 +662,33 @@ export default {
                         this.messages[i].sendName = this.friends[index].name + ' :'
                     }
                 }
+            }
+        },
+        addChatComponent(mess) {
+            if (!Number(mess.to) && typeof mess.to === 'string' || !Number(mess.from) && typeof mess.from === 'string') {
+                let campaign = this.groups.filter(group => {
+                    return group.hashtag === mess.showName
+                })
+
+                if (!campaign.length) {
+                    return
+                }
+
+                EventBus.$emit('addChatComponent', {
+                    id: campaign[0].hashtag,
+                    name: campaign[0].hashtag,
+                    singleChat: false,
+                    slug: campaign[0].title
+                })
+            } else {
+                let id = (Number(mess.to) != this.user.id)
+                    ? Number(mess.to) : Number(mess.from)
+                EventBus.$emit('addChatComponent', {
+                    id: id,
+                    name: mess.showName,
+                    singleChat: true,
+                    slug: id
+                })
             }
         }
     },
