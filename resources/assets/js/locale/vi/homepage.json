@@ -8,7 +8,7 @@
     "start_now": "Bắt đầu",
     "campaign": "chiến dịch",
     "in_campaign": "trong chiến dịch",
-    "campaigns_may_join": "Các chiến dịch mở rộng",
+    "campaigns_may_join": "Các Chiến Dịch Mở Rộng",
     "mutual_friends": "Bạn chung",
     "information": "Thông tin",
     "create_own_campaign": "TẠO RA CHIẾN DỊCH CỦA RIÊNG BẠN!",
@@ -36,5 +36,20 @@
     "in_common": "bạn chung",
     "register_now": "Tạo ngay bây giờ!",
     "intro": "Hãy cùng tham gia các chiến dịch và kết bạn để có thêm các thông tin.",
-    "home": "Trang chủ"
+    "home": "Trang chủ",
+    "header": {
+        "profile_settings": "Cài đặt tài khoản",
+        "your_timeline": "Dòng thời gian",
+        "your_account": "Tài khoản của bạn",
+        "choose_language": "Chọn ngôn ngữ",
+        "language": "VI",
+        "login": "Đăng nhập",
+        "register": "Đăng kí",
+        "readed_at": "Đã đọc lúc",
+        "chat_message": "Trò chuyện / Tin nhắn",
+        "logout": "Đăng xuất",
+        "vietnam": "Việt nam",
+        "english": "English",
+        "japan": "Janpan"
+    }
 }

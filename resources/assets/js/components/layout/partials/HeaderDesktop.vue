@@ -68,6 +68,48 @@
                 {{ $t('homepage.home') }}
             </router-link>
             <div class="control-block" v-if="authenticated">
+                <div class="select-lang control-icon more has-items">
+                    {{ $t('homepage.header.language') }}
+                    <div class="more-lang more-dropdown more-with-triangle triangle-top-center">
+                        <div class="ui-block-title ui-block-title-small">
+                            <h6 class="title">{{ $t('homepage.header.choose_language') }}</h6>
+                        </div>
+                        <div class="mCustomScrollbar ps ps--theme_default ps--active-y" data-mcs-theme="dark" data-ps-id="a157eff2-42d1-dbd0-3583-bc5f938692d2">
+                            <ul class="notification-list friend-requests">
+                                <li @click.prevent="changeLanguage('vi')">
+                                    <div class="author-thumb">
+                                        <img src="/images/vn.png" alt="author">
+                                    </div>
+                                    <div class="notification-event">
+                                        <a href="javascript:void(0)" class="h6 notification-friend">
+                                            {{ $t('homepage.header.vietnam') }}
+                                        </a>
+                                    </div>
+                                </li>
+                                <li @click.prevent="changeLanguage('en')">
+                                    <div class="author-thumb">
+                                        <img src="/images/en.png" alt="author">
+                                    </div>
+                                    <div class="notification-event">
+                                        <a href="javascript:void(0)" class="h6 notification-friend">
+                                            {{ $t('homepage.header.english') }}
+                                        </a>
+                                    </div>
+                                </li>
+                                <li @click.prevent="changeLanguage('ja')">
+                                    <div class="author-thumb">
+                                        <img src="/images/jp5.png" alt="author">
+                                    </div>
+                                    <div class="notification-event">
+                                        <a href="javascript:void(0)" class="h6 notification-friend">
+                                            {{ $t('homepage.header.japan') }}
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <div class="control-icon more has-items" @click="markRead(0)">
                     <svg class="olymp-happy-face-icon">
                         <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
@@ -129,7 +171,7 @@
                     <div class="label-avatar bg-purple" v-show="countReadMessage">{{ countReadMessage }}</div>
                     <div class="more-dropdown more-with-triangle triangle-top-center">
                         <div class="ui-block-title ui-block-title-small">
-                            <h6 class="title">Chat / Messages</h6>
+                            <h6 class="title">{{ $t('homepage.header.chat_message') }}</h6>
                             <a href="#" style="display:none;">Mark all as read</a>
                             <a href="#" style="display:none;">Settings</a>
                         </div>
@@ -144,7 +186,7 @@
                                         <span class="chat-message-item" v-html="mess.sendName + mess.message"></span>
                                         <span class="notification-date">
                                             <time class="entry-date updated" datetime="2004-07-24T18:18" v-if="mess.read">
-                                                Read at {{ calendarTime(mess.time) }}
+                                                {{ $t('homepage.header.readed_at') + ' ' + calendarTime(mess.time) }}
                                             </time>
                                             <time class="entry-date updated" datetime="2004-07-24T18:18" v-else>
                                                 {{ calendarTime(mess.time) }}
@@ -328,7 +370,7 @@
                         <span class="icon-status online"></span>
                         <div class="more-dropdown more-with-triangle">
                             <div class="ui-block-title ui-block-title-small">
-                                <h6 class="title">Your Account</h6>
+                                <h6 class="title">{{ $t('homepage.header.your_account') }}</h6>
                             </div>
                             <ul class="account-settings">
                                 <li>
@@ -336,7 +378,7 @@
                                         <svg class="olymp-menu-icon">
                                             <use xlink:href="/frontend/icons/icons.svg#olymp-menu-icon"></use>
                                         </svg>
-                                        <span>Profile Settings</span>
+                                        <span>{{ $t('homepage.header.profile_settings') }}</span>
                                     </router-link>
                                 </li>
                                 <li>
@@ -344,7 +386,7 @@
                                         <svg class="olymp-star-icon left-menu-icon">
                                             <use xlink:href="/frontend/icons/icons.svg#olymp-star-icon"></use>
                                         </svg>
-                                        <span>Your timeline</span>
+                                        <span>{{ $t('homepage.header.your_timeline') }}</span>
                                     </router-link>
                                 </li>
                                 <li>
@@ -352,7 +394,7 @@
                                         <svg class="olymp-logout-icon">
                                             <use xlink:href="/frontend/icons/icons.svg#olymp-logout-icon"></use>
                                         </svg>
-                                        <span>Log Out</span>
+                                        <span>{{ $t('homepage.header.logout') }}</span>
                                     </a>
                                 </li>
                             </ul>
@@ -372,8 +414,8 @@
             <!--End: control-block -->
 
             <div class="control-log control-block" v-else>
-                <router-link to="/login">Login</router-link> |
-                <router-link to="/register">Register</router-link>
+                <router-link to="/login">{{ $t('homepage.header.login') }}</router-link> |
+                <router-link to="/register">{{ $t('homepage.header.register') }}</router-link>
             </div>
         </div>
     </header>
@@ -690,6 +732,10 @@ export default {
                     slug: id
                 })
             }
+        },
+        changeLanguage(locale) {
+            this.$i18n.locale = locale
+            localStorage.setItem('locale', locale)
         }
     },
     mounted() {
@@ -776,6 +822,67 @@ export default {
 </script>
 
 <style lang="scss">
+.select-lang {
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+
+    &.control-icon {
+        .more-lang {
+            right: -70px;
+            width: 145px;
+            padding: 0;;
+            box-shadow: 0 0 34px 0 rgba(192, 194, 204, 0.55);
+
+            .ui-block-title.ui-block-title-small {
+                padding: 7px 25px;
+            }
+
+            .notification-list {
+                .notification-event {
+                    padding-left: 0px;
+                    a {
+                        &:hover {
+                            color: #515365;
+                        }
+                    }
+                }
+
+            .notification-friend {
+                    margin-right: 0px;
+                    padding: 5px 0px 0px 0px;
+                    font-size: 12px;
+                }
+                li {
+                    padding: 5px 10px;
+                    border-bottom: 1px solid #e6ecf5;
+                    display: block;
+                    position: relative;
+                    transition: all .3s ease;
+                    .author-thumb {
+                        height: 27px;
+                        width: 27px;
+                        img {
+                            width: 23px;
+                            height: 18px;
+                            border-radius: 0px;
+                            box-shadow: 2px 1px 5px -1px #404358;
+                        }
+                    }
+
+                    &:last-child {
+                        border-bottom: 0px;
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+
+
+
 .author-thumb {
     .avatar {
         width: 40px;

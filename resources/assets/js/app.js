@@ -39,7 +39,7 @@ for (let rule in rules) {
 Validator.updateDictionary(dictionary);
 
 const i18n = new VueI18n({
-    locale: window.Laravel.locale,
+    locale: !!localStorage.getItem('locale') ? localStorage.getItem('locale') : window.Laravel.locale,
     fallbackLocale: window.Laravel.fallbackLocale,
     messages
 })
