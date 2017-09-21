@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/images/favicon.ico') }}"/>
     {!! Html::script(asset('frontend/js/webfontloader.min.js')) !!}
     <script>
         WebFont.load({
