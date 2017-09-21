@@ -16,34 +16,33 @@
                     <div class="features-video-content">
                         <article class="hentry post info-event">
                             <div class="post__author author vcard inline-items user-event">
-                                <img :src="event.user.image_thumbnail" alt="author">
                                 <div class="author-date">
-                                    <router-link :to="{ name: 'user.timeline', params: { slug: event.user.id } }">
-                                        <a class="h6 post__author-name fn" href="javascript:void(0)">{{ event.user.name }}</a>
-                                    </router-link>
-                                    <div class="post__date">
-                                        <time class="published" datetime="2017-03-24T18:18">
-                                            {{ timeAgo(event.created_at) }}
-                                        </time>
-                                    </div>
+                                    <p class="h2 post-title">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        {{ event.title }}
+                                    </p>
                                 </div>
                                 <div class="more" v-if="isManager && !event.deleted_at">
                                     <svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
                                     <ul class="more-dropdown">
                                         <li>
-                                            <router-link :to="{ name: 'event.update', params: { slug: event.slug } }">
+                                            <router-link :to="{ name: 'event.update', params: { slug: event.slug }}">
                                                 {{ $t('events.edit-event') }}
                                             </router-link>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)" @click="confirmCloseEvent()">{{ $t('events.close-event') }}</a>
+                                            <a href="#" @click.prevent="showConfirm = true">{{ $t('events.close-event') }}</a>
                                         </li>
                                     </ul>
                                 </div>
+                                <div class="post__date">
+                                    <router-link
+                                        :to="{ name: 'user.timeline', params: { slug: event.user.slug } }">
+                                        <i class="fa fa-user" aria-hidden="true"></i> {{ event.user.name }}
+                                    </router-link>
+                                    <i class="fa fa-clock-o"></i> {{ timeAgo(event.created_at) }}
+                                </div>
                             </div>
-                            <p class="title-event">
-                                {{ event.title }}
-                            </p>
                             <master-like
                                 :likes="event.likes"
                                 :checkLiked="checkLiked"
@@ -98,22 +97,10 @@
                 </div>
             </div>
         </div>
-        <message :show.sync="showComfirm">
-            <h5 class="exclamation-header" slot="header">
-                {{ $t('messages.comfirm_delete') }}
-            </h5>
-            <div class="body-modal confirm-delete" slot="main">
-                <a href="javascript:void(0)"
-                    class="btn btn-breez col-lg-3 col-md-6 col-sm-12 col-xs-12"
-                    @click="closeEvent(event.id)">
-                    {{ $t('form.button.agree') }}
-                </a>
-                <a href="javascript:void(0)"
-                    class="btn btn-secondary col-lg-3 col-md-6 col-sm-12 col-xs-12"
-                    @click="cancelCloseEvent">
-                    {{ $t('form.button.no') }}
-                </a>
-            </div>
+        <message
+            :show.sync="showConfirm"
+            :messages="$t('messages.confirm_close_event')"
+            @handelMethod="closeEvent(event.id)">
         </message>
     </div>
 </template>
@@ -125,23 +112,23 @@
     import Comment from '../comment/Comment.vue'
     import { get, del } from '../../helpers/api'
     import noty from '../../helpers/noty'
-    import Message from '../libs/Modal.vue'
+    import Message from '../libs/MessageComfirm.vue'
     import MasterLike from '../like/MasterLike.vue'
 
     export default {
-        data :() => ({
+        data: () => ({
             style: { width: '100%', height: '100%' },
             isLiked: null,
             numberLike: 0,
             model: 'event',
             showExpense: false,
             isManager: false,
-            showComfirm: false,
+            showConfirm: false,
             pageType: 'event',
             imageEventDefault: window.Laravel.settings.imageEventDefault
         }),
 
-        computed : {
+        computed: {
             ...mapState('event', [
                 'event',
                 'checkLiked'
@@ -184,14 +171,6 @@
                             type: 'error'
                         })
                     })
-            },
-
-            confirmCloseEvent() {
-                this.showComfirm = true
-            },
-
-            cancelCloseEvent() {
-                this.showComfirm = false
             },
 
             setScrollBar() {
@@ -239,7 +218,6 @@
         margin-bottom: 0px;
         align-items: initial !important;
         .slider-event {
-            height: 420px !important;
             button {
                 z-index: 20 !important;
             }
@@ -321,6 +299,24 @@
     .show-description {
         .ui-block-title {
             line-height: 1.5
+        }
+    }
+    .post {
+        .author-date {
+            width: 85% !important;
+            margin-left: 5px;
+        }
+    }
+    .post__date {
+        margin-top: 5px;
+        a {
+            margin-right: 5px;
+            color: #888da8;
+        }
+    }
+    .post-additional-info {
+        > * {
+            margin-right: 0;
         }
     }
 </style>

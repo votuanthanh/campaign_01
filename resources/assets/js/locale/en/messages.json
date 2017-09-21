@@ -52,6 +52,7 @@
     "error": "Error",
     "not_permission": "You are not permission",
     "delete_photo": "Are you sure you want to cancel this photo?",
+    "confirm_close_event": "Are you sure you want to close this event?",
     "comfirm_open_event": "Are you sure you want to open this event?",
     "comfirm-close-campaign": "Do you want to close this campaign?",
     "close_campaign_success": "You closed this campaign is successfully!",
