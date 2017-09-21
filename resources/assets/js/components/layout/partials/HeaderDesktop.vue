@@ -510,29 +510,32 @@ export default {
                     .then(res => {
                         if (res.data.status == 200) {
                             let noty = res.data.notifications
+                            var self = this
 
                             for (var index = 0; index < noty.length; index++) {
-                                let isSendToUser = Number.isInteger(Number(noty[index].content.receive))
-                                let mess = {
-                                    from: noty[index].content.userId,
-                                    sendName: this.$i18n.t('messages.you'),
-                                    to: noty[index].content.receive,
-                                    groupChat: noty[index].content.groupKey,
-                                    message: noty[index].content.message,
-                                    showName: noty[index].content.nameReceive,
-                                    showAvatar: noty[index].content.avatarReceive,
-                                    class: isSendToUser
-                                        ? (noty[index].isRead || this.user.id == noty[index].content.userId ? "" : "message-unread")
-                                        : "group-chat",
-                                    time: noty[index].isRead ? noty[index].time : noty[index].content.time,
-                                    read: noty[index].content.userId == this.user.id ? true : noty[index].isRead
-                                }
+                                (function () {
+                                    var isSendToUser = Number.isInteger(Number(noty[index].content.receive))
+                                    var mess = {
+                                        from: noty[index].content.userId,
+                                        sendName: self.$i18n.t('messages.you'),
+                                        to: noty[index].content.receive,
+                                        groupChat: noty[index].content.groupKey,
+                                        message: noty[index].content.message,
+                                        showName: noty[index].content.nameReceive,
+                                        showAvatar: noty[index].content.avatarReceive,
+                                        class: isSendToUser
+                                            ? (noty[index].isRead || self.user.id == noty[index].content.userId ? "" : "message-unread")
+                                            : "group-chat",
+                                        time: noty[index].isRead ? noty[index].time : noty[index].content.time,
+                                        read: noty[index].content.userId == self.user.id ? true : noty[index].isRead
+                                    }
 
-                                this.countReadMessage = !mess.read && mess.read != null
-                                    ? (this.countReadMessage + 1)
-                                    : this.countReadMessage
+                                    self.countReadMessage = !mess.read && mess.read != null
+                                        ? (self.countReadMessage + 1)
+                                        : self.countReadMessage
 
-                                this.messages.push(mess)
+                                    self.messages.push(mess)
+                                })();
                             }
 
                             this.paginate = res.data.paginate
@@ -576,7 +579,10 @@ export default {
 
                 if (index == -1) {
                     this.messages.unshift(mess)
-                    this.countReadMessage += 1
+
+                    if (this.user.id != Number(mess.from)) {
+                        this.countReadMessage += 1
+                    }
                 } else {
                     this.countReadMessage = !this.messages[index].read || socketData.from == this.user.id
                         ? this.countReadMessage
@@ -713,6 +719,7 @@ export default {
             }
         },
         addChatComponent(mess) {
+            console.log(mess)
             if (!Number(mess.to) && typeof mess.to === 'string' || !Number(mess.from) && typeof mess.from === 'string') {
                 let campaign = this.groups.filter(group => {
                     return group.hashtag === mess.showName
@@ -726,7 +733,7 @@ export default {
                     id: campaign[0].hashtag,
                     name: campaign[0].hashtag,
                     singleChat: false,
-                    slug: campaign[0].title
+                    slug: this.replaceSpace(campaign[0].title + '-' + campaign[0].id)
                 })
             } else {
                 let id = (Number(mess.to) != this.user.id)
@@ -735,9 +742,12 @@ export default {
                     id: id,
                     name: mess.showName,
                     singleChat: true,
-                    slug: id
+                    slug: this.replaceSpace(mess.showName + '-' + id)
                 })
             }
+        },
+        replaceSpace(str) {
+            return str.replace(' ', '-').toLowerCase();
         },
         changeLanguage(locale) {
             this.$i18n.locale = this.lang = locale
@@ -962,6 +972,17 @@ export default {
 .page-title {
     a {
         color: #fff;
+    }
+}
+
+.message-unread {
+    background-color: rgb(236, 239, 241) !important;
+}
+
+.chat-message-item {
+    color: #0c0c0c !important;
+    p {
+        color: #0c0c0c !important;
     }
 }
 </style>

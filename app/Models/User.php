@@ -219,6 +219,12 @@ class User extends Authenticatable
             ->wherePivot('status', self::PENDING);
     }
 
+    public function acceptFriends()
+    {
+        return $this->friendsIAmSender()
+            ->wherePivot('status', self::PENDING);
+    }
+
     public function isFriendWith($id)
     {
         return $this->friends()->where('id', $id)->count();

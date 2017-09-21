@@ -391,4 +391,18 @@ abstract class BaseRepository implements RepositoryInterface
             $query->withTrashed()->where('user_id', $userId);
         })->get()->pluck('id');
     }
+
+    public function take($limit)
+    {
+        $this->model = $this->model->take($limit);
+
+        return $this;
+    }
+
+    public function inRandomOrder()
+    {
+        $this->model = $this->model->inRandomOrder();
+
+        return $this;
+    }
 }
