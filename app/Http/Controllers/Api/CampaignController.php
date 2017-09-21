@@ -473,7 +473,7 @@ class CampaignController extends ApiController
         }
 
         return $this->doAction(function () use ($campaign) {
-            $eventIds = $campaign->events()->pluck('id');
+            $eventIds = $campaign->events()->withTrashed()->pluck('id');
             $this->compacts['event'] = $this->eventRepository->openFromCampaign($campaign->events());
             $this->compacts['campaign_tag'] = $this->tagRepository->openFromCampaign($campaign);
             $this->compacts['campaign_user'] = $this->userRepository->openFromCampaign($campaign);

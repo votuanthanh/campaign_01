@@ -204,9 +204,9 @@
         </message>
         <action-detail
             :showAction.sync="showAction"
-            :dataAction="dataAction"
-            :checkLikeActions="checkLikeAction"
-            :canComment="checkPermission">
+            :dataAction.sync="dataAction.list_action"
+            :checkLikeActions.sync="dataAction.checkLikeAction"
+            :canComment.sync="checkPermission">
         </action-detail>
         <update-action
             :showUpdate.sync="showUpdate"
@@ -231,11 +231,10 @@
             numberImgShow: 4,
             showAction: false,
             showUpdate: false,
-            dataAction: {},
+            dataAction: [],
             isShowDelete: false,
             actionId: null,
             pageType: 'event',
-            checkLikeAction: {},
             checkPermission: true
         }),
 
@@ -290,8 +289,7 @@
                 this.showAction = true
                 this.getDetailAction(actionId)
                 .then(data => {
-                    this.checkLikeAction = data.actions.checkLikeAction
-                    this.dataAction = data.actions.list_action
+                    this.dataAction = data.actions
                     this.checkPermission = data.checkPermission
                 })
                 .catch(err => {

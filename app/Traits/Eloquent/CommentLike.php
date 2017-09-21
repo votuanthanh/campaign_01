@@ -7,18 +7,19 @@ trait CommentLike
     public function scopeGetComments($query)
     {
         return $query->with(['comments' => function ($query) {
-            $query->withTrashed()->with(['subComment' => function ($subQuery) {
-                $subQuery->withTrashed()->getLikes()
-                    ->groupBy('created_at')
-                    ->orderBy('created_at', 'desc')
-                    ->paginate(config('settings.paginate_comment'), ['*'], 1);
-            }])
-            ->withTrashed()
-            ->getLikes()
-            ->where('parent_id', config('settings.comment_parent'))
-            ->groupBy('created_at')
-            ->orderBy('created_at', 'desc')
-            ->paginate(config('settings.paginate_comment'), ['*'], 1);
+            $query
+                ->withTrashed()
+                ->getLikes()
+                ->with(['subComment' => function ($subQuery) {
+                    $subQuery->withTrashed()->getLikes()
+                        ->groupBy('created_at')
+                        ->orderBy('created_at', 'desc')
+                        ->paginate(config('settings.paginate_comment'), ['*'], 1);
+                }])
+                ->where('parent_id', config('settings.comment_parent'))
+                ->groupBy('created_at')
+                ->orderBy('created_at', 'desc')
+                ->paginate(config('settings.paginate_comment'), ['*'], 1);
         }]);
     }
 

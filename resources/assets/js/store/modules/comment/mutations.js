@@ -9,8 +9,9 @@ export default {
         }
 
         state.comments[data.flag][data.modelId] = []
+        var commentReverse = data.comments.reverse()
 
-        data.comments.reverse().forEach(function (item, index) {
+        commentReverse.forEach(function (item, index) {
             state.comments[data.flag][item.commentable_id][index] = item
             state.comments[data.flag][item.commentable_id][index]['sub_comment']['data'] = item.sub_comment.reverse()
             state.comments[data.flag][item.commentable_id][index]['sub_comment']['last_page'] = 2
@@ -61,8 +62,6 @@ export default {
                 data.comments['sub_comment']['total'] = data.numberComment
 
                 comments[data.flag][data.modelId] = comments[data.flag][data.modelId].concat(data.comments)
-
-                state.paginates[data.flag][data.modelId].total = data.numberComment
             }
         }
 
@@ -165,7 +164,6 @@ export default {
         data.rootStateLike.like = like
         // comment
         commentReverse.forEach(function (item, index) {
-            commentReverse[index]['sub_comment'] = []
             commentReverse[index]['sub_comment']['data'] = item.sub_comment
             commentReverse[index]['sub_comment']['last_page'] = 2
             commentReverse[index]['sub_comment']['total'] = item.number_of_comments

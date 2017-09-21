@@ -166,13 +166,34 @@ class EventRepository extends BaseRepository implements EventInterface
 
     public function getEvent($event, $userId)
     {
-        return $event->withTrashed()->with(['media' => function ($query) {
-            $query->withTrashed();
-        }, 'user'])
+        $inforEvent = $event->withTrashed()
+            ->with(['media' => function ($query) {
+                $query->withTrashed();
+            }, 'user'])
             ->getLikes()
-            ->getComments()
             ->orderBy('created_at', 'desc')
             ->paginate(config('settings.paginate_event'));
+        $events = $inforEvent->each(function ($item) {
+            $item->load(['comments' => function ($query) {
+                $query->withTrashed()
+                    ->getLikes()
+                    ->with(['subComment' => function ($subQuery) {
+                        $subQuery->withTrashed()->getLikes()
+                            ->groupBy('created_at')
+                            ->orderBy('created_at', 'desc')
+                            ->paginate(config('settings.paginate_comment'), ['*'], 1);
+                    }])
+                    ->where('parent_id', config('settings.comment_parent'))
+                    ->groupBy('created_at')
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(config('settings.paginate_comment'), ['*'], 1);
+            }]);
+        });
+
+        return [
+            'inforPage' => $inforEvent,
+            'data' => $events,
+        ];
     }
 
     public function createOrDeleteLike($event, $userId)
@@ -211,8 +232,10 @@ class EventRepository extends BaseRepository implements EventInterface
     public function openFromCampaign($events)
     {
         if (!empty($events)) {
+            $events->restore();
+
             $events->each(function ($event) {
-               $event->goals()->restore();
+                $event->goals()->restore();
                 $event->donations()->restore();
                 $event->settings()->restore();
                 $event->media()->restore();
@@ -221,8 +244,10 @@ class EventRepository extends BaseRepository implements EventInterface
                 $event->comments()->restore();
             });
 
-            return $events->restore();
+            return true;
         }
+
+        return false;
     }
 
     public function getDetailEvent($id)
