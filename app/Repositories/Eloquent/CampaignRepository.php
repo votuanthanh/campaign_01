@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Donation;
 use Carbon\Carbon;
 
 class CampaignRepository extends BaseRepository implements CampaignInterface
@@ -523,8 +524,12 @@ class CampaignRepository extends BaseRepository implements CampaignInterface
                         config('settings.events.end_day'),
                     ]);
                 },
-                'events.media',
-                'events.goals.donations',
+                'events.media' => function ($media) {
+                    $media->withTrashed();
+                },
+                'events.goals.donations' => function ($donation) {
+                    $donation->where('status', Donation::ACCEPT);
+                },
                 'events.goals.donationType.quality',
                 'events.goals.expenses',
             ]);

@@ -99,9 +99,15 @@
                     <li><h3 class="date-title">{{ day | localeDate}}</h3></li>
                     <li v-for="event in events">
                         <div class="post__author author vcard inline-items">
-                            <img :src="event.media[0].image_thumbnail" alt="author">
+                            <img :src="event.media[0].image_thumbnail" alt="author" v-if="event.media.length">
                             <div class="author-date">
-                                <a class="h6 post__author-name fn" href="#">{{ event.title }}</a>
+                                <router-link class="h6 post__author-name fn"
+                                    :to="{
+                                        name: 'event.index',
+                                        params: { slug: $route.params.slug, slugEvent: event.slug }
+                                    }">
+                                    {{ event.title }}
+                                </router-link>
                                 <div class="post__date">
                                     <time class="published" datetime="2017-03-24T18:18">
                                         {{ $t('campaigns.statistic.created_at') }}

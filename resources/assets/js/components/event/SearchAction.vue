@@ -12,14 +12,6 @@
                                 class="form-control input-search-action"
                                 :placeholder="$t('events.search_action')"
                                 type="text">
-                            <router-link
-                                v-else
-                                :to="{ name: 'event.index' }"
-                                class="btn btn-primary btn-md-2"
-                                data-toggle="modal"
-                                data-target="#update-header-photo">
-                                {{ $t('events.donation.actions') }}
-                            </router-link>
                         </div>
                         <div class="align-right">
                             <button
@@ -29,52 +21,52 @@
                                 data-toggle="modal"
                                 data-target="#update-header-photo"
                                 @click="createAction">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
                                 {{ $t('events.create_action') }}
                             </button>
-
-                            <router-link
-                                tag="button"
-                                class="btn btn-primary btn-md-2 bg-breez"
-                                :to="{ name: 'event.info' }"
-                                active-class="active"
-                                data-toggle="modal"
-                                data-target="#update-header-photo">
-                                {{ $t('events.show_info') }}
-                            </router-link>
-
-                            <div class="btn-group" v-show="event.complete_percent.length">
-                                <button
-                                    v-if="!event.deleted_at"
-                                    href="#"
-                                    class="btn btn-primary btn-md-2 bg-breez"
-                                    data-toggle="modal"
-                                    @click="showModal = true"
-                                    data-target="#update-header-photo">
-                                    {{ $t('events.donation.donate') }}
-                                </button>
-                                <router-link
-                                    v-if="!event.deleted_at"
-                                    tag="button"
-                                    class="btn btn-primary btn-md-2 bg-breez"
-                                    :to="{ name: 'event.donation' }"
-                                    active-class="active"
-                                    data-toggle="modal"
-                                    data-target="#update-header-photo">
-                                    {{ $t('events.donation.donation_details') }}
-                                </router-link>
-                                <router-link
-                                    tag="button"
-                                    class="btn btn-primary btn-md-2 bg-breez"
-                                    :to="{ name: 'expense.list' }"
-                                    active-class="active"
-                                    data-toggle="modal"
-                                    data-target="#update-header-photo">
-                                    {{ $t('events.expenses.expense') }}
-                                </router-link>
-                            </div>
+                            <a href="#"
+                                class="btn btn-control bg-purple"
+                                v-if="!event.deleted_at && event.complete_percent.length"
+                                @click.prevent="showModal = true">
+                                <i class="fa fa-gift"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-12">
+                <ul class="cat-list-bg-style align-center sorting-menu">
+                    <router-link
+                        :to="{ name: 'event.index' }"
+                        class="cat-list__item"
+                        exact-active-class="active"
+                        tag="li">
+                        <a href="#">{{ $t('events.donation.actions') }}</a>
+                    </router-link>
+                    <router-link
+                        :to="{ name: 'event.info' }"
+                        class="cat-list__item"
+                        exact-active-class="active"
+                        tag="li">
+                        <a href="#">{{ $t('events.show_info') }}</a>
+                    </router-link>
+                    <router-link
+                        v-if="event.complete_percent.length"
+                        :to="{ name: 'event.donation' }"
+                        class="cat-list__item"
+                        active-class="active"
+                        tag="li">
+                        <a href="">{{ $t('events.donation.donation_details') }}</a>
+                    </router-link>
+                    <router-link
+                        v-if="event.complete_percent.length"
+                        :to="{ name: 'expense.list' }"
+                        class="cat-list__item"
+                        active-class="active"
+                        tag="li">
+                        <a href="">{{ $t('events.expenses.expense') }}</a>
+                    </router-link>
+                </ul>
             </div>
         </div>
         <create-action :show.sync="show">
@@ -266,6 +258,14 @@
     .btn-group {
         .bg-breez {
             border-color: #5bc0de;
+        }
+    }
+    .cat-list-bg-style {
+        margin: 20px 0;
+    }
+    .btn-control {
+        > i {
+            font-size: 30px;
         }
     }
 </style>

@@ -129,14 +129,14 @@
                         class="cat-list__item"
                         exact-active-class="active"
                         tag="li">
-                        <a href="javascript:void(0)" class="">{{ $t('events.donation.list') }}</a>
+                        <a href="#">{{ $t('events.donation.list') }}</a>
                     </router-link>
                     <router-link
                         :to="{ name: 'donation.manage' }"
                         class="cat-list__item"
                         exact-active-class="active"
                         tag="li">
-                        <a href="javascript:void(0)" class="">{{ $t('events.donation.manage') }}</a>
+                        <a href="#">{{ $t('events.donation.manage') }}</a>
                     </router-link>
                 </ul>
             </div>
