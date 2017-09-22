@@ -37,7 +37,7 @@ export default {
     },
 
     [types.LIKE_ACTIVITY](state, data) {
-        var like = state.like
+        var like = state.like;
         let checkLike = state.checkLike
 
         if (typeof (data.like) == 'boolean') {
@@ -71,5 +71,38 @@ export default {
 
         state.listMember[data.flag][data.modelId] = []
         state.listMember[data.flag][data.modelId] = data.member
+    },
+
+    [types.APPEND_LIKE](state, data) {
+        var like = state.like
+        let checkLike = state.checkLike
+
+        if (typeof(like[data.flag][data.modelId]) !== "undefined")
+        {
+            if (typeof (data.like) == 'boolean') {
+                let dataLike = $.grep(like[data.flag][data.modelId], function (item, index) {
+                    return item.user_id !== data.user.id
+                });
+
+                like[data.flag][data.modelId] = dataLike
+            } else {
+                let index = $.map(like[data.flag][data.modelId], function (item, index) {
+                    if (item.user_id == data.user.id) {
+                        return index;
+                    }
+                });
+
+                if (!index.length) {
+                    like[data.flag][data.modelId] = like[data.flag][data.modelId].concat(data.like)
+                }
+            }
+
+            like[data.flag][data.modelId].numberOfLikes = data.numberOfLikes
+            state.like = []
+            state.like = like
+
+            state.checkLike = []
+            state.checkLike = checkLike
+        }
     },
 };

@@ -181,7 +181,7 @@ class EventController extends ApiController
                 ])
                 ->get();
             $this->compacts['manage'] = $this->user->can('manage', $event);
-            $this->compacts['member'] = $this->user->can('comment', $event);
+            $this->compacts['member'] = $this->user->can('member', $event);
             $this->compacts['checkLikeEvent'] = $this->eventRepository->checkLike($event, $this->user->id);
         });
     }

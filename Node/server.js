@@ -194,6 +194,19 @@ io.on('connection', function (socket) {
     socket.on('remove_action', function (data) {
         io.sockets.in(data.room).emit('delete_action', { actionId: data.actionId })
     })
+
+    //like
+    socket.on('likeActivity', function (data) {
+        io.sockets.in(data.room).emit('newLike', data.newLike)
+    })
+
+    socket.on('viewing_like', function (data) {
+        socket.join(data)
+    })
+
+    socket.on('stop_view_like', function (data) {
+        socket.leave(data)
+    })
 })
 
 function callOnline(socket, listFriend, userLogin) {

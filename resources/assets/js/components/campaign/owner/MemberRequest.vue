@@ -206,22 +206,25 @@
         mounted() {
             $(window).scroll(() => {
                 if ($(document).height() <= $(window).scrollTop() + $(window).height()) {
-                    this.searchMember({
-                        campaignId: this.pageId,
-                        status: 0,
-                        search: this.search,
-                        pageNumberEvent: this.members.last_page,
-                        pageCurrent: this.members.current_page
-                    })
-                    .then(data => {
-                        let list_members = this.members
-                        data.members.data = [...list_members.data, ...data.members.data]
-                        this.members = []
-                        this.members = data.members
-                    })
-                    .catch(err => {
-                        //
-                    })
+                    if ((parseInt(this.members.current_page) + 1) <= this.members.last_page) {
+                        this.searchMember({
+                            campaignId: this.pageId,
+                            status: 0,
+                            search: this.search,
+                            pageNumberEvent: this.members.last_page,
+                            pageCurrent: this.members.current_page
+                        })
+                        .then(data => {
+                            let list_members = this.members
+                            data.members.data = [...list_members.data, ...data.members.data]
+                            this.members = []
+                            this.members = data.members
+                        })
+                        .catch(err => {
+                            const message = this.$i18n.t('messages.message-fail')
+                            noty({ text: message, force: true, container: false })
+                        })
+                    }
                 }
             })
         },

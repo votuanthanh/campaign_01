@@ -225,4 +225,9 @@ class CampaignPolicy extends BasePolicy
 
         return false;
     }
+
+    public function member(User $user, Campaign $campaign)
+    {
+        return $campaign->users->contains('id', $user->id);
+    }
 }

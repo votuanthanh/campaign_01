@@ -1,16 +1,7 @@
-<template lang="html">
+\<template lang="html">
     <a href="javascript:void(0)"
         :class="{ liked: checkLike[flag][modelId], btn: true, 'btn-control': true }"
-        @click="likeActivity({
-            model: flag,
-            modelId: modelId,
-            user: user,
-            flag: flag,
-            numberOfLikes: like[flag][modelId].numberOfLikes,
-            deleteDate: like[flag][modelId].deleteDate,
-            messages: modelClosed,
-            permission: permission
-        })">
+        @click="likeActivities()">
         <svg class="olymp-like-post-icon">
             <use xlink:href="/frontend/icons/icons.svg#olymp-like-post-icon"></use>
         </svg>
@@ -19,6 +10,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import noty from '../../helpers/noty'
 
 export default {
     props: {
@@ -26,7 +18,8 @@ export default {
         flag: '',
         numberOfLikes: 0,
         modelClosed: '',
-        permission: ''
+        permission: '',
+        roomLike: ''
     },
     computed: {
         ...mapState('like', [
@@ -42,6 +35,37 @@ export default {
             'setLike',
             'likeActivity'
         ]),
+        likeActivities() {
+            this.likeActivity({
+                model: this.flag,
+                modelId: this.modelId,
+                user: this.user,
+                flag: this.flag,
+                numberOfLikes: this.like[this.flag][this.modelId].numberOfLikes,
+                deleteDate: this.like[this.flag][this.modelId].deleteDate,
+                messages: this.modelClosed,
+                permission: this.permission
+            })
+            .then(res => {
+                 let data = {
+                    like: res.like,
+                    modelId: this.modelId,
+                    flag: this.flag,
+                    user: this.user,
+                    numberOfLikes: res.numberOfLikes,
+                    deleteDate: this.deleteDate
+                }
+
+                this.$socket.emit('likeActivity', {
+                    newLike: data,
+                    room: this.roomLike
+                })
+            })
+            .catch(err => {
+                const message = this.$i18n.t('messages.join_campaign_fail')
+                noty({ text: message, force: true, container: false })
+            })
+        }
     },
 }
 </script>

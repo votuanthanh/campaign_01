@@ -43,4 +43,9 @@ class ActionPolicy extends BasePolicy
     {
         return $user->can('like', $action->event);
     }
+
+    public function member(User $user, Action $action)
+    {
+        return $user->can('member', $action->event);
+    }
 }

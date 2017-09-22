@@ -28,7 +28,8 @@
                                         :numberOfLikes="photo.number_of_likes"
                                         :class="'post-add-icon'"
                                         :showMore="false"
-                                        :deleteDate="photo.deleted_at">
+                                        :deleteDate="photo.deleted_at"
+                                        :roomLike="`campaign${pageId}`">
                                     </master-like>
 
                                     <a href="javascript:void(0)"
@@ -106,7 +107,8 @@
             :showAction.sync="showAction"
             :dataAction.sync="dataAction.list_action"
             :checkLikeActions.sync="dataAction.checkLikeAction"
-            :canComment.sync="checkPermission">
+            :canComment.sync="checkPermission"
+            :roomLike="`campaign${pageId}`">
         </action-detail>
     </div>
 </template>

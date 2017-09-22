@@ -9,7 +9,8 @@
         :numberOfLikes="numberOfLikes"
         :showMore="showMore"
         :modelClosed="modelClosed"
-        :permission="permission">
+        :permission="permission"
+        :roomLike="roomLike">
     </like>
 
     <like-infor
@@ -18,7 +19,8 @@
         :modelId="modelId"
         :numberOfLikes="numberOfLikes"
         :modelClosed="modelClosed"
-        :permission="permission">
+        :permission="permission"
+        :roomLike="roomLike">
     </like-infor>
 </template>
 
@@ -55,6 +57,7 @@
             numberOfComments: 0,
             showMore: true,
             deleteDate: null,
+            roomLike: ''
         },
         methods: {
             ...mapActions('like', [
@@ -64,7 +67,7 @@
         components: {
            Like,
            LikeInfor,
-        }
+        },
     }
 </script>
 

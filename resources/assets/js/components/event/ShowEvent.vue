@@ -52,7 +52,8 @@
                                 :numberOfComments="event.number_of_comments"
                                 :numberOfLikes="event.number_of_likes"
                                 :showMore="true"
-                                :deleteDate="event.deleted_at">
+                                :deleteDate="event.deleted_at"
+                                :roomLike="`campaign${event.campaign_id}`">
                             </master-like>
                             <div class="control-block-button post-control-button">
                                 <master-like
@@ -63,7 +64,8 @@
                                     :modelId="event.id"
                                     :numberOfComments="event.number_of_comments"
                                     :numberOfLikes="event.number_of_likes"
-                                    :deleteDate="event.deleted_at">
+                                    :deleteDate="event.deleted_at"
+                                    :roomLike="`campaign${event.campaign_id}`">
                                 </master-like>
                             </div>
                         </article>
@@ -76,7 +78,8 @@
                             :classListComment="'list-comment-event'"
                             :classFormComment="'input-comment-event'"
                             :deleteDate="event.deleted_at"
-                            :canComment="event.isMember">
+                            :canComment="event.isMember"
+                            :roomLike="`campaign${event.campaign_id}`">
                         </comment>
                     </div>
                 </div>
@@ -152,6 +155,10 @@
                 'like_event'
             ]),
 
+            ...mapActions('like', [
+                'appendLike'
+            ]),
+
             closeEvent(id) {
                 del(`event/delete/${id}`)
                     .then(res => {
@@ -189,7 +196,13 @@
                 this.showExpense = true
             },
         },
-
+        sockets: {
+            newLike: function (data) {
+                if (this.user.id != data.user.id) {
+                    this.appendLike(data)
+                }
+            }
+        },
         created() {
             get(`event/check-permission/${this.pageId}`)
                 .then(res => {
