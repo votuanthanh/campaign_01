@@ -55,7 +55,7 @@
     <div id="app">
         <router-view></router-view>
     </div>
-    {!! Html::script(asset('frontend/js/bootstrap.js')) !!}
+    {!! Html::script(mix('frontend/js/bootstrap.js')) !!}
     {!! Html::script(asset('frontend/js/material.min.js')) !!}
     {!! Html::script(asset('frontend/js/theme-plugins.js')) !!}
     {!! Html::script(asset('frontend/js/selectize.min.js')) !!}

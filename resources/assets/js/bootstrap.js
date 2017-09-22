@@ -1,8 +1,6 @@
-
 window._ = require('lodash');
 
 window.moment = require('moment');
-moment.locale(window.Laravel.locale);
 
 try {
     window.$ = window.jQuery = require('jquery');
