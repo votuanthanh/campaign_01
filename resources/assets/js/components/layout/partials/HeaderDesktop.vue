@@ -1,7 +1,11 @@
 <template lang="html">
     <header class="header" id="site-header">
         <div class="page-title">
-            <h6>FCAMPAIGN</h6>
+            <h6>
+                <router-link :to="{ name: 'homepage' }">
+                    {{ $t('homepage.home') }}
+                </router-link>
+            </h6>
         </div>
         <div class="header-content-wrapper">
             <div class="search-bar w-search notification-list friend-requests" v-if="user">
@@ -64,9 +68,6 @@
                     </div>
                 </div>
             </div>
-            <router-link class="link-find-friend" :to="{ name: 'homepage' }">
-                {{ $t('homepage.home') }}
-            </router-link>
             <div class="control-block" v-if="authenticated">
                 <div class="select-lang control-icon more has-items">
                     {{ $t('homepage.header.language') }}
@@ -880,9 +881,6 @@ export default {
     }
 }
 
-
-
-
 .author-thumb {
     .avatar {
         width: 40px;
@@ -943,5 +941,11 @@ export default {
 #img-author-showAvatar {
     height: 34px;
     width: 34px;
+}
+
+.page-title {
+    a {
+        color: #fff;
+    }
 }
 </style>

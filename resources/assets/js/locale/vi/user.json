@@ -101,5 +101,11 @@
         "result_campaign_finded": "Không có chiến dịch với từ khóa | Có một chiến dịch với từ khóa | Có {value} các chiến dịch có từ khóa",
         "check_joined": "Bạn chưa tham gia chiến dịch này. | Bạn đã tham gia vào chiến dịch này. | Bạn là quản trị viên của chiến dịch này."
     },
-    "activity_empty": "Tại đây bạn sẽ thấy các hoạt động cập nhật gần đây"
+    "activity_empty": "Tại đây bạn sẽ thấy các hoạt động cập nhật gần đây",
+    "profile": {
+        "your_profile": "Hồ sơ của bạn",
+        "profile_setting": "Chỉnh sửa hồ sơ",
+        "personal_info": "Thông tin cá nhân",
+        "change_pass": "Đổi mật khẩu"
+    }
 }
