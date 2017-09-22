@@ -1,0 +1,105 @@
+{
+    "friend": {
+        "block": "Block Profile",
+        "report": "Report Profile",
+        "turn_off_notifications": "Turn Off Notifications",
+        "birthday": "Birthday",
+        "phone": "Phone",
+        "gender": "Gender",
+        "address": "Address",
+        "email": "Email",
+        "male": "Male",
+        "female": "Female",
+        "loading": "Loading...",
+        "photo": "Photos",
+        "video": "Videos",
+        "friends": "Friends",
+        "search": "Search Friends...",
+        "unfriend": "Unfriend",
+        "cancel_request": "Cancel friend request",
+        "accept_request": "Accept friend request",
+        "reject_request": "Reject friend request",
+        "add_friend": "Add friend"
+    },
+    "title": {
+        "login": "Login to your Account",
+        "register_campaign": "Register to Campaign"
+    },
+    "label": {
+        "following_campaign": "Following Campaigns",
+        "joined_campaign": "Joined Campaigns",
+        "owned_campaign": "Owned Campaigns",
+        "account_setting": "Account Settings",
+        "list_campaign_close": "List Campaign Close"
+    },
+    "button": {
+        "read_more": "Read more"
+    },
+    "quote": {
+        "create_campaign": "create a new campaign",
+        "more_user": "and <br> {0} more joined in this",
+        "no_data": "no more data...",
+        "unfriend_msg": "Do you want to unfriend with this person?",
+        "deny_request_msg": "Do you want to decline this friend request?"
+    },
+    "upload": {
+        "update_avatar": "Update your avatar",
+        "upload_photo": "Upload Photo",
+        "upload_photo_desc": "Browse your computer.",
+        "choose_from_my_photo": "Choose from My Photos",
+        "choose_from_my_photo_desc": "Choose from your uploaded photos",
+        "select_photo": "Select photo",
+        "cancel": "Cancel",
+        "confirm": "Confirm Photo",
+        "update_header_photo": "Update your header photo",
+        "no_photo_msg": "You don't have any images, please upload"
+    },
+    "connect": {
+        "online": "ONLINE",
+        "offline": "OFFLINE"
+    },
+    "sidebar": {
+        "about_me": "About me",
+        "birthday": "Birthday",
+        "address": "Address",
+        "profile_intro": "Profile Intro",
+        "friends": "Friends",
+        "list_photo": "List Photo",
+        "done_have_friend": "You don't have any friend",
+        "done_have_photo": "You don't have any photo",
+        "search_friends": "search friends...",
+        "load_more": "Load More",
+        "of": "of",
+        "previous": "Previous (Left arrow key)",
+        "next": "Next (Right arrow key)",
+        "close": "Close (Esc)"
+    },
+    "photo": {
+        "gallery": "’s Photo Gallery",
+        "header": "Header Photos",
+        "delete": "Delete this photo",
+        "dont_have_images": "Don't have any photo."
+    },
+    "header": {
+        "search": "Search here people or pages...",
+        "tag": "tag"
+    },
+    "search": {
+        "unfriend": "Unfriend",
+        "cancel_request": "Cancel request",
+        "confirm": "Confirm",
+        "friends": "Friends",
+        "owner": "Owner",
+        "add_friend": "Add friend",
+        "delete_request": "Delete request",
+        "friend_request_send": "Request sent",
+        "view_more": "View more",
+        "campaign": "Campaign",
+        "number_of_participants": "Number of participants",
+        "number_of_events": "Number of events",
+        "result_finded": "There is no user with key word | There is a user with key word | There are {value} users with key word",
+        "result_campaign_finded": "There is no campaign with key word | There is a campaign with key word | There are {value} campaigns with key word",
+        "check_joined": "You have not joined this campaign yet. | You joined this campaign. | You are owner in this campaign."
+    },
+    "activity_empty": "Here you'll see the recent updates of activities"
+}

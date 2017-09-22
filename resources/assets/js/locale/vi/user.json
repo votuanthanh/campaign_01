@@ -23,7 +23,7 @@
     },
     "title": {
         "login": "Đăng nhập vào tài khoản",
-        "register_campaign": "Tạo chiến dịch"
+        "register_campaign": "Đăng ký"
     },
     "label": {
         "following_campaign": "Chiến dịch đang theo dõi",
@@ -92,7 +92,7 @@
         "owner": "Quản trị viên",
         "add_friend": "Kết bạn",
         "delete_request": "Xóa yêu cầu",
-        "friend_request_send": "Đã gữi yêu cầu",
+        "friend_request_send": "Đã gữi",
         "view_more": "Xem thêm",
         "campaign": "Chiến dịch",
         "number_of_participants": "Số người tham gia",

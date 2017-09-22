@@ -31,7 +31,7 @@
                                 {{ user.name }}
                             </router-link>
                             <span class="chat-message-item">
-                                {{ numberMutualFriend[index] + ' ' + $t('homepage.friends') + ' ' + $t('homepage.in_common') }}
+                                {{ numberMutualFriend[index] + ' ' + $t('homepage.in_common') }}
                             </span>
                         </div>
                         <request-friend :friend="user" :classTemp="'home'"></request-friend>
