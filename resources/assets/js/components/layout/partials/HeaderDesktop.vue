@@ -69,48 +69,6 @@
                 </div>
             </div>
             <div class="control-block" v-if="authenticated">
-                <div class="select-lang control-icon more has-items">
-                    {{ $t('homepage.header.language') }}
-                    <div class="more-lang more-dropdown more-with-triangle triangle-top-center">
-                        <div class="ui-block-title ui-block-title-small">
-                            <h6 class="title">{{ $t('homepage.header.choose_language') }}</h6>
-                        </div>
-                        <div class="mCustomScrollbar ps ps--theme_default ps--active-y" data-mcs-theme="dark" data-ps-id="a157eff2-42d1-dbd0-3583-bc5f938692d2">
-                            <ul class="notification-list friend-requests">
-                                <li @click.prevent="changeLanguage('vi')">
-                                    <div class="author-thumb">
-                                        <img src="/images/vn.png" alt="author">
-                                    </div>
-                                    <div class="notification-event">
-                                        <a href="javascript:void(0)" class="h6 notification-friend">
-                                            {{ $t('homepage.header.vietnam') }}
-                                        </a>
-                                    </div>
-                                </li>
-                                <li @click.prevent="changeLanguage('en')">
-                                    <div class="author-thumb">
-                                        <img src="/images/en.png" alt="author">
-                                    </div>
-                                    <div class="notification-event">
-                                        <a href="javascript:void(0)" class="h6 notification-friend">
-                                            {{ $t('homepage.header.english') }}
-                                        </a>
-                                    </div>
-                                </li>
-                                <li @click.prevent="changeLanguage('ja')">
-                                    <div class="author-thumb">
-                                        <img src="/images/jp5.png" alt="author">
-                                    </div>
-                                    <div class="notification-event">
-                                        <a href="javascript:void(0)" class="h6 notification-friend">
-                                            {{ $t('homepage.header.japan') }}
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
                 <div class="control-icon more has-items" @click="markRead(0)">
                     <svg class="olymp-happy-face-icon">
                         <use xlink:href="/frontend/icons/icons.svg#olymp-happy-face-icon"></use>
@@ -411,6 +369,51 @@
                         <span class="author-subtitle">{{ user.email }}</span>
                     </router-link>
                 </div>
+                <div class="select-lang control-icon more has-items">
+                    <img src="/images/vn.png" v-show="lang == 'vi'" alt="author">
+                    <img src="/images/jp5.png" v-show="lang == 'ja'" alt="author">
+                    <img src="/images/en.png" v-show="lang == 'en'" alt="author">
+                    {{ $t('homepage.header.language') }}
+                    <div class="more-lang more-dropdown more-with-triangle triangle-top-center">
+                        <div class="ui-block-title ui-block-title-small">
+                            <h6 class="title">{{ $t('homepage.header.choose_language') }}</h6>
+                        </div>
+                        <div class="mCustomScrollbar ps ps--theme_default ps--active-y" data-mcs-theme="dark" data-ps-id="a157eff2-42d1-dbd0-3583-bc5f938692d2">
+                            <ul class="notification-list friend-requests">
+                                <li @click.prevent="changeLanguage('vi')">
+                                    <div class="author-thumb">
+                                        <img src="/images/vn.png" alt="author">
+                                    </div>
+                                    <div class="notification-event">
+                                        <a href="javascript:void(0)" class="h6 notification-friend">
+                                            {{ $t('homepage.header.vietnam') }}
+                                        </a>
+                                    </div>
+                                </li>
+                                <li @click.prevent="changeLanguage('en')">
+                                    <div class="author-thumb">
+                                        <img src="/images/en.png" alt="author">
+                                    </div>
+                                    <div class="notification-event">
+                                        <a href="javascript:void(0)" class="h6 notification-friend">
+                                            {{ $t('homepage.header.english') }}
+                                        </a>
+                                    </div>
+                                </li>
+                                <li @click.prevent="changeLanguage('ja')">
+                                    <div class="author-thumb">
+                                        <img src="/images/jp5.png" alt="author">
+                                    </div>
+                                    <div class="notification-event">
+                                        <a href="javascript:void(0)" class="h6 notification-friend">
+                                            {{ $t('homepage.header.japan') }}
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!--End: control-block -->
 
@@ -448,9 +451,11 @@ export default {
         countReadMessage: 0,
         keyword: '',
         usersFinded: [],
-        campaignsFinded: []
+        campaignsFinded: [],
+        lang: ''
     }),
     created () {
+        this.lang = !!localStorage.getItem('locale') ? localStorage.getItem('locale') : window.Laravel.locale
         EventBus.$on('redirect-page', () => {
             this.keyword = ''
             this.search()
@@ -735,7 +740,9 @@ export default {
             }
         },
         changeLanguage(locale) {
-            this.$i18n.locale = locale
+            this.$i18n.locale = this.lang = locale
+            this.$validator.setLocale(locale)
+            window.moment.locale(locale)
             localStorage.setItem('locale', locale)
         }
     },
@@ -824,19 +831,28 @@ export default {
 
 <style lang="scss">
 .select-lang {
+    width: 95px;
     color: white;
     font-weight: bold;
     font-size: 15px;
+    margin-left: 20px;
+    margin-right: -40px;
+
+    >img {
+        width: 23px;
+        height: 16px;
+    }
 
     &.control-icon {
         .more-lang {
-            right: -70px;
-            width: 145px;
+            right: -25px;
+            width: 130px;
             padding: 0;;
             box-shadow: 0 0 34px 0 rgba(192, 194, 204, 0.55);
 
             .ui-block-title.ui-block-title-small {
-                padding: 7px 25px;
+                padding: 7px;
+                text-align: center;
             }
 
             .notification-list {

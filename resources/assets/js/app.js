@@ -37,9 +37,10 @@ for (let rule in rules) {
 }
 
 Validator.updateDictionary(dictionary);
+let lang = !!localStorage.getItem('locale') ? localStorage.getItem('locale') : window.Laravel.locale
 
 const i18n = new VueI18n({
-    locale: !!localStorage.getItem('locale') ? localStorage.getItem('locale') : window.Laravel.locale,
+    locale: lang,
     fallbackLocale: window.Laravel.fallbackLocale,
     messages
 })
@@ -56,6 +57,8 @@ Vue.mixin({
         }
     },
 })
+
+window.moment.locale(lang)
 
 const app = new Vue({
     el: '#app',

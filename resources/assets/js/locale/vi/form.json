@@ -66,13 +66,13 @@
     },
     "delete": "Xóa",
     "edit": "Sửa",
-    "answers": "trả lời",
+    "answers": "Trả lời",
     "cancel": "Hủy",
-    "hidden": "ẩn",
+    "hidden": "Ẩn",
     "placeholder": {
         "choose_quality": "Chọn đơn vị",
-        "choose_type": "chọn loại",
-        "choose_product": "chọn sản phẩm"
+        "choose_type": "Chọn loại",
+        "choose_product": "Chọn sản phẩm"
     },
     "search_all": "Tìm kiếm",
     "stt": "Số thứ tự",

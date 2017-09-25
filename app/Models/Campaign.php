@@ -168,11 +168,6 @@ class Campaign extends BaseModel
         return $this->attributes['status'] == static::ACTIVE;
     }
 
-    public function getCreatedAtAttribute($date)
-    {
-        return Carbon::parse($date)->diffForHumans();
-    }
-
     public function getSlugAttribute()
     {
         return str_slug(str_limit($this->title, 100) . ' ' . $this->id);

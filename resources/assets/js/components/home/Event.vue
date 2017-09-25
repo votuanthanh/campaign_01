@@ -21,7 +21,7 @@
                     </router-link>
                     <div class="post__date">
                         <time class="published">
-                            {{ event.timeAgo }}
+                            {{ timeAgo(event.created_at) }}
                         </time>
                     </div>
                 </div>
@@ -126,6 +126,11 @@
         components: {
             ShowText,
             ListImage
+        },
+        methods: {
+            timeAgo(time) {
+                return moment(time, "YYYY-MM-DD h:mm:ss").fromNow()
+            }
         }
     }
 </script>

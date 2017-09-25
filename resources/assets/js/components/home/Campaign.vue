@@ -13,7 +13,7 @@
                     </router-link>
                     <div class="post__date">
                         <time class="published">
-                            {{ campaign.created_at }}
+                            {{ timeAgo(campaign.created_at) }}
                         </time>
                     </div>
                 </div>
@@ -124,6 +124,11 @@
         props: {
             campaign: {},
             owner: {}
+        },
+        methods: {
+            timeAgo(time) {
+                return moment(time, "YYYY-MM-DD h:mm:ss").fromNow()
+            }
         }
     }
 </script>
