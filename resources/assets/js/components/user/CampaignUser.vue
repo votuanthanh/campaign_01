@@ -40,7 +40,11 @@
                             <img :src="campaign.owner[0].image_thumbnail" alt="author">
 
                             <div class="author-date">
-                                <a class="h6 post__author-name fn" href="02-ProfilePage.html">{{ campaign.owner[0].name }}</a> {{ $t('user.quote.create_campaign') }}
+                                <router-link class="h6 post__author-name fn"
+                                    :to="{ name: 'user.timeline', params: { slug: campaign.owner[0].slug }}">
+                                    {{ campaign.owner[0].name }}
+                                </router-link>
+                                {{ $t('user.quote.create_campaign') }}
                                 <div class="post__date">
                                     <time class="published" datetime="2017-03-24T18:18">
                                         {{ campaign.created_at }}
@@ -48,36 +52,17 @@
                                 </div>
                             </div>
 
-                            <div class="more"><svg class="olymp-three-dots-icon"><use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use></svg>
-                                <ul class="more-dropdown">
-                                    <li>
-                                        <a href="#">Edit Post</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Delete Post</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Turn Off Notifications</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Select as Featured</a>
-                                    </li>
-                                </ul>
-                            </div>
-
                         </div>
 
                         <div class="post-thumb">
-                            <img :src="campaign.media[0].image_default" alt="photo">
+                            <router-link :to="{ name: 'campaign.timeline', params: { slug: campaign.slug }}">
+                                <img :src="campaign.media[0].image_default" alt="photo">
+                            </router-link>
                         </div>
 
                         <router-link :to="{ name: 'campaign.timeline', params: { slug: campaign.slug }}"  class="h2 post-title">{{ shorten(campaign.title, 40) }}</router-link>
 
                         <p>{{ shorten(strip(campaign.description), 200) }}</p>
-
-                        <router-link :to="{ name: 'campaign.timeline', params: { slug: campaign.slug }}"
-                            class="btn btn-md-2 btn-border-think c-grey btn-transparent custom-color">
-                            {{ $t('user.button.read_more') }}</router-link>
 
                         <div class="control-block-button post-control-button">
                             <master-like
