@@ -8,6 +8,9 @@ class XSSProtection
 {
     public function handle($request, Closure $next)
     {
+        $log = "\n Request: " . date('Y-m-d H:i:s') . ': ' . $request->ip();
+        \Storage::disk('local')->append('log_requests.json', $log);
+
         if (!in_array(strtolower($request->method()), ['put', 'post', 'patch'])) {
             return $next($request);
         }
