@@ -162,7 +162,14 @@
             getFriendSuggest() {
                 get('friends-suggest')
                     .then(res => {
-                        this.listUser = res.data.data.friendSuggests
+                        let users = res.data.data.friendSuggests
+                        users.forEach(user => {
+                            user.has_pending_request = false
+                            user.has_send_request = false
+                            user.is_friend = 0
+                            this.listUser.push(user)
+                        })
+
                         this.numberMutualFriend = res.data.data.countMutualFriends
                     })
                     .catch(err => {

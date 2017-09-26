@@ -227,9 +227,11 @@ class UserRepository extends BaseRepository implements UserInterface
                 if ($roleId != config('settings.search_default')) {
                     $query = $query->where('campaign_user.role_id', $roleId);
                 }
-            })->with(['campaigns' => function ($query) use ($campaignId) {
+            })
+            ->with(['campaigns' => function ($query) use ($campaignId) {
                 $query->withTrashed()->where('campaign_id', $campaignId);
-            }])->paginate(config('settings.paginate_default'));
+            }])
+            ->paginate(config('settings.paginate_default'));
     }
 
     public function notificationMakeFriend($userRequest, $approvalId)
@@ -379,11 +381,16 @@ class UserRepository extends BaseRepository implements UserInterface
             ->paginate(config('settings.paginate_member'));
     }
 
-    public function getFriendsSuggest() {
+    public function getFriendsSuggest()
+    {
         $this->setGuard('api');
         $countMutualFriends = [];
         $friendIds = $this->user->friends()->pluck('id')->all();
+        $friendsPedding = $this->user->pendingFriends()->pluck('users.id')->all();
+        $friendsIAmSender = $this->user->acceptFriends()->pluck('users.id')->all();
         $friendIds[] = $this->user->id;
+        $friendIds = array_merge($friendIds, $friendsPedding, $friendsIAmSender);
+
         // if (count($friendIds)) {
         //     $friendSuggestIds = \DB::table('relationships')
         //         ->where('status', User::ACCEPTED)
@@ -406,21 +413,13 @@ class UserRepository extends BaseRepository implements UserInterface
         //             ]);
         //         });
 
-        $friendSuggests = $this->model
-            ->where('status', User::ACTIVE)
+        $friendSuggests = $this->where('status', User::ACTIVE)
             ->whereNotIn('id', $friendIds)
             ->inRandomOrder()
             ->take(config('settings.friend_suggest'))
-            ->get()
-            ->each(function ($query) use ($friendIds) {
-                $query->makeVisible([
-                    'is_friend',
-                    'has_pending_request',
-                    'has_send_request',
-                ]);
-            });
+            ->get();
 
-        foreach($friendSuggests as $user) {
+        foreach ($friendSuggests as $user) {
             $countMutualFriends[] = count(array_intersect($user->friends()->pluck('id')->all(), $friendIds));
         }
 

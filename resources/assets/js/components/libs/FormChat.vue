@@ -13,7 +13,7 @@
                     </svg>
                     <ul class="more-dropdown more-with-triangle triangle-bottom-right">
                         <li v-for="number in 27">
-                            <a href="#">
+                            <a href="#" @click.prevent>
                                 <img :src="`/images/icon-chat${number}.png`" alt="icon" @click="addIcon(number)">
                             </a>
                         </li>

@@ -43,7 +43,6 @@ trait UploadableTrait
 
         if ($storage->has($destinationTarget)) {
             $storage->delete($destinationTarget);
-            $storage->deleteDirectory('cache/' + $destinationTarget);
 
             return true;
         }
