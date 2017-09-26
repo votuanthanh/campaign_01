@@ -1,19 +1,6 @@
 <template lang="html">
     <div>
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="ui-block">
-                        <div class="top-header">
-                            <div class="top-header-thumb">
-                                <img :src="user.default_header" :alt="user.name">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        <user-header :user="user"/>
         <div class="container">
             <div class="row">
                 <router-view></router-view>
@@ -57,13 +44,17 @@
 
 <script>
 import { mapState } from 'vuex'
+import UserHeader from './Header'
 export default {
     metaInfo() {
         return {
             title: this.$t('user.label.account_setting')
         }
     },
-    computed: mapState('auth', ['user'])
+    computed: mapState('auth', ['user']),
+    components: {
+        UserHeader
+    }
 }
 </script>
 

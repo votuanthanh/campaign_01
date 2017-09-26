@@ -22,7 +22,7 @@
                                     type="text"
                                     name="first-name"
                                     v-model="firstName"
-                                    v-validate="'required|max:255'">
+                                    v-validate="'required|max:50'">
                                 <span v-show="errors.has('first-name')" class="material-input text-danger">
                                     {{ errors.first('first-name') }}
                                 </span>
@@ -37,7 +37,7 @@
                                     type="text"
                                     name="last-name"
                                     v-model="lastName"
-                                    v-validate="'max:255'">
+                                    v-validate="'max:50'">
                             </div>
                             <span v-show="errors.has('last-name')" class="material-input text-danger">
                                 {{ errors.first('last-name') }}

@@ -16,15 +16,6 @@
                                     </button>
                                 </div>
                             </form>
-                            <div class="more">
-                                <svg class="olymp-three-dots-icon">
-                                    <use xlink:href="/frontend/icons/icons.svg#olymp-three-dots-icon"></use>
-                                </svg>
-                                <ul class="more-dropdown">
-                                    <li><a>{{ $t('user.friend.block') }}</a></li>
-                                    <li><a>{{ $t('user.friend.turn_off_notifications') }}</a></li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -44,8 +44,8 @@
     },
     "upload": {
         "update_avatar": "Cập nhật ảnh đại diện",
-        "upload_photo": "Ảnh tải lên",
-        "upload_photo_desc": "Trình duyệt...",
+        "upload_photo": "Tải ảnh lên",
+        "upload_photo_desc": "Duyệt file...",
         "choose_from_my_photo": "Chọn từ ảnh của bạn",
         "choose_from_my_photo_desc": "Chọn từ ảnh tải lên của bạn",
         "select_photo": "Chọn ảnh",
